@@ -1,0 +1,103 @@
+[gd_scene format=4 uid="uid://bficcnd31abcj"]
+
+[ext_resource type="Script" uid="uid://c58d18t8eq3k1" path="res://character_body_2d.gd" id="1_0e48y"]
+[ext_resource type="Texture2D" uid="uid://by0xtcu6q3j2l" path="res://assets/placeholder_player.png" id="2_0hol4"]
+[ext_resource type="Script" uid="uid://duh4koj5u1eax" path="res://area_2d.gd" id="2_rj586"]
+[ext_resource type="Script" uid="uid://cd01ntpk2uj7b" path="res://sprite_2d.gd" id="3_q6r6c"]
+[ext_resource type="Script" uid="uid://bdhohfio7mlni" path="res://tile_map_test.gd" id="4_0hol4"]
+[ext_resource type="Texture2D" uid="uid://dy7wn6wntikuw" path="res://pixil-frame-0 (20).png" id="5_d21ai"]
+[ext_resource type="Script" uid="uid://dajl8wnmpjcmb" path="res://test_enemy.gd" id="6_d21ai"]
+[ext_resource type="Texture2D" uid="uid://cxwgsy27e6hwo" path="res://pixil-frame-0 (8).png" id="6_kdubu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5jwi"]
+size = Vector2(15.5, 15.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_euwu4"]
+size = Vector2(15.5, 15.5)
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q6r6c"]
+resource_local_to_scene = true
+bounce = 1.05
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4d7sh"]
+texture = ExtResource("5_d21ai")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0 = 0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:0/0 = 0
+3:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:1/0 = 0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:1/0 = 0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:1/0 = 0
+2:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:1/0 = 0
+3:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:2/0 = 0
+0:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:2/0 = 0
+1:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:2/0 = 0
+2:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:2/0 = 0
+3:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:2/0/physics_layer_0/polygon_0/one_way = true
+0:3/0 = 0
+0:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+1:3/0 = 0
+1:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:3/0 = 0
+2:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+3:3/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_413ny"]
+physics_layer_0/collision_layer = 255
+physics_layer_0/physics_material = SubResource("PhysicsMaterial_q6r6c")
+sources/2 = SubResource("TileSetAtlasSource_4d7sh")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d21ai"]
+size = Vector2(15.5, 15.5)
+
+[node name="Node2D" type="Node2D" unique_id=1755812023]
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=714223642]
+safe_margin = 1.0
+script = ExtResource("1_0e48y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=1446692577]
+shape = SubResource("RectangleShape2D_b5jwi")
+
+[node name="Area2D" type="Area2D" parent="Player" unique_id=604566733]
+script = ExtResource("2_rj586")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Area2D" unique_id=2075048318]
+shape = SubResource("RectangleShape2D_euwu4")
+
+[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1032957902]
+texture = ExtResource("2_0hol4")
+script = ExtResource("3_q6r6c")
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1456672527]
+zoom = Vector2(4, 4)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1246592559]
+tile_map_data = PackedByteArray("AAAEAAQAAgABAAEAAAAFAAQAAgABAAAAAAAGAAQAAgABAAAAAAAHAAQAAgABAAAAAAAIAAQAAgABAAAAAAAJAAQAAgABAAAAAAAKAAQAAgABAAAAAAALAAQAAgABAAAAAAAMAAQAAgABAAAAAAANAAQAAgABAAAAAAAOAAQAAgABAAAAAAAPAAQAAgABAAAAAAADAAQAAgABAAEAAAACAAQAAgABAAEAAAABAAQAAgABAAAAAAAAAAQAAgABAAAAAAD//wQAAgABAAAAAAD9/wQAAgABAAAAAAD+/wQAAgABAAAAAAD8/wQAAgABAAAAAAD7/wQAAgABAAAAAAD6/wQAAgABAAAAAAD5/wQAAgABAAEAAAD5/wMAAgACAAEAAAD5/wIAAgACAAEAAAD5/wEAAgACAAEAAAD5/wAAAgACAAEAAAD5////AgACAAEAAAD5//7/AgACAAEAAAD5//3/AgACAAEAAAD7/wEAAgADAAIAAAD8/wEAAgADAAIAAAD9/wEAAgADAAIAAAD+/wEAAgADAAIAAAD//wEAAgADAAIAAAAAAAEAAgADAAIAAAAEAAEAAgABAAMAAAAFAAEAAgACAAMAAAADAAMAAgABAAAAAAACAAMAAgAAAAAAAAAEAAMAAgACAAAAAAAJAAMAAgADAAIAAAAJAAIAAgADAAIAAAAJAAEAAgADAAIAAAAJAAAAAgADAAIAAAAJAP//AgADAAIAAAAJAP7/AgADAAIAAAA=")
+tile_set = SubResource("TileSet_413ny")
+script = ExtResource("4_0hol4")
+
+[node name="TestEnemy" type="CharacterBody2D" parent="." unique_id=1538584470]
+position = Vector2(100, 0)
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("6_d21ai")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TestEnemy" unique_id=1477282665]
+shape = SubResource("RectangleShape2D_d21ai")
+
+[node name="Sprite2D" type="Sprite2D" parent="TestEnemy" unique_id=715875069]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("6_kdubu")

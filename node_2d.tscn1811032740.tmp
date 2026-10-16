@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://bficcnd31abcj"]
+
+[ext_resource type="Script" uid="uid://c58d18t8eq3k1" path="res://character_body_2d.gd" id="1_0e48y"]
+[ext_resource type="Texture2D" uid="uid://ecs5hjw15i05" path="res://icon.svg" id="2_epypp"]
+[ext_resource type="Script" uid="uid://dlavfi6g5ro4f" path="res://timer_player.gd" id="3_epypp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5jwi"]
+size = Vector2(125, 125)
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_pdsx1"]
+diffuse_texture = ExtResource("2_epypp")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_euwu4"]
+size = Vector2(125, 125)
+
+[node name="Node2D" type="Node2D" unique_id=1755812023]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=714223642]
+script = ExtResource("1_0e48y")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1446692577]
+shape = SubResource("RectangleShape2D_b5jwi")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=1032957902]
+texture = SubResource("CanvasTexture_pdsx1")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1456672527]
+
+[node name="Timer" type="Timer" parent="CharacterBody2D" unique_id=608571780]
+script = ExtResource("3_epypp")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=775599139]
+position = Vector2(0, 125)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1852936075]
+shape = SubResource("RectangleShape2D_euwu4")
+
+[node name="Sprite2D" type="Sprite2D" parent="StaticBody2D" unique_id=448520439]
+texture = ExtResource("2_epypp")
