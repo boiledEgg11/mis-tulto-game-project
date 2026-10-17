@@ -7,7 +7,6 @@ const DASH_SPEED = 480
 var direction = 1
 var health = 10
 var ENEMY_COLLISION = false
-var DAMAGE = 0
 var DASH_COOL = false
 var DASH_Y_CHANGE = 0
 var CROUCH = false
@@ -15,7 +14,9 @@ var SLIDE = 0
 var DASH_DIRECTION = 0
 var DASH_MOVE = false
 var DAMAGE_MULTIPLIER = 1
+var CROUCH_BLOCK = false
 func _ready() -> void:
+	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$PlayerHealth.value = 10
 func _health_process(DAMAGE: float) -> void:
 	$PlayerHealth.value += DAMAGE * DAMAGE_MULTIPLIER
@@ -52,21 +53,22 @@ func _physics_process(delta: float) -> void:
 			SPEED = 30
 			$Player_Shape.shape.size = Vector2(15.5, 7.75)
 			$Player_Shape.position = Vector2(0, 3.875)
-			$Area2D/PlayerAttackCollision.shape.size = Vector2(14, 7)
-			$Area2D/PlayerAttackCollision.position = Vector2(0, 3.875)
+			$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(14, 7)
+			$AttackCollisionArea/PlayerAttackCollision.position = Vector2(0, 3.875)
 			$Sprite2D.texture = load("res://assets/placeholder_player_crouch.png")
 		if not CROUCH:
 			SPEED = 120
 			$Player_Shape.shape.size = Vector2(15.5, 15.5)
 			$Player_Shape.position = Vector2(0, 0)
-			$Area2D/PlayerAttackCollision.shape.size = Vector2(14, 14)
-			$Area2D/PlayerAttackCollision.position = Vector2(0, 0)
+			$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(14, 14)
+			$AttackCollisionArea/PlayerAttackCollision.position = Vector2(0, 0)
 			$Sprite2D.texture = load("res://assets/placeholder_player.png")
 		if is_on_floor():
-			if Input.is_action_pressed("down"):
-				CROUCH = true
-			else:
-				CROUCH = false
+			if not CROUCH_BLOCK:
+				if Input.is_action_pressed("down"):
+					CROUCH = true
+				else:
+					CROUCH = false
 			if Input.is_action_just_pressed("up"):
 				velocity.y = JUMP_VELOCITY
 		DASH_Y_CHANGE = Input.get_axis("up", "down")
@@ -105,3 +107,14 @@ func _process(delta: float) -> void:
 		_health_process(-1)
 func _dash_recover_process(delta:float) -> void:
 	$DashRecover.value += delta * 1
+
+
+func _on_crouch_test_area_body_shape_entered(body_rid: RID, body: TileMapLayer, body_shape_index: int, local_shape_index: int) -> void:
+	CROUCH_BLOCK = true
+	print("cant crouch")
+	CROUCH = true
+
+
+func _on_crouch_test_area_body_shape_exited(body_rid: RID, body: TileMapLayer, body_shape_index: int, local_shape_index: int) -> void:
+	CROUCH_BLOCK = false
+	print("can crouch") 
