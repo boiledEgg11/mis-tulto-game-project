@@ -15,6 +15,9 @@ size = Vector2(15.5, 15.5)
 size = Vector2(5, 5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iyk0q"]
+size = Vector2(0.1, 15.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8445k"]
 size = Vector2(15.5, 15.5)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q6r6c"]
@@ -130,6 +133,11 @@ script = ExtResource("5_d21ai")
 shape = SubResource("RectangleShape2D_iyk0q")
 debug_color = Color(0.9650963, 1.4439225e-06, 0.49168748, 0.41960785)
 
+[node name="CrouchExitTestArea" type="Area2D" parent="Player" unique_id=1144140170]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CrouchExitTestArea" unique_id=359216176]
+shape = SubResource("RectangleShape2D_8445k")
+
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1246592559 groups=["Player_collisoin"]]
 light_mask = 261
 position = Vector2(11, 0)
@@ -137,5 +145,7 @@ tile_map_data = PackedByteArray("AAAEAAQAAAACAAQAAAAFAAQAAAABAAAAAAAGAAQAAAABAAA
 tile_set = SubResource("TileSet_413ny")
 script = ExtResource("4_0hol4")
 
+[connection signal="body_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_entered"]
 [connection signal="body_shape_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_shape_entered"]
 [connection signal="body_shape_exited" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_shape_exited"]
+[connection signal="body_exited" from="Player/CrouchExitTestArea" to="Player" method="_on_crouch_exit_test_area_body_exited"]

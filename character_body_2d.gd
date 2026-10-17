@@ -64,10 +64,10 @@ func _physics_process(delta: float) -> void:
 			$AttackCollisionArea/PlayerAttackCollision.position = Vector2(0, 0)
 			$Sprite2D.texture = load("res://assets/placeholder_player.png")
 		if is_on_floor():
-			if not CROUCH_BLOCK:
-				if Input.is_action_pressed("down"):
+			if Input.is_action_pressed("down"):
 					CROUCH = true
-				else:
+			else:
+				if not CROUCH_BLOCK:
 					CROUCH = false
 			if Input.is_action_just_pressed("up"):
 				velocity.y = JUMP_VELOCITY
@@ -108,13 +108,11 @@ func _process(delta: float) -> void:
 func _dash_recover_process(delta:float) -> void:
 	$DashRecover.value += delta * 1
 
-
-func _on_crouch_test_area_body_shape_entered(body_rid: RID, body: TileMapLayer, body_shape_index: int, local_shape_index: int) -> void:
-	CROUCH_BLOCK = true
-	print("cant crouch")
-	CROUCH = true
-
-
-func _on_crouch_test_area_body_shape_exited(body_rid: RID, body: TileMapLayer, body_shape_index: int, local_shape_index: int) -> void:
+func _on_crouch_exit_test_area_body_exited(body: TileMapLayer) -> void:
 	CROUCH_BLOCK = false
 	print("can crouch") 
+
+
+func _on_crouch_test_area_body_entered(body: TileMapLayer) -> void:
+	CROUCH_BLOCK = true
+	print("cant crouch")
