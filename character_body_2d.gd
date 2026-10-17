@@ -18,6 +18,10 @@ func _ready() -> void:
 	pass
 func _health_process() -> void:
 	$PlayerHealth.value += DAMAGE
+	if $PlayerHealth.value <= 0:
+		_death()
+func _death():
+	pass
 func _physics_process(delta: float) -> void: 
 	move_and_slide()
 	if not DASH_MOVE:
@@ -63,23 +67,32 @@ func _physics_process(delta: float) -> void:
 		if not direction:
 			velocity.x = move_toward(velocity.x, 0, SLIDE)
 			direction = 0
-		if Input.is_action_just_pressed("space") and $DashRecover.value == 100 and direction != 0 and not DASH_COOL and not DASHING:
-			if direction < 0:
-				DASH_DIRECTION = -1
-			if direction > 0:
-				DASH_DIRECTION = 1
-			if not DASH_COOL:
-				DASH_MOVE = true
-				DASHING = true
-				DASH_COOL = true
-	if DASHING:
-		if DASH_Y_CHANGE == 0:
-			velocity.x = DASH_SPEED * DASH_DIRECTION
-		else:
-			velocity.x = DASH_SPEED * DASH_DIRECTION /1.5
-		velocity.y = DASH_Y_CHANGE * DASH_SPEED / 4
-		await get_tree().create_timer(0.25).timeout
-		DASH_Y_CHANGE = 0
-		velocity.x = 0
-		velocity.y = 0
-		DASH_MOVE = false
+		if$DashRecover.value == 100 and direction != 0 and not DASH_COOL and not DASHING:
+			if Input.is_action_just_pressed("space"): 
+				if direction < 0:
+					DASH_DIRECTION = -1
+				if direction > 0:
+					DASH_DIRECTION = 1
+				if not DASH_COOL:
+					DASH_MOVE = true
+					DASHING = true
+				$DashRecover.value = 0
+				if DASH_Y_CHANGE == 0:
+					velocity.x = DASH_SPEED * DASH_DIRECTION
+				else:
+					velocity.x = DASH_SPEED * DASH_DIRECTION /1.5
+				velocity.y = DASH_Y_CHANGE * DASH_SPEED / 4
+				await get_tree().create_timer(0.25).timeout
+				DASH_Y_CHANGE = 0
+				velocity.x = 0
+				velocity.y = 0
+				DASH_MOVE = false
+				await get_tree().create_timer(1).timeout
+				DASH_COOL = false
+				print("cool finished")
+				DASHING = false
+func _process(delta: float) -> void:
+	_dash_recover_process(1)
+func _dash_recover_process(delta:float) -> void:
+	$DashRecover.value += delta * 1
+	pass
