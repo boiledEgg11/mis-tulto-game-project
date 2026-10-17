@@ -46,11 +46,15 @@ func _physics_process(delta: float) -> void:
 			SPEED = 30
 			$Player_Shape.shape.size = Vector2(15.5, 7.75)
 			$Player_Shape.position = Vector2(0, 3.875)
+			$Area2D/PlayerAttackCollision.shape.size = Vector2(5, 2.5)
+			$Area2D/PlayerAttackCollision.position = Vector2(0, 3.875)
 			$Sprite2D.texture = load("res://assets/placeholder_player_crouch.png")
 		if not CROUCH:
 			SPEED = 120
 			$Player_Shape.shape.size = Vector2(15.5, 15.5)
 			$Player_Shape.position = Vector2(0, 0)
+			$Area2D/PlayerAttackCollision.shape.size = Vector2(5, 5)
+			$Area2D/PlayerAttackCollision.position = Vector2(0, 0)
 			$Sprite2D.texture = load("res://assets/placeholder_player.png")
 		if is_on_floor():
 			if Input.is_action_pressed("down"):
@@ -67,7 +71,7 @@ func _physics_process(delta: float) -> void:
 		if not direction:
 			velocity.x = move_toward(velocity.x, 0, SLIDE)
 			direction = 0
-		if$DashRecover.value == 100 and direction != 0 and not DASH_COOL and not DASHING:
+		if $DashRecover.value == 60 and direction != 0 and not DASH_COOL and not DASHING:
 			if Input.is_action_just_pressed("space"): 
 				if direction < 0:
 					DASH_DIRECTION = -1
@@ -77,11 +81,8 @@ func _physics_process(delta: float) -> void:
 					DASH_MOVE = true
 					DASHING = true
 				$DashRecover.value = 0
-				if DASH_Y_CHANGE == 0:
-					velocity.x = DASH_SPEED * DASH_DIRECTION
-				else:
-					velocity.x = DASH_SPEED * DASH_DIRECTION /1.5
-				velocity.y = DASH_Y_CHANGE * DASH_SPEED / 4
+				velocity.y = DASH_Y_CHANGE * DASH_SPEED / 3
+				velocity.x = (DASH_SPEED - abs(velocity.y)) * DASH_DIRECTION
 				await get_tree().create_timer(0.25).timeout
 				DASH_Y_CHANGE = 0
 				velocity.x = 0
