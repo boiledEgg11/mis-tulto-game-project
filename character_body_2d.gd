@@ -17,6 +17,7 @@ var INVINCIBLE = false
 func _ready() -> void:
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$PlayerHealth.value = 10
+	$AttackCollision/CollisionShape2D.disabled = true
 func _health_process(DAMAGE: float) -> void:
 	if not INVINCIBLE:
 		$PlayerHealth.value += DAMAGE * DAMAGE_MULTIPLIER
@@ -31,7 +32,7 @@ func _death():
 	$PlayerHealth.value = 10
 func _physics_process(delta: float) -> void: 
 	if INVINCIBLE:
-		$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(0, 0)
+		$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
 	move_and_slide()
 	if not DASH_MOVE:
 		direction = Input.get_axis("left", "right")
@@ -59,16 +60,16 @@ func _physics_process(delta: float) -> void:
 			$Player_Shape.shape.size = Vector2(15.5, 7.75)
 			$Player_Shape.position = Vector2(0, 3.875)
 			if not INVINCIBLE:
-				$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(10, 5)
-				$AttackCollisionArea/PlayerAttackCollision.position = Vector2(0, 3.875)
+				$DamageCollision/PlayerDamageCollision.shape.size = Vector2(10, 5)
+				$DamageCollision/PlayerDamageCollision.position = Vector2(0, 3.875)
 			$Sprite2D.texture = load("res://assets/placeholder_player_crouch.png")
 		if not CROUCH:
 			SPEED = 120
 			$Player_Shape.shape.size = Vector2(15.5, 15.5)
 			$Player_Shape.position = Vector2(0, 0)
 			if not INVINCIBLE:
-				$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(10, 10)
-				$AttackCollisionArea/PlayerAttackCollision.position = Vector2(0, 0)
+				$DamageCollision/PlayerDamageCollision.shape.size = Vector2(10, 10)
+				$DamageCollision/PlayerDamageCollision.position = Vector2(0, 0)
 			$Sprite2D.texture = load("res://assets/placeholder_player.png")
 		if is_on_floor():
 			if Input.is_action_pressed("down"):
@@ -93,6 +94,7 @@ func _physics_process(delta: float) -> void:
 				if direction > 0:
 					DASH_DIRECTION = 1
 				DASH_MOVE = true
+				INVINCIBLE = true
 				$DashRecover.value = 0
 				if direction == 0:
 					velocity.x = 0
@@ -103,11 +105,16 @@ func _physics_process(delta: float) -> void:
 				else:
 					velocity.y = DASH_Y_CHANGE * DASH_SPEED / 3
 					velocity.x = abs(DASH_SPEED - abs(velocity.y)) * DASH_DIRECTION
+				$AttackCollision/CollisionShape2D.shape.size = Vector2(17, 17)
+				$AttackCollision/CollisionShape2D.disabled = false
 				await get_tree().create_timer(0.25).timeout
 				DASH_Y_CHANGE = 0
+				INVINCIBLE = false
 				DASH_MOVE = false
 				velocity.x = 0
 				velocity.y = 0
+				$AttackCollision/CollisionShape2D.disabled = true
+				$AttackCollision/CollisionShape2D.shape.size = Vector2(0, 0)
 func _process(delta: float) -> void:
 	_dash_recover_process(1)
 

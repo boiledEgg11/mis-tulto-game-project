@@ -21,6 +21,9 @@ size = Vector2(0.1, 15.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8445k"]
 size = Vector2(15.5, 15.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ucd7"]
+size = Vector2(0, 0)
+
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q6r6c"]
 resource_local_to_scene = true
 bounce = 1.05
@@ -91,6 +94,9 @@ size = Vector2(15.5, 15.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nfudh"]
 size = Vector2(0.1, 15.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f5w1v"]
+size = Vector2(15.5, 15.5)
+
 [node name="Node2D" type="Node2D" unique_id=1755812023]
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=714223642 groups=["Player_collisoin"]]
@@ -111,11 +117,11 @@ show_percentage = false
 [node name="Player_Shape" type="CollisionShape2D" parent="Player" unique_id=1446692577]
 shape = SubResource("RectangleShape2D_b5jwi")
 
-[node name="AttackCollisionArea" type="Area2D" parent="Player" unique_id=604566733]
+[node name="DamageCollision" type="Area2D" parent="Player" unique_id=604566733]
 collision_mask = 2
 script = ExtResource("2_rj586")
 
-[node name="PlayerAttackCollision" type="CollisionShape2D" parent="Player/AttackCollisionArea" unique_id=2075048318]
+[node name="PlayerDamageCollision" type="CollisionShape2D" parent="Player/DamageCollision" unique_id=2075048318]
 shape = SubResource("RectangleShape2D_euwu4")
 debug_color = Color(2.117753e-06, 0.65099275, 0.075226285, 0.41960785)
 script = ExtResource("3_4d7sh")
@@ -150,6 +156,14 @@ collision_layer = 4
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CrouchExitTestArea" unique_id=359216176]
 shape = SubResource("RectangleShape2D_8445k")
 
+[node name="AttackCollision" type="Area2D" parent="Player" unique_id=487374813]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/AttackCollision" unique_id=832266739]
+shape = SubResource("RectangleShape2D_7ucd7")
+debug_color = Color(0.4250181, 0.0011518651, 0.6030327, 0.41960785)
+
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1246592559 groups=["Player_collisoin"]]
 light_mask = 261
 position = Vector2(11, 0)
@@ -181,11 +195,19 @@ position = Vector2(8, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/RightCollisionCheck" unique_id=1806524756]
 shape = SubResource("RectangleShape2D_nfudh")
 
-[connection signal="body_entered" from="Player/AttackCollisionArea" to="Player" method="_on_attack_collision_area_body_entered"]
-[connection signal="body_exited" from="Player/AttackCollisionArea" to="Player" method="_on_attack_collision_area_body_exited"]
+[node name="EnemyArea" type="Area2D" parent="EnemyTest" unique_id=1094728586]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/EnemyArea" unique_id=947598378]
+shape = SubResource("RectangleShape2D_f5w1v")
+
+[connection signal="body_entered" from="Player/DamageCollision" to="Player" method="_on_attack_collision_area_body_entered"]
+[connection signal="body_exited" from="Player/DamageCollision" to="Player" method="_on_attack_collision_area_body_exited"]
 [connection signal="body_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_entered"]
 [connection signal="body_shape_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_shape_entered"]
 [connection signal="body_shape_exited" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_shape_exited"]
 [connection signal="body_exited" from="Player/CrouchExitTestArea" to="Player" method="_on_crouch_exit_test_area_body_exited"]
 [connection signal="body_entered" from="EnemyTest/LeftCollisionCheck" to="EnemyTest" method="_on_left_collision_check_body_entered"]
 [connection signal="body_entered" from="EnemyTest/RightCollisionCheck" to="EnemyTest" method="_on_right_collision_check_body_entered"]
+[connection signal="area_entered" from="EnemyTest/EnemyArea" to="EnemyTest" method="_on_enemy_area_area_entered"]
