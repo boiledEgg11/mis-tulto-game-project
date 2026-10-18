@@ -15,18 +15,25 @@ var DASH_DIRECTION = 0
 var DASH_MOVE = false
 var DAMAGE_MULTIPLIER = 1
 var CROUCH_BLOCK = false
+var INVINCIBLE = false
 func _ready() -> void:
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$PlayerHealth.value = 10
 func _health_process(DAMAGE: float) -> void:
-	$PlayerHealth.value += DAMAGE * DAMAGE_MULTIPLIER
-	if $PlayerHealth.value <= 0:
-		_death()
+	if not INVINCIBLE:
+		$PlayerHealth.value += DAMAGE * DAMAGE_MULTIPLIER
+		if $PlayerHealth.value <= 0:
+			_death()
+		INVINCIBLE = true
+		await get_tree().create_timer(1).timeout
+		INVINCIBLE = false
 func _death():
 	print("dead!")
 	await get_tree().create_timer(1).timeout
 	$PlayerHealth.value = 10
 func _physics_process(delta: float) -> void: 
+	if INVINCIBLE:
+		$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(0, 0)
 	move_and_slide()
 	if not DASH_MOVE:
 		direction = Input.get_axis("left", "right")
@@ -53,15 +60,17 @@ func _physics_process(delta: float) -> void:
 			SPEED = 30
 			$Player_Shape.shape.size = Vector2(15.5, 7.75)
 			$Player_Shape.position = Vector2(0, 3.875)
-			$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(14, 7)
-			$AttackCollisionArea/PlayerAttackCollision.position = Vector2(0, 3.875)
+			if not INVINCIBLE:
+				$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(10, 5)
+				$AttackCollisionArea/PlayerAttackCollision.position = Vector2(0, 3.875)
 			$Sprite2D.texture = load("res://assets/placeholder_player_crouch.png")
 		if not CROUCH:
 			SPEED = 120
 			$Player_Shape.shape.size = Vector2(15.5, 15.5)
 			$Player_Shape.position = Vector2(0, 0)
-			$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(14, 14)
-			$AttackCollisionArea/PlayerAttackCollision.position = Vector2(0, 0)
+			if not INVINCIBLE:
+				$AttackCollisionArea/PlayerAttackCollision.shape.size = Vector2(10, 10)
+				$AttackCollisionArea/PlayerAttackCollision.position = Vector2(0, 0)
 			$Sprite2D.texture = load("res://assets/placeholder_player.png")
 		if is_on_floor():
 			if Input.is_action_pressed("down"):
@@ -103,8 +112,7 @@ func _physics_process(delta: float) -> void:
 				velocity.y = 0
 func _process(delta: float) -> void:
 	_dash_recover_process(1)
-	if Input.is_action_just_pressed("i"):
-		_health_process(-1)
+
 func _dash_recover_process(delta:float) -> void:
 	$DashRecover.value += delta * 1
 
@@ -116,3 +124,11 @@ func _on_crouch_exit_test_area_body_exited(body: TileMapLayer) -> void:
 func _on_crouch_test_area_body_entered(body: TileMapLayer) -> void:
 	CROUCH_BLOCK = true
 	print("cant crouch")
+
+func _on_attack_collision_area_body_entered(body: CharacterBody2D) -> void:
+	ENEMY_COLLISION = true
+	_health_process(-1)
+	print(INVINCIBLE)
+
+func _on_attack_collision_area_body_exited(body: CharacterBody2D) -> void:
+	ENEMY_COLLISION = false
