@@ -7,17 +7,18 @@ func _physics_process(delta: float) -> void:
 	velocity.x = direction * SPEED
 	if not is_on_floor():
 		velocity += get_gravity() * delta * 1.5
-
-
 func _on_left_collision_check_body_entered(body: Node2D) -> void:
 	direction = 1
+	$Sprite2D.flip_h = true
 func _on_right_collision_check_body_entered(body: Node2D) -> void:
 	direction = -1
+	$Sprite2D.flip_h = false
 
 
 func _on_enemy_area_area_entered(area) -> void:
 	if area.name == "AttackCollision":
 		health -= 5
+		print("damaged")
 func _process(delta: float) -> void:
 	if health == 0:
 		queue_free()

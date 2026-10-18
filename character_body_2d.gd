@@ -14,6 +14,7 @@ var DASH_MOVE = false
 var DAMAGE_MULTIPLIER = 1
 var CROUCH_BLOCK = false
 var INVINCIBLE = false
+var floating = false
 func _ready() -> void:
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$PlayerHealth.value = 10
@@ -28,8 +29,13 @@ func _health_process(DAMAGE: float) -> void:
 		INVINCIBLE = false
 func _death():
 	print("dead!")
+	velocity.y = -600
+	CROUCH = true
+	CROUCH_BLOCK = true
 	await get_tree().create_timer(1).timeout
 	$PlayerHealth.value = 10
+	CROUCH = false
+	CROUCH_BLOCK = false
 func _physics_process(delta: float) -> void: 
 	if INVINCIBLE:
 		$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
@@ -50,7 +56,7 @@ func _physics_process(delta: float) -> void:
 			else:
 				SLIDE = 30
 				DAMAGE_MULTIPLIER = 1
-		if not is_on_floor():
+		if not is_on_floor() and not floating:
 			if Input.is_action_pressed("down"):
 				velocity += get_gravity() * delta * 2.5
 			else:
@@ -130,10 +136,25 @@ func _on_crouch_test_area_body_entered(body: TileMapLayer) -> void:
 	CROUCH_BLOCK = true
 	print("cant crouch")
 
-func _on_attack_collision_area_body_entered(body: Node2D) -> void:
-	ENEMY_COLLISION = true
-	_health_process(-1)
-	print(INVINCIBLE)
+func _on_attack_collision_area_body_entered(body) -> void:
+	if body.is_in_group("damage"):
+		ENEMY_COLLISION = true
+		_health_process(-1)
+		print(INVINCIBLE)
 
-func _on_attack_collision_area_body_exited(body: Node2D) -> void:
-	ENEMY_COLLISION = false
+func _on_attack_collision_area_body_exited(body) -> void:
+	if body.is_in_group("damage"):
+		ENEMY_COLLISION = false
+
+func _on_damage_collision_area_entered(area) -> void:
+	floating = true
+	if area.is_in_group("float"):
+		position.y = 0
+		position.x = 0
+
+
+func _on_crouch_test_area_area_entered(area: Area2D) -> void:
+	if area.is_in_group("float"):
+		position.y = 0
+		position.x = 0
+		_health_process(-5)
