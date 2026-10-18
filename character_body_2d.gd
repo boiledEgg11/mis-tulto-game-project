@@ -2,12 +2,10 @@ extends CharacterBody2D
 var SPEED = 120.0
 var JUMP_VELOCITY = -400.0
 var DASHING = false
-const DASH_TIME = 3
 const DASH_SPEED = 480
 var direction = 1
 var health = 10
 var ENEMY_COLLISION = false
-var DASH_COOL = false
 var DASH_Y_CHANGE = 0
 var CROUCH = false
 var SLIDE = 0
@@ -25,7 +23,7 @@ func _health_process(DAMAGE: float) -> void:
 		if $PlayerHealth.value <= 0:
 			_death()
 		INVINCIBLE = true
-		await get_tree().create_timer(1).timeout
+		await get_tree().create_timer(2).timeout
 		INVINCIBLE = false
 func _death():
 	print("dead!")
@@ -125,10 +123,10 @@ func _on_crouch_test_area_body_entered(body: TileMapLayer) -> void:
 	CROUCH_BLOCK = true
 	print("cant crouch")
 
-func _on_attack_collision_area_body_entered(body: CharacterBody2D) -> void:
+func _on_attack_collision_area_body_entered(body: Node2D) -> void:
 	ENEMY_COLLISION = true
 	_health_process(-1)
 	print(INVINCIBLE)
 
-func _on_attack_collision_area_body_exited(body: CharacterBody2D) -> void:
+func _on_attack_collision_area_body_exited(body: Node2D) -> void:
 	ENEMY_COLLISION = false
