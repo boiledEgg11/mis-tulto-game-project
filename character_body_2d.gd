@@ -124,18 +124,22 @@ func _physics_process(delta: float) -> void:
 							$Sprite2D.flip_v = true
 					velocity.y = DASH_Y_CHANGE * DASH_SPEED / 3
 					velocity.x = abs(DASH_SPEED - abs(velocity.y)) * DASH_DIRECTION
-				if is_on_floor():
-					velocity.y = DASH_SPEED / 6
 				$AttackCollision/CollisionShape2D.shape.size = Vector2(17, 17)
 				$AttackCollision/CollisionShape2D.disabled = false
-				await get_tree().create_timer(0.25).timeout
+				if DASH_Y_CHANGE == 1 and is_on_floor():
+					velocity.y = -200
+					velocity.x = DASH_SPEED * DASH_DIRECTION * 1.5
+					await get_tree().create_timer(0.1).timeout
+				else:
+					await get_tree().create_timer(0.25).timeout
 				$Sprite2D.flip_v = false
 				$Sprite2D.rotation_degrees = 0
 				DASH_Y_CHANGE = 0
 				INVINCIBLE = false
 				DASH_MOVE = false
-				velocity.x = 0
-				velocity.y = 0
+				if not (DASH_Y_CHANGE and is_on_floor()): 
+					velocity.y = 0
+					velocity.x = 0
 				$AttackCollision/CollisionShape2D.disabled = true
 				$AttackCollision/CollisionShape2D.shape.size = Vector2(0, 0)
 func _process(delta: float) -> void:
