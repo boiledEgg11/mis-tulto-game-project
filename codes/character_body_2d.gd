@@ -15,7 +15,7 @@ var DAMAGE_MULTIPLIER = -1
 var CROUCH_BLOCK = false
 var INVINCIBLE = false
 var floating = false
-var STAUTS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5}
+var STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5}
 var TEXTURE_LOCK
 func _ready() -> void:
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
@@ -50,6 +50,7 @@ func _physics_process(delta: float) -> void:
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
+		STATUS = Autoloads.POSSESS_STATUS
 		if INVINCIBLE:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
 		if not DASH_MOVE:
@@ -59,10 +60,10 @@ func _physics_process(delta: float) -> void:
 			if direction < 0:
 				$Sprite2D.flip_h = false
 			if not is_on_floor():
-				SLIDE = 5
+				STATUS.slide = 5
 				DAMAGE_MULTIPLIER = -1.2
 			else:
-				SLIDE = 30
+				STATUS.slide = 30
 				DAMAGE_MULTIPLIER = -1
 			if not is_on_floor() and not floating:
 				if Input.is_action_pressed("down"):
@@ -73,14 +74,15 @@ func _physics_process(delta: float) -> void:
 				if Input.is_action_just_pressed("up"):
 					velocity.y = JUMP_VELOCITY
 			if direction:
-				velocity.x = SPEED * direction
+				velocity.x = STATUS.speed * direction
 			if not direction:
-				velocity.x = move_toward(velocity.x, 0, SLIDE)
+				velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 				direction = 0
 			$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 			if Input.is_action_just_pressed("space"):
 				Autoloads.PLAYER_POSSESS_STOP = true
 				Autoloads.PLAYER_POSSESSING = false
+				STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5}
 				_health_process(0)
 	if not Autoloads.PLAYER_POSSESSING:
 		if INVINCIBLE:
@@ -92,15 +94,15 @@ func _physics_process(delta: float) -> void:
 			if direction < 0:
 				$Sprite2D.flip_h = true
 			if not is_on_floor():
-				SLIDE = 5
-				DAMAGE_MULTIPLIER = -1.2
+				STATUS.slide = 5
+				STATUS.damage_multiplier = -1.2
 			else:
 				if CROUCH:
-					SLIDE = 120
-					DAMAGE_MULTIPLIER = -0.8
+					STATUS.slide = 120
+					STATUS.damage_multiplier = -0.8
 				else:
-					SLIDE = 30
-					DAMAGE_MULTIPLIER = -1
+					STATUS.slide = 30
+					STATUS.damage_multiplier = -1
 			if not is_on_floor() and not floating:
 				if Input.is_action_pressed("down"):
 					velocity += get_gravity() * delta * 2.5
@@ -108,7 +110,7 @@ func _physics_process(delta: float) -> void:
 					velocity += get_gravity() * delta * 1.5
 			if not TEXTURE_LOCK:
 				if CROUCH:
-					SPEED = 30
+					STATUS.speed = 30
 					$Player_Shape.shape.size = Vector2(15.5, 7.75)
 					$Player_Shape.position = Vector2(0, 3.875)
 					if not INVINCIBLE:
@@ -116,7 +118,7 @@ func _physics_process(delta: float) -> void:
 						$DamageCollision/PlayerDamageCollision.position = Vector2(0, 3.875)
 					$Sprite2D.texture = load("res://assets/placeholder_player_crouch.png")
 				if not CROUCH:
-					SPEED = 120
+					STATUS.speed = 120
 					$Player_Shape.shape.size = Vector2(15.5, 15.5)
 					$Player_Shape.position = Vector2(0, 0)
 					if not INVINCIBLE:
@@ -130,14 +132,14 @@ func _physics_process(delta: float) -> void:
 					if not CROUCH_BLOCK:
 						CROUCH = false
 				if Input.is_action_just_pressed("up"):
-					velocity.y = JUMP_VELOCITY
+					velocity.y = STATUS.jump
 			DASH_Y_CHANGE = Input.get_axis("up", "down")
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 			if direction:
-				velocity.x = SPEED * direction
+				velocity.x = STATUS.speed * direction
 			if not direction:
-				velocity.x = move_toward(velocity.x, 0, SLIDE)
+				velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 				direction = 0
 			if $DashRecover.value == 60 and abs(direction) + abs(DASH_Y_CHANGE) != 0:
 				if Input.is_action_just_pressed("space"): 
