@@ -13,7 +13,11 @@ config_version=5
 config/name="Mis-tulto"
 run/main_scene="uid://bficcnd31abcj"
 config/features=PackedStringArray("4.7", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://assets/icon/icon.svg"
+
+[autoload]
+
+Autoloads="*uid://w335w5cpmm11"
 
 [display]
 

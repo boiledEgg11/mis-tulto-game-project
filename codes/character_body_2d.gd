@@ -11,7 +11,7 @@ var CROUCH = false
 var SLIDE = 0
 var DASH_DIRECTION = 0
 var DASH_MOVE = false
-var DAMAGE_MULTIPLIER = 1
+var DAMAGE_MULTIPLIER = -1
 var CROUCH_BLOCK = false
 var INVINCIBLE = false
 var floating = false
@@ -20,6 +20,9 @@ func _ready() -> void:
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$PlayerHealth.value = 10
 	$AttackCollision/CollisionShape2D.disabled = true
+	$PossessArea/PossessShape.disabled = true
+	$DamageCollision/PlayerDamageCollision.disabled = false
+	$DamageCollision/PlayerDamageCollision.shape.size = Vector2(10, 10)
 func _health_process(DAMAGE: float) -> void:
 	if not INVINCIBLE:
 		TEXTURE_LOCK = true
@@ -41,6 +44,8 @@ func _death():
 	$PlayerHealth.value = 10
 	TEXTURE_LOCK = false
 func _physics_process(delta: float) -> void: 
+	Autoloads.PLAYER_POSITION_X = position.x
+	Autoloads.PLAYER_POSITION_Y = position.y
 	if INVINCIBLE:
 		$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
 	move_and_slide()
@@ -52,14 +57,14 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.flip_h = true
 		if not is_on_floor():
 			SLIDE = 5
-			DAMAGE_MULTIPLIER = 1.2
+			DAMAGE_MULTIPLIER = -1.2
 		else:
 			if CROUCH:
 				SLIDE = 120
-				DAMAGE_MULTIPLIER = 0.8
+				DAMAGE_MULTIPLIER = -0.8
 			else:
 				SLIDE = 30
-				DAMAGE_MULTIPLIER = 1
+				DAMAGE_MULTIPLIER = -1
 		if not is_on_floor() and not floating:
 			if Input.is_action_pressed("down"):
 				velocity += get_gravity() * delta * 2.5
@@ -104,11 +109,13 @@ func _physics_process(delta: float) -> void:
 					DASH_DIRECTION = -1
 				if direction > 0:
 					DASH_DIRECTION = 1
+				if direction == 0:
+					DASH_DIRECTION = 0
 				DASH_MOVE = true
 				INVINCIBLE = true
 				$Sprite2D.texture = load("res://assets/placeholder_dash.png")
 				$DashRecover.value = 0
-				if direction == 0:
+				if DASH_DIRECTION == 0:
 					velocity.x = 0
 					$Sprite2D.flip_h = false
 					$Sprite2D.rotation_degrees = -90
@@ -124,11 +131,11 @@ func _physics_process(delta: float) -> void:
 							$Sprite2D.flip_v = true
 					velocity.y = DASH_Y_CHANGE * DASH_SPEED / 3
 					velocity.x = abs(DASH_SPEED - abs(velocity.y)) * DASH_DIRECTION
-				$AttackCollision/CollisionShape2D.shape.size = Vector2(17, 17)
-				$AttackCollision/CollisionShape2D.disabled = false
+				$PossessArea/PossessShape.disabled = false
 				if DASH_Y_CHANGE == 1 and is_on_floor():
 					velocity.y = -200
 					velocity.x = DASH_SPEED * DASH_DIRECTION * 1.5
+					$AttackCollision/CollisionShape2D.disabled = false
 					await get_tree().create_timer(0.1).timeout
 				else:
 					await get_tree().create_timer(0.25).timeout
@@ -141,7 +148,7 @@ func _physics_process(delta: float) -> void:
 					velocity.y = 0
 					velocity.x = 0
 				$AttackCollision/CollisionShape2D.disabled = true
-				$AttackCollision/CollisionShape2D.shape.size = Vector2(0, 0)
+				$PossessArea/PossessShape.disabled = true
 func _process(delta: float) -> void:
 	_dash_recover_process(1)
 
@@ -157,27 +164,22 @@ func _on_crouch_test_area_body_entered(body: TileMapLayer) -> void:
 	CROUCH_BLOCK = true
 	print("cant crouch")
 
-func _on_attack_collision_area_body_entered(body) -> void:
-	if body.is_in_group("damage"):
+func _on_damage_collision_area_entered(area) -> void:
+	if area.is_in_group("damage"):
 		ENEMY_COLLISION = true
 		if not INVINCIBLE:
 			velocity.y = -200
-		_health_process(-1)
+		_health_process(1)
 		print(INVINCIBLE)
-
-func _on_attack_collision_area_body_exited(body) -> void:
-	if body.is_in_group("damage"):
-		ENEMY_COLLISION = false
-
-func _on_damage_collision_area_entered(area) -> void:
-	floating = true
-	if area.is_in_group("float"):
-		position.y = 0
-		position.x = 0
 
 
 func _on_crouch_test_area_area_entered(area: Area2D) -> void:
 	if area.is_in_group("float"):
 		position.y = 0
 		position.x = 0
-		_health_process(-5)
+		_health_process(5)
+
+
+func _on_damage_collision_area_exited(area) -> void:
+	if area.is_in_group("damage"):
+		ENEMY_COLLISION = false
