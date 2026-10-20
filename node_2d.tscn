@@ -26,7 +26,7 @@ size = Vector2(15.5, 15.5)
 size = Vector2(17, 17)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kurx0"]
-size = Vector2(16.25, 17)
+size = Vector2(17, 17)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q6r6c"]
 resource_local_to_scene = true
@@ -172,7 +172,8 @@ shape = SubResource("RectangleShape2D_7ucd7")
 debug_color = Color(0.42352942, 0, 0.6039216, 0.5882353)
 
 [node name="PossessArea" type="Area2D" parent="Player" unique_id=701140378]
-position = Vector2(0.375, 0)
+collision_layer = 8
+collision_mask = 8
 
 [node name="PossessShape" type="CollisionShape2D" parent="Player/PossessArea" unique_id=1164572365]
 shape = SubResource("RectangleShape2D_kurx0")

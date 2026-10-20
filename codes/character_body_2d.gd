@@ -15,6 +15,7 @@ var DAMAGE_MULTIPLIER = -1
 var CROUCH_BLOCK = false
 var INVINCIBLE = false
 var floating = false
+var STAUTS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5}
 var TEXTURE_LOCK
 func _ready() -> void:
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
@@ -171,6 +172,7 @@ func _physics_process(delta: float) -> void:
 						velocity.y = -200
 						velocity.x = DASH_SPEED * DASH_DIRECTION * 1.5
 						$AttackCollision/CollisionShape2D.disabled = false
+						$PossessArea/PossessShape.disabled = true
 						await get_tree().create_timer(0.1).timeout
 					else:
 						await get_tree().create_timer(0.25).timeout
