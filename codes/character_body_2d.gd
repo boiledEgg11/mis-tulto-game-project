@@ -45,9 +45,17 @@ func _ability_use(ability):
 	print(ability)
 	match ability:
 		"Jump":
-			velocity.y = STATUS.jump * 2
-	$DashRecover.value = 0
+			if is_on_floor():
+				velocity.y = STATUS.jump * 2
+			else:
+				if Input.is_action_pressed("down"):
+					velocity.y = STATUS.jump * -4
+				else:
+					velocity.y = STATUS.jump * 1.5
+	if ability != "None":
+		$DashRecover.value = 0
 func _physics_process(delta: float) -> void: 
+	print(Autoloads.POSSESS_AMOUNT)
 	Autoloads.PLAYER_POSITION_X = position.x
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
@@ -58,39 +66,69 @@ func _physics_process(delta: float) -> void:
 		if INVINCIBLE:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
 		if not DASH_MOVE:
-			if Input.is_action_just_pressed("ability") and $DashRecover.value == 60:
+			if Input.is_action_just_pressed("space") and $DashRecover.value == 60:
 				_ability_use(Autoloads.POSSESS_ABILITY)
-			direction = Input.get_axis("left", "right")
-			if direction > 0:
-				$Sprite2D.flip_h = true
-			if direction < 0:
-				$Sprite2D.flip_h = false
-			if not is_on_floor():
-				STATUS.slide = 5
-				STATUS.damage_multiplier = -1.2
-			else:
-				STATUS.slide = 30
-				STATUS.damage_multiplier = -1
-			if not is_on_floor():
-				if Input.is_action_pressed("down"):
-					velocity += get_gravity() * delta * 2.5
+		match Autoloads.POSSESS_ABILITY:
+			"Jump":
+				direction = Input.get_axis("left", "right")
+				if direction > 0:
+					$Sprite2D.flip_h = false
+				if direction < 0:
+					$Sprite2D.flip_h = true
+				if not is_on_floor():
+					STATUS.slide = 5
+					STATUS.damage_multiplier = -1.2
 				else:
-					velocity += get_gravity() * delta * 1.5
-			if is_on_floor():
-				if Input.is_action_just_pressed("up"):
-					velocity.y = STATUS.jump
-			if direction:
-				velocity.x = STATUS.speed * direction
-			if not direction:
-				velocity.x = move_toward(velocity.x, 0, STATUS.slide)
-				direction = 0
-			$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
-			if Input.is_action_just_pressed("space") or Autoloads.POSSESS_AMOUNT > 1:
-				Autoloads.PLAYER_POSSESS_STOP = true
-				Autoloads.PLAYER_POSSESSING = false
-				STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5}
-				_health_process(0)
-				Autoloads.POSSESS_AMOUNT = 0
+					STATUS.slide = 30
+					STATUS.damage_multiplier = -1
+				if not is_on_floor():
+					if Input.is_action_pressed("down"):
+						velocity += get_gravity() * delta * 2.5
+					else:
+						velocity += get_gravity() * delta * 1.5
+				if is_on_floor():
+					if Input.is_action_just_pressed("up"):
+						velocity.y = STATUS.jump
+				if direction:
+					velocity.x = STATUS.speed * direction
+					if is_on_floor():
+						velocity.y = STATUS.jump
+				if not direction:
+					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+					direction = 0
+				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
+			_:
+				direction = Input.get_axis("left", "right")
+				if direction > 0:
+					$Sprite2D.flip_h = false
+				if direction < 0:
+					$Sprite2D.flip_h = true
+				if not is_on_floor():
+					STATUS.slide = 5
+					STATUS.damage_multiplier = -1.2
+				else:
+					STATUS.slide = 30
+					STATUS.damage_multiplier = -1
+				if not is_on_floor():
+					if Input.is_action_pressed("down"):
+						velocity += get_gravity() * delta * 2.5
+					else:
+						velocity += get_gravity() * delta * 1.5
+				if is_on_floor():
+					if Input.is_action_just_pressed("up"):
+						velocity.y = STATUS.jump
+				if direction:
+					velocity.x = STATUS.speed * direction
+				if not direction:
+					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+					direction = 0
+				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
+		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1:
+			Autoloads.POSSESS_AMOUNT = 0
+			Autoloads.PLAYER_POSSESS_STOP = true
+			Autoloads.PLAYER_POSSESSING = false
+			STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5}
+			_health_process(0)
 	if not Autoloads.PLAYER_POSSESSING:
 		if INVINCIBLE:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
