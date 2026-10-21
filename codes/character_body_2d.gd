@@ -1,6 +1,4 @@
 extends CharacterBody2D
-var SPEED = 120.0
-var JUMP_VELOCITY = -400.0
 var DASHING = false
 const DASH_SPEED = 480
 var direction = 1
@@ -8,10 +6,8 @@ var health = 10
 var ENEMY_COLLISION = false
 var DASH_Y_CHANGE = 0
 var CROUCH = false
-var SLIDE = 0
 var DASH_DIRECTION = 0
 var DASH_MOVE = false
-var DAMAGE_MULTIPLIER = -1
 var CROUCH_BLOCK = false
 var INVINCIBLE = false
 var floating = false
@@ -29,7 +25,7 @@ func _health_process(DAMAGE) -> void:
 		TEXTURE_LOCK = true
 		if DAMAGE > 0:
 			$Sprite2D.texture = load("res://assets/placeholder_death.png")
-			$PlayerHealth.value += DAMAGE * DAMAGE_MULTIPLIER
+			$PlayerHealth.value += DAMAGE * STATUS.damage_multiplier
 		if $PlayerHealth.value <= 0:
 			_death()
 		INVINCIBLE = true
@@ -50,6 +46,7 @@ func _physics_process(delta: float) -> void:
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
+		$PossessArea/PossessShape.disabled = true
 		STATUS = Autoloads.POSSESS_STATUS
 		if INVINCIBLE:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
@@ -61,10 +58,10 @@ func _physics_process(delta: float) -> void:
 				$Sprite2D.flip_h = false
 			if not is_on_floor():
 				STATUS.slide = 5
-				DAMAGE_MULTIPLIER = -1.2
+				STATUS.damage_multiplier = -1.2
 			else:
 				STATUS.slide = 30
-				DAMAGE_MULTIPLIER = -1
+				STATUS.damage_multiplier = -1
 			if not is_on_floor() and not floating:
 				if Input.is_action_pressed("down"):
 					velocity += get_gravity() * delta * 2.5
@@ -72,7 +69,7 @@ func _physics_process(delta: float) -> void:
 					velocity += get_gravity() * delta * 1.5
 			if is_on_floor():
 				if Input.is_action_just_pressed("up"):
-					velocity.y = JUMP_VELOCITY
+					velocity.y = STATUS.jump
 			if direction:
 				velocity.x = STATUS.speed * direction
 			if not direction:
@@ -111,18 +108,18 @@ func _physics_process(delta: float) -> void:
 			if not TEXTURE_LOCK:
 				if CROUCH:
 					STATUS.speed = 30
-					$Player_Shape.shape.size = Vector2(15.5, 7.75)
-					$Player_Shape.position = Vector2(0, 3.875)
+					$Player_Shape.shape.size = Vector2(STATUS.hitbox_x, STATUS.hitbox_y / 2)
+					$Player_Shape.position = Vector2(0, STATUS.hitbox_y / 4)
 					if not INVINCIBLE:
-						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(10, 5)
-						$DamageCollision/PlayerDamageCollision.position = Vector2(0, 3.875)
+						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x * (2/3), STATUS.hitbox_y * (1/3))
+						$DamageCollision/PlayerDamageCollision.position = Vector2(0, STATUS.hitbox_y / 4)
 					$Sprite2D.texture = load("res://assets/placeholder_player_crouch.png")
 				if not CROUCH:
 					STATUS.speed = 120
-					$Player_Shape.shape.size = Vector2(15.5, 15.5)
+					$Player_Shape.shape.size = Vector2(STATUS.hitbox_x, STATUS.hitbox_y)
 					$Player_Shape.position = Vector2(0, 0)
 					if not INVINCIBLE:
-						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(10, 10)
+						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x * (2/3), STATUS.hitbox_y * (2/3))
 						$DamageCollision/PlayerDamageCollision.position = Vector2(0, 0)
 					$Sprite2D.texture = load("res://assets/placeholder_player.png")
 			if is_on_floor():
@@ -190,6 +187,8 @@ func _physics_process(delta: float) -> void:
 					$PossessArea/PossessShape.disabled = true
 func _process(delta: float) -> void:
 	_dash_recover_process(1)
+	if Autoloads.PLAYER_POSSESSING:
+		$PossessArea/PossessShape.disabled = true
 
 func _dash_recover_process(delta:float) -> void:
 	$DashRecover.value += delta * 1

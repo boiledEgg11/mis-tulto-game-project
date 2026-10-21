@@ -1,8 +1,8 @@
 extends CharacterBody2D
 var SPEED = 50
 var direction = -1
-var health = 2
-var possess_health = 2
+var health = 1
+var possess_health = 0
 var SLIDE
 var INVINCIBLE = false
 func _ready() -> void:
@@ -50,8 +50,6 @@ func _on_enemy_area_area_entered(area) -> void:
 func _process(delta: float) -> void:
 		if health == 0:
 			queue_free()
-		if Autoloads.PLAYER_POSSESSING and possess_health > 0:
-			possess_health = 0
 		if possess_health == 0:
 			Autoloads.POSSESS_STATUS = {"speed": 50, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5}
 			possess_health = -1

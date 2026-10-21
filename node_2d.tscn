@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="5_rj586"]
 [ext_resource type="Script" uid="uid://cc0rtmvte20dk" path="res://codes/rigid_body_2d.gd" id="8_rj586"]
 [ext_resource type="Texture2D" uid="uid://b7dpufmafxgyw" path="res://assets/placeholder_enemy.png" id="9_4d7sh"]
+[ext_resource type="Script" uid="uid://c5heq53boj1k3" path="res://codes/testenemy2.gd" id="10_ir8iy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b5jwi"]
 size = Vector2(15.5, 15.5)
@@ -108,7 +109,7 @@ size = Vector2(2500, 50)
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=714223642 groups=["Player_collisoin"]]
 z_index = 1
-collision_layer = 4
+collision_layer = 0
 collision_mask = 5
 script = ExtResource("1_0e48y")
 
@@ -188,7 +189,7 @@ script = ExtResource("4_0hol4")
 
 [node name="EnemyTest" type="CharacterBody2D" parent="." unique_id=1630711260]
 position = Vector2(98, 0)
-collision_layer = 2
+collision_layer = 0
 collision_mask = 3
 script = ExtResource("8_rj586")
 
@@ -217,6 +218,37 @@ collision_mask = 8
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/EnemyArea" unique_id=947598378]
 shape = SubResource("RectangleShape2D_f5w1v")
 
+[node name="EnemyTest2" type="CharacterBody2D" parent="." unique_id=871149970]
+position = Vector2(-20, 0)
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("10_ir8iy")
+
+[node name="Sprite2D" type="Sprite2D" parent="EnemyTest2" unique_id=1785007946]
+texture = ExtResource("9_4d7sh")
+
+[node name="EnemyTestCollision" type="CollisionShape2D" parent="EnemyTest2" unique_id=1580353255]
+shape = SubResource("RectangleShape2D_dmgr1")
+
+[node name="LeftCollisionCheck" type="Area2D" parent="EnemyTest2" unique_id=1514178106]
+position = Vector2(-8, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest2/LeftCollisionCheck" unique_id=262479670]
+shape = SubResource("RectangleShape2D_nfudh")
+
+[node name="RightCollisionCheck" type="Area2D" parent="EnemyTest2" unique_id=2109190624]
+position = Vector2(8, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest2/RightCollisionCheck" unique_id=696586175]
+shape = SubResource("RectangleShape2D_nfudh")
+
+[node name="EnemyArea" type="Area2D" parent="EnemyTest2" unique_id=1667929739 groups=["damage"]]
+collision_layer = 10
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest2/EnemyArea" unique_id=292008142]
+shape = SubResource("RectangleShape2D_f5w1v")
+
 [node name="Area2D" type="Area2D" parent="." unique_id=7964720 groups=["float"]]
 position = Vector2(0, 200)
 
@@ -236,3 +268,6 @@ shape = SubResource("RectangleShape2D_ir8iy")
 [connection signal="body_entered" from="EnemyTest/LeftCollisionCheck" to="EnemyTest" method="_on_left_collision_check_body_entered"]
 [connection signal="body_entered" from="EnemyTest/RightCollisionCheck" to="EnemyTest" method="_on_right_collision_check_body_entered"]
 [connection signal="area_entered" from="EnemyTest/EnemyArea" to="EnemyTest" method="_on_enemy_area_area_entered"]
+[connection signal="body_entered" from="EnemyTest2/LeftCollisionCheck" to="EnemyTest2" method="_on_left_collision_check_body_entered"]
+[connection signal="body_entered" from="EnemyTest2/RightCollisionCheck" to="EnemyTest2" method="_on_right_collision_check_body_entered"]
+[connection signal="area_entered" from="EnemyTest2/EnemyArea" to="EnemyTest2" method="_on_enemy_area_area_entered"]
