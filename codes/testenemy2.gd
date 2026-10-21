@@ -8,8 +8,6 @@ var INVINCIBLE = false
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
-	if possess_health > health and health != 0:
-		possess_health = health
 	move_and_slide()
 	if possess_health > 0:
 		velocity.x = direction * SPEED
@@ -23,8 +21,6 @@ func _physics_process(delta: float) -> void:
 			position.y = Autoloads.PLAYER_POSITION_Y
 			$EnemyArea/CollisionShape2D.disabled = true
 			$Sprite2D.visible = false
-			if Autoloads.PLAYER_POSSESS_STOP:
-				_possess_stop()
 func _possess_stop() -> void:
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
@@ -48,10 +44,19 @@ func _on_enemy_area_area_entered(area) -> void:
 			possess_health -= 1
 			print("possessed")
 func _process(delta: float) -> void:
+		if $Sprite2D.visible == false and Autoloads.PLAYER_POSSESS_STOP:
+			possess_health = 1
+			INVINCIBLE = false
+			$Sprite2D.visible = true
+			$EnemyArea/CollisionShape2D.disabled = false
+		if Autoloads.PLAYER_POSSESS_STOP and possess_health < 1:
+			_possess_stop()
 		if health == 0:
 			queue_free()
 		if possess_health == 0:
-			Autoloads.POSSESS_STATUS = {"speed": 50, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5}
+			Autoloads.POSSESS_ABILITY = "Jump"
+			Autoloads.POSSESS_AMOUNT += 1
+			Autoloads.POSSESS_STATUS = {"speed": 50, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 16, "hitbox_x": 16}
 			possess_health = -1
 			Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy.png"
 			Autoloads.PLAYER_POSSESSING = true
