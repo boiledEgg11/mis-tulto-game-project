@@ -3,6 +3,7 @@ var direction = -1
 var health = 1
 var possess_health = 0
 var SLIDE
+var POSSESSED = false
 var INVINCIBLE = false
 var STATUS = {"speed": 80, "jump": -300, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5}
 func _ready() -> void:
@@ -10,6 +11,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
+		POSSESSED = false
 		if is_on_wall_only():
 			direction *= -1
 		if not abs(velocity.x) == 50:
@@ -25,8 +27,9 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.flip_h = false
 		if direction == -1:
 			$Sprite2D.flip_h = true
-	else:
+	if possess_health == -1:
 			INVINCIBLE = true
+			POSSESSED = true
 			position.x = Autoloads.PLAYER_POSITION_X
 			position.y = Autoloads.PLAYER_POSITION_Y
 			$EnemyArea/CollisionShape2D.disabled = true
@@ -50,11 +53,8 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(delta: float) -> void:
-	if possess_health < 1 and not Autoloads.PLAYER_POSSESSING:
-		possess_health = 1
-		INVINCIBLE = false
-		$Sprite2D.visible = true
-		$EnemyArea/CollisionShape2D.disabled = false
+	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
+		_possess_stop()
 	if $Sprite2D.visible == false:
 		print("invis")
 	if Autoloads.POSSESS_AMOUNT > 1:
@@ -66,11 +66,11 @@ func _process(delta: float) -> void:
 	if health == 0:
 		queue_free()
 	if possess_health == 0:
+		Autoloads.PLAYER_POSSESSING = true
 		Autoloads.POSSESS_ABILITY = "Jump"
 		Autoloads.POSSESS_AMOUNT += 1
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
 		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy_bouncy.png"
-		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0

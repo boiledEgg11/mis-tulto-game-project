@@ -4,6 +4,7 @@ var health = 1
 var possess_health = 0
 var SLIDE
 var INVINCIBLE = false
+var POSSESSED = false
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
@@ -12,13 +13,15 @@ func _physics_process(delta: float) -> void:
 		possess_health = health
 	move_and_slide()
 	if possess_health > 0:
+		POSSESSED = false
 		velocity.x = direction * STATUS.speed
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
-	else:
+	if possess_health == -1:
 			INVINCIBLE = true
+			POSSESSED = true
 			position.x = Autoloads.PLAYER_POSITION_X
 			position.y = Autoloads.PLAYER_POSITION_Y
 			$EnemyArea/CollisionShape2D.disabled = true
@@ -46,22 +49,24 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(delta: float) -> void:
-		if $Sprite2D.visible == false and Autoloads.PLAYER_POSSESS_STOP:
-			INVINCIBLE = false
-			$Sprite2D.visible = true
-			$EnemyArea/CollisionShape2D.disabled = false
-		if $Sprite2D.visible == false:
-			print("invis")
-		if Autoloads.POSSESS_AMOUNT > 1:
-			_possess_stop()
-		if health == 0:
-			queue_free()
-		if possess_health == 0:
-			Autoloads.POSSESS_AMOUNT += 1
-			Autoloads.POSSESS_ABILITY = "None"
-			Autoloads.POSSESS_STATUS = STATUS
-			possess_health = -1
-			Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy.png"
-			Autoloads.PLAYER_POSSESSING = true
-			velocity.x = 0
-			velocity.y = 0
+	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
+		_possess_stop()
+	if $Sprite2D.visible == false:
+		print("invis")
+	if Autoloads.POSSESS_AMOUNT > 1:
+		_possess_stop()
+	if health == 0:
+		queue_free()
+	if Autoloads.POSSESS_AMOUNT > 1:
+		_possess_stop()
+	if health == 0:
+		queue_free()
+	if possess_health == 0:
+		Autoloads.POSSESS_AMOUNT += 1
+		Autoloads.POSSESS_ABILITY = "None"
+		Autoloads.POSSESS_STATUS = STATUS
+		possess_health = -1
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy.png"
+		Autoloads.PLAYER_POSSESSING = true
+		velocity.x = 0
+		velocity.y = 0
