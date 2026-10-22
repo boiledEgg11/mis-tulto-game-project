@@ -55,7 +55,7 @@ func _ability_use(ability):
 	if ability != "None":
 		$DashRecover.value = 0
 func _physics_process(delta: float) -> void: 
-	print(Autoloads.POSSESS_AMOUNT)
+	print(velocity.x)
 	Autoloads.PLAYER_POSITION_X = position.x
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
@@ -76,7 +76,7 @@ func _physics_process(delta: float) -> void:
 				if direction < 0:
 					$Sprite2D.flip_h = true
 				if not is_on_floor():
-					STATUS.slide = 5
+					STATUS.slide = 0
 					STATUS.damage_multiplier = -1.2
 				else:
 					STATUS.slide = 30
@@ -104,7 +104,7 @@ func _physics_process(delta: float) -> void:
 				if direction < 0:
 					$Sprite2D.flip_h = true
 				if not is_on_floor():
-					STATUS.slide = 5
+					STATUS.slide = -10
 					STATUS.damage_multiplier = -1.2
 				else:
 					STATUS.slide = 30
@@ -118,10 +118,11 @@ func _physics_process(delta: float) -> void:
 					if Input.is_action_just_pressed("up"):
 						velocity.y = STATUS.jump
 				if direction:
-					velocity.x = STATUS.speed * direction
-				if not direction:
-					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
-					direction = 0
+					if direction != velocity.x / STATUS.speed and abs(velocity.x) < STATUS.speed* velocity.x:
+						velocity.x = direction * delta / 256
+					else:
+						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+						velocity.x = STATUS.speed * direction
 				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1:
 			Autoloads.POSSESS_AMOUNT = 0
@@ -139,7 +140,7 @@ func _physics_process(delta: float) -> void:
 			if direction < 0:
 				$Sprite2D.flip_h = true
 			if not is_on_floor():
-				STATUS.slide = 5
+				STATUS.slide = 2
 				STATUS.damage_multiplier = -1.2
 			else:
 				if CROUCH:
@@ -182,7 +183,11 @@ func _physics_process(delta: float) -> void:
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 			if direction:
-				velocity.x = STATUS.speed * direction
+				if abs(velocity.x) < STATUS.speed:
+					velocity.x += direction * delta * STATUS.speed * 2
+				else:
+					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+					velocity.x = direction * STATUS.speed
 			if not direction:
 				velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 				direction = 0

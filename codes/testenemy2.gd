@@ -23,9 +23,9 @@ func _physics_process(delta: float) -> void:
 		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
-		if direction == 1:
+		if velocity.x > 0:
 			$Sprite2D.flip_h = false
-		if direction == -1:
+		if velocity.x < 0:
 			$Sprite2D.flip_h = true
 	if possess_health == -1:
 			INVINCIBLE = true
