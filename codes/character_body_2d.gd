@@ -14,7 +14,12 @@ var STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "
 var TEXTURE_LOCK
 var CHARGE = 0
 var ABILITY_USE = true
+var body
+var SAVABLE = false
+var OVERLAPPING_BODIES
+var SAVE_THINGS
 func _ready() -> void:
+	OVERLAPPING_BODIES = $CrouchExitTestArea.get_overlapping_bodies()
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$PlayerHealth.value = 10
 	$AttackCollision/CollisionShape2D.disabled = true
@@ -55,12 +60,17 @@ func _ability_use(ability):
 					velocity.y = STATUS.jump * 1.5
 	if ability != "None":
 		$DashRecover.value = 0
-func _physics_process(delta: float) -> void: 
+func _save():
+	$PlayerHealth.value = 10
+	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
+func _physics_process(delta: float) -> void:
+	if Input.is_action_pressed("shift"):
+		if SAVABLE:
+			_save()
 	if position.y > 175:
 		position.y = 0
 		position.x = 0
 		_health_process(5)
-	print(position.y)
 	Autoloads.PLAYER_POSITION_X = position.x
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
@@ -259,14 +269,18 @@ func _process(delta: float) -> void:
 func _dash_recover_process(delta:float) -> void:
 	$DashRecover.value += delta * 1
 
-func _on_crouch_exit_test_area_body_exited(body: TileMapLayer) -> void:
-	CROUCH_BLOCK = false
-	print("can crouch") 
+func _on_crouch_exit_test_area_body_exited(body) -> void:
+	if body.is_in_group("tile"):
+		CROUCH_BLOCK = false
+		print("can crouch")
+	if body.is_in_group("save"):
+		SAVABLE = false 
 
 
-func _on_crouch_test_area_body_entered(body: TileMapLayer) -> void:
-	CROUCH_BLOCK = true
-	print("cant crouch")
+func _on_crouch_test_area_body_entered(body) -> void:
+	if body.is_in_group("tile"):
+		CROUCH_BLOCK = true
+		print("cant crouch")
 
 func _on_damage_collision_area_entered(area) -> void:
 	if area.is_in_group("damage"):
@@ -283,3 +297,8 @@ func _on_damage_collision_area_entered(area) -> void:
 func _on_damage_collision_area_exited(area) -> void:
 	if area.is_in_group("damage"):
 		ENEMY_COLLISION = false
+
+
+func _on_crouch_exit_test_area_body_entered(body) -> void:
+	if body.is_in_group("save"):
+		SAVABLE = true

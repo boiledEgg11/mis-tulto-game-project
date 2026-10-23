@@ -64,6 +64,7 @@ func _process(delta: float) -> void:
 	if possess_health == 0:
 		Autoloads.POSSESS_AMOUNT += 1
 		Autoloads.POSSESS_ABILITY = "None"
+		Autoloads.POSSESS_ENEMY = "TEST"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
 		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy.png"
