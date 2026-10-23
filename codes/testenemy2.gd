@@ -5,7 +5,8 @@ var possess_health = 0
 var SLIDE
 var POSSESSED = false
 var INVINCIBLE = false
-var STATUS = {"speed": 80, "jump": -300, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5}
+var JUMP_CHARGE = 0
+var STATUS = {"speed": 80, "jump": -300, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed":100}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
@@ -14,11 +15,14 @@ func _physics_process(delta: float) -> void:
 		POSSESSED = false
 		if is_on_wall_only():
 			direction *= -1
-		if not abs(velocity.x) == 50:
-			direction *= -1
+		if not is_on_floor():
+			velocity.x = direction * STATUS.air_speed
 		if is_on_floor():
-			velocity.x = direction * STATUS.speed
-			velocity.y = STATUS.jump
+			JUMP_CHARGE += 1
+			velocity.x = 0
+			if JUMP_CHARGE > 30:
+				JUMP_CHARGE = 0
+				velocity.y = STATUS.jump
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
