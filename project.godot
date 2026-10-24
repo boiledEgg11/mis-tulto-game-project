@@ -37,6 +37,7 @@ damage="things that deal damage to the player"
 float=""
 tile=""
 save=""
+SAVE=""
 
 [input]
 

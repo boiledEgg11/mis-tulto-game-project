@@ -1,7 +1,7 @@
 extends CharacterBody2D
 var direction = -1
 var health = 1
-var possess_health = 0
+var possess_health = 1
 var SLIDE
 var POSSESSED = false
 var INVINCIBLE = false
@@ -46,6 +46,8 @@ func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
 		if area.name == "AttackCollision":
 			health -= 1
+		if area.name == "ExtraAttack":
+			health -= 5
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
@@ -59,15 +61,13 @@ func _possess_stop() -> void:
 func _process(delta: float) -> void:
 	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
 		_possess_stop()
-	if $Sprite2D.visible == false:
-		print("invis")
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
 	if health == 0:
 		queue_free()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health == 0:
+	if health < 0:
 		queue_free()
 	if possess_health == 0:
 		Autoloads.PLAYER_POSSESSING = true

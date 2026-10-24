@@ -18,6 +18,10 @@ var body
 var SAVABLE = false
 var OVERLAPPING_BODIES
 var SAVE_THINGS
+var location
+var DASH_LOCK = false
+var MOVE_LOCK = false
+var ABILITY_LOCK = false
 func _ready() -> void:
 	OVERLAPPING_BODIES = $CrouchExitTestArea.get_overlapping_bodies()
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
@@ -58,6 +62,17 @@ func _ability_use(ability):
 					velocity.y = STATUS.jump * -4
 				else:
 					velocity.y = STATUS.jump * 1.5
+		"EXPLOSIVE":
+			ABILITY_LOCK = true
+			$ExtraAttack/CollisionShape2D.disabled = false
+			if $Sprite2D.flip_h:
+				$ExtraAttack/CollisionShape2D.position = Vector2(-10, 0)
+			if not $Sprite2D.flip_h:
+				$ExtraAttack/CollisionShape2D.position = Vector2(10, 0)
+			await get_tree().create_timer(0.5).timeout
+			$ExtraAttack/CollisionShape2D.disabled = true
+			$ExtraAttack/CollisionShape2D.position = Vector2(0, 0)
+			ABILITY_LOCK = false
 	if ability != "None":
 		$DashRecover.value = 0
 func _save():
@@ -118,6 +133,49 @@ func _physics_process(delta: float) -> void:
 					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 					direction = 0
 				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
+			"EXPLOSIVE":
+				if not is_on_floor():
+					STATUS.slide = 2
+					STATUS.damage_multiplier = -1.2
+				else:
+					STATUS.slide = 30
+					STATUS.damage_multiplier = -1
+				if not is_on_floor():
+					if Input.is_action_pressed("down"):
+						velocity += get_gravity() * delta * 2.5
+					else:
+						velocity += get_gravity() * delta * 1.5
+				if not Input.is_action_pressed("space"):
+					$DashRecover.value = 0
+					DASH_LOCK = true
+					MOVE_LOCK = false
+				else:
+					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+					if $DashRecover.value == 60:
+						_ability_use(Autoloads.POSSESS_ABILITY)
+					DASH_LOCK = false
+					MOVE_LOCK = true
+				direction = Input.get_axis("left", "right")
+				if not MOVE_LOCK or not ABILITY_LOCK:
+					if direction > 0:
+						$Sprite2D.flip_h = false
+					if direction < 0:
+						$Sprite2D.flip_h = true
+					if is_on_floor():
+						if Input.is_action_just_pressed("up"):
+							velocity.x = 0
+							velocity.y = STATUS.jump
+					if direction and not Input.is_action_pressed("space"):
+						if (velocity.x < (STATUS.speed * -1) and direction == -1) or (velocity.x > STATUS.speed and direction == 1):
+							velocity.x += direction * delta * STATUS.speed / 20
+						else:
+							velocity.x = direction * STATUS.speed
+					else:
+						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+						direction = 0
+					if ABILITY_LOCK:
+						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 			_:
 				direction = Input.get_axis("left", "right")
 				if direction > 0:
@@ -125,7 +183,7 @@ func _physics_process(delta: float) -> void:
 				if direction < 0:
 					$Sprite2D.flip_h = true
 				if not is_on_floor():
-					STATUS.slide = -10
+					STATUS.slide = 2
 					STATUS.damage_multiplier = -1.2
 				else:
 					STATUS.slide = 30
@@ -137,21 +195,27 @@ func _physics_process(delta: float) -> void:
 						velocity += get_gravity() * delta * 1.5
 				if is_on_floor():
 					if Input.is_action_just_pressed("up"):
+						velocity.x = 0
 						velocity.y = STATUS.jump
-				if direction:
-					if direction != velocity.x / STATUS.speed and abs(velocity.x) < STATUS.speed* velocity.x:
-						velocity.x = direction * delta / 256
+				if direction and not Input.is_action_pressed("space"):
+					if (velocity.x < (STATUS.speed * -1) and direction == -1) or (velocity.x > STATUS.speed and direction == 1):
+						velocity.x += direction * delta * STATUS.speed / 20
 					else:
-						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
-						velocity.x = STATUS.speed * direction
+						velocity.x = direction * STATUS.speed
+				else:
+					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+					direction = 0
 				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
+
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1:
 			Autoloads.POSSESS_AMOUNT = 0
 			Autoloads.PLAYER_POSSESS_STOP = true
 			Autoloads.PLAYER_POSSESSING = false
+			DASH_LOCK = false
 			STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 			_health_process(0)
 	if not Autoloads.PLAYER_POSSESSING:
+		DASH_LOCK = false
 		if INVINCIBLE:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
 		if not DASH_MOVE:
@@ -267,7 +331,8 @@ func _process(delta: float) -> void:
 		$PossessArea/PossessShape.disabled = true
 
 func _dash_recover_process(delta:float) -> void:
-	$DashRecover.value += delta * 1
+	if not DASH_LOCK:
+		$DashRecover.value += delta * 1
 
 func _on_crouch_exit_test_area_body_exited(body) -> void:
 	if body.is_in_group("tile"):
