@@ -1,35 +1,19 @@
 [gd_scene format=4 uid="uid://bficcnd31abcj"]
 
 [ext_resource type="Script" uid="uid://c58d18t8eq3k1" path="res://codes/character_body_2d.gd" id="1_0e48y"]
+[ext_resource type="Script" uid="uid://oi5cwcb2u2g0" path="res://node_2d.gd" id="1_0h7mo"]
 [ext_resource type="Texture2D" uid="uid://by0xtcu6q3j2l" path="res://assets/placeholder_player.png" id="2_0hol4"]
 [ext_resource type="Script" uid="uid://duh4koj5u1eax" path="res://codes/area_2d.gd" id="2_rj586"]
 [ext_resource type="Script" uid="uid://bb5icce710kjn" path="res://codes/collision_shape_2d.gd" id="3_4d7sh"]
-[ext_resource type="Script" uid="uid://bdhohfio7mlni" path="res://codes/tile_map_test.gd" id="4_0hol4"]
+[ext_resource type="Script" uid="uid://blii58sd0o1rm" path="res://tile_map_layer_2.gd" id="3_nr8wp"]
 [ext_resource type="Script" uid="uid://csugv3yw5phaf" path="res://codes/crouch_test_area.gd" id="5_d21ai"]
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="5_rj586"]
+[ext_resource type="Script" uid="uid://kwi6rykda5kh" path="res://enemy_test_3.gd" id="8_nr8wp"]
 [ext_resource type="Script" uid="uid://cc0rtmvte20dk" path="res://codes/rigid_body_2d.gd" id="8_rj586"]
 [ext_resource type="Texture2D" uid="uid://drgtym1my3gso" path="res://assets/placeholder_enemy.png" id="9_4d7sh"]
 [ext_resource type="Script" uid="uid://c5heq53boj1k3" path="res://codes/testenemy2.gd" id="10_ir8iy"]
 [ext_resource type="Texture2D" uid="uid://7kwhs2sblyyi" path="res://assets/placeholder_enemy_bouncy.png" id="11_hqns4"]
 [ext_resource type="Texture2D" uid="uid://c7o36xe4q7agb" path="res://assets/placeholder_save.png" id="12_x0ka3"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5jwi"]
-size = Vector2(15.5, 15.5)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_euwu4"]
-size = Vector2(10, 10)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_iyk0q"]
-size = Vector2(0.1, 15.5)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8445k"]
-size = Vector2(15.5, 15.5)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ucd7"]
-size = Vector2(17, 17)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kurx0"]
-size = Vector2(17, 17)
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q6r6c"]
 resource_local_to_scene = true
@@ -95,6 +79,9 @@ physics_layer_0/collision_layer = 1
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_q6r6c")
 sources/0 = SubResource("TileSetAtlasSource_4d7sh")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jwpib"]
+size = Vector2(16, 16)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dmgr1"]
 size = Vector2(15.5, 15.5)
 
@@ -107,95 +94,47 @@ size = Vector2(15.5, 15.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8kdyp"]
 size = Vector2(16, 16)
 
-[node name="Node2D" type="Node2D" unique_id=1755812023]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b5jwi"]
+size = Vector2(15.5, 15.5)
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=714223642 groups=["Player_collisoin"]]
-z_index = 1
-collision_layer = 0
-collision_mask = 5
-script = ExtResource("1_0e48y")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_euwu4"]
+size = Vector2(10, 10)
 
-[node name="PlayerHealth" type="ProgressBar" parent="Player" unique_id=739125418]
-modulate = Color(0.17837903, 0.7651734, 0.31318405, 1)
-offset_left = -139.0
-offset_top = -77.0
-offset_right = -67.0
-offset_bottom = -68.0
-max_value = 10.0
-show_percentage = false
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iyk0q"]
+size = Vector2(0.1, 15.5)
 
-[node name="Player_Shape" type="CollisionShape2D" parent="Player" unique_id=1446692577]
-shape = SubResource("RectangleShape2D_b5jwi")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8445k"]
+size = Vector2(15.5, 15.5)
 
-[node name="DamageCollision" type="Area2D" parent="Player" unique_id=604566733]
-collision_mask = 18
-script = ExtResource("2_rj586")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ucd7"]
+size = Vector2(17, 17)
 
-[node name="PlayerDamageCollision" type="CollisionShape2D" parent="Player/DamageCollision" unique_id=2075048318]
-shape = SubResource("RectangleShape2D_euwu4")
-debug_color = Color(0, 0.6509804, 0.07450981, 1)
-script = ExtResource("3_4d7sh")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kurx0"]
+size = Vector2(17, 17)
 
-[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1032957902]
-texture = ExtResource("2_0hol4")
+[sub_resource type="CircleShape2D" id="CircleShape2D_b5jwi"]
+radius = 20.0
 
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1456672527]
-zoom = Vector2(4, 4)
-
-[node name="DashRecover" type="ProgressBar" parent="Player" unique_id=2138811126]
-modulate = Color(0, 0.7713469, 0.77134687, 1)
-self_modulate = Color(1, 0, 1, 1)
-offset_left = -139.0
-offset_top = -65.0
-offset_right = -94.0
-offset_bottom = -61.0
-max_value = 60.0
-show_percentage = false
-
-[node name="CrouchTestArea" type="Area2D" parent="Player" unique_id=1144540496]
-collision_layer = 4
-script = ExtResource("5_d21ai")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CrouchTestArea" unique_id=6903447]
-shape = SubResource("RectangleShape2D_iyk0q")
-debug_color = Color(0.9650963, 1.4439225e-06, 0.49168748, 0.41960785)
-
-[node name="CrouchExitTestArea" type="Area2D" parent="Player" unique_id=1144140170]
-collision_layer = 4
-collision_mask = 17
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CrouchExitTestArea" unique_id=359216176]
-shape = SubResource("RectangleShape2D_8445k")
-
-[node name="AttackCollision" type="Area2D" parent="Player" unique_id=487374813]
-collision_layer = 8
-collision_mask = 8
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/AttackCollision" unique_id=832266739]
-shape = SubResource("RectangleShape2D_7ucd7")
-debug_color = Color(0.42352942, 0, 0.6039216, 0.5882353)
-
-[node name="PossessArea" type="Area2D" parent="Player" unique_id=701140378]
-collision_layer = 8
-collision_mask = 8
-
-[node name="PossessShape" type="CollisionShape2D" parent="Player/PossessArea" unique_id=1164572365]
-shape = SubResource("RectangleShape2D_kurx0")
-debug_color = Color(3.465414e-06, 0.6276734, 0.50268704, 0.41960785)
+[node name="Node2D" type="Node2D" unique_id=1755812023 groups=["SAVE"]]
+script = ExtResource("1_0h7mo")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1246592559 groups=["Player_collisoin", "tile"]]
 light_mask = 261
 position = Vector2(11, 0)
-tile_map_data = PackedByteArray("AAAEAAQAAAAEAAEAAAAFAAQAAAAEAAEAAAAGAAQAAAAEAAEAAAAHAAQAAAAEAAEAAAAIAAQAAAAEAAEAAAAJAAQAAAAEAAEAAAAKAAQAAAAEAAEAAAALAAQAAAAEAAEAAAAMAAQAAAAEAAEAAAANAAQAAAAEAAEAAAAOAAQAAAAEAAEAAAAPAAQAAAAAAAMAAAADAAQAAAAEAAEAAAACAAQAAAAEAAEAAAABAAQAAAAEAAEAAAAAAAQAAAAEAAEAAAD//wQAAAAEAAEAAAD9/wQAAAAEAAEAAAD+/wQAAAAEAAEAAAD8/wQAAAAEAAEAAAD5/wQAAAABAAIAAAD5/wMAAAACAAEAAAD5/wIAAAACAAEAAAD5/wEAAAACAAEAAAD5/wAAAAACAAEAAAD5////AAACAAEAAAD5//7/AAACAAEAAAD5//3/AAACAAAAAAD7/wEAAAADAAIAAAD8/wEAAAADAAIAAAD9/wEAAAADAAIAAAD+/wEAAAADAAIAAAD//wEAAAADAAIAAAAAAAEAAAADAAIAAAAEAAEAAAABAAMAAAAFAAEAAAACAAMAAAADAAMAAAABAAAAAAACAAMAAAAAAAAAAAAEAAMAAAACAAAAAAAPAAUAAAAEAAAAAAAPAAYAAAAEAAAAAAAPAAcAAAAEAAAAAAAPAAgAAAAEAAAAAAAPAAkAAAAAAAMAAAAOAAkAAAAEAAEAAAANAAkAAAAEAAEAAAAMAAkAAAAEAAEAAAALAAkAAAABAAMAAAD8/wMAAAAEAAMAAAD9/wMAAAAEAAMAAAD7/wMAAAAEAAMAAAD4//3/AAABAAAAAAD3//3/AAABAAAAAAD2//3/AAABAAAAAAD1//3/AAABAAAAAAD0//3/AAAAAAAAAAD0//7/AAAAAAEAAAD0////AAAAAAEAAAD0/wAAAAAAAAEAAAD0/wEAAAAAAAEAAAD0/wIAAAAAAAEAAAD0/wMAAAAAAAEAAAD0/wQAAAAAAAIAAAD2/wcAAAAEAAEAAAD3/wcAAAAEAAEAAAD1/wcAAAAEAAEAAAD4/wcAAAACAAMAAAD1/wQAAAACAAIAAAD1/wMAAAACAAEAAAD1/wIAAAACAAEAAAD1/wEAAAACAAEAAAD1/wAAAAACAAEAAAD1////AAACAAEAAAD1//7/AAADAAQAAAD2//7/AAABAAIAAAD3//7/AAABAAIAAAD4//7/AAABAAQAAAD4////AAAAAAEAAAD4/wAAAAAAAAEAAAD4/wEAAAAAAAEAAAD4/wIAAAAAAAEAAAD4/wMAAAAAAAEAAAD4/wQAAAAAAAIAAAD7/wQAAAADAAIAAAD6/wQAAAADAAIAAAD7/wcAAAACAAMAAAD6/wcAAAABAAMAAAACAAkAAAAEAAEAAAABAAkAAAAEAAEAAAADAAkAAAAEAAEAAAAEAAkAAAAEAAEAAAAFAAkAAAAEAAEAAAAGAAkAAAACAAMAAAAAAAkAAAABAAMAAAAIAAMAAAAAAAAAAAAJAAMAAAABAAAAAAAKAAMAAAACAAAAAAALAAMAAAAEAAQAAAAMAAMAAAAEAAQAAAANAAMAAAAEAAQAAAAMAAIAAAABAAMAAAANAAIAAAACAAMAAAD0/wcAAAAEAAEAAADz/wcAAAAEAAEAAADy/wcAAAABAAMAAAAQAAQAAAAAAAMAAAARAAQAAAAAAAMAAAASAAQAAAAAAAMAAAATAAQAAAAAAAMAAAAUAAQAAAAAAAMAAAAVAAQAAAAAAAMAAAAWAAQAAAAAAAMAAAAXAAQAAAAAAAMAAAAYAAQAAAAAAAMAAAAZAAQAAAAAAAMAAAAaAAQAAAAAAAMAAAAbAAQAAAAAAAMAAAAcAAQAAAAAAAMAAAAdAAQAAAAAAAMAAAAeAAQAAAAAAAMAAAAfAAQAAAAAAAMAAAAgAAQAAAAAAAMAAAAhAAQAAAAAAAMAAAAiAAQAAAAAAAMAAAAjAAQAAAAAAAMAAAAkAAQAAAAAAAMAAAAlAAQAAAAAAAMAAAAmAAQAAAAAAAMAAAAnAAQAAAAAAAMAAAAoAAQAAAAAAAMAAAApAAQAAAAAAAMAAAAqAAQAAAAAAAMAAAArAAQAAAAAAAMAAAAsAAQAAAAAAAMAAAAtAAQAAAAAAAMAAAAuAAQAAAAAAAMAAAAvAAQAAAAAAAMAAAAwAAQAAAAAAAMAAAAxAAQAAAAAAAMAAAAyAAQAAAAAAAMAAAAzAAQAAAAAAAMAAAA0AAQAAAAAAAMAAAA1AAQAAAAAAAMAAAA2AAQAAAAAAAMAAAA3AAQAAAAAAAMAAAA4AAQAAAAAAAMAAAA5AAQAAAAAAAMAAAA6AAQAAAAAAAMAAAA7AAQAAAAAAAMAAAA8AAQAAAAAAAMAAAA9AAQAAAAAAAMAAAA+AAQAAAAAAAMAAAA/AAQAAAAAAAMAAABAAAQAAAAAAAMAAABBAAQAAAAAAAMAAABCAAQAAAAAAAMAAABDAAQAAAAAAAMAAABEAAQAAAAAAAMAAABFAAQAAAAAAAMAAABGAAQAAAAAAAMAAABHAAQAAAAAAAMAAABIAAQAAAAAAAMAAAA=")
+tile_map_data = PackedByteArray("AAAEAAQAAAAEAAEAAAAIAAQAAAAEAAEAAAAJAAQAAAAEAAEAAAAKAAQAAAAEAAEAAAALAAQAAAAEAAEAAAAMAAQAAAAEAAEAAAANAAQAAAAEAAEAAAAOAAQAAAAEAAEAAAAPAAQAAAAAAAMAAAADAAQAAAAEAAEAAAACAAQAAAAEAAEAAAABAAQAAAAEAAEAAAAAAAQAAAAEAAEAAAD//wQAAAAEAAEAAAD9/wQAAAAEAAEAAAD+/wQAAAAEAAEAAAD8/wQAAAAEAAEAAAD5/wQAAAABAAIAAAD5/wMAAAACAAEAAAD5/wIAAAACAAEAAAD5/wEAAAACAAEAAAD5/wAAAAACAAEAAAD5////AAACAAEAAAD5//7/AAACAAEAAAD5//3/AAACAAAAAAD7/wEAAAADAAIAAAD8/wEAAAADAAIAAAD9/wEAAAADAAIAAAD+/wEAAAADAAIAAAD//wEAAAADAAIAAAAAAAEAAAADAAIAAAAEAAEAAAABAAMAAAAFAAEAAAACAAMAAAADAAMAAAABAAAAAAACAAMAAAAAAAAAAAAEAAMAAAACAAAAAAAPAAUAAAAEAAAAAAAPAAYAAAAEAAAAAAAPAAcAAAAEAAAAAAAPAAgAAAAEAAAAAAAPAAkAAAAAAAMAAAAOAAkAAAAEAAEAAAANAAkAAAAEAAEAAAAMAAkAAAAEAAEAAAALAAkAAAABAAMAAAD8/wMAAAAEAAMAAAD9/wMAAAAEAAMAAAD7/wMAAAAEAAMAAAD4//3/AAABAAAAAAD3//3/AAABAAAAAAD2//3/AAABAAAAAAD1//3/AAABAAAAAAD0//3/AAAAAAAAAAD0//7/AAAAAAEAAAD0////AAAAAAEAAAD0/wAAAAAAAAEAAAD0/wEAAAAAAAEAAAD0/wIAAAAAAAEAAAD0/wMAAAAAAAEAAAD0/wQAAAAAAAIAAAD2/wcAAAAEAAEAAAD3/wcAAAAEAAEAAAD1/wcAAAAEAAEAAAD4/wcAAAACAAMAAAD1/wQAAAACAAIAAAD1/wMAAAACAAEAAAD1/wIAAAACAAEAAAD1/wEAAAACAAEAAAD1/wAAAAACAAEAAAD1////AAACAAEAAAD1//7/AAADAAQAAAD2//7/AAABAAIAAAD3//7/AAABAAIAAAD4//7/AAABAAQAAAD4////AAAAAAEAAAD4/wAAAAAAAAEAAAD4/wEAAAAAAAEAAAD4/wIAAAAAAAEAAAD4/wMAAAAAAAEAAAD4/wQAAAAAAAIAAAD7/wQAAAADAAIAAAD6/wQAAAADAAIAAAD7/wcAAAACAAMAAAD6/wcAAAABAAMAAAACAAkAAAAEAAEAAAABAAkAAAAEAAEAAAADAAkAAAAEAAEAAAAEAAkAAAAEAAEAAAAFAAkAAAAEAAEAAAAGAAkAAAACAAMAAAAAAAkAAAABAAMAAAAIAAMAAAAAAAAAAAAJAAMAAAABAAAAAAAKAAMAAAACAAAAAAALAAMAAAAEAAQAAAAMAAMAAAAEAAQAAAANAAMAAAAEAAQAAAAMAAIAAAABAAMAAAANAAIAAAACAAMAAAD0/wcAAAAEAAEAAADz/wcAAAAEAAEAAADy/wcAAAABAAMAAAAQAAQAAAAAAAMAAAARAAQAAAAAAAMAAAASAAQAAAAAAAMAAAATAAQAAAAAAAMAAAAUAAQAAAAAAAMAAAAVAAQAAAAAAAMAAAAWAAQAAAAAAAMAAAAXAAQAAAAAAAMAAAAYAAQAAAAAAAMAAAAZAAQAAAAAAAMAAAAaAAQAAAAAAAMAAAAbAAQAAAAAAAMAAAAcAAQAAAAAAAMAAAAdAAQAAAAAAAMAAAAeAAQAAAAAAAMAAAAfAAQAAAAAAAMAAAAgAAQAAAAAAAMAAAAhAAQAAAAAAAMAAAAiAAQAAAAAAAMAAAAjAAQAAAAAAAMAAAAkAAQAAAAAAAMAAAAlAAQAAAAAAAMAAAAmAAQAAAAAAAMAAAAnAAQAAAAAAAMAAAAoAAQAAAAAAAMAAAApAAQAAAAAAAMAAAAqAAQAAAAAAAMAAAArAAQAAAAAAAMAAAAsAAQAAAAAAAMAAAAtAAQAAAAAAAMAAAAuAAQAAAAAAAMAAAAvAAQAAAAAAAMAAAAwAAQAAAAAAAMAAAAxAAQAAAAAAAMAAAAyAAQAAAAAAAMAAAAzAAQAAAAAAAMAAAA0AAQAAAAAAAMAAAA1AAQAAAAAAAMAAAA2AAQAAAAAAAMAAAA3AAQAAAAAAAMAAAA4AAQAAAAAAAMAAAA5AAQAAAAAAAMAAAA6AAQAAAAAAAMAAAA7AAQAAAAAAAMAAAA8AAQAAAAAAAMAAAA9AAQAAAAAAAMAAAA+AAQAAAAAAAMAAAA/AAQAAAAAAAMAAABAAAQAAAAAAAMAAABBAAQAAAAAAAMAAABCAAQAAAAAAAMAAABDAAQAAAAAAAMAAABEAAQAAAAAAAMAAABFAAQAAAAAAAMAAABGAAQAAAAAAAMAAABHAAQAAAAAAAMAAABIAAQAAAAAAAMAAAA=")
 tile_set = SubResource("TileSet_413ny")
-script = ExtResource("4_0hol4")
 
 [node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=992050739 groups=["Player_collisoin", "tile"]]
 light_mask = 261
 position = Vector2(11, 0)
-tile_map_data = PackedByteArray("AAAEAAQAAAAEAAEAAAAFAAQAAAAEAAEAAAAGAAQAAAAEAAEAAAAHAAQAAAAEAAEAAAAIAAQAAAAEAAEAAAAJAAQAAAAEAAEAAAAKAAQAAAAEAAEAAAALAAQAAAAEAAEAAAAMAAQAAAAEAAEAAAANAAQAAAAEAAEAAAAOAAQAAAAEAAEAAAAPAAQAAAAAAAMAAAADAAQAAAAEAAEAAAACAAQAAAAEAAEAAAABAAQAAAAEAAEAAAAAAAQAAAAEAAEAAAD//wQAAAAEAAEAAAD9/wQAAAAEAAEAAAD+/wQAAAAEAAEAAAD8/wQAAAAEAAEAAAD5/wQAAAABAAIAAAD5/wMAAAACAAEAAAD5/wIAAAACAAEAAAD5/wEAAAACAAEAAAD5/wAAAAACAAEAAAD5////AAACAAEAAAD5//7/AAACAAEAAAD5//3/AAACAAAAAAD7/wEAAAADAAIAAAD8/wEAAAADAAIAAAD9/wEAAAADAAIAAAD+/wEAAAADAAIAAAD//wEAAAADAAIAAAAAAAEAAAADAAIAAAAEAAEAAAABAAMAAAAFAAEAAAACAAMAAAADAAMAAAABAAAAAAACAAMAAAAAAAAAAAAEAAMAAAACAAAAAAAPAAUAAAAEAAAAAAAPAAYAAAAEAAAAAAAPAAcAAAAEAAAAAAAPAAgAAAAEAAAAAAAPAAkAAAAAAAMAAAAOAAkAAAAEAAEAAAANAAkAAAAEAAEAAAAMAAkAAAAEAAEAAAALAAkAAAABAAMAAAD8/wMAAAAEAAMAAAD9/wMAAAAEAAMAAAD7/wMAAAAEAAMAAAD4//3/AAABAAAAAAD3//3/AAABAAAAAAD2//3/AAABAAAAAAD1//3/AAABAAAAAAD0//3/AAAAAAAAAAD0//7/AAAAAAEAAAD0////AAAAAAEAAAD0/wAAAAAAAAEAAAD0/wEAAAAAAAEAAAD0/wIAAAAAAAEAAAD0/wMAAAAAAAEAAAD0/wQAAAAAAAIAAAD2/wcAAAAEAAEAAAD3/wcAAAAEAAEAAAD1/wcAAAAEAAEAAAD4/wcAAAACAAMAAAD1/wQAAAACAAIAAAD1/wMAAAACAAEAAAD1/wIAAAACAAEAAAD1/wEAAAACAAEAAAD1/wAAAAACAAEAAAD1////AAACAAEAAAD1//7/AAADAAQAAAD2//7/AAABAAIAAAD3//7/AAABAAIAAAD4//7/AAABAAQAAAD4////AAAAAAEAAAD4/wAAAAAAAAEAAAD4/wEAAAAAAAEAAAD4/wIAAAAAAAEAAAD4/wMAAAAAAAEAAAD4/wQAAAAAAAIAAAD7/wQAAAADAAIAAAD6/wQAAAADAAIAAAD7/wcAAAACAAMAAAD6/wcAAAABAAMAAAACAAkAAAAEAAEAAAABAAkAAAAEAAEAAAADAAkAAAAEAAEAAAAEAAkAAAAEAAEAAAAFAAkAAAAEAAEAAAAGAAkAAAACAAMAAAAAAAkAAAABAAMAAAAIAAMAAAAAAAAAAAAJAAMAAAABAAAAAAAKAAMAAAACAAAAAAALAAMAAAAEAAQAAAAMAAMAAAAEAAQAAAANAAMAAAAEAAQAAAAMAAIAAAABAAMAAAANAAIAAAACAAMAAAD0/wcAAAAEAAEAAADz/wcAAAAEAAEAAADy/wcAAAABAAMAAAA=")
+tile_map_data = PackedByteArray("AAAFAAQAAAADAAMAAAAGAAQAAAADAAMAAAAHAAQAAAADAAMAAAA=")
 tile_set = SubResource("TileSet_413ny")
-script = ExtResource("4_0hol4")
+script = ExtResource("3_nr8wp")
+
+[node name="Area2D" type="Area2D" parent="TileMapLayer2" unique_id=1670189491]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TileMapLayer2/Area2D" unique_id=1204107503]
+shape = SubResource("RectangleShape2D_jwpib")
 
 [node name="EnemyTest" type="CharacterBody2D" parent="." unique_id=1630711260]
 position = Vector2(98, 0)
@@ -259,6 +198,37 @@ collision_mask = 8
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest2/EnemyArea" unique_id=292008142]
 shape = SubResource("RectangleShape2D_f5w1v")
 
+[node name="EnemyTest3" type="CharacterBody2D" parent="." unique_id=343767597]
+position = Vector2(-20, 0)
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("8_nr8wp")
+
+[node name="Sprite2D" type="Sprite2D" parent="EnemyTest3" unique_id=2057786528]
+texture = ExtResource("9_4d7sh")
+
+[node name="EnemyTestCollision" type="CollisionShape2D" parent="EnemyTest3" unique_id=1703062001]
+shape = SubResource("RectangleShape2D_dmgr1")
+
+[node name="LeftCollisionCheck" type="Area2D" parent="EnemyTest3" unique_id=1998626087]
+position = Vector2(-8, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/LeftCollisionCheck" unique_id=852405086]
+shape = SubResource("RectangleShape2D_nfudh")
+
+[node name="RightCollisionCheck" type="Area2D" parent="EnemyTest3" unique_id=1578926421]
+position = Vector2(8, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/RightCollisionCheck" unique_id=1893693752]
+shape = SubResource("RectangleShape2D_nfudh")
+
+[node name="EnemyArea" type="Area2D" parent="EnemyTest3" unique_id=1224848848 groups=["damage"]]
+collision_layer = 10
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/EnemyArea" unique_id=219461260]
+shape = SubResource("RectangleShape2D_f5w1v")
+
 [node name="Savepoint" type="StaticBody2D" parent="." unique_id=1337825658 groups=["save"]]
 position = Vector2(243, 136)
 collision_layer = 16
@@ -269,20 +239,110 @@ shape = SubResource("RectangleShape2D_8kdyp")
 [node name="Sprite2D" type="Sprite2D" parent="Savepoint" unique_id=1563806827]
 texture = ExtResource("12_x0ka3")
 
-[connection signal="area_entered" from="Player/DamageCollision" to="Player" method="_on_damage_collision_area_entered"]
-[connection signal="area_exited" from="Player/DamageCollision" to="Player" method="_on_damage_collision_area_exited"]
-[connection signal="area_shape_entered" from="Player/DamageCollision" to="Player" method="_on_damage_collision_area_shape_entered"]
-[connection signal="body_entered" from="Player/DamageCollision" to="Player" method="_on_attack_collision_area_body_entered"]
-[connection signal="body_exited" from="Player/DamageCollision" to="Player" method="_on_attack_collision_area_body_exited"]
-[connection signal="area_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_area_entered"]
-[connection signal="body_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_entered"]
-[connection signal="body_shape_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_shape_entered"]
-[connection signal="body_shape_exited" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_shape_exited"]
-[connection signal="body_entered" from="Player/CrouchExitTestArea" to="Player" method="_on_crouch_exit_test_area_body_entered"]
-[connection signal="body_exited" from="Player/CrouchExitTestArea" to="Player" method="_on_crouch_exit_test_area_body_exited"]
+[node name="Node2D" type="Node2D" parent="." unique_id=1263762251 groups=["SAVE"]]
+
+[node name="Player" type="CharacterBody2D" parent="Node2D" unique_id=714223642 groups=["Player_collisoin", "SAVE"]]
+z_index = 1
+collision_layer = 0
+collision_mask = 5
+script = ExtResource("1_0e48y")
+
+[node name="PlayerHealth" type="ProgressBar" parent="Node2D/Player" unique_id=739125418]
+modulate = Color(0.17837903, 0.7651734, 0.31318405, 1)
+offset_left = -139.0
+offset_top = -77.0
+offset_right = -67.0
+offset_bottom = -68.0
+max_value = 10.0
+show_percentage = false
+
+[node name="Player_Shape" type="CollisionShape2D" parent="Node2D/Player" unique_id=1446692577]
+shape = SubResource("RectangleShape2D_b5jwi")
+
+[node name="DamageCollision" type="Area2D" parent="Node2D/Player" unique_id=604566733]
+collision_mask = 18
+script = ExtResource("2_rj586")
+
+[node name="PlayerDamageCollision" type="CollisionShape2D" parent="Node2D/Player/DamageCollision" unique_id=2075048318]
+shape = SubResource("RectangleShape2D_euwu4")
+debug_color = Color(0, 0.6509804, 0.07450981, 1)
+script = ExtResource("3_4d7sh")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D/Player" unique_id=1032957902]
+texture = ExtResource("2_0hol4")
+
+[node name="Camera2D" type="Camera2D" parent="Node2D/Player" unique_id=1456672527]
+zoom = Vector2(4, 4)
+
+[node name="DashRecover" type="ProgressBar" parent="Node2D/Player" unique_id=2138811126]
+modulate = Color(0, 0.7713469, 0.77134687, 1)
+self_modulate = Color(1, 0, 1, 1)
+offset_left = -139.0
+offset_top = -65.0
+offset_right = -94.0
+offset_bottom = -61.0
+max_value = 60.0
+show_percentage = false
+
+[node name="CrouchTestArea" type="Area2D" parent="Node2D/Player" unique_id=1144540496]
+collision_layer = 4
+script = ExtResource("5_d21ai")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Player/CrouchTestArea" unique_id=6903447]
+shape = SubResource("RectangleShape2D_iyk0q")
+debug_color = Color(0.9650963, 1.4439225e-06, 0.49168748, 0.41960785)
+
+[node name="CrouchExitTestArea" type="Area2D" parent="Node2D/Player" unique_id=1144140170]
+collision_layer = 4
+collision_mask = 17
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Player/CrouchExitTestArea" unique_id=359216176]
+shape = SubResource("RectangleShape2D_8445k")
+
+[node name="AttackCollision" type="Area2D" parent="Node2D/Player" unique_id=487374813]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Player/AttackCollision" unique_id=832266739]
+shape = SubResource("RectangleShape2D_7ucd7")
+debug_color = Color(0.42352942, 0, 0.6039216, 0.5882353)
+
+[node name="PossessArea" type="Area2D" parent="Node2D/Player" unique_id=701140378]
+collision_layer = 8
+collision_mask = 8
+
+[node name="PossessShape" type="CollisionShape2D" parent="Node2D/Player/PossessArea" unique_id=1164572365]
+shape = SubResource("RectangleShape2D_kurx0")
+debug_color = Color(3.465414e-06, 0.6276734, 0.50268704, 0.41960785)
+
+[node name="ExtraAttack" type="Area2D" parent="Node2D/Player" unique_id=1904654816 groups=["tile_break"]]
+collision_layer = 9
+collision_mask = 9
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Player/ExtraAttack" unique_id=677240736]
+shape = SubResource("CircleShape2D_b5jwi")
+disabled = true
+debug_color = Color(0.7005621, 0.3218768, 0.92896277, 0.41960785)
+
+[connection signal="area_entered" from="TileMapLayer2/Area2D" to="TileMapLayer2" method="_on_area_2d_area_entered"]
+[connection signal="area_shape_entered" from="TileMapLayer2/Area2D" to="TileMapLayer2" method="_on_area_2d_area_shape_entered"]
 [connection signal="body_entered" from="EnemyTest/LeftCollisionCheck" to="EnemyTest" method="_on_left_collision_check_body_entered"]
 [connection signal="body_entered" from="EnemyTest/RightCollisionCheck" to="EnemyTest" method="_on_right_collision_check_body_entered"]
 [connection signal="area_entered" from="EnemyTest/EnemyArea" to="EnemyTest" method="_on_enemy_area_area_entered"]
 [connection signal="body_entered" from="EnemyTest2/LeftCollisionCheck" to="EnemyTest2" method="_on_left_collision_check_body_entered"]
 [connection signal="body_entered" from="EnemyTest2/RightCollisionCheck" to="EnemyTest2" method="_on_right_collision_check_body_entered"]
 [connection signal="area_entered" from="EnemyTest2/EnemyArea" to="EnemyTest2" method="_on_enemy_area_area_entered"]
+[connection signal="body_entered" from="EnemyTest3/LeftCollisionCheck" to="EnemyTest3" method="_on_left_collision_check_body_entered"]
+[connection signal="body_entered" from="EnemyTest3/RightCollisionCheck" to="EnemyTest3" method="_on_right_collision_check_body_entered"]
+[connection signal="area_entered" from="EnemyTest3/EnemyArea" to="EnemyTest3" method="_on_enemy_area_area_entered"]
+[connection signal="area_entered" from="Node2D/Player/DamageCollision" to="Node2D/Player" method="_on_damage_collision_area_entered"]
+[connection signal="area_exited" from="Node2D/Player/DamageCollision" to="Node2D/Player" method="_on_damage_collision_area_exited"]
+[connection signal="area_shape_entered" from="Node2D/Player/DamageCollision" to="Node2D/Player" method="_on_damage_collision_area_shape_entered"]
+[connection signal="body_entered" from="Node2D/Player/DamageCollision" to="Node2D/Player" method="_on_attack_collision_area_body_entered"]
+[connection signal="body_exited" from="Node2D/Player/DamageCollision" to="Node2D/Player" method="_on_attack_collision_area_body_exited"]
+[connection signal="area_entered" from="Node2D/Player/CrouchTestArea" to="Node2D/Player" method="_on_crouch_test_area_area_entered"]
+[connection signal="body_entered" from="Node2D/Player/CrouchTestArea" to="Node2D/Player" method="_on_crouch_test_area_body_entered"]
+[connection signal="body_shape_entered" from="Node2D/Player/CrouchTestArea" to="Node2D/Player" method="_on_crouch_test_area_body_shape_entered"]
+[connection signal="body_shape_exited" from="Node2D/Player/CrouchTestArea" to="Node2D/Player" method="_on_crouch_test_area_body_shape_exited"]
+[connection signal="body_entered" from="Node2D/Player/CrouchExitTestArea" to="Node2D/Player" method="_on_crouch_exit_test_area_body_entered"]
+[connection signal="body_exited" from="Node2D/Player/CrouchExitTestArea" to="Node2D/Player" method="_on_crouch_exit_test_area_body_exited"]
