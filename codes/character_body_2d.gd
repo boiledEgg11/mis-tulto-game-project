@@ -10,11 +10,11 @@ var DASH_DIRECTION = 0
 var DASH_MOVE = false
 var CROUCH_BLOCK = false
 var INVINCIBLE = false
-var STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 120}
+var STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 120, "damage": 1, "extra_damage": 1}
 var TEXTURE_LOCK
 var CHARGE = 0
 var ABILITY_USE = true
-var body
+var bodies
 var SAVABLE = false
 var OVERLAPPING_BODIES
 var SAVE_THINGS
@@ -43,6 +43,11 @@ func _health_process(DAMAGE) -> void:
 		TEXTURE_LOCK = false
 		await get_tree().create_timer(1.8).timeout
 		INVINCIBLE = false
+func _collision(collision: KinematicCollision2D) -> void:
+	if not collision:
+		return
+	var collision_pos = collision.get_position()
+	var collision_opponent = collision.get_collider()
 func _death():
 	print("dead!")
 	TEXTURE_LOCK = true
@@ -52,7 +57,6 @@ func _death():
 	$PlayerHealth.value = 10
 	TEXTURE_LOCK = false
 func _ability_use(ability):
-	print(ability)
 	match ability:
 		"Jump":
 			if is_on_floor():
@@ -79,6 +83,11 @@ func _save():
 	$PlayerHealth.value = 10
 	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
 func _physics_process(delta: float) -> void:
+	bodies = $ExtraAttack.get_overlapping_bodies()
+	for body in bodies:
+		if not body.is_in_group("tile_breakable"):
+				break
+		Autoloads.tile = body.local_to_map(body.position)
 	if Input.is_action_pressed("shift"):
 		if SAVABLE:
 			_save()

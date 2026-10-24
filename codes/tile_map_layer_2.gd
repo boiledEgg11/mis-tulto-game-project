@@ -15,6 +15,10 @@ func _on_area_2d_area_shape_entered(area_rid: RID, area: Area2D, area_shape_inde
 	pass # Replace with function body.
 
 
+
 func _on_area_2d_area_entered(area) -> void:
-	if area.is_in_group("tile_break"):
-		erase_cell(pos)
+	pass
+
+
+func _on_extra_attack_body_shape_entered(body_rid, body, body_shape_index: int, local_shape_index: int) -> void:
+	print(get_coords_for_body_rid(body_rid))
