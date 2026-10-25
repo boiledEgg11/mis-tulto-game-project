@@ -13,7 +13,22 @@ func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _attack_charge():
 	charge = 1
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(0.25).timeout
+	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
+	await get_tree().create_timer(0.25).timeout
+	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
+	await get_tree().create_timer(0.25).timeout
+	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
+	await get_tree().create_timer(0.25).timeout
+	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
+	await get_tree().create_timer(0.25).timeout
+	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
+	await get_tree().create_timer(0.25).timeout
+	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
+	await get_tree().create_timer(0.25).timeout
+	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
+	await get_tree().create_timer(0.25).timeout
+	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
 	print(charge)
 	$Area2D.position = Vector2i(10 * direction, 0)
 	$Area2D/CollisionShape2D.disabled = false
@@ -116,7 +131,7 @@ func _process(delta: float) -> void:
 		Autoloads.POSSESS_ENEMY = "EXPLOSIVE_ENEMY"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy.png"
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy_explosion.png"
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
