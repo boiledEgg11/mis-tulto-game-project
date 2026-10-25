@@ -1,4 +1,4 @@
 res://node_2d.tscn
-res://character_body_2d.gd
-res://rigid_body_2d.gd
-res://AUTOLOADS.gd
+res://node_2d.gd
+res://tile_map_layer_2.gd
+res://codes/character_body_2d.gd

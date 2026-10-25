@@ -22,6 +22,7 @@ var location
 var DASH_LOCK = false
 var MOVE_LOCK = false
 var ABILITY_LOCK = false
+var SPEED_MULTIPLIER
 func _ready() -> void:
 	OVERLAPPING_BODIES = $CrouchExitTestArea.get_overlapping_bodies()
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
@@ -156,14 +157,13 @@ func _physics_process(delta: float) -> void:
 						velocity += get_gravity() * delta * 1.5
 				if not Input.is_action_pressed("space"):
 					$DashRecover.value = 0
+					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
-					MOVE_LOCK = false
 				else:
-					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 					if $DashRecover.value == 60:
 						_ability_use(Autoloads.POSSESS_ABILITY)
+					SPEED_MULTIPLIER = 0.25
 					DASH_LOCK = false
-					MOVE_LOCK = true
 				direction = Input.get_axis("left", "right")
 				if not MOVE_LOCK or not ABILITY_LOCK:
 					if direction > 0:
@@ -174,11 +174,8 @@ func _physics_process(delta: float) -> void:
 						if Input.is_action_just_pressed("up"):
 							velocity.x = 0
 							velocity.y = STATUS.jump
-					if direction and not Input.is_action_pressed("space"):
-						if (velocity.x < (STATUS.speed * -1) and direction == -1) or (velocity.x > STATUS.speed and direction == 1):
-							velocity.x += direction * delta * STATUS.speed / 20
-						else:
-							velocity.x = direction * STATUS.speed
+					if direction:
+							velocity.x = direction * STATUS.speed * SPEED_MULTIPLIER
 					else:
 						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 						direction = 0

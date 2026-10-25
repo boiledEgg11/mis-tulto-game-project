@@ -2,7 +2,7 @@ extends Node2D
 var save
 var save_info
 var bodies
-
+var tile_positions
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -16,4 +16,6 @@ func _process(delta: float) -> void:
 				break
 		var a = $TileMapLayer2.get_cell_atlas_coords(body.position)
 		$TileMapLayer2.erase_cell(body.local_to_map($TileMapLayer2.get_local_mouse_position()))
-		print(a)
+		
+func _on_extra_attack_body_shape_entered(body_rid, body, body_shape_index: int, local_shape_index: int) -> void:
+	pass
