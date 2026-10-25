@@ -24,6 +24,7 @@ var MOVE_LOCK = false
 var ABILITY_LOCK = false
 var SPEED_MULTIPLIER = 1
 var POSSESS_START = true
+@export var PlayerProjectile = preload("res://player_projectile.tscn")
 func _ready() -> void:
 	OVERLAPPING_BODIES = $CrouchExitTestArea.get_overlapping_bodies()
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
@@ -36,7 +37,8 @@ func _health_process(DAMAGE) -> void:
 	if not INVINCIBLE:
 		TEXTURE_LOCK = true
 		if DAMAGE > 0:
-			$Sprite2D.texture = load("res://assets/placeholder_death.png")
+			if not Autoloads.PLAYER_POSSESSING:
+				$Sprite2D.texture = load("res://assets/placeholder_death.png")
 			$PlayerHealth.value += DAMAGE * STATUS.damage_multiplier
 		if $PlayerHealth.value <= 0:
 			_death()
@@ -45,21 +47,27 @@ func _health_process(DAMAGE) -> void:
 		TEXTURE_LOCK = false
 		await get_tree().create_timer(1.8).timeout
 		INVINCIBLE = false
-func _collision(collision: KinematicCollision2D) -> void:
-	if not collision:
-		return
-	var collision_pos = collision.get_position()
-	var collision_opponent = collision.get_collider()
 func _death():
 	print("dead!")
 	TEXTURE_LOCK = true
 	velocity.y = -600
-	$Sprite2D.texture = load("res://assets/placeholder_death.png")
+	if not Autoloads.PLAYER_POSSESSING:
+		$Sprite2D.texture = load("res://assets/placeholder_death.png")
 	await get_tree().create_timer(1).timeout
 	$PlayerHealth.value = 10
 	TEXTURE_LOCK = false
+func _shoot():
+			var SHOOT_BULLET = PlayerProjectile.instantiate()
+			owner.add_child(SHOOT_BULLET)
+			SHOOT_BULLET.position = position
+			if $Sprite2D.flip_h:
+				SHOOT_BULLET.direction = -1
+			else:
+				SHOOT_BULLET.direction = 1
 func _ability_use(ability):
 	match ability:
+		"SHOOT":
+			_shoot()
 		"Jump":
 			if is_on_floor():
 				velocity.y = STATUS.jump * 2
@@ -166,7 +174,10 @@ func _physics_process(delta: float) -> void:
 					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
 				else:
-					velocity.y = Input.get_axis("up", "down") * SPEED_MULTIPLIER * STATUS.air_speed
+					if $RayCast2D.is_colliding():
+						velocity.y = Input.get_axis("up", "down") * SPEED_MULTIPLIER * STATUS.air_speed
+					if not $RayCast2D.is_colliding():
+						velocity.y = 0
 					if $DashRecover.value == 60:
 						_ability_use(Autoloads.POSSESS_ABILITY)
 					SPEED_MULTIPLIER = 0.25
@@ -182,7 +193,6 @@ func _physics_process(delta: float) -> void:
 							velocity.y = STATUS.jump / 2
 						else:
 							if $RayCast2D.is_colliding():
-								print($RayCast2D.target_position.y)
 								velocity.y = STATUS.jump / 4 
 					if direction:
 						if is_on_floor():
@@ -194,7 +204,6 @@ func _physics_process(delta: float) -> void:
 						direction = 0
 					if ABILITY_LOCK:
 						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
-				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 			"EXPLOSIVE":
 				if $DashRecover.value == 0:
 					$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
@@ -271,8 +280,6 @@ func _physics_process(delta: float) -> void:
 				else:
 					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 					direction = 0
-				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
-
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1:
 			Autoloads.POSSESS_AMOUNT = 0
 			Autoloads.PLAYER_POSSESS_STOP = true

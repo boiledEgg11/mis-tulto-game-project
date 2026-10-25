@@ -44,7 +44,7 @@ func _on_right_collision_check_body_entered(body: Node2D) -> void:
 	direction = -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
-		if area.name == "AttackCollision":
+		if area.name == "AttackCollision" or "PlayerProjectile":
 			health -= 1
 		if area.name == "ExtraAttack":
 			health -= 5

@@ -199,7 +199,7 @@ collision_mask = 8
 shape = SubResource("RectangleShape2D_f5w1v")
 
 [node name="EnemyTest2" type="CharacterBody2D" parent="." unique_id=871149970]
-position = Vector2(-20, 0)
+position = Vector2(50, 0)
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("10_ir8iy")
@@ -230,7 +230,7 @@ collision_mask = 8
 shape = SubResource("RectangleShape2D_f5w1v")
 
 [node name="EnemyTest3" type="CharacterBody2D" parent="." unique_id=343767597]
-position = Vector2(-20, 0)
+position = Vector2(-50, 0)
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("8_nr8wp")
@@ -379,7 +379,7 @@ target_position = Vector2(0, 0)
 texture = ExtResource("15_d2bti")
 
 [node name="RayCast2D" type="RayCast2D" parent="Player" unique_id=1493795449]
-target_position = Vector2(0, 100)
+target_position = Vector2(0, 90)
 
 [connection signal="body_entered" from="EnemyTest/LeftCollisionCheck" to="EnemyTest" method="_on_left_collision_check_body_entered"]
 [connection signal="body_entered" from="EnemyTest/RightCollisionCheck" to="EnemyTest" method="_on_right_collision_check_body_entered"]

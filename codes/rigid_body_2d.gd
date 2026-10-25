@@ -9,8 +9,6 @@ var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8,
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
-	if possess_health > health and health != 0:
-		possess_health = health
 	move_and_slide()
 	if possess_health > 0:
 		POSSESSED = false
@@ -36,7 +34,7 @@ func _on_right_collision_check_body_entered(body: Node2D) -> void:
 	$Sprite2D.flip_h = true
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
-		if area.name == "AttackCollision":
+		if area.name == "AttackCollision" or "PlayerProjectile":
 			health -= 1
 		if area.name == "ExtraAttack":
 			health -= 5
