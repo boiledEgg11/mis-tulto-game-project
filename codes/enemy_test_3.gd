@@ -29,7 +29,6 @@ func _attack_charge():
 	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
 	await get_tree().create_timer(0.25).timeout
 	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
-	print(charge)
 	$Area2D.position = Vector2i(10 * direction, 0)
 	$Area2D/CollisionShape2D.disabled = false
 	await get_tree().create_timer(0.1).timeout
@@ -38,8 +37,6 @@ func _attack_charge():
 	attacking = false
 	direction *= -1
 func _physics_process(delta: float) -> void:
-	if possess_health > health and health != 0:
-		possess_health = health
 	move_and_slide()
 	if possess_health > 0:
 		POSSESSED = false
@@ -88,6 +85,8 @@ func _on_right_collision_check_body_entered(body: Node2D) -> void:
 		direction = -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
+		if area.name == "PlayerProjectile":
+			health -= 1
 		if area.name == "AttackCollision":
 			health -= 1
 		if area.name == "ExtraAttack":
@@ -121,8 +120,6 @@ func _process(delta: float) -> void:
 		_possess_stop()
 	if health == 0:
 		queue_free()
-	if Autoloads.POSSESS_AMOUNT > 1:
-		_possess_stop()
 	if health < 0:
 		queue_free()
 	if possess_health == 0:

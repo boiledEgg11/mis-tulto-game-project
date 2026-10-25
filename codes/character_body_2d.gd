@@ -24,7 +24,6 @@ var MOVE_LOCK = false
 var ABILITY_LOCK = false
 var SPEED_MULTIPLIER = 1
 var POSSESS_START = true
-@export var PlayerProjectile = preload("res://player_projectile.tscn")
 func _ready() -> void:
 	OVERLAPPING_BODIES = $CrouchExitTestArea.get_overlapping_bodies()
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
@@ -57,7 +56,7 @@ func _death():
 	$PlayerHealth.value = 10
 	TEXTURE_LOCK = false
 func _shoot():
-			var SHOOT_BULLET = PlayerProjectile.instantiate()
+			var SHOOT_BULLET = preload("res://player_projectile.tscn").instantiate()
 			owner.add_child(SHOOT_BULLET)
 			SHOOT_BULLET.position = position
 			if $Sprite2D.flip_h:

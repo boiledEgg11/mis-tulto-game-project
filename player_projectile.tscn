@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://cvo0v454mxkjs" path="res://player_projectile.gd" id="1_0gc0p"]
 [ext_resource type="Texture2D" uid="uid://cdbsg4jany1jc" path="res://assets/placeholder_enemy_projectile.png" id="2_73r22"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y60uv"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dbwdf"]
 radius = 4.0
 height = 16.0
 
-[node name="PlayerProjectile" type="Area2D" unique_id=1201075805 groups=["damage"]]
+[node name="PlayerProjectile" type="Area2D" unique_id=1201075805]
 collision_layer = 11
 collision_mask = 11
 script = ExtResource("1_0gc0p")
@@ -15,7 +15,6 @@ script = ExtResource("1_0gc0p")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1320052415]
 texture = ExtResource("2_73r22")
 
-[node name="AttackCollision" type="CollisionShape2D" parent="." unique_id=295066906]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=295066906]
 rotation = 1.5707964
-shape = SubResource("CapsuleShape2D_y60uv")
-disabled = true
+shape = SubResource("CapsuleShape2D_dbwdf")
