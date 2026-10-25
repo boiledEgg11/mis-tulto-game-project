@@ -6,6 +6,9 @@ func _ready() -> void:
 	pass
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
+	if direction != 0:
+		if not $VisibleOnScreenNotifier2D.is_on_screen():
+			queue_free()
 	position.x += direction * speed * delta
 	if direction == 1:
 		$Sprite2D.flip_h = false

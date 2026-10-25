@@ -26,6 +26,7 @@ var SPEED_MULTIPLIER = 1
 var POSSESS_START = true
 func _ready() -> void:
 	OVERLAPPING_BODIES = $CrouchExitTestArea.get_overlapping_bodies()
+	$ExtraAttack/Sprite2D.visible = false
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$PlayerHealth.value = 10
 	$AttackCollision/CollisionShape2D.disabled = true
@@ -78,13 +79,15 @@ func _ability_use(ability):
 		"EXPLOSIVE":
 			ABILITY_LOCK = true
 			$ExtraAttack/CollisionShape2D.disabled = false
+			$ExtraAttack/Sprite2D.visible = true
 			if $Sprite2D.flip_h:
-				$ExtraAttack/CollisionShape2D.position = Vector2(-10, 0)
+				$ExtraAttack.position = Vector2(-10, 0)
 			if not $Sprite2D.flip_h:
-				$ExtraAttack/CollisionShape2D.position = Vector2(10, 0)
+				$ExtraAttack.position = Vector2(10, 0)
 			await get_tree().create_timer(0.2).timeout
 			$ExtraAttack/CollisionShape2D.disabled = true
-			$ExtraAttack/CollisionShape2D.position = Vector2(0, 0)
+			$ExtraAttack/Sprite2D.visible = false
+			$ExtraAttack.position = Vector2(0, 0)
 			ABILITY_LOCK = false
 	if ability != "None":
 		$DashRecover.value = 0
@@ -108,6 +111,10 @@ func _physics_process(delta: float) -> void:
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
+		if Autoloads.POSSESS_ABILITY != "None":
+			$DashRecover/Label.text = Autoloads.POSSESS_ABILITY
+		else:
+			$DashRecover/Label.text = ""
 		if POSSESS_START:
 			$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 		POSSESS_START = false
@@ -288,6 +295,7 @@ func _physics_process(delta: float) -> void:
 			STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 			_health_process(0)
 	if not Autoloads.PLAYER_POSSESSING:
+		$DashRecover/Label.text = "dash"
 		$Sprite2D2.visible = false
 		DASH_LOCK = false
 		if INVINCIBLE:

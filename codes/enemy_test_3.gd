@@ -10,6 +10,7 @@ var charge = 0
 var ATTACK = false
 var STATUS = {"speed": 85, "jump": -350, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100}
 func _ready() -> void:
+	$Area2D/Sprite2D.visible = false
 	$EnemyArea/CollisionShape2D.disabled = false
 func _attack_charge():
 	charge = 1
@@ -29,10 +30,13 @@ func _attack_charge():
 	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
 	await get_tree().create_timer(0.25).timeout
 	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
-	$Area2D.position = Vector2i(10 * direction, 0)
-	$Area2D/CollisionShape2D.disabled = false
-	await get_tree().create_timer(0.1).timeout
-	$Area2D/CollisionShape2D.disabled = true
+	if possess_health > 0:
+		$Area2D.position = Vector2i(10 * direction, 0)
+		$Area2D/CollisionShape2D.disabled = false
+		$Area2D/Sprite2D.visible = true
+		await get_tree().create_timer(0.1).timeout
+		$Area2D/CollisionShape2D.disabled = true
+		$Area2D/Sprite2D.visible = false
 	charge = 0
 	attacking = false
 	direction *= -1
