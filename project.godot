@@ -40,6 +40,7 @@ save=""
 SAVE=""
 tile_break=""
 tile_breakable=""
+damage_2=""
 
 [input]
 

@@ -1,14 +1,14 @@
 [gd_scene format=4 uid="uid://bficcnd31abcj"]
 
 [ext_resource type="Script" uid="uid://c58d18t8eq3k1" path="res://codes/character_body_2d.gd" id="1_0e48y"]
-[ext_resource type="Script" uid="uid://oi5cwcb2u2g0" path="res://node_2d.gd" id="1_0h7mo"]
+[ext_resource type="Script" path="res://node_2d.gd" id="1_0h7mo"]
 [ext_resource type="Texture2D" uid="uid://by0xtcu6q3j2l" path="res://assets/placeholder_player.png" id="2_0hol4"]
 [ext_resource type="Script" uid="uid://duh4koj5u1eax" path="res://codes/area_2d.gd" id="2_rj586"]
 [ext_resource type="Script" uid="uid://bb5icce710kjn" path="res://codes/collision_shape_2d.gd" id="3_4d7sh"]
-[ext_resource type="Script" uid="uid://blii58sd0o1rm" path="res://tile_map_layer_2.gd" id="3_nr8wp"]
+[ext_resource type="Script" uid="uid://bneh7x1n7a1cs" path="res://tile_map_layer_2.gd" id="3_nr8wp"]
 [ext_resource type="Script" uid="uid://csugv3yw5phaf" path="res://codes/crouch_test_area.gd" id="5_d21ai"]
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="5_rj586"]
-[ext_resource type="Script" uid="uid://kwi6rykda5kh" path="res://enemy_test_3.gd" id="8_nr8wp"]
+[ext_resource type="Script" uid="uid://s02jym0yktfw" path="res://enemy_test_3.gd" id="8_nr8wp"]
 [ext_resource type="Script" uid="uid://cc0rtmvte20dk" path="res://codes/rigid_body_2d.gd" id="8_rj586"]
 [ext_resource type="Texture2D" uid="uid://drgtym1my3gso" path="res://assets/placeholder_enemy.png" id="9_4d7sh"]
 [ext_resource type="Script" uid="uid://c5heq53boj1k3" path="res://codes/testenemy2.gd" id="10_ir8iy"]
@@ -87,6 +87,9 @@ size = Vector2(0.1, 15)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_f5w1v"]
 size = Vector2(15.5, 15.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_euwu4"]
+radius = 30.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8kdyp"]
 size = Vector2(16, 16)
@@ -222,6 +225,22 @@ collision_mask = 8
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/EnemyArea" unique_id=219461260]
 shape = SubResource("RectangleShape2D_f5w1v")
 
+[node name="RayCast2D" type="RayCast2D" parent="EnemyTest3" unique_id=1135942268]
+position = Vector2(10, 0)
+target_position = Vector2(50, 0)
+collision_mask = 16
+
+[node name="Area2D" type="Area2D" parent="EnemyTest3" unique_id=816961214 groups=["damage", "damage_2"]]
+collision_layer = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/Area2D" unique_id=938967739]
+shape = SubResource("CircleShape2D_euwu4")
+debug_color = Color(0, 0.6372624, 0.39842844, 0.41960785)
+
+[node name="player_detection" type="RayCast2D" parent="EnemyTest3" unique_id=553775173]
+target_position = Vector2(40, 0)
+collision_mask = 16
+
 [node name="Savepoint" type="StaticBody2D" parent="." unique_id=1337825658 groups=["save"]]
 position = Vector2(232, 136)
 collision_layer = 16
@@ -236,7 +255,7 @@ texture = ExtResource("12_x0ka3")
 
 [node name="Player" type="CharacterBody2D" parent="Node2D" unique_id=714223642 groups=["Player_collisoin", "SAVE"]]
 z_index = 1
-collision_layer = 0
+collision_layer = 16
 collision_mask = 5
 script = ExtResource("1_0e48y")
 
@@ -313,7 +332,6 @@ collision_layer = 9
 collision_mask = 9
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/Player/ExtraAttack" unique_id=677240736]
-position = Vector2(100, 0)
 shape = SubResource("CircleShape2D_b5jwi")
 disabled = true
 debug_color = Color(0.7005621, 0.3218768, 0.92896277, 0.41960785)

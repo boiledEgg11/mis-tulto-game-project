@@ -74,7 +74,7 @@ func _ability_use(ability):
 				$ExtraAttack/CollisionShape2D.position = Vector2(-10, 0)
 			if not $Sprite2D.flip_h:
 				$ExtraAttack/CollisionShape2D.position = Vector2(10, 0)
-			await get_tree().create_timer(0.5).timeout
+			await get_tree().create_timer(0.2).timeout
 			$ExtraAttack/CollisionShape2D.disabled = true
 			$ExtraAttack/CollisionShape2D.position = Vector2(0, 0)
 			ABILITY_LOCK = false
@@ -358,6 +358,8 @@ func _on_damage_collision_area_entered(area) -> void:
 		ENEMY_COLLISION = true
 		if not INVINCIBLE:
 			velocity.y = -200
+		if area.is_in_group("damage_2"):
+			_health_process(5)
 		_health_process(1)
 		print(INVINCIBLE)
 

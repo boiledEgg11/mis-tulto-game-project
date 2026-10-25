@@ -5,16 +5,50 @@ var possess_health = 0
 var SLIDE
 var INVINCIBLE = false
 var POSSESSED = false
+var attacking = false
+var charge = 0
+var ATTACK = false
 var STATUS = {"speed": 85, "jump": -350, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
+func _attack_charge():
+	charge = 1
+	await get_tree().create_timer(2).timeout
+	print(charge)
+	$Area2D.position = Vector2i(10 * direction, 0)
+	$Area2D/CollisionShape2D.disabled = false
+	await get_tree().create_timer(0.1).timeout
+	$Area2D/CollisionShape2D.disabled = true
+	charge = 0
+	attacking = false
 func _physics_process(delta: float) -> void:
 	if possess_health > health and health != 0:
 		possess_health = health
 	move_and_slide()
 	if possess_health > 0:
 		POSSESSED = false
-		velocity.x = direction * STATUS.speed
+		if $player_detection.is_colliding():
+			attacking = true
+		if $RayCast2D.is_colliding():
+			direction *= -1
+		if direction == 1:
+			$player_detection.rotation_degrees = 0 
+			$player_detection.position = Vector2i(10, 0)
+			$Sprite2D.flip_h = false
+			$RayCast2D.rotation_degrees = 180
+			$RayCast2D.position = Vector2i(-10, 0)
+		if direction == -1:
+			$player_detection.rotation_degrees = 180 
+			$player_detection.position = Vector2i(-10, 0)
+			$Sprite2D.flip_h = true
+			$RayCast2D.rotation_degrees = 0
+			$RayCast2D.position = Vector2i(10, 0)
+		if not attacking:
+			velocity.x = direction * STATUS.speed
+		if attacking:
+			velocity.x = direction * STATUS.speed / 4
+			if charge == 0:
+				_attack_charge()
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
@@ -30,10 +64,9 @@ func _physics_process(delta: float) -> void:
 				_possess_stop()
 func _on_left_collision_check_body_entered(body: Node2D) -> void:
 	direction = 1
-	$Sprite2D.flip_h = false
+
 func _on_right_collision_check_body_entered(body: Node2D) -> void:
 	direction = -1
-	$Sprite2D.flip_h = true
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
 		if area.name == "AttackCollision":
@@ -51,6 +84,18 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(delta: float) -> void:
+	if direction == 1:
+		$player_detection.rotation_degrees = 0 
+		$player_detection.position = Vector2i(10, 0)
+		$Sprite2D.flip_h = false
+		$RayCast2D.rotation_degrees = 180
+		$RayCast2D.position = Vector2i(-10, 0)
+	if direction == -1:
+		$player_detection.rotation_degrees = 180 
+		$player_detection.position = Vector2i(-10, 0)
+		$Sprite2D.flip_h = true
+		$RayCast2D.rotation_degrees = 0
+		$RayCast2D.position = Vector2i(10, 0)
 	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
