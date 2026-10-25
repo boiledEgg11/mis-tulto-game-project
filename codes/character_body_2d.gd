@@ -100,6 +100,8 @@ func _physics_process(delta: float) -> void:
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
+		$Sprite2D2.visible = true
+		$Sprite2D2.position = Vector2i(0, STATUS.hitbox_y / -2 - (STATUS.hitbox_y / 1.5))
 		$Player_Shape.shape.size = Vector2(Autoloads.POSSESS_STATUS.hitbox_x, Autoloads.POSSESS_STATUS.hitbox_y)
 		$PossessArea/PossessShape.disabled = true
 		STATUS = Autoloads.POSSESS_STATUS
@@ -221,6 +223,7 @@ func _physics_process(delta: float) -> void:
 			STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 			_health_process(0)
 	if not Autoloads.PLAYER_POSSESSING:
+		$Sprite2D2.visible = false
 		DASH_LOCK = false
 		if INVINCIBLE:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
@@ -359,6 +362,7 @@ func _on_damage_collision_area_entered(area) -> void:
 		if not INVINCIBLE:
 			velocity.y = -200
 		if area.is_in_group("damage_2"):
+			INVINCIBLE = false
 			_health_process(5)
 		_health_process(1)
 		print(INVINCIBLE)

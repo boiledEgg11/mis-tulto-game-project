@@ -1,7 +1,7 @@
 extends CharacterBody2D
 var direction = -1
 var health = 1
-var possess_health = 0
+var possess_health = 1
 var SLIDE
 var INVINCIBLE = false
 var POSSESSED = false
@@ -21,6 +21,7 @@ func _attack_charge():
 	$Area2D/CollisionShape2D.disabled = true
 	charge = 0
 	attacking = false
+	direction *= -1
 func _physics_process(delta: float) -> void:
 	if possess_health > health and health != 0:
 		possess_health = health
@@ -54,19 +55,22 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
-			INVINCIBLE = true
-			POSSESSED = true
-			position.x = Autoloads.PLAYER_POSITION_X
-			position.y = Autoloads.PLAYER_POSITION_Y
-			$EnemyArea/CollisionShape2D.disabled = true
-			$Sprite2D.visible = false
-			if Autoloads.PLAYER_POSSESS_STOP:
-				_possess_stop()
+		$Area2D/CollisionShape2D.disabled = true
+		INVINCIBLE = true
+		POSSESSED = true
+		position.x = Autoloads.PLAYER_POSITION_X
+		position.y = Autoloads.PLAYER_POSITION_Y
+		$EnemyArea/CollisionShape2D.disabled = true
+		$Sprite2D.visible = false
+		if Autoloads.PLAYER_POSSESS_STOP:
+			_possess_stop()
 func _on_left_collision_check_body_entered(body: Node2D) -> void:
-	direction = 1
+	if not attacking:
+		direction = 1
 
 func _on_right_collision_check_body_entered(body: Node2D) -> void:
-	direction = -1
+	if not attacking:
+		direction = -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
 		if area.name == "AttackCollision":
