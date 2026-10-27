@@ -60,10 +60,7 @@ func _shoot():
 			var SHOOT_BULLET = preload("res://player_projectile.tscn").instantiate()
 			owner.add_child(SHOOT_BULLET)
 			SHOOT_BULLET.position = position
-			if $Sprite2D.flip_h:
-				SHOOT_BULLET.direction = -1
-			else:
-				SHOOT_BULLET.direction = 1
+			direction = 1
 func _ability_use(ability):
 	match ability:
 		"SHOOT":
@@ -210,6 +207,16 @@ func _physics_process(delta: float) -> void:
 						direction = 0
 					if ABILITY_LOCK:
 						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+			"SPIN":
+				velocity.x = 0
+				velocity.y = 0
+				position.x = 512
+				position.y = -20
+				direction = Input.get_axis("left", "right")
+				Autoloads.tile_move = direction
+				if direction:
+					$Sprite2D.rotation_degrees += direction * 10
+					$DamageCollision.rotation_degrees += direction * 10
 			"EXPLOSIVE":
 				if $DashRecover.value == 0:
 					$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")

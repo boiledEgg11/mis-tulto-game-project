@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://cblfyuw6f13dc"]
 
-[ext_resource type="Script" uid="uid://cvo0v454mxkjs" path="res://player_projectile.gd" id="1_0gc0p"]
+[ext_resource type="Script" uid="uid://cvo0v454mxkjs" path="res://PlayerProjectile.gd" id="1_0gc0p"]
 [ext_resource type="Texture2D" uid="uid://cdbsg4jany1jc" path="res://assets/placeholder_enemy_projectile.png" id="2_73r22"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dbwdf"]
-radius = 4.0
-height = 16.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_rjqkl"]
+radius = 8.0
 
 [node name="PlayerProjectile" type="Area2D" unique_id=1201075805]
 collision_layer = 11
@@ -17,7 +16,9 @@ texture = ExtResource("2_73r22")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=295066906]
 rotation = 1.5707964
-shape = SubResource("CapsuleShape2D_dbwdf")
+shape = SubResource("CircleShape2D_rjqkl")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=1688041128]
 rect = Rect2(-8, -4, 16, 8)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
