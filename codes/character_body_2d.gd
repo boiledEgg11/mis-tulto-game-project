@@ -92,6 +92,10 @@ func _save():
 	$Camera2D/PlayerHealth.value = 10
 	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
 func _physics_process(delta: float) -> void:
+	var standing = $RayCast2D.get_collider()
+	if standing:
+		if standing.name == "TileMapLayer3" and Autoloads.move_amount > -82 and Autoloads.move_amount < 100:
+			position.x += Autoloads.tile_move
 	bodies = $ExtraAttack.get_overlapping_bodies()
 	for body in bodies:
 		if not body.is_in_group("tile_breakable"):
@@ -296,6 +300,7 @@ func _physics_process(delta: float) -> void:
 					direction = 0
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1:
 			Autoloads.POSSESS_AMOUNT = 0
+			Autoloads.tile_move = 0
 			$Sprite2D.rotation = 0
 			$DamageCollision.rotation = 0
 			$Camera2D.position = Vector2i(0, 0)
