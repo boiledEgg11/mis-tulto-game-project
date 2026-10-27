@@ -13,6 +13,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
+		Autoloads.tile_move = 0
 		velocity = Vector2(0, 0)
 		POSSESSED = false
 		rotation += 0.1

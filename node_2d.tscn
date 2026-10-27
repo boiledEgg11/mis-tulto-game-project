@@ -21,6 +21,7 @@
 [ext_resource type="Texture2D" uid="uid://g87vfgpql376" path="res://assets/placeholder_enemy_explosion.png" id="11_rjqkl"]
 [ext_resource type="Texture2D" uid="uid://c7o36xe4q7agb" path="res://assets/placeholder_save.png" id="12_x0ka3"]
 [ext_resource type="Texture2D" uid="uid://q2xiqq3jrf1v" path="res://assets/placeholder_player_indicator.png" id="15_d2bti"]
+[ext_resource type="Script" uid="uid://csj23uyadyu7y" path="res://camera_2d.gd" id="18_e8dv2"]
 [ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholder_explosion.png" id="18_rjqkl"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q6r6c"]
@@ -346,7 +347,11 @@ collision_layer = 16
 collision_mask = 5
 script = ExtResource("1_0e48y")
 
-[node name="PlayerHealth" type="ProgressBar" parent="Player" unique_id=739125418]
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1456672527]
+zoom = Vector2(4, 4)
+script = ExtResource("18_e8dv2")
+
+[node name="PlayerHealth" type="ProgressBar" parent="Player/Camera2D" unique_id=739125418]
 modulate = Color(0.17837903, 0.7651734, 0.31318405, 1)
 offset_left = -139.0
 offset_top = -77.0
@@ -354,6 +359,24 @@ offset_right = -67.0
 offset_bottom = -68.0
 max_value = 10.0
 show_percentage = false
+
+[node name="DashRecover" type="ProgressBar" parent="Player/Camera2D" unique_id=2138811126]
+modulate = Color(0, 0.7713469, 0.77134687, 1)
+self_modulate = Color(1, 0, 1, 1)
+offset_left = -139.0
+offset_top = -65.0
+offset_right = -94.0
+offset_bottom = -61.0
+max_value = 60.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="Player/Camera2D/DashRecover" unique_id=30597192]
+clip_contents = true
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_constants/shadow_outline_size = 0
 
 [node name="Player_Shape" type="CollisionShape2D" parent="Player" unique_id=1446692577]
 shape = SubResource("RectangleShape2D_b5jwi")
@@ -369,27 +392,6 @@ script = ExtResource("3_4d7sh")
 
 [node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1032957902]
 texture = ExtResource("2_0hol4")
-
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1456672527]
-zoom = Vector2(4, 4)
-
-[node name="DashRecover" type="ProgressBar" parent="Player" unique_id=2138811126]
-modulate = Color(0, 0.7713469, 0.77134687, 1)
-self_modulate = Color(1, 0, 1, 1)
-offset_left = -139.0
-offset_top = -65.0
-offset_right = -94.0
-offset_bottom = -61.0
-max_value = 60.0
-show_percentage = false
-
-[node name="Label" type="Label" parent="Player/DashRecover" unique_id=30597192]
-clip_contents = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-theme_override_colors/font_color = Color(0, 1, 1, 1)
-theme_override_constants/shadow_outline_size = 0
 
 [node name="CrouchTestArea" type="Area2D" parent="Player" unique_id=1144540496]
 collision_layer = 4
