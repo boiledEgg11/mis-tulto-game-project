@@ -176,6 +176,8 @@ func _physics_process(delta: float) -> void:
 						velocity += get_gravity() * delta * 1.5
 					else:
 						velocity += get_gravity() * delta / 5
+				if $RayCast2D.is_colliding():
+					CHARGE = 0
 				if not Input.is_action_pressed("space"):
 					$Camera2D/DashRecover.value = 0
 					SPEED_MULTIPLIER = 1
@@ -184,7 +186,11 @@ func _physics_process(delta: float) -> void:
 					if $RayCast2D.is_colliding():
 						velocity.y = Input.get_axis("up", "down") * SPEED_MULTIPLIER * STATUS.air_speed
 					if not $RayCast2D.is_colliding():
-						velocity.y = 0
+						CHARGE += 1
+						if CHARGE > 30:
+							velocity.y = 30
+						else:
+							velocity.y = 0
 					if $Camera2D/DashRecover.value == 60:
 						_ability_use(Autoloads.POSSESS_ABILITY)
 					SPEED_MULTIPLIER = 0.25
@@ -212,7 +218,10 @@ func _physics_process(delta: float) -> void:
 					if ABILITY_LOCK:
 						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 			"SPIN":
-				$Camera2D.global_position = Vector2i(816, 64)
+				if not Input.is_action_pressed("space"):
+					$Camera2D.global_position = Vector2i(816, 64)
+				else:
+					$Camera2D.position = Vector2i(0, 0)
 				velocity.x = 0
 				velocity.y = 0
 				position.x = 512
@@ -223,6 +232,10 @@ func _physics_process(delta: float) -> void:
 					$Sprite2D.rotation_degrees += direction * 10
 					$DamageCollision.rotation_degrees += direction * 10
 			"TARGET_DASH":
+				if direction > 0:
+					$Sprite2D.flip_h = false
+				if direction < 0:
+					$Sprite2D.flip_h = true
 				direction = Input.get_axis("left", "right")
 				if direction:
 					if is_on_floor():

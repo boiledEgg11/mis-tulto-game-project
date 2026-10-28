@@ -37,13 +37,6 @@ func _on_right_collision_check_body_entered(body: Node2D) -> void:
 	$Sprite2D.flip_h = true
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
-		if area.name == "PlayerProjectile":
-			health -= 1
-			print("hit!")
-		if area.name == "AttackCollision":
-			health -= 1
-		if area.name == "ExtraAttack":
-			health -= 5
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
