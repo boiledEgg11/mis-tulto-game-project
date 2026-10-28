@@ -77,7 +77,7 @@ func _process(delta: float) -> void:
 	if possess_health == 0:
 		Autoloads.POSSESS_AMOUNT += 1
 		Autoloads.POSSESS_ABILITY = "TARGET_DASH"
-		Autoloads.POSSESS_ENEMY = "FLY"
+		Autoloads.POSSESS_ENEMY = "FLY_TEST"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
 		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy.png"
@@ -94,8 +94,8 @@ func _on_search_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_
 			direction = 1
 		else:
 			direction = -1
+		TARGET_POS = Vector2i(body.position.x, body.position.y)
 		await get_tree().create_timer(1).timeout
 		print("yes")
 		HAS_TARGET = 2
-		TARGET_POS = Vector2i(body.position.x, body.position.y)
 		print(TARGET_POS)

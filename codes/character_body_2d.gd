@@ -222,6 +222,25 @@ func _physics_process(delta: float) -> void:
 				if direction:
 					$Sprite2D.rotation_degrees += direction * 10
 					$DamageCollision.rotation_degrees += direction * 10
+			"TARGET_DASH":
+				direction = Input.get_axis("left", "right")
+				if direction:
+					if is_on_floor():
+						velocity.x = direction * STATUS.speed * SPEED_MULTIPLIER
+					if not is_on_floor():
+						velocity.x = direction * STATUS.air_speed * SPEED_MULTIPLIER
+				else:
+					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+					direction = 0
+				if $RayCast2D.is_colliding() and Input.is_action_pressed("up"):
+					velocity.y = STATUS.jump
+				if not is_on_floor():
+					if Input.is_action_pressed("down"):
+						velocity.y = STATUS.jump * -1
+					if not $RayCast2D.is_colliding():
+						velocity += get_gravity() * delta
+					else:
+						velocity.y = move_toward(velocity.y, 0, 30)
 			"EXPLOSIVE":
 				if $Camera2D/DashRecover.value == 0:
 					$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
