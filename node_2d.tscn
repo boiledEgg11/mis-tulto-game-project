@@ -466,6 +466,10 @@ collision_mask = 8
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest4/EnemyArea" unique_id=1431891251]
 shape = SubResource("RectangleShape2D_f5w1v")
 
+[node name="RayCast2D" type="RayCast2D" parent="EnemyTest4" unique_id=1137685567]
+target_position = Vector2(0, 90)
+collision_mask = 16
+
 [node name="EnemyTest5" type="CharacterBody2D" parent="." unique_id=638117747]
 position = Vector2(512, -20)
 collision_layer = 0

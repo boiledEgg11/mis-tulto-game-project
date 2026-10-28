@@ -3,6 +3,8 @@ var direction = -1
 var health = 1
 var possess_health = 1
 var SLIDE
+var charge = 0
+var CHARGING = false
 var initial_y = 0
 var WAIT = 0
 var INVINCIBLE = false
@@ -11,17 +13,31 @@ var STATUS = {"speed": 30, "jump": -300, "slide": 40, "damage_multiplier": -0.8,
 func _ready() -> void:
 	initial_y = position.y
 	$EnemyArea/CollisionShape2D.disabled = false
+func _charging():
+	await get_tree().create_timer(1).timeout
+	print("shoot!")
+	CHARGING = false
+	var SHOOT_BULLET = preload("res://enemy_projectile.tscn").instantiate()
+	owner.add_child(SHOOT_BULLET)
+	SHOOT_BULLET.position = position
+	direction = 1
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
+		if $RayCast2D.is_colliding():
+			if not CHARGING:
+				_charging()
+			CHARGING = true
 		POSSESSED = false
 		if is_on_floor():
-			velocity.x = direction * STATUS.speed
 			velocity.y = STATUS.jump
 		if not is_on_floor():
 			if position.y > initial_y:
 				velocity.y = STATUS.jump / 4
-			velocity.x = direction * STATUS.air_speed
+			if CHARGING:
+				velocity.x = direction * STATUS.air_speed / 4
+			else:
+				velocity.x = direction * STATUS.air_speed
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
@@ -43,7 +59,9 @@ func _on_right_collision_check_body_entered(body: Node2D) -> void:
 	$Sprite2D.flip_h = true
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
-		if area.name == "AttackCollision" or "PlayerProjectile":
+		if area.name == "PlayerProjectile":
+			health -= 1
+		if area.name == "AttackCollision":
 			health -= 1
 		if area.name == "ExtraAttack":
 			health -= 5
@@ -69,8 +87,6 @@ func _process(delta: float) -> void:
 		_possess_stop()
 	if health == 0:
 		queue_free()
-	if Autoloads.POSSESS_AMOUNT > 1:
-		_possess_stop()
 	if health < 0:
 		queue_free()
 	if possess_health == 0:
