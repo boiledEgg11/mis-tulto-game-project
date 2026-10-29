@@ -25,6 +25,8 @@ var ABILITY_LOCK = false
 var SPEED_MULTIPLIER = 1
 var POSSESS_START = true
 var TARGET_POS = Vector2(0, 0)
+var ATTACK_COLLISION = false
+var HAS_TARGET = 0
 func _ready() -> void:
 	OVERLAPPING_BODIES = $CrouchExitTestArea.get_overlapping_bodies()
 	$ExtraAttack/Sprite2D.visible = false
@@ -97,6 +99,10 @@ func _save():
 	$Camera2D/PlayerHealth.value = 10
 	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
 func _physics_process(delta: float) -> void:
+	if ATTACK_COLLISION:
+		$ExtraAttack/CollisionShape2D.disabled = false
+	if not ATTACK_COLLISION or ABILITY_LOCK:
+		$ExtraAttack/CollisionShape2D.disabled = true
 	var standing = $RayCast2D.get_collider()
 	if standing:
 		if standing.name == "TileMapLayer3" and Autoloads.move_amount > -82 and Autoloads.move_amount < 100:
@@ -237,6 +243,11 @@ func _physics_process(delta: float) -> void:
 					$Sprite2D.rotation_degrees += direction * 10
 					$DamageCollision.rotation_degrees += direction * 10
 			"TARGET_DASH":
+				if HAS_TARGET == 2:
+						position.x = move_toward(position.x, TARGET_POS.x, 2)
+						position.y = move_toward(position.y, TARGET_POS.y, 2)
+						await get_tree().create_timer(0.6).timeout
+						HAS_TARGET = 0
 				if not MOVE_LOCK:
 					if direction > 0:
 						$Sprite2D.flip_h = false
@@ -495,33 +506,36 @@ func _on_damage_collision_area_exited(area) -> void:
 func _on_crouch_exit_test_area_body_entered(body) -> void:
 	if body.is_in_group("save"):
 		SAVABLE = true
-func _on_detect_shape_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
-	$DetectShape/CollisionShape2D.disabled = true
-	$ExtraAttack/CollisionShape2D.disabled = false
-	_enemey6_dash(body)
 func _enemey6_dash(body):
-	MOVE_LOCK = true
-	INVINCIBLE = true
-	velocity.x = 0
-	velocity.y = 0
-	if body.position.x > position.x:
-		TARGET_POS.x = body.position.x + 150
-	if body.position.x < position.x:
-		TARGET_POS.x = body.position.x - 150
-	else:
-		TARGET_POS.x = 0
-	if body.position.y > position.y:
-		TARGET_POS.y = body.position.y + 150
-	if body.position.y < position.y:
-		TARGET_POS.y = body.position.y - 150
-	else:
-		TARGET_POS.y = 0
-	await get_tree().create_timer(0.5).timeout
-	position.x = move_toward(position.x, TARGET_POS.x, 2)
-	position.y = move_toward(position.y, TARGET_POS.y, 2)
-	await get_tree().create_timer(0.6).timeout
-	INVINCIBLE = false
-	$ExtraAttack/CollisionShape2D.disabled = true
-	MOVE_LOCK = false
-func _on_detect_shape_area_entered(area: Area2D) -> void:
 	pass
+func _on_detect_shape_body_entered(body: Node2D) -> void:
+	ATTACK_COLLISION = true
+	velocity = Vector2(0, 0)
+	if HAS_TARGET == 0:
+		INVINCIBLE = true
+		MOVE_LOCK = true
+		velocity.x = 0
+		velocity.y = 0
+		HAS_TARGET = 1
+		if body.position.x - position.x > 0:
+			direction = 1
+		else:
+			direction = -1
+		if body.position.x > position.x:
+			TARGET_POS.x = body.position.x + 150
+		if body.position.x < position.x:
+			TARGET_POS.x = body.position.x - 150
+		else:
+			TARGET_POS.x = 0
+		if body.position.y > position.y:
+			TARGET_POS.y = body.position.y + 150
+		if body.position.x < position.y:
+			TARGET_POS.y = body.position.y - 150
+		else:
+			TARGET_POS.y = 0
+		await get_tree().create_timer(0.5).timeout
+		HAS_TARGET = 2
+		INVINCIBLE = false
+		MOVE_LOCK = false
+		ATTACK_COLLISION = false
+		print(TARGET_POS)
