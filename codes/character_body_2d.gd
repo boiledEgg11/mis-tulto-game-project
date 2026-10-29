@@ -495,33 +495,29 @@ func _on_damage_collision_area_exited(area) -> void:
 func _on_crouch_exit_test_area_body_entered(body) -> void:
 	if body.is_in_group("save"):
 		SAVABLE = true
-func _on_detect_shape_body_shape_entered(body_rid: RID, area: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+func _on_detect_shape_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	MOVE_LOCK = true
 	INVINCIBLE = true
 	$ExtraAttack/CollisionShape2D.disabled = false
-	print(area.name)
 	velocity.x = 0
 	velocity.y = 0
-	if area.position.x - position.x > 0:
-		direction = 1
+	if body.position.x > position.x:
+		TARGET_POS.x = body.position.x + 150
 	else:
-		direction = -1
-	TARGET_POS = Vector2i(area.position.x, area.position.y)
-	await get_tree().create_timer(0.5).timeout
-	if position.x > TARGET_POS.x:
-		print("yayy")
-		position.x = move_toward(position.x, TARGET_POS.x, 50)
+		TARGET_POS.x = body.position.x - 150
+	if body.position.y > position.y:
+		TARGET_POS.y = body.position.y + 150
 	else:
-		print("nono")
-		position.x = move_toward(position.x, TARGET_POS.x, 50)
-	position.y = move_toward(position.y, TARGET_POS.y, 15)
+		TARGET_POS.y = body.position.y - 150
 	await get_tree().create_timer(0.5).timeout
-	print("yes")
+	print(position.x - TARGET_POS.x)
+	print(position.y - TARGET_POS.y)
+	position.x = move_toward(position.x, TARGET_POS.x, 4)
+	position.y = move_toward(position.y, TARGET_POS.y, 4)
+	await get_tree().create_timer(0.6).timeout
+	print(TARGET_POS)
 	INVINCIBLE = false
 	$ExtraAttack/CollisionShape2D.disabled = true
 	MOVE_LOCK = false
-
-
-
 func _on_detect_shape_area_entered(area: Area2D) -> void:
 	pass

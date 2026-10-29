@@ -1,7 +1,7 @@
 extends CharacterBody2D
 var direction = -1
 var health = 1
-var possess_health = 0
+var possess_health = 1
 var SLIDE
 var INVINCIBLE = false
 var POSSESSED = false
@@ -13,6 +13,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
+		INVINCIBLE = false
 		POSSESSED = false
 		$EnemyTestCollision.disabled = false
 		$EnemyArea/CollisionShape2D.disabled = false
@@ -23,7 +24,7 @@ func _physics_process(delta: float) -> void:
 		if HAS_TARGET == 2:
 			position.x = move_toward(position.x, TARGET_POS.x, 2)
 			position.y = move_toward(position.y, TARGET_POS.y, 2)
-			await get_tree().create_timer(0.25).timeout
+			await get_tree().create_timer(0.6).timeout
 			HAS_TARGET = 0
 	if possess_health == -1:
 		$EnemyTestCollision.disabled = true
@@ -43,17 +44,6 @@ func _on_right_collision_check_body_entered(body: Node2D) -> void:
 	direction = -1
 	$Sprite2D.flip_h = true
 	$RayCast2D.target_position = Vector2(-50, 0)
-func _on_enemy_area_area_entered(area) -> void:
-	if not INVINCIBLE:
-		if area.name == "PlayerProjectile":
-			health -= 1
-			print("hit!")
-		if area.name == "AttackCollision":
-			health -= 1
-		if area.name == "ExtraAttack":
-			health -= 5
-		if area.name == "PossessArea":
-			possess_health -= 1
 func _possess_stop() -> void:
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
@@ -93,8 +83,32 @@ func _on_search_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_
 			direction = 1
 		else:
 			direction = -1
-		TARGET_POS = Vector2i(body.position.x, body.position.y)
-		await get_tree().create_timer(1).timeout
-		print("yes")
+		if body.position.x > position.x:
+			TARGET_POS.x = body.position.x + 150
+		if body.position.x < position.x:
+			TARGET_POS.x = body.position.x - 150
+		else:
+			TARGET_POS.x = 0
+		if body.position.y > position.y:
+			TARGET_POS.y = body.position.y + 150
+		if body.position.x < position.y:
+			TARGET_POS.y = body.position.y - 150
+		else:
+			TARGET_POS.y = 0
+		await get_tree().create_timer(0.5).timeout
 		HAS_TARGET = 2
 		print(TARGET_POS)
+
+
+func _on_enemy_area_area_entered(area: Area2D) -> void:
+	if not INVINCIBLE:
+		if area.name == "PlayerProjectile":
+			health -= 1
+			print("hit!")
+		if area.name == "AttackCollision":
+			health -= 1
+		if area.name == "ExtraAttack":
+			health -= 5
+		if area.name == "PossessArea":
+			possess_health -= 1
+			print("hit!")
