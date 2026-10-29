@@ -98,8 +98,6 @@ func _on_search_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_
 		await get_tree().create_timer(0.5).timeout
 		HAS_TARGET = 2
 		print(TARGET_POS)
-
-
 func _on_enemy_area_area_entered(area: Area2D) -> void:
 	if not INVINCIBLE:
 		if area.name == "PlayerProjectile":

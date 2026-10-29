@@ -496,26 +496,30 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 	if body.is_in_group("save"):
 		SAVABLE = true
 func _on_detect_shape_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	$DetectShape/CollisionShape2D.disabled = true
+	$ExtraAttack/CollisionShape2D.disabled = false
+	_enemey6_dash(body)
+func _enemey6_dash(body):
 	MOVE_LOCK = true
 	INVINCIBLE = true
-	$ExtraAttack/CollisionShape2D.disabled = false
 	velocity.x = 0
 	velocity.y = 0
 	if body.position.x > position.x:
 		TARGET_POS.x = body.position.x + 150
-	else:
+	if body.position.x < position.x:
 		TARGET_POS.x = body.position.x - 150
+	else:
+		TARGET_POS.x = 0
 	if body.position.y > position.y:
 		TARGET_POS.y = body.position.y + 150
-	else:
+	if body.position.y < position.y:
 		TARGET_POS.y = body.position.y - 150
+	else:
+		TARGET_POS.y = 0
 	await get_tree().create_timer(0.5).timeout
-	print(position.x - TARGET_POS.x)
-	print(position.y - TARGET_POS.y)
-	position.x = move_toward(position.x, TARGET_POS.x, 4)
-	position.y = move_toward(position.y, TARGET_POS.y, 4)
+	position.x = move_toward(position.x, TARGET_POS.x, 2)
+	position.y = move_toward(position.y, TARGET_POS.y, 2)
 	await get_tree().create_timer(0.6).timeout
-	print(TARGET_POS)
 	INVINCIBLE = false
 	$ExtraAttack/CollisionShape2D.disabled = true
 	MOVE_LOCK = false
