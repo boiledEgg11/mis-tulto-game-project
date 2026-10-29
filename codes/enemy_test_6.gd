@@ -1,7 +1,7 @@
 extends CharacterBody2D
 var direction = -1
 var health = 1
-var possess_health = 1
+var possess_health = 0
 var SLIDE
 var INVINCIBLE = false
 var POSSESSED = false
@@ -14,12 +14,10 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
 		POSSESSED = false
+		$EnemyTestCollision.disabled = false
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
-		if $RayCast2D2.is_colliding():
-			velocity.y = -50 
-		if not $RayCast2D2.is_colliding():
-			velocity.y = move_toward(velocity.y, 0, 10)
+		velocity.y = move_toward(velocity.y, 0, 10)
 		if HAS_TARGET == 0:
 			velocity.x = direction * STATUS.air_speed
 		if HAS_TARGET == 2:
@@ -28,14 +26,15 @@ func _physics_process(delta: float) -> void:
 			await get_tree().create_timer(0.25).timeout
 			HAS_TARGET = 0
 	if possess_health == -1:
-			INVINCIBLE = true
-			POSSESSED = true
-			position.x = Autoloads.PLAYER_POSITION_X
-			position.y = Autoloads.PLAYER_POSITION_Y
-			$EnemyArea/CollisionShape2D.disabled = true
-			$Sprite2D.visible = false
-			if Autoloads.PLAYER_POSSESS_STOP:
-				_possess_stop()
+		$EnemyTestCollision.disabled = true
+		INVINCIBLE = true
+		POSSESSED = true
+		position.x = Autoloads.PLAYER_POSITION_X
+		position.y = Autoloads.PLAYER_POSITION_Y
+		$EnemyArea/CollisionShape2D.disabled = true
+		$Sprite2D.visible = false
+		if Autoloads.PLAYER_POSSESS_STOP:
+			_possess_stop()
 func _on_left_collision_check_body_entered(body: Node2D) -> void:
 	direction = 1
 	$Sprite2D.flip_h = false

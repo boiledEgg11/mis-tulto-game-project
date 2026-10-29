@@ -24,6 +24,7 @@ var MOVE_LOCK = false
 var ABILITY_LOCK = false
 var SPEED_MULTIPLIER = 1
 var POSSESS_START = true
+var TARGET_POS = Vector2(0, 0)
 func _ready() -> void:
 	OVERLAPPING_BODIES = $CrouchExitTestArea.get_overlapping_bodies()
 	$ExtraAttack/Sprite2D.visible = false
@@ -63,6 +64,10 @@ func _shoot():
 			direction = 1
 func _ability_use(ability):
 	match ability:
+		"TARGET_DASH":
+			$DetectShape/CollisionShape2D.disabled = false
+			await get_tree().create_timer(1).timeout
+			$DetectShape/CollisionShape2D.disabled = true
 		"SHOOT":
 			_shoot()
 		"Jump":
@@ -232,28 +237,29 @@ func _physics_process(delta: float) -> void:
 					$Sprite2D.rotation_degrees += direction * 10
 					$DamageCollision.rotation_degrees += direction * 10
 			"TARGET_DASH":
-				if direction > 0:
-					$Sprite2D.flip_h = false
-				if direction < 0:
-					$Sprite2D.flip_h = true
-				direction = Input.get_axis("left", "right")
-				if direction:
-					if is_on_floor():
-						velocity.x = direction * STATUS.speed * SPEED_MULTIPLIER
-					if not is_on_floor():
-						velocity.x = direction * STATUS.air_speed * SPEED_MULTIPLIER
-				else:
-					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
-					direction = 0
-				if $RayCast2D.is_colliding() and Input.is_action_pressed("up"):
-					velocity.y = STATUS.jump
-				if not is_on_floor():
-					if Input.is_action_pressed("down"):
-						velocity.y = STATUS.jump * -1
-					if not $RayCast2D.is_colliding():
-						velocity += get_gravity() * delta
+				if not MOVE_LOCK:
+					if direction > 0:
+						$Sprite2D.flip_h = false
+					if direction < 0:
+						$Sprite2D.flip_h = true
+					direction = Input.get_axis("left", "right")
+					if direction:
+						if is_on_floor():
+							velocity.x = direction * STATUS.speed * SPEED_MULTIPLIER
+						if not is_on_floor():
+							velocity.x = direction * STATUS.air_speed * SPEED_MULTIPLIER
 					else:
-						velocity.y = move_toward(velocity.y, 0, 30)
+						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+						direction = 0
+					if $RayCast2D.is_colliding() and Input.is_action_pressed("up"):
+						velocity.y = STATUS.jump
+					if not is_on_floor():
+						if Input.is_action_pressed("down"):
+							velocity.y = STATUS.jump * -1
+						if not $RayCast2D.is_colliding():
+							velocity += get_gravity() * delta
+						else:
+							velocity.y = move_toward(velocity.y, 0, 30)
 			"EXPLOSIVE":
 				if $Camera2D/DashRecover.value == 0:
 					$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
@@ -459,19 +465,15 @@ func _process(delta: float) -> void:
 	_dash_recover_process(1)
 	if Autoloads.PLAYER_POSSESSING:
 		$PossessArea/PossessShape.disabled = true
-
 func _dash_recover_process(delta:float) -> void:
 	if not DASH_LOCK:
-		$Camera2D/DashRecover.value += delta * 1
-
+		$Camera2D/DashRecover.value += delta
 func _on_crouch_exit_test_area_body_exited(body) -> void:
 	if body.is_in_group("tile"):
 		CROUCH_BLOCK = false
 		print("can crouch")
 	if body.is_in_group("save"):
 		SAVABLE = false 
-
-
 func _on_crouch_test_area_body_entered(body) -> void:
 	if body.is_in_group("tile"):
 		CROUCH_BLOCK = true
@@ -487,16 +489,39 @@ func _on_damage_collision_area_entered(area) -> void:
 			_health_process(5)
 		_health_process(1)
 		print(INVINCIBLE)
-
-
-
-
-
 func _on_damage_collision_area_exited(area) -> void:
 	if area.is_in_group("damage"):
 		ENEMY_COLLISION = false
-
-
 func _on_crouch_exit_test_area_body_entered(body) -> void:
 	if body.is_in_group("save"):
 		SAVABLE = true
+func _on_detect_shape_body_shape_entered(body_rid: RID, area: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	MOVE_LOCK = true
+	INVINCIBLE = true
+	$ExtraAttack/CollisionShape2D.disabled = false
+	print(area.name)
+	velocity.x = 0
+	velocity.y = 0
+	if area.position.x - position.x > 0:
+		direction = 1
+	else:
+		direction = -1
+	TARGET_POS = Vector2i(area.position.x, area.position.y)
+	await get_tree().create_timer(0.5).timeout
+	if position.x > TARGET_POS.x:
+		print("yayy")
+		position.x = move_toward(position.x, TARGET_POS.x, 50)
+	else:
+		print("nono")
+		position.x = move_toward(position.x, TARGET_POS.x, 50)
+	position.y = move_toward(position.y, TARGET_POS.y, 15)
+	await get_tree().create_timer(0.5).timeout
+	print("yes")
+	INVINCIBLE = false
+	$ExtraAttack/CollisionShape2D.disabled = true
+	MOVE_LOCK = false
+
+
+
+func _on_detect_shape_area_entered(area: Area2D) -> void:
+	pass
