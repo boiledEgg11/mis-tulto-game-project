@@ -33,7 +33,7 @@ func _ready() -> void:
 	$AttackCollision/CollisionShape2D.disabled = true
 	$PossessArea/PossessShape.disabled = true
 	$DamageCollision/PlayerDamageCollision.disabled = false
-	$DamageCollision/PlayerDamageCollision.shape.size = Vector2(10, 10)
+	$DamageCollision/PlayerDamageCollision.shape.size = Vector2(15, 15)
 func _health_process(DAMAGE) -> void:
 	if not INVINCIBLE:
 		TEXTURE_LOCK = true
@@ -410,7 +410,7 @@ func _physics_process(delta: float) -> void:
 					$Player_Shape.position = Vector2(0, STATUS.hitbox_y / 4)
 					if not INVINCIBLE:
 						@warning_ignore("integer_division")
-						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x * (2/3), STATUS.hitbox_y * (1/3))
+						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x - 0.5, STATUS.hitbox_y / 2 - 0.5)
 						$DamageCollision/PlayerDamageCollision.position = Vector2(0, STATUS.hitbox_y / 4)
 					if not ANIMATION_MOVED:
 						$AnimatedSprite2D.play("crouch")
@@ -423,7 +423,7 @@ func _physics_process(delta: float) -> void:
 					$Player_Shape.position = Vector2(0, 0)
 					if not INVINCIBLE:
 						@warning_ignore("integer_division")
-						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x * (2/3), STATUS.hitbox_y * (2/3))
+						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x - 5, STATUS.hitbox_y - 5)
 						$DamageCollision/PlayerDamageCollision.position = Vector2(0, 0)
 					$Sprite2D.texture = load("res://assets/placeholder_player.png")
 			if is_on_floor():

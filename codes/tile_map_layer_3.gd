@@ -13,7 +13,7 @@ func _process(_delta: float) -> void:
 			if Autoloads.move_amount:
 				position.x = initial_pos - 79.9
 			else:
-				position.x = initial_pos - 80
+				position.x = initial_pos - 79.9
 		if initial_pos < position.x:
 			if Autoloads.move_amount:
 				position.x = initial_pos + 99.9
