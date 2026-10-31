@@ -8,6 +8,7 @@ var DASH_Y_CHANGE = 0
 var CROUCH = false
 var DASH_DIRECTION = 0
 var DASH_MOVE = false
+var ANIMATION_MOVED = false
 var CROUCH_BLOCK = false
 var INVINCIBLE = false
 var STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 120, "damage": 1, "extra_damage": 1}
@@ -105,7 +106,7 @@ func _physics_process(delta: float) -> void:
 		$ExtraAttack/CollisionShape2D.disabled = true
 	var standing = $RayCast2D.get_collider()
 	if standing:
-		if standing.name == "TileMapLayer3" and Autoloads.move_amount > -82 and Autoloads.move_amount < 100:
+		if standing.name == "TileMapLayer3" and Autoloads.move_amount > -80 and Autoloads.move_amount < 100:
 			position.x += Autoloads.tile_move
 	bodies = $ExtraAttack.get_overlapping_bodies()
 	for body in bodies:
@@ -123,6 +124,8 @@ func _physics_process(delta: float) -> void:
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
+		$AnimatedSprite2D.visible = false
+		$Sprite2D.visible = true
 		if Autoloads.POSSESS_ABILITY != "None":
 			$Camera2D/DashRecover/Label.text = Autoloads.POSSESS_ABILITY
 		else:
@@ -237,7 +240,10 @@ func _physics_process(delta: float) -> void:
 				velocity.y = 0
 				position.x = 512
 				position.y = -20
-				direction = Input.get_axis("left", "right")
+				if Input.is_action_pressed("shift"):
+					direction = Input.get_axis("left", "right") * 10
+				else:
+					direction = Input.get_axis("left", "right")
 				Autoloads.tile_move = direction
 				if direction:
 					$Sprite2D.rotation_degrees += direction * 10
@@ -387,6 +393,17 @@ func _physics_process(delta: float) -> void:
 				else:
 					velocity += get_gravity() * delta * 1.5
 			if not TEXTURE_LOCK:
+				if direction or CROUCH:
+					$Sprite2D.visible = false
+					$AnimatedSprite2D.visible = true
+				else:
+					ANIMATION_MOVED = false
+					$Sprite2D.visible = true
+					$AnimatedSprite2D.visible = false
+				if direction and not CROUCH:
+					if not ANIMATION_MOVED:
+						ANIMATION_MOVED = true
+						$AnimatedSprite2D.play("move")
 				if CROUCH:
 					STATUS.speed = 30
 					$Player_Shape.shape.size = Vector2(STATUS.hitbox_x, STATUS.hitbox_y / 2)
@@ -394,8 +411,12 @@ func _physics_process(delta: float) -> void:
 					if not INVINCIBLE:
 						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x * (2/3), STATUS.hitbox_y * (1/3))
 						$DamageCollision/PlayerDamageCollision.position = Vector2(0, STATUS.hitbox_y / 4)
+					if not ANIMATION_MOVED:
+						$AnimatedSprite2D.play("crouch")
+						ANIMATION_MOVED = true
 					$Sprite2D.texture = load("res://assets/placeholder_player_crouch.png")
 				if not CROUCH:
+					ANIMATION_MOVED = false
 					STATUS.speed = 120
 					$Player_Shape.shape.size = Vector2(STATUS.hitbox_x, STATUS.hitbox_y)
 					$Player_Shape.position = Vector2(0, 0)
@@ -424,6 +445,8 @@ func _physics_process(delta: float) -> void:
 				direction = 0
 			if $Camera2D/DashRecover.value == 60 and abs(direction) + abs(DASH_Y_CHANGE) != 0:
 				if Input.is_action_just_pressed("space"): 
+					$AnimatedSprite2D.visible = false
+					$Sprite2D.visible = true
 					if direction < 0:
 						DASH_DIRECTION = -1
 					if direction > 0:
@@ -474,6 +497,9 @@ func _physics_process(delta: float) -> void:
 					$PossessArea/PossessShape.disabled = true
 func _process(delta: float) -> void:
 	_dash_recover_process(1)
+	$AnimatedSprite2D.flip_h = $Sprite2D.flip_h
+	$AnimatedSprite2D.flip_v = $Sprite2D.flip_v
+	$AnimatedSprite2D.rotation = $Sprite2D.rotation
 	if Autoloads.PLAYER_POSSESSING:
 		$PossessArea/PossessShape.disabled = true
 func _dash_recover_process(delta:float) -> void:

@@ -1,13 +1,14 @@
 extends TileMapLayer
-
-# Called when the node enters the scene tree for the first time.
+var initial_pos
 func _ready() -> void:
-	pass # Replace with function body.
-
-
+	initial_pos = position.x
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if (Autoloads.move_amount >= -82 and Autoloads.tile_move < 0) or (Autoloads.move_amount <= 100 and Autoloads.tile_move > 0):
-		Autoloads.move_amount += Autoloads.tile_move
-	if Autoloads.move_amount > -82 and Autoloads.move_amount < 100:
+	Autoloads.move_amount = position.x - initial_pos
+	if position.x > initial_pos - 80 and position.x < initial_pos + 100:
 		position.x += Autoloads.tile_move
+	else:
+		if initial_pos > position.x:
+			position.x = initial_pos - 79.9
+		if initial_pos < position.x:
+			position.x = initial_pos + 99.9
