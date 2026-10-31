@@ -80,11 +80,11 @@ func _physics_process(delta: float) -> void:
 		$Sprite2D.visible = false
 		if Autoloads.PLAYER_POSSESS_STOP:
 			_possess_stop()
-func _on_left_collision_check_body_entered(body: Node2D) -> void:
+func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	if not attacking:
 		direction = 1
 
-func _on_right_collision_check_body_entered(body: Node2D) -> void:
+func _on_right_collision_check_body_entered(_body: Node2D) -> void:
 	if not attacking:
 		direction = -1
 func _on_enemy_area_area_entered(area) -> void:
@@ -105,7 +105,7 @@ func _possess_stop() -> void:
 	health = 1
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if direction == 1:
 		$player_detection.rotation_degrees = 0 
 		$player_detection.position = Vector2i(10, 0)

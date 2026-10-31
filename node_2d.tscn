@@ -3,11 +3,9 @@
 [ext_resource type="Script" uid="uid://c58d18t8eq3k1" path="res://codes/character_body_2d.gd" id="1_0e48y"]
 [ext_resource type="Script" uid="uid://cvo0v454mxjkl" path="res://main_scne.gd" id="1_0h7mo"]
 [ext_resource type="Texture2D" uid="uid://by0xtcu6q3j2l" path="res://assets/placeholder_player.png" id="2_0hol4"]
-[ext_resource type="Script" uid="uid://duh4koj5u1eax" path="res://codes/area_2d.gd" id="2_rj586"]
 [ext_resource type="Script" uid="uid://bb5icce710kjn" path="res://codes/collision_shape_2d.gd" id="3_4d7sh"]
 [ext_resource type="Script" uid="uid://bg10c5p33fycw" path="res://tile_map_layer_3.gd" id="3_ei405"]
 [ext_resource type="Script" uid="uid://bneh7x1n7a1cs" path="res://codes/tile_map_layer_2.gd" id="3_nr8wp"]
-[ext_resource type="Script" uid="uid://csugv3yw5phaf" path="res://codes/crouch_test_area.gd" id="5_d21ai"]
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="5_rj586"]
 [ext_resource type="Script" uid="uid://0ox0t7c838x6" path="res://enemy_test_4.gd" id="6_ta5nu"]
 [ext_resource type="Texture2D" uid="uid://dcwc4yricskq0" path="res://assets/placeholder_enemy_shoot.png" id="7_k73cj"]
@@ -24,7 +22,6 @@
 [ext_resource type="Texture2D" uid="uid://bnxvoakjqh3as" path="res://assets/player_crouch.png" id="14_gt76g"]
 [ext_resource type="Texture2D" uid="uid://q2xiqq3jrf1v" path="res://assets/placeholder_player_indicator.png" id="15_d2bti"]
 [ext_resource type="Script" uid="uid://g3ax43qmhmde" path="res://enemy_test_6.gd" id="16_2nhjh"]
-[ext_resource type="Script" uid="uid://csj23uyadyu7y" path="res://camera_2d.gd" id="18_e8dv2"]
 [ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholder_explosion.png" id="18_rjqkl"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q6r6c"]
@@ -280,7 +277,6 @@ script = ExtResource("1_0e48y")
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1456672527]
 zoom = Vector2(4, 4)
-script = ExtResource("18_e8dv2")
 
 [node name="PlayerHealth" type="ProgressBar" parent="Player/Camera2D" unique_id=739125418]
 modulate = Color(0.17837903, 0.7651734, 0.31318405, 1)
@@ -314,7 +310,6 @@ shape = SubResource("RectangleShape2D_b5jwi")
 
 [node name="DamageCollision" type="Area2D" parent="Player" unique_id=604566733]
 collision_mask = 18
-script = ExtResource("2_rj586")
 
 [node name="PlayerDamageCollision" type="CollisionShape2D" parent="Player/DamageCollision" unique_id=2075048318]
 shape = SubResource("RectangleShape2D_euwu4")
@@ -331,7 +326,6 @@ texture = ExtResource("2_0hol4")
 
 [node name="CrouchTestArea" type="Area2D" parent="Player" unique_id=1144540496]
 collision_layer = 4
-script = ExtResource("5_d21ai")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CrouchTestArea" unique_id=6903447]
 shape = SubResource("RectangleShape2D_iyk0q")

@@ -17,9 +17,7 @@ var CHARGE = 0
 var ABILITY_USE = true
 var bodies
 var SAVABLE = false
-var OVERLAPPING_BODIES
 var SAVE_THINGS
-var location
 var DASH_LOCK = false
 var MOVE_LOCK = false
 var ABILITY_LOCK = false
@@ -29,7 +27,6 @@ var TARGET_POS = Vector2(0, 0)
 var ATTACK_COLLISION = false
 var HAS_TARGET = 0
 func _ready() -> void:
-	OVERLAPPING_BODIES = $CrouchExitTestArea.get_overlapping_bodies()
 	$ExtraAttack/Sprite2D.visible = false
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$Camera2D/PlayerHealth.value = 10
@@ -106,7 +103,7 @@ func _physics_process(delta: float) -> void:
 		$ExtraAttack/CollisionShape2D.disabled = true
 	var standing = $RayCast2D.get_collider()
 	if standing:
-		if standing.name == "TileMapLayer3" and Autoloads.move_amount > -80 and Autoloads.move_amount < 100:
+		if standing.name == "TileMapLayer3" and Autoloads.is_moving:
 			position.x += Autoloads.tile_move
 	bodies = $ExtraAttack.get_overlapping_bodies()
 	for body in bodies:
@@ -232,6 +229,9 @@ func _physics_process(delta: float) -> void:
 					if ABILITY_LOCK:
 						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 			"SPIN":
+				Autoloads.move_amount = true
+				if Input.is_action_just_pressed("ability"):
+					Autoloads.move_amount = false
 				if not Input.is_action_pressed("space"):
 					$Camera2D.global_position = Vector2i(816, 64)
 				else:
@@ -409,6 +409,7 @@ func _physics_process(delta: float) -> void:
 					$Player_Shape.shape.size = Vector2(STATUS.hitbox_x, STATUS.hitbox_y / 2)
 					$Player_Shape.position = Vector2(0, STATUS.hitbox_y / 4)
 					if not INVINCIBLE:
+						@warning_ignore("integer_division")
 						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x * (2/3), STATUS.hitbox_y * (1/3))
 						$DamageCollision/PlayerDamageCollision.position = Vector2(0, STATUS.hitbox_y / 4)
 					if not ANIMATION_MOVED:
@@ -421,6 +422,7 @@ func _physics_process(delta: float) -> void:
 					$Player_Shape.shape.size = Vector2(STATUS.hitbox_x, STATUS.hitbox_y)
 					$Player_Shape.position = Vector2(0, 0)
 					if not INVINCIBLE:
+						@warning_ignore("integer_division")
 						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x * (2/3), STATUS.hitbox_y * (2/3))
 						$DamageCollision/PlayerDamageCollision.position = Vector2(0, 0)
 					$Sprite2D.texture = load("res://assets/placeholder_player.png")
@@ -495,7 +497,7 @@ func _physics_process(delta: float) -> void:
 						velocity.x = 0
 					$AttackCollision/CollisionShape2D.disabled = true
 					$PossessArea/PossessShape.disabled = true
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	_dash_recover_process(1)
 	$AnimatedSprite2D.flip_h = $Sprite2D.flip_h
 	$AnimatedSprite2D.flip_v = $Sprite2D.flip_v
@@ -532,8 +534,6 @@ func _on_damage_collision_area_exited(area) -> void:
 func _on_crouch_exit_test_area_body_entered(body) -> void:
 	if body.is_in_group("save"):
 		SAVABLE = true
-func _enemey6_dash(body):
-	pass
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	ATTACK_COLLISION = true
 	velocity = Vector2(0, 0)

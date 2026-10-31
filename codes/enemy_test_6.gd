@@ -10,7 +10,7 @@ var HAS_TARGET = 0
 var STATUS = {"speed": 0, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 70, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
 		INVINCIBLE = false
@@ -36,11 +36,11 @@ func _physics_process(delta: float) -> void:
 		$Sprite2D.visible = false
 		if Autoloads.PLAYER_POSSESS_STOP:
 			_possess_stop()
-func _on_left_collision_check_body_entered(body: Node2D) -> void:
+func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	direction = 1
 	$Sprite2D.flip_h = false
 	$RayCast2D.target_position = Vector2(50, 0)
-func _on_right_collision_check_body_entered(body: Node2D) -> void:
+func _on_right_collision_check_body_entered(_body: Node2D) -> void:
 	direction = -1
 	$Sprite2D.flip_h = true
 	$RayCast2D.target_position = Vector2(-50, 0)
@@ -52,7 +52,7 @@ func _possess_stop() -> void:
 	health = 1
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
@@ -74,7 +74,7 @@ func _process(delta: float) -> void:
 		velocity.x = 0
 		velocity.y = 0
 
-func _on_search_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+func _on_search_area_body_shape_entered(_body_rid: RID, body: Node2D, _body_shape_index: int, _local_shape_index: int) -> void:
 	if HAS_TARGET == 0:
 		velocity.x = 0
 		velocity.y = 0

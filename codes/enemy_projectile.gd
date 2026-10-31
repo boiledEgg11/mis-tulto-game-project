@@ -12,7 +12,7 @@ func _physics_process(delta: float) -> void:
 			if not $VisibleOnScreenNotifier2D.is_on_screen():
 				queue_free()
 		position.y+= speed * delta
-func _on_body_entered(body) -> void:
+func _on_body_entered(_body) -> void:
 	MOVING = false
 	$CollisionShape2D.shape.radius = 32
 	await get_tree().create_timer(0.1).timeout

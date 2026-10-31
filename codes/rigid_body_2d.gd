@@ -26,10 +26,10 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.visible = false
 			if Autoloads.PLAYER_POSSESS_STOP:
 				_possess_stop()
-func _on_left_collision_check_body_entered(body: Node2D) -> void:
+func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	direction = 1
 	$Sprite2D.flip_h = false
-func _on_right_collision_check_body_entered(body: Node2D) -> void:
+func _on_right_collision_check_body_entered(_body: Node2D) -> void:
 	direction = -1
 	$Sprite2D.flip_h = true
 func _on_enemy_area_area_entered(area) -> void:
@@ -51,7 +51,7 @@ func _possess_stop() -> void:
 	health = 1
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
