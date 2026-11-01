@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://h4xfxn4eosop"]
+
+[ext_resource type="Script" uid="uid://dvs2kyjr6mdsa" path="res://codes/enemy_test_4.gd" id="1_r8dfk"]
+[ext_resource type="Texture2D" uid="uid://dcwc4yricskq0" path="res://assets/placeholder_enemy_shoot.png" id="2_nfnpf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gbotl"]
+size = Vector2(15.5, 15.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ag805"]
+size = Vector2(0.1, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lbsx0"]
+size = Vector2(15.5, 15.5)
+
+[node name="Node2D" type="Node2D" unique_id=1005217645]
+
+[node name="EnemyTest4" type="CharacterBody2D" parent="." unique_id=231193582]
+collision_layer = 0
+collision_mask = 3
+script = ExtResource("1_r8dfk")
+
+[node name="Sprite2D" type="Sprite2D" parent="EnemyTest4" unique_id=573225733]
+texture = ExtResource("2_nfnpf")
+
+[node name="EnemyTestCollision" type="CollisionShape2D" parent="EnemyTest4" unique_id=1494564695]
+shape = SubResource("RectangleShape2D_gbotl")
+
+[node name="LeftCollisionCheck" type="Area2D" parent="EnemyTest4" unique_id=523719309]
+position = Vector2(-8.2, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest4/LeftCollisionCheck" unique_id=1634977399]
+shape = SubResource("RectangleShape2D_ag805")
+
+[node name="RightCollisionCheck" type="Area2D" parent="EnemyTest4" unique_id=1910356684]
+position = Vector2(8.2, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest4/RightCollisionCheck" unique_id=1382762995]
+shape = SubResource("RectangleShape2D_ag805")
+
+[node name="EnemyArea" type="Area2D" parent="EnemyTest4" unique_id=36729329 groups=["damage"]]
+collision_layer = 2
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest4/EnemyArea" unique_id=388003403]
+shape = SubResource("RectangleShape2D_lbsx0")
+
+[node name="RayCast2D" type="RayCast2D" parent="EnemyTest4" unique_id=167205855]
+target_position = Vector2(0, 90)
+collision_mask = 16
+
+[node name="groundchecker" type="RayCast2D" parent="EnemyTest4" unique_id=1728323499]
+target_position = Vector2(0, 90)
+
+[connection signal="body_entered" from="EnemyTest4/LeftCollisionCheck" to="EnemyTest4" method="_on_left_collision_check_body_entered"]
+[connection signal="body_entered" from="EnemyTest4/RightCollisionCheck" to="EnemyTest4" method="_on_right_collision_check_body_entered"]
+[connection signal="area_entered" from="EnemyTest4/EnemyArea" to="EnemyTest4" method="_on_enemy_area_area_entered"]

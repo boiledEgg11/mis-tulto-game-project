@@ -1,20 +1,19 @@
 extends StaticBody2D
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	var enemy1 = preload("res://enemy1.tscn").instantiate()
-	var enemy2 = preload("res://enemy2.tscn").instantiate()
-	var enemy3 = preload("res://enemy3.tscn").instantiate()
-	var enemy4 = preload("res://enemy4.tscn").instantiate()
-	var enemy5 = preload("res://enemy5.tscn").instantiate()
-	var enemy6 = preload("res://enemy6.tscn").instantiate()
-	var enemy7 = preload("res://enemy7.tscn").instantiate()
-	owner.add_child(enemy1)
-	owner.add_child(enemy2)
-	owner.add_child(enemy3)
-	owner.add_child(enemy4)
-	owner.add_child(enemy5)
-	owner.add_child(enemy6)
-	owner.add_child(enemy7)
+var enemy1 = preload("res://enemy1.tscn").instantiate()
+var enemy2 = preload("res://enemy2.tscn").instantiate()
+var enemy3 = preload("res://enemy3.tscn").instantiate()
+var enemy4 = preload("res://enemy4.tscn").instantiate()
+var enemy5 = preload("res://enemy5.tscn").instantiate()
+var enemy6 = preload("res://enemy6.tscn").instantiate()
+var enemy7 = preload("res://enemy7.tscn").instantiate()
+func _set_enemy():
+	owner.add_child.call_deferred(enemy1)
+	owner.add_child.call_deferred(enemy2)
+	owner.add_child.call_deferred(enemy3)
+	owner.add_child.call_deferred(enemy4)
+	owner.add_child.call_deferred(enemy5)
+	owner.add_child.call_deferred(enemy6)
+	owner.add_child.call_deferred(enemy7)
 	enemy1.position = Vector2i(98, 0)
 	enemy2.position = Vector2i(50, 0)
 	enemy3.position = Vector2i(250, 0)
@@ -22,5 +21,5 @@ func _ready() -> void:
 	enemy5.position = Vector2i(512, -20)
 	enemy6.position = Vector2i(98, 0)
 	enemy7.position = Vector2i(1100, 30)
-func _process(delta: float) -> void:
-	pass
+func _ready() -> void:
+	_set_enemy()

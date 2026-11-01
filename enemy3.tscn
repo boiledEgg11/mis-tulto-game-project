@@ -1,0 +1,88 @@
+[gd_scene format=3 uid="uid://bhuqpl27xlkoe"]
+
+[ext_resource type="Script" uid="uid://s02jym0yktfw" path="res://codes/enemy_test_3.gd" id="1_10atn"]
+[ext_resource type="Texture2D" uid="uid://g87vfgpql376" path="res://assets/placeholder_enemy_explosion.png" id="2_baq7o"]
+[ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholder_explosion.png" id="3_yag85"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o5vrm"]
+size = Vector2(15.5, 15.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vpkv7"]
+size = Vector2(0.1, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sq3t0"]
+size = Vector2(15.5, 15.5)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rud8w"]
+radius = 30.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m0xub"]
+radius = 40.0
+
+[node name="Node2D" type="Node2D" unique_id=1476176984]
+
+[node name="EnemyTest3" type="CharacterBody2D" parent="." unique_id=532878073]
+collision_layer = 32
+collision_mask = 3
+script = ExtResource("1_10atn")
+
+[node name="Sprite2D" type="Sprite2D" parent="EnemyTest3" unique_id=1892446437]
+texture = ExtResource("2_baq7o")
+
+[node name="EnemyTestCollision" type="CollisionShape2D" parent="EnemyTest3" unique_id=1541820094]
+shape = SubResource("RectangleShape2D_o5vrm")
+
+[node name="LeftCollisionCheck" type="Area2D" parent="EnemyTest3" unique_id=1918400324]
+position = Vector2(-8, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/LeftCollisionCheck" unique_id=1131866409]
+shape = SubResource("RectangleShape2D_vpkv7")
+
+[node name="RightCollisionCheck" type="Area2D" parent="EnemyTest3" unique_id=1439939376]
+position = Vector2(8, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/RightCollisionCheck" unique_id=986916069]
+shape = SubResource("RectangleShape2D_vpkv7")
+
+[node name="EnemyArea" type="Area2D" parent="EnemyTest3" unique_id=1602615021 groups=["damage"]]
+collision_layer = 10
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/EnemyArea" unique_id=2037894159]
+shape = SubResource("RectangleShape2D_sq3t0")
+
+[node name="RayCast2D" type="RayCast2D" parent="EnemyTest3" unique_id=333004002]
+position = Vector2(10, 0)
+target_position = Vector2(50, 0)
+collision_mask = 16
+
+[node name="Area2D" type="Area2D" parent="EnemyTest3" unique_id=1344434408 groups=["damage", "damage_2", "player_damaging"]]
+collision_layer = 10
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/Area2D" unique_id=1837794797]
+shape = SubResource("CircleShape2D_rud8w")
+disabled = true
+debug_color = Color(0, 0.6372624, 0.39842844, 0.41960785)
+
+[node name="Sprite2D" type="Sprite2D" parent="EnemyTest3/Area2D" unique_id=1182031133]
+texture = ExtResource("3_yag85")
+
+[node name="player_detection" type="RayCast2D" parent="EnemyTest3" unique_id=278011795]
+position = Vector2(-20, -1)
+target_position = Vector2(60, 0)
+collision_mask = 16
+
+[node name="groundchecker" type="RayCast2D" parent="EnemyTest3" unique_id=1946017761]
+target_position = Vector2(0, 90)
+
+[node name="PlayerDetectionArea" type="Area2D" parent="EnemyTest3" unique_id=300589926]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest3/PlayerDetectionArea" unique_id=1292274009]
+shape = SubResource("CircleShape2D_m0xub")
+
+[connection signal="body_entered" from="EnemyTest3/LeftCollisionCheck" to="EnemyTest3" method="_on_left_collision_check_body_entered"]
+[connection signal="body_entered" from="EnemyTest3/RightCollisionCheck" to="EnemyTest3" method="_on_right_collision_check_body_entered"]
+[connection signal="area_entered" from="EnemyTest3/EnemyArea" to="EnemyTest3" method="_on_enemy_area_area_entered"]
+[connection signal="body_entered" from="EnemyTest3/PlayerDetectionArea" to="EnemyTest3" method="_on_player_detection_area_body_entered"]

@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://dd2gr0i3a5ybb"]
+
+[ext_resource type="Script" uid="uid://c5heq53boj1k3" path="res://codes/testenemy2.gd" id="1_jugo2"]
+[ext_resource type="Texture2D" uid="uid://7kwhs2sblyyi" path="res://assets/placeholder_enemy_bouncy.png" id="2_b3jlp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fb6pl"]
+size = Vector2(15.5, 15.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cp8lj"]
+size = Vector2(0.1, 15)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1elri"]
+size = Vector2(15.5, 15.5)
+
+[node name="Node2D" type="Node2D" unique_id=158777101]
+
+[node name="EnemyTest2" type="CharacterBody2D" parent="." unique_id=1693072703]
+collision_layer = 32
+collision_mask = 3
+script = ExtResource("1_jugo2")
+
+[node name="Sprite2D" type="Sprite2D" parent="EnemyTest2" unique_id=27702114]
+texture = ExtResource("2_b3jlp")
+
+[node name="EnemyTestCollision" type="CollisionShape2D" parent="EnemyTest2" unique_id=502818067]
+shape = SubResource("RectangleShape2D_fb6pl")
+
+[node name="LeftCollisionCheck" type="Area2D" parent="EnemyTest2" unique_id=717777022]
+position = Vector2(-8, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest2/LeftCollisionCheck" unique_id=920646626]
+shape = SubResource("RectangleShape2D_cp8lj")
+
+[node name="RightCollisionCheck" type="Area2D" parent="EnemyTest2" unique_id=1001652714]
+position = Vector2(8, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest2/RightCollisionCheck" unique_id=1361858523]
+shape = SubResource("RectangleShape2D_cp8lj")
+
+[node name="EnemyArea" type="Area2D" parent="EnemyTest2" unique_id=2080149154 groups=["damage"]]
+collision_layer = 10
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest2/EnemyArea" unique_id=350041541]
+shape = SubResource("RectangleShape2D_1elri")
+
+[node name="groundchecker" type="RayCast2D" parent="EnemyTest2" unique_id=174436221]
+target_position = Vector2(0, 90)
+
+[connection signal="body_entered" from="EnemyTest2/LeftCollisionCheck" to="EnemyTest2" method="_on_left_collision_check_body_entered"]
+[connection signal="body_entered" from="EnemyTest2/RightCollisionCheck" to="EnemyTest2" method="_on_right_collision_check_body_entered"]
+[connection signal="area_entered" from="EnemyTest2/EnemyArea" to="EnemyTest2" method="_on_enemy_area_area_entered"]
