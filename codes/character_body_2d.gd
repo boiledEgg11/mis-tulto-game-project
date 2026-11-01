@@ -99,8 +99,6 @@ func _ability_use(ability):
 			$ExtraAttack/Sprite2D.visible = false
 			$ExtraAttack.position = Vector2(0, 0)
 			ABILITY_LOCK = false
-	if ability != "None":
-		$Camera2D/DashRecover.value = 0
 func _save():
 	$Camera2D/PlayerHealth.value = 10
 	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
@@ -119,7 +117,7 @@ func _physics_process(delta: float) -> void:
 		$AttackCollision/CollisionShape2D.disabled = false
 	if not ATTACK_COLLISION:
 		$AttackCollision/CollisionShape2D.disabled = true
-	var standing = $RayCast2D.get_collider()
+	var standing = $groundchecker.get_collider()
 	if standing:
 		if standing.is_in_group("moving_tile") and Autoloads.is_moving:
 			position.x += Autoloads.tile_move
@@ -207,7 +205,7 @@ func _physics_process(delta: float) -> void:
 						velocity += get_gravity() * delta * 1.5
 					else:
 						velocity += get_gravity() * delta / 5
-				if $RayCast2D.is_colliding():
+				if $groundchecker.is_colliding():
 					CHARGE = 0
 				if not Input.is_action_pressed("space"):
 					if $Camera2D/DashRecover.value == 60:
@@ -217,9 +215,9 @@ func _physics_process(delta: float) -> void:
 					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
 				else:
-					if $RayCast2D.is_colliding():
+					if $groundchecker.is_colliding():
 						velocity.y = Input.get_axis("up", "down") * SPEED_MULTIPLIER * STATUS.air_speed
-					if not $RayCast2D.is_colliding():
+					if not $groundchecker.is_colliding():
 						CHARGE += 1
 						if CHARGE > 30:
 							velocity.y = 30
@@ -237,7 +235,7 @@ func _physics_process(delta: float) -> void:
 						if is_on_floor():
 							velocity.y = STATUS.jump / 2
 						else:
-							if $RayCast2D.is_colliding():
+							if $groundchecker.is_colliding():
 								velocity.y = STATUS.jump / 4 
 					if direction:
 						if is_on_floor():
@@ -289,12 +287,12 @@ func _physics_process(delta: float) -> void:
 					else:
 						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 						direction = 0
-					if $RayCast2D.is_colliding() and Input.is_action_pressed("up"):
+					if $groundchecker.is_colliding() and Input.is_action_pressed("up"):
 						velocity.y = STATUS.jump
 					if not is_on_floor():
 						if Input.is_action_pressed("down"):
 							velocity.y = STATUS.jump * -1
-						if not $RayCast2D.is_colliding():
+						if not $groundchecker.is_colliding():
 							velocity += get_gravity() * delta
 						else:
 							velocity.y = move_toward(velocity.y, 0, 30)
