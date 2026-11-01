@@ -71,6 +71,7 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
+		Autoloads.POSSESS_TYPE = "charge"
 		$Area2D/CollisionShape2D.disabled = true
 		INVINCIBLE = true
 		POSSESSED = true

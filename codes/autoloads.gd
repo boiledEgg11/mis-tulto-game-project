@@ -9,6 +9,7 @@ var POSSESS_AMOUNT = 0
 var POSSESS_ENEMY
 var PROGRESSION
 var tile
+var POSSESS_TYPE
 var tile_move = 0
 var move_amount = false
 var is_moving = true

@@ -42,6 +42,7 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta / 5
 	if possess_health == -1:
+			Autoloads.POSSESS_TYPE = "charge"
 			INVINCIBLE = true
 			POSSESSED = true
 			position.x = Autoloads.PLAYER_POSITION_X

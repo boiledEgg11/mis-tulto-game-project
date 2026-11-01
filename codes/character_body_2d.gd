@@ -368,6 +368,7 @@ func _physics_process(delta: float) -> void:
 			STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 			_health_process(0)
 	if not Autoloads.PLAYER_POSSESSING:
+		Autoloads.POSSESS_TYPE = "none"
 		$Camera2D/DashRecover/Label.text = "dash"
 		$Sprite2D2.visible = false
 		DASH_LOCK = false
@@ -497,6 +498,13 @@ func _physics_process(delta: float) -> void:
 					$AttackCollision/CollisionShape2D.disabled = true
 					$PossessArea/PossessShape.disabled = true
 func _process(_delta: float) -> void:
+	if $Camera2D/DashRecover.value == 60:
+		$Camera2D/DashRecover.texture_progress = load("res://assets/dash_bar_max.png")
+	else:
+		if Autoloads.POSSESS_TYPE == "charge":
+			$Camera2D/DashRecover.texture_progress = load("res://assets/dash_bar_charge_charging.png")
+		else:
+			$Camera2D/DashRecover.texture_progress = load("res://assets/dash_bar_high.png")
 	if Input.is_action_just_pressed("Any"):
 		ANIMATION_MOVED = false
 	if $Camera2D/PlayerHealth.value <= 3:
