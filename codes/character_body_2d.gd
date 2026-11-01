@@ -46,12 +46,10 @@ func _dash_hold_stop():
 		$Sprite2D.visible = false
 func _health_process(DAMAGE) -> void:
 	if not INVINCIBLE:
-		$AnimatedSprite2D.visible = false
-		$Sprite2D.visible = true
 		TEXTURE_LOCK = true
 		if DAMAGE > 0:
 			if not Autoloads.PLAYER_POSSESSING:
-				$Sprite2D.texture = load("res://assets/placeholder_death.png")
+				$AnimatedSprite2D.play("hurt")
 			$Camera2D/PlayerHealth.value += DAMAGE * STATUS.damage_multiplier
 		if $Camera2D/PlayerHealth.value <= 0:
 			_death()
@@ -65,9 +63,7 @@ func _death():
 	TEXTURE_LOCK = true
 	velocity.y = -600
 	if not Autoloads.PLAYER_POSSESSING:
-		$AnimatedSprite2D.visible = false
-		$Sprite2D.visible = true
-		$Sprite2D.texture = load("res://assets/placeholder_death.png")
+		$AnimatedSprite2D.play("hurt")
 	await get_tree().create_timer(1).timeout
 	$Camera2D/PlayerHealth.value = 10
 	TEXTURE_LOCK = false
@@ -564,7 +560,6 @@ func _on_crouch_exit_test_area_body_exited(body) -> void:
 func _on_crouch_test_area_body_entered(body) -> void:
 	if body.is_in_group("tile"):
 		CROUCH_BLOCK = true
-		print("cant crouch")
 
 func _on_damage_collision_area_entered(area) -> void:
 	if area.is_in_group("damage"):
