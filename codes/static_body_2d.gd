@@ -6,7 +6,9 @@ var enemy4 = preload("res://scenes/enemy4.tscn").instantiate()
 var enemy5 = preload("res://scenes/enemy5.tscn").instantiate()
 var enemy6 = preload("res://scenes/enemy6.tscn").instantiate()
 var enemy7 = preload("res://scenes/enemy7.tscn").instantiate()
+var enemy1_1 = preload("res://scenes/enemy1.tscn").instantiate()
 func _set_enemy():
+	owner.add_child.call_deferred(enemy1_1)
 	owner.add_child.call_deferred(enemy1)
 	owner.add_child.call_deferred(enemy2)
 	owner.add_child.call_deferred(enemy3)
@@ -14,12 +16,13 @@ func _set_enemy():
 	owner.add_child.call_deferred(enemy5)
 	owner.add_child.call_deferred(enemy6)
 	owner.add_child.call_deferred(enemy7)
-	enemy1.position = Vector2i(98, 0)
-	enemy2.position = Vector2i(50, 0)
-	enemy3.position = Vector2i(250, 0)
-	enemy4.position = Vector2i(300, 0)
-	enemy5.position = Vector2i(512, -20)
-	enemy6.position = Vector2i(0, 112)
-	enemy7.position = Vector2i(1100, 30)
+	enemy1.individual = 1
+	enemy2.individual = 1
+	enemy3.individual = 1
+	enemy4.individual = 1
+	enemy5.individual = 1
+	enemy6.individual = 1
+	enemy7.individual = 1
+	enemy1_1.individual = 2
 func _ready() -> void:
 	_set_enemy()

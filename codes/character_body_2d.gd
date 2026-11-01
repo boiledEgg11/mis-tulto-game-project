@@ -99,6 +99,8 @@ func _ability_use(ability):
 			$ExtraAttack/Sprite2D.visible = false
 			$ExtraAttack.position = Vector2(0, 0)
 			ABILITY_LOCK = false
+	if ability != "none" or ability != "spin":
+		$Camera2D/DashRecover.value = 0
 func _save():
 	$Camera2D/PlayerHealth.value = 10
 	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
@@ -607,8 +609,6 @@ func _charge_blink():
 		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
 		await get_tree().create_timer(0.3).timeout
 		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
-
-
 func _on_loaded_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	body.add_to_group("is_on_screen")
 func _on_loaded_area_body_shape_exited(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:

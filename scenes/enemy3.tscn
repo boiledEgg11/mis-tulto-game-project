@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bhuqpl27xlkoe"]
 
-[ext_resource type="Script" uid="uid://s02jym0yktfw" path="res://codes/enemy_test_3.gd" id="1_10atn"]
-[ext_resource type="Texture2D" uid="uid://g87vfgpql376" path="res://assets/placeholder_enemy_explosion.png" id="2_baq7o"]
-[ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholder_explosion.png" id="3_yag85"]
+[ext_resource type="Script" uid="uid://s02jym0yktfw" path="res://codes/enemy_test_3.gd" id="1_o2iik"]
+[ext_resource type="Texture2D" uid="uid://g87vfgpql376" path="res://assets/placeholder_enemy_explosion.png" id="2_kroph"]
+[ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholder_explosion.png" id="3_xx6g3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o5vrm"]
 size = Vector2(15.5, 15.5)
@@ -21,13 +21,14 @@ radius = 40.0
 
 [node name="Node2D" type="Node2D" unique_id=1476176984]
 
-[node name="EnemyTest3" type="CharacterBody2D" parent="." unique_id=532878073]
+[node name="EnemyTest3" type="CharacterBody2D" parent="." unique_id=532878073 groups=["is_on_screen"]]
+position = Vector2(250, 0)
 collision_layer = 32
 collision_mask = 3
-script = ExtResource("1_10atn")
+script = ExtResource("1_o2iik")
 
 [node name="Sprite2D" type="Sprite2D" parent="EnemyTest3" unique_id=1892446437]
-texture = ExtResource("2_baq7o")
+texture = ExtResource("2_kroph")
 
 [node name="EnemyTestCollision" type="CollisionShape2D" parent="EnemyTest3" unique_id=1541820094]
 shape = SubResource("RectangleShape2D_o5vrm")
@@ -65,7 +66,7 @@ disabled = true
 debug_color = Color(0, 0.6372624, 0.39842844, 0.41960785)
 
 [node name="Sprite2D" type="Sprite2D" parent="EnemyTest3/Area2D" unique_id=1182031133]
-texture = ExtResource("3_yag85")
+texture = ExtResource("3_xx6g3")
 
 [node name="player_detection" type="RayCast2D" parent="EnemyTest3" unique_id=278011795]
 position = Vector2(-20, -1)

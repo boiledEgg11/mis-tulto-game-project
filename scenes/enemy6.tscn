@@ -18,6 +18,7 @@ radius = 40.0
 [node name="Node2D" type="Node2D" unique_id=1523048410]
 
 [node name="EnemyTest6" type="CharacterBody2D" parent="." unique_id=644890121]
+position = Vector2(0, 112)
 collision_layer = 32
 collision_mask = 3
 script = ExtResource("1_le1et")

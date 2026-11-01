@@ -3,10 +3,18 @@ var direction = -1
 var health = 1
 var possess_health = 1
 var SLIDE
+var individual
 var INVINCIBLE = false
 var POSSESSED = false
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
+	match individual:
+		1:
+			position = Vector2(98, 0)
+		2:
+			position = Vector2i(-20, 0)
+		_:
+			position = Vector2i(98, 0)
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
 	move_and_slide()

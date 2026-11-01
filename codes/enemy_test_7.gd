@@ -6,8 +6,14 @@ var SLIDE
 var INVINCIBLE = false
 var Initial = Vector2(0, 0)
 var POSSESSED = false
+var individual = 0
 var STATUS = {"speed": 0, "jump": 0, "slide": 200, "damage_multiplier": -0.8, "hitbox_y": 22, "hitbox_x": 22, "air_speed": 0, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
+	match individual:
+		1:
+			position = Vector2(1100, 30)
+		_:
+			position = Vector2i(1100, 30)
 	Initial = position
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(_delta: float) -> void:
@@ -23,6 +29,7 @@ func _physics_process(_delta: float) -> void:
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 	if possess_health == -1:
+		position = Vector2i(0, 0)
 		Autoloads.CAMERA_LOCATION = Vector2i(1232, 0)
 		Autoloads.PLAYER_POSITION_X = Initial.x
 		Autoloads.PLAYER_POSITION_Y = Initial.y

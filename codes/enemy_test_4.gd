@@ -7,10 +7,16 @@ var charge = 0
 var CHARGING = false
 var initial_y = 0
 var WAIT = 0
+var individual
 var INVINCIBLE = false
 var POSSESSED = false
 var STATUS = {"speed": 30, "jump": -300, "slide": 40, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 120, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
+	match individual:
+		1:
+			position = Vector2(300, 0)
+		_:
+			position = Vector2i(300, 0)
 	initial_y = position.y
 	$EnemyArea/CollisionShape2D.disabled = false
 func _charging():
@@ -52,6 +58,7 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta / 5
 	if possess_health == -1:
+			position = Vector2i(0, 0)
 			Autoloads.POSSESS_TYPE = "charge"
 			$EnemyTestCollision.disabled = true
 			INVINCIBLE = true

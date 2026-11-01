@@ -7,8 +7,14 @@ var INVINCIBLE = false
 var POSSESSED = false
 var TARGET_POS = Vector2i(0, 0)
 var HAS_TARGET = 0
+var individual = 0
 var STATUS = {"speed": 0, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 70, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
+	match individual:
+		1:
+			position = Vector2(0, 112)
+		_:
+			position = Vector2i(0, 112)
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(_delta: float) -> void:
 	move_and_slide()
@@ -35,6 +41,7 @@ func _physics_process(_delta: float) -> void:
 			await get_tree().create_timer(0.6).timeout
 			HAS_TARGET = 0
 	if possess_health == -1:
+		position = Vector2i(0, 0)
 		$EnemyTestCollision.disabled = true
 		INVINCIBLE = true
 		POSSESSED = true

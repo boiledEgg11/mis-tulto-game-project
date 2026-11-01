@@ -15,6 +15,7 @@ size = Vector2(15.5, 15.5)
 [node name="Node2D" type="Node2D" unique_id=1259683197]
 
 [node name="EnemyTest7" type="CharacterBody2D" parent="." unique_id=1087316620]
+position = Vector2(1100, 30)
 collision_layer = 32
 collision_mask = 3
 script = ExtResource("1_7dl0u")
