@@ -1,11 +1,11 @@
 extends StaticBody2D
-var enemy1 = preload("res://enemy1.tscn").instantiate()
-var enemy2 = preload("res://enemy2.tscn").instantiate()
-var enemy3 = preload("res://enemy3.tscn").instantiate()
-var enemy4 = preload("res://enemy4.tscn").instantiate()
-var enemy5 = preload("res://enemy5.tscn").instantiate()
-var enemy6 = preload("res://enemy6.tscn").instantiate()
-var enemy7 = preload("res://enemy7.tscn").instantiate()
+var enemy1 = preload("res://scenes/enemy1.tscn").instantiate()
+var enemy2 = preload("res://scenes/enemy2.tscn").instantiate()
+var enemy3 = preload("res://scenes/enemy3.tscn").instantiate()
+var enemy4 = preload("res://scenes/enemy4.tscn").instantiate()
+var enemy5 = preload("res://scenes/enemy5.tscn").instantiate()
+var enemy6 = preload("res://scenes/enemy6.tscn").instantiate()
+var enemy7 = preload("res://scenes/enemy7.tscn").instantiate()
 func _set_enemy():
 	owner.add_child.call_deferred(enemy1)
 	owner.add_child.call_deferred(enemy2)
@@ -19,7 +19,7 @@ func _set_enemy():
 	enemy3.position = Vector2i(250, 0)
 	enemy4.position = Vector2i(300, 0)
 	enemy5.position = Vector2i(512, -20)
-	enemy6.position = Vector2i(98, 0)
+	enemy6.position = Vector2i(0, 112)
 	enemy7.position = Vector2i(1100, 30)
 func _ready() -> void:
 	_set_enemy()

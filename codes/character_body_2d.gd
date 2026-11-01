@@ -67,7 +67,7 @@ func _death():
 	$Camera2D/PlayerHealth.value = 10
 	TEXTURE_LOCK = false
 func _shoot():
-	var SHOOT_BULLET = preload("res://player_projectile.tscn").instantiate()
+	var SHOOT_BULLET = preload("res://scenes/player_projectile.tscn").instantiate()
 	owner.add_child(SHOOT_BULLET)
 	SHOOT_BULLET.position = position
 func _ability_use(ability):
@@ -607,3 +607,9 @@ func _charge_blink():
 		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
 		await get_tree().create_timer(0.3).timeout
 		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
+
+
+func _on_loaded_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	body.add_to_group("is_on_screen")
+func _on_loaded_area_body_shape_exited(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	body.remove_from_group("is_on_screen")

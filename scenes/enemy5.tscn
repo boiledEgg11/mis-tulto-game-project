@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://tr7i0x86e1h1"]
 
-[ext_resource type="Script" uid="uid://ineaaqg21lwu" path="res://codes/enemy_test_5.gd" id="1_jmhoy"]
-[ext_resource type="Texture2D" uid="uid://dp08go8sv1off" path="res://assets/placeholder_gear.png" id="2_7nq4r"]
+[ext_resource type="Script" uid="uid://ineaaqg21lwu" path="res://codes/enemy_test_5.gd" id="1_yw1p2"]
+[ext_resource type="Texture2D" uid="uid://dp08go8sv1off" path="res://assets/placeholder_gear.png" id="2_mgl14"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ef0an"]
 size = Vector2(22, 22)
@@ -17,10 +17,10 @@ size = Vector2(15.5, 15.5)
 [node name="EnemyTest5" type="CharacterBody2D" parent="." unique_id=1712286494]
 collision_layer = 32
 collision_mask = 3
-script = ExtResource("1_jmhoy")
+script = ExtResource("1_yw1p2")
 
 [node name="Sprite2D" type="Sprite2D" parent="EnemyTest5" unique_id=614958299]
-texture = ExtResource("2_7nq4r")
+texture = ExtResource("2_mgl14")
 
 [node name="EnemyTestCollision" type="CollisionShape2D" parent="EnemyTest5" unique_id=2075218491]
 shape = SubResource("RectangleShape2D_ef0an")
@@ -43,9 +43,6 @@ collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest5/EnemyArea" unique_id=1967167350]
 shape = SubResource("RectangleShape2D_kgb2g")
-
-[node name="groundchecker" type="RayCast2D" parent="EnemyTest5" unique_id=572951211]
-target_position = Vector2(0, 90)
 
 [connection signal="body_entered" from="EnemyTest5/LeftCollisionCheck" to="EnemyTest5" method="_on_left_collision_check_body_entered"]
 [connection signal="body_entered" from="EnemyTest5/RightCollisionCheck" to="EnemyTest5" method="_on_right_collision_check_body_entered"]

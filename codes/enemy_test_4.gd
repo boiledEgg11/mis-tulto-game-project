@@ -17,7 +17,7 @@ func _charging():
 	await get_tree().create_timer(1).timeout
 	CHARGING = false
 	if possess_health > 0:
-		var SHOOT_BULLET = preload("res://enemy_projectile.tscn").instantiate()
+		var SHOOT_BULLET = preload("res://scenes/enemy_projectile.tscn").instantiate()
 		owner.add_child(SHOOT_BULLET)
 		SHOOT_BULLET.position = position
 func _physics_process(delta: float) -> void:

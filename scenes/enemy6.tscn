@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://xij3otpukrtp"]
 
-[ext_resource type="Script" uid="uid://dbxduvikgaeqc" path="res://codes/enemy_test_6.gd" id="1_x8e8k"]
-[ext_resource type="Texture2D" uid="uid://bokga3fn602dw" path="res://assets/placeholder_enemy_dash.png" id="2_riawb"]
+[ext_resource type="Script" uid="uid://dbxduvikgaeqc" path="res://codes/enemy_test_6.gd" id="1_le1et"]
+[ext_resource type="Texture2D" uid="uid://bokga3fn602dw" path="res://assets/placeholder_enemy_dash.png" id="2_6uec7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ffaeh"]
 size = Vector2(15.5, 15.5)
@@ -20,10 +20,10 @@ radius = 40.0
 [node name="EnemyTest6" type="CharacterBody2D" parent="." unique_id=644890121]
 collision_layer = 32
 collision_mask = 3
-script = ExtResource("1_x8e8k")
+script = ExtResource("1_le1et")
 
 [node name="Sprite2D" type="Sprite2D" parent="EnemyTest6" unique_id=96382412]
-texture = ExtResource("2_riawb")
+texture = ExtResource("2_6uec7")
 
 [node name="EnemyTestCollision" type="CollisionShape2D" parent="EnemyTest6" unique_id=215388977]
 shape = SubResource("RectangleShape2D_ffaeh")
