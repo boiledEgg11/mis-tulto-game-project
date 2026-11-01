@@ -19,13 +19,15 @@ func _physics_process(_delta: float) -> void:
 				position.x += Autoloads.tile_move
 		if position.y > 175:
 			queue_free()
-		Autoloads.tile_move = 0.5
+		if not Autoloads.move_amount:
+			Autoloads.tile_move = 0.5
 		velocity = Vector2(0, 0)
 		POSSESSED = false
 		rotation += 0.1
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 	if possess_health == -1:
+		Autoloads.CAMERA_LOCATION = Vector2i(816, 64)
 		Autoloads.PLAYER_POSITION_X = Initial.x
 		Autoloads.PLAYER_POSITION_Y = Initial.y
 		rotation = 0

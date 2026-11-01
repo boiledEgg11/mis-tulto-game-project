@@ -123,6 +123,8 @@ func _physics_process(delta: float) -> void:
 	if standing:
 		if standing.is_in_group("moving_tile") and Autoloads.is_moving:
 			position.x += Autoloads.tile_move
+		if standing.is_in_group("moving_tile_y") and Autoloads.is_moving:
+			position.y -= Autoloads.tile_move / 2
 	bodies = $ExtraAttack.get_overlapping_bodies()
 	for body in bodies:
 		if not body.is_in_group("tile_breakable"):
@@ -252,13 +254,13 @@ func _physics_process(delta: float) -> void:
 				if Input.is_action_just_pressed("ability"):
 					Autoloads.move_amount = false
 				if not Input.is_action_pressed("space"):
-					$Camera2D.global_position = Vector2i(816, 64)
+					$Camera2D.global_position = Autoloads.CAMERA_LOCATION
 				else:
 					$Camera2D.position = Vector2i(0, 0)
 				velocity.x = 0
 				velocity.y = 0
-				position.x = 512
-				position.y = -20
+				position.x = Autoloads.PLAYER_POSITION_X
+				position.y = Autoloads.PLAYER_POSITION_Y
 				if Input.is_action_pressed("shift"):
 					direction = Input.get_axis("left", "right") * 10
 				else:

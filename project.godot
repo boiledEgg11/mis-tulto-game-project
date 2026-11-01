@@ -43,6 +43,7 @@ tile_breakable=""
 damage_2=""
 player_damaging="Group of nodes that are damage by player"
 moving_tile=""
+moving_tile_y=""
 
 [input]
 
