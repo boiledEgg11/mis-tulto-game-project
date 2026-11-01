@@ -98,9 +98,9 @@ func _save():
 	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
 func _physics_process(delta: float) -> void:
 	if ATTACK_COLLISION:
-		$ExtraAttack/CollisionShape2D.disabled = false
-	if not ATTACK_COLLISION or ABILITY_LOCK:
-		$ExtraAttack/CollisionShape2D.disabled = true
+		$AttackCollision/CollisionShape2D.disabled = false
+	if not ATTACK_COLLISION:
+		$AttackCollision/CollisionShape2D.disabled = true
 	var standing = $RayCast2D.get_collider()
 	if standing:
 		if standing.name == "TileMapLayer3" and Autoloads.is_moving:
@@ -498,6 +498,10 @@ func _physics_process(delta: float) -> void:
 					$AttackCollision/CollisionShape2D.disabled = true
 					$PossessArea/PossessShape.disabled = true
 func _process(_delta: float) -> void:
+	if $Camera2D/PlayerHealth.value <= 3:
+		$Camera2D/PlayerHealth.texture_progress = load("res://assets/health_bar_low.png")
+	else:
+		$Camera2D/PlayerHealth.texture_progress = load("res://assets/health_bar_high.png")
 	_dash_recover_process(1)
 	$AnimatedSprite2D.flip_h = $Sprite2D.flip_h
 	$AnimatedSprite2D.flip_v = $Sprite2D.flip_v
@@ -535,6 +539,7 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 	if body.is_in_group("save"):
 		SAVABLE = true
 func _on_detect_shape_body_entered(body: Node2D) -> void:
+	TARGET_POS = Vector2i(0, 0)
 	ATTACK_COLLISION = true
 	velocity = Vector2(0, 0)
 	if HAS_TARGET == 0:
@@ -543,23 +548,19 @@ func _on_detect_shape_body_entered(body: Node2D) -> void:
 		velocity.x = 0
 		velocity.y = 0
 		HAS_TARGET = 1
-		if body.position.x - position.x > 0:
+		if body.position.x - global_position.x > 0:
 			direction = 1
 		else:
 			direction = -1
-		if body.position.x > position.x:
+		if body.position.x > global_position.x:
 			TARGET_POS.x = body.position.x + 150
-		if body.position.x < position.x:
+		if body.position.x < global_position.x:
 			TARGET_POS.x = body.position.x - 150
-		else:
-			TARGET_POS.x = 0
-		if body.position.y > position.y:
+		if body.position.y > global_position.y:
 			TARGET_POS.y = body.position.y + 150
-		if body.position.x < position.y:
+		if body.position.y < global_position.y:
 			TARGET_POS.y = body.position.y - 150
-		else:
-			TARGET_POS.y = 0
-		await get_tree().create_timer(0.5).timeout
+		await get_tree().create_timer(0.25).timeout
 		HAS_TARGET = 2
 		INVINCIBLE = false
 		MOVE_LOCK = false

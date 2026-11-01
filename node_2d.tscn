@@ -8,12 +8,16 @@
 [ext_resource type="Script" uid="uid://bneh7x1n7a1cs" path="res://codes/tile_map_layer_2.gd" id="3_nr8wp"]
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="5_rj586"]
 [ext_resource type="Script" uid="uid://dvs2kyjr6mdsa" path="res://codes/enemy_test_4.gd" id="6_ta5nu"]
+[ext_resource type="Texture2D" uid="uid://bn27x6bkyh3da" path="res://assets/health_bar_border.png" id="7_bjha6"]
+[ext_resource type="Texture2D" uid="uid://jxdinm4nneo5" path="res://assets/bar_ background.png" id="7_gt76g"]
 [ext_resource type="Texture2D" uid="uid://dcwc4yricskq0" path="res://assets/placeholder_enemy_shoot.png" id="7_k73cj"]
 [ext_resource type="Script" uid="uid://ineaaqg21lwu" path="res://codes/enemy_test_5.gd" id="8_fs4d3"]
+[ext_resource type="Texture2D" uid="uid://cruja23pe5w1v" path="res://assets/health_bar_high.png" id="8_gt76g"]
 [ext_resource type="Script" uid="uid://s02jym0yktfw" path="res://codes/enemy_test_3.gd" id="8_nr8wp"]
 [ext_resource type="Script" uid="uid://cc0rtmvte20dk" path="res://codes/rigid_body_2d.gd" id="8_rj586"]
 [ext_resource type="Texture2D" uid="uid://drgtym1my3gso" path="res://assets/placeholder_enemy.png" id="9_4d7sh"]
 [ext_resource type="Texture2D" uid="uid://dp08go8sv1off" path="res://assets/placeholder_gear.png" id="9_7vxoj"]
+[ext_resource type="Texture2D" uid="uid://ctmy1mvin5kpo" path="res://assets/dash_bar_high.png" id="10_1fr6y"]
 [ext_resource type="Script" uid="uid://c5heq53boj1k3" path="res://codes/testenemy2.gd" id="10_ir8iy"]
 [ext_resource type="Texture2D" uid="uid://7kwhs2sblyyi" path="res://assets/placeholder_enemy_bouncy.png" id="11_hqns4"]
 [ext_resource type="Texture2D" uid="uid://g87vfgpql376" path="res://assets/placeholder_enemy_explosion.png" id="11_rjqkl"]
@@ -278,32 +282,38 @@ script = ExtResource("1_0e48y")
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1456672527]
 zoom = Vector2(4, 4)
 
-[node name="PlayerHealth" type="ProgressBar" parent="Player/Camera2D" unique_id=739125418]
-modulate = Color(0.17837903, 0.7651734, 0.31318405, 1)
-offset_left = -139.0
-offset_top = -77.0
-offset_right = -67.0
-offset_bottom = -68.0
+[node name="PlayerHealth" type="TextureProgressBar" parent="Player/Camera2D" unique_id=971471211]
+offset_left = -142.0
+offset_top = -78.0
+offset_right = -62.0
+offset_bottom = -38.0
 max_value = 10.0
-show_percentage = false
+value = 5.0
+texture_under = ExtResource("7_gt76g")
+texture_over = ExtResource("7_bjha6")
+texture_progress = ExtResource("8_gt76g")
 
-[node name="DashRecover" type="ProgressBar" parent="Player/Camera2D" unique_id=2138811126]
-modulate = Color(0, 0.7713469, 0.77134687, 1)
-self_modulate = Color(1, 0, 1, 1)
-offset_left = -139.0
-offset_top = -65.0
-offset_right = -94.0
-offset_bottom = -61.0
+[node name="DashRecover" type="TextureProgressBar" parent="Player/Camera2D" unique_id=1523865024]
+offset_left = -142.0
+offset_top = -66.0
+offset_right = -62.0
+offset_bottom = -26.0
 max_value = 60.0
-show_percentage = false
+value = 60.0
+texture_under = ExtResource("7_gt76g")
+texture_over = ExtResource("7_bjha6")
+texture_progress = ExtResource("10_1fr6y")
 
 [node name="Label" type="Label" parent="Player/Camera2D/DashRecover" unique_id=30597192]
 clip_contents = true
 layout_mode = 0
+offset_top = 12.0
 offset_right = 40.0
-offset_bottom = 23.0
-theme_override_colors/font_color = Color(0, 1, 1, 1)
+offset_bottom = 35.0
+scale = Vector2(0.5, 0.5)
+theme_override_colors/font_color = Color(0.856858, 0.7668405, 1, 1)
 theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 8
 
 [node name="Player_Shape" type="CollisionShape2D" parent="Player" unique_id=1446692577]
 shape = SubResource("RectangleShape2D_b5jwi")

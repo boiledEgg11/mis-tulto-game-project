@@ -76,6 +76,7 @@ func _process(_delta: float) -> void:
 
 func _on_search_area_body_shape_entered(_body_rid: RID, body: Node2D, _body_shape_index: int, _local_shape_index: int) -> void:
 	if HAS_TARGET == 0:
+		TARGET_POS = Vector2i(0, 0)
 		velocity.x = 0
 		velocity.y = 0
 		HAS_TARGET = 1
@@ -87,14 +88,10 @@ func _on_search_area_body_shape_entered(_body_rid: RID, body: Node2D, _body_shap
 			TARGET_POS.x = body.position.x + 150
 		if body.position.x < position.x:
 			TARGET_POS.x = body.position.x - 150
-		else:
-			TARGET_POS.x = 0
 		if body.position.y > position.y:
 			TARGET_POS.y = body.position.y + 150
-		if body.position.x < position.y:
+		if body.position.y < position.y:
 			TARGET_POS.y = body.position.y - 150
-		else:
-			TARGET_POS.y = 0
 		await get_tree().create_timer(0.5).timeout
 		HAS_TARGET = 2
 		print(TARGET_POS)
