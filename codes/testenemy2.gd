@@ -16,6 +16,8 @@ func _physics_process(delta: float) -> void:
 		if standing:
 			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
 				position.x += Autoloads.tile_move
+			if standing.is_in_group("moving_tile_y") and Autoloads.is_moving:
+				position.y -= Autoloads.tile_move / 2
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
@@ -50,6 +52,8 @@ func _on_right_collision_check_body_entered(_body: Node2D) -> void:
 	direction = -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
+		if area.is_in_group("player_damaging"):
+			health -= 1
 		if area.name == "PlayerProjectile":
 			health -= 1
 		if area.name == "AttackCollision":
