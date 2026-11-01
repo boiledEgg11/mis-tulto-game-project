@@ -1,6 +1,5 @@
 extends CharacterBody2D
 var DASHING = false
-const DASH_SPEED = 480
 var direction = 1
 var health = 10
 var ENEMY_COLLISION = false
@@ -149,8 +148,8 @@ func _physics_process(delta: float) -> void:
 		if POSSESS_START:
 			$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 		POSSESS_START = false
-		$Sprite2D2.visible = true
-		$Sprite2D2.position = Vector2i(0, STATUS.hitbox_y / -2 - (STATUS.hitbox_y / 1.5))
+		$PlayerIndicator.visible = true
+		$PlayerIndicator.position = Vector2i(0, STATUS.hitbox_y / -2 - (STATUS.hitbox_y / 1.5))
 		$Player_Shape.shape.size = Vector2(Autoloads.POSSESS_STATUS.hitbox_x, Autoloads.POSSESS_STATUS.hitbox_y)
 		$PossessArea/PossessShape.disabled = true
 		STATUS = Autoloads.POSSESS_STATUS
@@ -323,7 +322,6 @@ func _physics_process(delta: float) -> void:
 				else:
 					SPEED_MULTIPLIER = 0.25
 					DASH_LOCK = false
-
 				direction = Input.get_axis("left", "right")
 				if not MOVE_LOCK or not ABILITY_LOCK:
 					if direction > 0:
@@ -388,7 +386,7 @@ func _physics_process(delta: float) -> void:
 	if not Autoloads.PLAYER_POSSESSING:
 		Autoloads.POSSESS_TYPE = "none"
 		$Camera2D/DashRecover/Label.text = "dash"
-		$Sprite2D2.visible = false
+		$PlayerIndicator.visible = false
 		DASH_LOCK = false
 		if INVINCIBLE:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
@@ -484,16 +482,16 @@ func _physics_process(delta: float) -> void:
 						$Sprite2D.rotation_degrees = -90
 						if DASH_Y_CHANGE == 1:
 							$Sprite2D.rotation_degrees = 90
-							velocity.y = DASH_Y_CHANGE * DASH_SPEED
+							velocity.y = DASH_Y_CHANGE * STATUS.speed * 4
 						else:
-							velocity.y = DASH_Y_CHANGE * DASH_SPEED / 1.5
+							velocity.y = DASH_Y_CHANGE * STATUS.speed * 4 / 1.5
 					else:
 						if DASH_Y_CHANGE != 0:
 							$Sprite2D.texture = load("res://assets/placeholder_dash_diagonal.png")
 							if DASH_Y_CHANGE == 1:
 								$Sprite2D.flip_v = true
-						velocity.y = DASH_Y_CHANGE * DASH_SPEED / 3
-					velocity.x = abs(DASH_SPEED - abs(velocity.y)) * DASH_DIRECTION
+						velocity.y = DASH_Y_CHANGE * STATUS.speed * 4 / 3
+					velocity.x = abs(STATUS.speed * 4 - abs(velocity.y)) * DASH_DIRECTION
 					if Input.is_action_pressed("ability") or Input.is_action_pressed("shift"):
 						ATTACK_COLLISION = true
 					else:
@@ -504,8 +502,7 @@ func _physics_process(delta: float) -> void:
 						await get_tree().create_timer(0.01).timeout
 						INVINCIBLE_HOLD = true
 						ATTACK_COLLISION = true
-						print("crouchattack!")
-						velocity.x = DASH_SPEED * DASH_DIRECTION * 1.5
+						velocity.x = STATUS.speed * DASH_DIRECTION * 6
 						$PossessArea/PossessShape.disabled = true
 						await get_tree().create_timer(0.1).timeout
 					else:
@@ -527,21 +524,21 @@ func _physics_process(delta: float) -> void:
 					$PossessArea/PossessShape.disabled = true
 func _process(_delta: float) -> void:
 	if $Camera2D/DashRecover.value == 60:
-		$Camera2D/DashRecover.texture_progress = load("res://assets/dash_bar_max.png")
+		$Camera2D/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_max.png")
 	else:
 		if Autoloads.POSSESS_TYPE == "charge":
-			$Camera2D/DashRecover.texture_progress = load("res://assets/dash_bar_charge_charging.png")
+			$Camera2D/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_charge_charging.png")
 		else:
-			$Camera2D/DashRecover.texture_progress = load("res://assets/dash_bar_high.png")
+			$Camera2D/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_high.png")
 	if Input.is_action_just_pressed("Any") and not DASH_MOVE:
 		ANIMATION_MOVED = false
 	if DASH_MOVE:
 		$Sprite2D.visible = true
 		$AnimatedSprite2D.visible = false
 	if $Camera2D/PlayerHealth.value <= 3:
-		$Camera2D/PlayerHealth.texture_progress = load("res://assets/health_bar_low.png")
+		$Camera2D/PlayerHealth.texture_progress = load("res://assets/sprites/health_bar_low.png")
 	else:
-		$Camera2D/PlayerHealth.texture_progress = load("res://assets/health_bar_high.png")
+		$Camera2D/PlayerHealth.texture_progress = load("res://assets/sprites/health_bar_high.png")
 	_dash_recover_process(1)
 	$AnimatedSprite2D.flip_h = $Sprite2D.flip_h
 	$AnimatedSprite2D.flip_v = $Sprite2D.flip_v
@@ -580,7 +577,7 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	TARGET_POS = Vector2i(0, 0)
 	ATTACK_COLLISION = true
-	velocity = Vector2(0, 0)
+	velocity = Vector2i(0, 0)
 	if HAS_TARGET == 0:
 		INVINCIBLE = true
 		MOVE_LOCK = true

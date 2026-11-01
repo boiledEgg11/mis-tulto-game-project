@@ -23,6 +23,10 @@ func _charging():
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
+		var standing = $groundchecker.get_collider()
+		if standing:
+			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
+				position.x += Autoloads.tile_move
 		if position.y > 175:
 			queue_free()
 		$EnemyTestCollision.disabled = false
