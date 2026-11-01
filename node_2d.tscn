@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://7kwhs2sblyyi" path="res://assets/placeholder_enemy_bouncy.png" id="11_hqns4"]
 [ext_resource type="Texture2D" uid="uid://g87vfgpql376" path="res://assets/placeholder_enemy_explosion.png" id="11_rjqkl"]
 [ext_resource type="Texture2D" uid="uid://c7o36xe4q7agb" path="res://assets/placeholder_save.png" id="12_x0ka3"]
+[ext_resource type="Texture2D" uid="uid://be42siuktuoj2" path="res://assets/player_idle.png" id="13_2hxjc"]
 [ext_resource type="Texture2D" uid="uid://dousl5g0sl2aj" path="res://assets/player_move.png" id="14_bjha6"]
 [ext_resource type="Texture2D" uid="uid://bnxvoakjqh3as" path="res://assets/player_crouch.png" id="14_gt76g"]
 [ext_resource type="Texture2D" uid="uid://q2xiqq3jrf1v" path="res://assets/placeholder_player_indicator.png" id="15_d2bti"]
@@ -117,6 +118,22 @@ region = Rect2(32, 0, 16, 16)
 atlas = ExtResource("14_gt76g")
 region = Rect2(48, 0, 16, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5dlx"]
+atlas = ExtResource("13_2hxjc")
+region = Rect2(0, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4wnb"]
+atlas = ExtResource("13_2hxjc")
+region = Rect2(20, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7plk7"]
+atlas = ExtResource("13_2hxjc")
+region = Rect2(40, 0, 20, 18)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fbwgr"]
+atlas = ExtResource("13_2hxjc")
+region = Rect2(60, 0, 20, 18)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_gt76g"]
 atlas = ExtResource("14_bjha6")
 region = Rect2(0, 0, 24, 16)
@@ -167,6 +184,23 @@ animations = [{
 "loop": 1,
 "name": &"crouch",
 "speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q5dlx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c4wnb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7plk7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fbwgr")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -313,7 +347,7 @@ offset_bottom = 35.0
 scale = Vector2(0.5, 0.5)
 theme_override_colors/font_color = Color(0.856858, 0.7668405, 1, 1)
 theme_override_constants/shadow_outline_size = 0
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 12
 
 [node name="Player_Shape" type="CollisionShape2D" parent="Player" unique_id=1446692577]
 shape = SubResource("RectangleShape2D_b5jwi")
@@ -328,8 +362,7 @@ script = ExtResource("3_4d7sh")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=1928977834]
 sprite_frames = SubResource("SpriteFrames_euwu4")
-animation = &"move"
-frame_progress = 0.42962185
+animation = &"idle"
 
 [node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1032957902]
 texture = ExtResource("2_0hol4")

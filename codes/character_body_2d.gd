@@ -97,6 +97,8 @@ func _save():
 	$Camera2D/PlayerHealth.value = 10
 	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
 func _physics_process(delta: float) -> void:
+	$Sprite2D.visible = false
+	$AnimatedSprite2D.visible = true
 	if ATTACK_COLLISION:
 		$AttackCollision/CollisionShape2D.disabled = false
 	if not ATTACK_COLLISION:
@@ -393,17 +395,14 @@ func _physics_process(delta: float) -> void:
 				else:
 					velocity += get_gravity() * delta * 1.5
 			if not TEXTURE_LOCK:
-				if direction or CROUCH:
-					$Sprite2D.visible = false
-					$AnimatedSprite2D.visible = true
-				else:
-					ANIMATION_MOVED = false
-					$Sprite2D.visible = true
-					$AnimatedSprite2D.visible = false
 				if direction and not CROUCH:
 					if not ANIMATION_MOVED:
 						ANIMATION_MOVED = true
 						$AnimatedSprite2D.play("move")
+				if not direction and not CROUCH:
+					if not ANIMATION_MOVED:
+						ANIMATION_MOVED = true
+						$AnimatedSprite2D.play("idle")
 				if CROUCH:
 					STATUS.speed = 30
 					$Player_Shape.shape.size = Vector2(STATUS.hitbox_x, STATUS.hitbox_y / 2)
@@ -498,6 +497,8 @@ func _physics_process(delta: float) -> void:
 					$AttackCollision/CollisionShape2D.disabled = true
 					$PossessArea/PossessShape.disabled = true
 func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("Any"):
+		ANIMATION_MOVED = false
 	if $Camera2D/PlayerHealth.value <= 3:
 		$Camera2D/PlayerHealth.texture_progress = load("res://assets/health_bar_low.png")
 	else:
