@@ -11,6 +11,7 @@ var DASH_MOVE = false
 var ANIMATION_MOVED = false
 var CROUCH_BLOCK = false
 var INVINCIBLE = false
+var INVINCIBLE_HOLD = false
 var STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 120, "damage": 1, "extra_damage": 1}
 var TEXTURE_LOCK
 var CHARGE = 0
@@ -36,6 +37,8 @@ func _ready() -> void:
 	$DamageCollision/PlayerDamageCollision.shape.size = Vector2(15, 15)
 func _health_process(DAMAGE) -> void:
 	if not INVINCIBLE:
+		$AnimatedSprite2D.visible = false
+		$Sprite2D.visible = true
 		TEXTURE_LOCK = true
 		if DAMAGE > 0:
 			if not Autoloads.PLAYER_POSSESSING:
@@ -53,6 +56,8 @@ func _death():
 	TEXTURE_LOCK = true
 	velocity.y = -600
 	if not Autoloads.PLAYER_POSSESSING:
+		$AnimatedSprite2D.visible = false
+		$Sprite2D.visible = true
 		$Sprite2D.texture = load("res://assets/placeholder_death.png")
 	await get_tree().create_timer(1).timeout
 	$Camera2D/PlayerHealth.value = 10
@@ -97,15 +102,29 @@ func _save():
 	$Camera2D/PlayerHealth.value = 10
 	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
 func _physics_process(delta: float) -> void:
-	$Sprite2D.visible = false
-	$AnimatedSprite2D.visible = true
+	if INVINCIBLE_HOLD:
+		if not is_on_floor():
+			INVINCIBLE = true
+			DASH_LOCK = true
+			$AttackCollision/CollisionShape2D.disabled = false
+		else:
+			$AttackCollision/CollisionShape2D.disabled = true
+			INVINCIBLE = false
+			DASH_LOCK = false
+			DASH_MOVE = false
+			INVINCIBLE_HOLD = false
+			$AnimatedSprite2D.visible = true
+			$Sprite2D.visible = false
+	if not TEXTURE_LOCK:
+		$Sprite2D.visible = false
+		$AnimatedSprite2D.visible = true
 	if ATTACK_COLLISION:
 		$AttackCollision/CollisionShape2D.disabled = false
 	if not ATTACK_COLLISION:
 		$AttackCollision/CollisionShape2D.disabled = true
 	var standing = $RayCast2D.get_collider()
 	if standing:
-		if standing.name == "TileMapLayer3" and Autoloads.is_moving:
+		if standing.is_in_group("moving_tile") and Autoloads.is_moving:
 			position.x += Autoloads.tile_move
 	bodies = $ExtraAttack.get_overlapping_bodies()
 	for body in bodies:
@@ -192,7 +211,10 @@ func _physics_process(delta: float) -> void:
 				if $RayCast2D.is_colliding():
 					CHARGE = 0
 				if not Input.is_action_pressed("space"):
-					$Camera2D/DashRecover.value = 0
+					if $Camera2D/DashRecover.value == 60:
+						_ability_use(Autoloads.POSSESS_ABILITY)
+					else:
+						$Camera2D/DashRecover.value = 0
 					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
 				else:
@@ -204,8 +226,6 @@ func _physics_process(delta: float) -> void:
 							velocity.y = 30
 						else:
 							velocity.y = 0
-					if $Camera2D/DashRecover.value == 60:
-						_ability_use(Autoloads.POSSESS_ABILITY)
 					SPEED_MULTIPLIER = 0.25
 					DASH_LOCK = false
 				direction = Input.get_axis("left", "right")
@@ -293,19 +313,19 @@ func _physics_process(delta: float) -> void:
 						velocity += get_gravity() * delta * 2.5
 					else:
 						velocity += get_gravity() * delta * 1.5
+				if Input.is_action_just_pressed("space"):
+					_charge_blink()
 				if not Input.is_action_pressed("space"):
-					$Camera2D/DashRecover.value = 0
 					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
-				else:
-					if ($Camera2D/DashRecover.value > 15 and $Camera2D/DashRecover.value < 30) or ($Camera2D/DashRecover.value > 45 and $Camera2D/DashRecover.value < 60):
-						$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
-					if ($Camera2D/DashRecover.value > 0 and $Camera2D/DashRecover.value < 15) or ($Camera2D/DashRecover.value > 30 and $Camera2D/DashRecover.value < 45) or $Camera2D/DashRecover.value == 60:
-						$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
 					if $Camera2D/DashRecover.value >= 60:
 						_ability_use(Autoloads.POSSESS_ABILITY)
+					else:
+						$Camera2D/DashRecover.value = 0
+				else:
 					SPEED_MULTIPLIER = 0.25
 					DASH_LOCK = false
+
 				direction = Input.get_axis("left", "right")
 				if not MOVE_LOCK or not ABILITY_LOCK:
 					if direction > 0:
@@ -447,6 +467,7 @@ func _physics_process(delta: float) -> void:
 				direction = 0
 			if $Camera2D/DashRecover.value == 60 and abs(direction) + abs(DASH_Y_CHANGE) != 0:
 				if Input.is_action_just_pressed("space"): 
+					DASH_LOCK = true
 					$AnimatedSprite2D.visible = false
 					$Sprite2D.visible = true
 					if direction < 0:
@@ -480,6 +501,7 @@ func _physics_process(delta: float) -> void:
 					else:
 						$PossessArea/PossessShape.disabled = false
 					if DASH_Y_CHANGE == 1 and is_on_floor():
+						INVINCIBLE_HOLD = true
 						velocity.y = -200
 						velocity.x = DASH_SPEED * DASH_DIRECTION * 1.5
 						$AttackCollision/CollisionShape2D.disabled = false
@@ -490,12 +512,16 @@ func _physics_process(delta: float) -> void:
 					$Sprite2D.flip_v = false
 					$Sprite2D.rotation_degrees = 0
 					DASH_Y_CHANGE = 0
-					INVINCIBLE = false
-					DASH_MOVE = false
+					if not INVINCIBLE_HOLD:
+						$AttackCollision/CollisionShape2D.disabled = true
+						DASH_LOCK = false
+						INVINCIBLE = false
+						DASH_MOVE = false
+						$AnimatedSprite2D.visible = true
+						$Sprite2D.visible = false
 					if not (DASH_Y_CHANGE and is_on_floor()): 
 						velocity.y = 0
 						velocity.x = 0
-					$AttackCollision/CollisionShape2D.disabled = true
 					$PossessArea/PossessShape.disabled = true
 func _process(_delta: float) -> void:
 	if $Camera2D/DashRecover.value == 60:
@@ -505,8 +531,11 @@ func _process(_delta: float) -> void:
 			$Camera2D/DashRecover.texture_progress = load("res://assets/dash_bar_charge_charging.png")
 		else:
 			$Camera2D/DashRecover.texture_progress = load("res://assets/dash_bar_high.png")
-	if Input.is_action_just_pressed("Any"):
+	if Input.is_action_just_pressed("Any") and not DASH_MOVE:
 		ANIMATION_MOVED = false
+	if DASH_MOVE:
+		$Sprite2D.visible = true
+		$AnimatedSprite2D.visible = false
 	if $Camera2D/PlayerHealth.value <= 3:
 		$Camera2D/PlayerHealth.texture_progress = load("res://assets/health_bar_low.png")
 	else:
@@ -574,4 +603,9 @@ func _on_detect_shape_body_entered(body: Node2D) -> void:
 		INVINCIBLE = false
 		MOVE_LOCK = false
 		ATTACK_COLLISION = false
-		print(TARGET_POS)
+func _charge_blink():
+	while Input.is_action_pressed("space"):
+		await get_tree().create_timer(0.3).timeout
+		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
+		await get_tree().create_timer(0.3).timeout
+		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
