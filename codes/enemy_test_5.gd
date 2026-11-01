@@ -11,9 +11,10 @@ func _ready() -> void:
 	Initial = position
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(_delta: float) -> void:
-	print(Autoloads.tile_move)
 	move_and_slide()
 	if possess_health > 0:
+		if position.y > 175:
+			queue_free()
 		Autoloads.tile_move = 0.5
 		velocity = Vector2(0, 0)
 		POSSESSED = false

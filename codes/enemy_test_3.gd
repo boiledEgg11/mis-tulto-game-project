@@ -12,37 +12,35 @@ var STATUS = {"speed": 85, "jump": -350, "slide": 60, "damage_multiplier": -0.8,
 func _ready() -> void:
 	$Area2D/Sprite2D.visible = false
 	$EnemyArea/CollisionShape2D.disabled = false
+func _charging():
+	while attacking:
+		await get_tree().create_timer(0.3).timeout
+		if attacking:
+			$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
+		await get_tree().create_timer(0.3).timeout
+		if attacking:
+			$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
 func _attack_charge():
 	charge = 1
-	await get_tree().create_timer(0.25).timeout
-	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
-	await get_tree().create_timer(0.25).timeout
-	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
-	await get_tree().create_timer(0.25).timeout
-	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
-	await get_tree().create_timer(0.25).timeout
-	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
-	await get_tree().create_timer(0.25).timeout
-	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
-	await get_tree().create_timer(0.25).timeout
-	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
-	await get_tree().create_timer(0.25).timeout
-	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
-	await get_tree().create_timer(0.25).timeout
-	$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
+	_charging()
+	await get_tree().create_timer(2).timeout
 	if possess_health > 0:
 		$Area2D.position = Vector2i(10 * direction, 0)
+		velocity.x = 0
 		$Area2D/CollisionShape2D.disabled = false
 		$Area2D/Sprite2D.visible = true
+		attacking = false
+		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
 		await get_tree().create_timer(0.1).timeout
 		$Area2D/CollisionShape2D.disabled = true
 		$Area2D/Sprite2D.visible = false
 	charge = 0
-	attacking = false
 	direction *= -1
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
+		if position.y > 175:
+			queue_free()
 		POSSESSED = false
 		if $player_detection.is_colliding():
 			attacking = true
@@ -60,7 +58,7 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.flip_h = true
 			$RayCast2D.rotation_degrees = 0
 			$RayCast2D.position = Vector2i(10, 0)
-		if not attacking:
+		if not attacking and charge == 0:
 			velocity.x = direction * STATUS.speed
 		if attacking:
 			velocity.x = direction * STATUS.speed / 4

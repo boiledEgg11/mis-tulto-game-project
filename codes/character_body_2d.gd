@@ -35,6 +35,15 @@ func _ready() -> void:
 	$PossessArea/PossessShape.disabled = true
 	$DamageCollision/PlayerDamageCollision.disabled = false
 	$DamageCollision/PlayerDamageCollision.shape.size = Vector2(15, 15)
+func _dash_hold_stop():
+	await get_tree().create_timer(0.05).timeout
+	if is_on_floor():
+		ATTACK_COLLISION = false
+		INVINCIBLE_HOLD = false
+		DASH_LOCK = false
+		INVINCIBLE = false
+		$AnimatedSprite2D.visible = true
+		$Sprite2D.visible = false
 func _health_process(DAMAGE) -> void:
 	if not INVINCIBLE:
 		$AnimatedSprite2D.visible = false
@@ -52,7 +61,7 @@ func _health_process(DAMAGE) -> void:
 		await get_tree().create_timer(1.8).timeout
 		INVINCIBLE = false
 func _death():
-	print("dead!")
+	position = Vector2i(0, 0)
 	TEXTURE_LOCK = true
 	velocity.y = -600
 	if not Autoloads.PLAYER_POSSESSING:
@@ -63,10 +72,9 @@ func _death():
 	$Camera2D/PlayerHealth.value = 10
 	TEXTURE_LOCK = false
 func _shoot():
-			var SHOOT_BULLET = preload("res://player_projectile.tscn").instantiate()
-			owner.add_child(SHOOT_BULLET)
-			SHOOT_BULLET.position = position
-			direction = 1
+	var SHOOT_BULLET = preload("res://player_projectile.tscn").instantiate()
+	owner.add_child(SHOOT_BULLET)
+	SHOOT_BULLET.position = position
 func _ability_use(ability):
 	match ability:
 		"TARGET_DASH":
@@ -103,18 +111,12 @@ func _save():
 	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
 func _physics_process(delta: float) -> void:
 	if INVINCIBLE_HOLD:
+		if is_on_floor():
+			_dash_hold_stop()
 		if not is_on_floor():
 			INVINCIBLE = true
 			DASH_LOCK = true
-			$AttackCollision/CollisionShape2D.disabled = false
-		else:
-			$AttackCollision/CollisionShape2D.disabled = true
-			INVINCIBLE = false
-			DASH_LOCK = false
-			DASH_MOVE = false
-			INVINCIBLE_HOLD = false
-			$AnimatedSprite2D.visible = true
-			$Sprite2D.visible = false
+			ATTACK_COLLISION = true
 	if not TEXTURE_LOCK:
 		$Sprite2D.visible = false
 		$AnimatedSprite2D.visible = true
@@ -443,7 +445,7 @@ func _physics_process(delta: float) -> void:
 					$Player_Shape.position = Vector2(0, 0)
 					if not INVINCIBLE:
 						@warning_ignore("integer_division")
-						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x - 5, STATUS.hitbox_y - 5)
+						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x - 0.5, STATUS.hitbox_y - 0.5)
 						$DamageCollision/PlayerDamageCollision.position = Vector2(0, 0)
 					$Sprite2D.texture = load("res://assets/placeholder_player.png")
 			if is_on_floor():
@@ -497,14 +499,17 @@ func _physics_process(delta: float) -> void:
 						velocity.y = DASH_Y_CHANGE * DASH_SPEED / 3
 					velocity.x = abs(DASH_SPEED - abs(velocity.y)) * DASH_DIRECTION
 					if Input.is_action_pressed("ability") or Input.is_action_pressed("shift"):
-						$AttackCollision/CollisionShape2D.disabled = false
+						ATTACK_COLLISION = true
 					else:
 						$PossessArea/PossessShape.disabled = false
 					if DASH_Y_CHANGE == 1 and is_on_floor():
-						INVINCIBLE_HOLD = true
+						position.y -= 10
 						velocity.y = -200
+						await get_tree().create_timer(0.01).timeout
+						INVINCIBLE_HOLD = true
+						ATTACK_COLLISION = true
+						print("crouchattack!")
 						velocity.x = DASH_SPEED * DASH_DIRECTION * 1.5
-						$AttackCollision/CollisionShape2D.disabled = false
 						$PossessArea/PossessShape.disabled = true
 						await get_tree().create_timer(0.1).timeout
 					else:
@@ -513,15 +518,16 @@ func _physics_process(delta: float) -> void:
 					$Sprite2D.rotation_degrees = 0
 					DASH_Y_CHANGE = 0
 					if not INVINCIBLE_HOLD:
-						$AttackCollision/CollisionShape2D.disabled = true
+						print("dash stop!")
+						ATTACK_COLLISION = false
 						DASH_LOCK = false
 						INVINCIBLE = false
-						DASH_MOVE = false
 						$AnimatedSprite2D.visible = true
 						$Sprite2D.visible = false
 					if not (DASH_Y_CHANGE and is_on_floor()): 
 						velocity.y = 0
 						velocity.x = 0
+					DASH_MOVE = false
 					$PossessArea/PossessShape.disabled = true
 func _process(_delta: float) -> void:
 	if $Camera2D/DashRecover.value == 60:

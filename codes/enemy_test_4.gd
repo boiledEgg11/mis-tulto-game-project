@@ -16,13 +16,16 @@ func _ready() -> void:
 func _charging():
 	await get_tree().create_timer(1).timeout
 	CHARGING = false
-	var SHOOT_BULLET = preload("res://enemy_projectile.tscn").instantiate()
-	owner.add_child(SHOOT_BULLET)
-	SHOOT_BULLET.position = position
-	direction = 1
+	if possess_health > 0:
+		var SHOOT_BULLET = preload("res://enemy_projectile.tscn").instantiate()
+		owner.add_child(SHOOT_BULLET)
+		SHOOT_BULLET.position = position
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
+		if position.y > 175:
+			queue_free()
+		$EnemyTestCollision.disabled = false
 		if $RayCast2D.is_colliding():
 			if not CHARGING:
 				_charging()
@@ -43,6 +46,7 @@ func _physics_process(delta: float) -> void:
 				velocity += get_gravity() * delta / 5
 	if possess_health == -1:
 			Autoloads.POSSESS_TYPE = "charge"
+			$EnemyTestCollision.disabled = true
 			INVINCIBLE = true
 			POSSESSED = true
 			position.x = Autoloads.PLAYER_POSITION_X

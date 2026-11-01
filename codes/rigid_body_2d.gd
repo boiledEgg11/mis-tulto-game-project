@@ -11,6 +11,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
+		if position.y > 175:
+			queue_free()
 		POSSESSED = false
 		velocity.x = direction * STATUS.speed
 		$EnemyArea/CollisionShape2D.disabled = false
@@ -52,6 +54,10 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
+	if direction == 1:
+		$Sprite2D.flip_h = false
+	if direction == -1:
+		$Sprite2D.flip_h = true
 	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:

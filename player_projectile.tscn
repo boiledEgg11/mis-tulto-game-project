@@ -8,7 +8,7 @@ radius = 8.0
 
 [node name="PlayerProjectile" type="Area2D" unique_id=1201075805 groups=["player_damaging"]]
 collision_layer = 9
-collision_mask = 11
+collision_mask = 43
 script = ExtResource("1_0gc0p")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1320052415]
@@ -21,4 +21,5 @@ shape = SubResource("CircleShape2D_rjqkl")
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=1688041128]
 rect = Rect2(-8, -4, 16, 8)
 
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
