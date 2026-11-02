@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://b0pbyi5sfg0cs"]
 
+[ext_resource type="Script" uid="uid://b3foj2olaj06f" path="res://codes/enemy_1_node.gd" id="1_n665k"]
 [ext_resource type="Script" uid="uid://cc0rtmvte20dk" path="res://codes/rigid_body_2d.gd" id="1_nb0t0"]
 [ext_resource type="Texture2D" uid="uid://drgtym1my3gso" path="res://assets/placeholder_enemy.png" id="2_n665k"]
 
@@ -13,9 +14,9 @@ size = Vector2(0.1, 15)
 size = Vector2(15.5, 15.5)
 
 [node name="Node2D" type="Node2D" unique_id=2001351235]
+script = ExtResource("1_n665k")
 
 [node name="EnemyTest" type="CharacterBody2D" parent="." unique_id=1083184139 groups=["is_on_screen"]]
-position = Vector2(98, 0)
 collision_layer = 32
 collision_mask = 3
 script = ExtResource("1_nb0t0")

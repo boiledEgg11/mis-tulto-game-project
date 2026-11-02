@@ -446,6 +446,7 @@ shape = SubResource("CircleShape2D_8445k")
 disabled = true
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1394671393]
+visible = false
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("20_4bto7")

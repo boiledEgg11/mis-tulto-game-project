@@ -3,20 +3,27 @@ var direction = -1
 var health = 1
 var possess_health = 1
 var SLIDE
-var individual
 var INVINCIBLE = false
 var POSSESSED = false
+var START = false
+var individual
+
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
-	match individual:
-		1:
-			position = Vector2(98, 0)
-		2:
-			position = Vector2i(-20, 0)
-		_:
-			position = Vector2i(98, 0)
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
+	if START:
+		match individual:
+			1:
+				print("yay")
+				position = Vector2(98, 0)
+			2:
+				print("meh")
+				position = Vector2i(-20, 0)
+			_:
+				print("none")
+				position = Vector2i(0, 0)
+		START = false
 	move_and_slide()
 	if possess_health > 0:
 		var standing = $groundchecker.get_collider()
@@ -42,6 +49,8 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.visible = false
 			if Autoloads.PLAYER_POSSESS_STOP:
 				_possess_stop()
+func _death():
+	queue_free()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	direction = 1
 	$Sprite2D.flip_h = false

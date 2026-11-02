@@ -8,15 +8,18 @@ var POSSESSED = false
 var TARGET_POS = Vector2i(0, 0)
 var HAS_TARGET = 0
 var individual = 0
+var START = false
 var STATUS = {"speed": 0, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 70, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
-	match individual:
-		1:
-			position = Vector2(0, 112)
-		_:
-			position = Vector2i(0, 112)
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(_delta: float) -> void:
+	if START:
+		match individual:
+			1:
+				position = Vector2(0, 112)
+			_:
+				position = Vector2i(0, 112)
+		START = false
 	move_and_slide()
 	if possess_health > 0:
 		var standing = $groundchecker.get_collider()

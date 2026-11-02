@@ -6,17 +6,20 @@ var SLIDE
 var INVINCIBLE = false
 var Initial = Vector2(0, 0)
 var POSSESSED = false
+var START = false
 var individual = 0
 var STATUS = {"speed": 0, "jump": 0, "slide": 200, "damage_multiplier": -0.8, "hitbox_y": 22, "hitbox_x": 22, "air_speed": 0, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
-	match individual:
-		1:
-			position = Vector2(1100, 30)
-		_:
-			position = Vector2i(1100, 30)
-	Initial = position
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(_delta: float) -> void:
+	if START:
+		match individual:
+			1:
+				position = Vector2(1100, 30)
+			_:
+				position = Vector2i(0, 0)
+		Initial = position
+		START = false
 	move_and_slide()
 	if possess_health > 0:
 		if position.y > 175:

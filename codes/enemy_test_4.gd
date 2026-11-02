@@ -7,17 +7,12 @@ var charge = 0
 var CHARGING = false
 var initial_y = 0
 var WAIT = 0
+var START = false
 var individual
 var INVINCIBLE = false
 var POSSESSED = false
 var STATUS = {"speed": 30, "jump": -300, "slide": 40, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 120, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
-	match individual:
-		1:
-			position = Vector2(300, 0)
-		_:
-			position = Vector2i(300, 0)
-	initial_y = position.y
 	$EnemyArea/CollisionShape2D.disabled = false
 func _charging():
 	await get_tree().create_timer(1).timeout
@@ -27,6 +22,14 @@ func _charging():
 		owner.add_child(SHOOT_BULLET)
 		SHOOT_BULLET.position = position
 func _physics_process(delta: float) -> void:
+	if START:
+		match individual:
+			1:
+				position = Vector2(300, 0)
+			_:
+				position = Vector2i(300, 0)
+		initial_y = position.y
+		START = false
 	move_and_slide()
 	if possess_health > 0:
 		var standing = $groundchecker.get_collider()

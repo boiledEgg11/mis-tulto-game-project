@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://h4xfxn4eosop"]
 
 [ext_resource type="Script" uid="uid://dvs2kyjr6mdsa" path="res://codes/enemy_test_4.gd" id="1_cq41y"]
+[ext_resource type="Script" uid="uid://mtdcg0c6w0xl" path="res://codes/enemy_4_node.gd" id="1_pguuh"]
 [ext_resource type="Texture2D" uid="uid://dcwc4yricskq0" path="res://assets/placeholder_enemy_shoot.png" id="2_pguuh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gbotl"]
@@ -13,6 +14,7 @@ size = Vector2(0.1, 15)
 size = Vector2(15.5, 15.5)
 
 [node name="Node2D" type="Node2D" unique_id=1005217645]
+script = ExtResource("1_pguuh")
 
 [node name="EnemyTest4" type="CharacterBody2D" parent="." unique_id=231193582 groups=["is_on_screen"]]
 position = Vector2(300, 0)

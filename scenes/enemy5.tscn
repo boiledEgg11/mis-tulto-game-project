@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://tr7i0x86e1h1"]
 
+[ext_resource type="Script" uid="uid://b5bik405qorn3" path="res://codes/enemy_5_node.gd" id="1_mgl14"]
 [ext_resource type="Script" uid="uid://ineaaqg21lwu" path="res://codes/enemy_test_5.gd" id="1_yw1p2"]
 [ext_resource type="Texture2D" uid="uid://dp08go8sv1off" path="res://assets/placeholder_gear.png" id="2_mgl14"]
 
@@ -13,6 +14,7 @@ size = Vector2(0.1, 15)
 size = Vector2(15.5, 15.5)
 
 [node name="Node2D" type="Node2D" unique_id=1912250218]
+script = ExtResource("1_mgl14")
 
 [node name="EnemyTest5" type="CharacterBody2D" parent="." unique_id=1712286494]
 position = Vector2(512, -20)
