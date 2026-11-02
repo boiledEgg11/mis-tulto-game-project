@@ -26,6 +26,8 @@ var POSSESS_START = true
 var TARGET_POS = Vector2(0, 0)
 var ATTACK_COLLISION = false
 var HAS_TARGET = 0
+var OVERLAPPING_SAVE = "none"
+var SAVE = preload("res://scenes/save.tscn")
 func _ready() -> void:
 	$ExtraAttack/Sprite2D.visible = false
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
@@ -101,9 +103,6 @@ func _ability_use(ability):
 			ABILITY_LOCK = false
 	if ability != "none" or ability != "spin":
 		$Camera2D/DashRecover.value = 0
-func _save():
-	$Camera2D/PlayerHealth.value = 10
-	SAVE_THINGS = {"possess_enemy": Autoloads.POSSESS_ENEMY}
 func _physics_process(delta: float) -> void:
 	if INVINCIBLE_HOLD:
 		if is_on_floor():
@@ -130,9 +129,10 @@ func _physics_process(delta: float) -> void:
 		if not body.is_in_group("tile_breakable"):
 				break
 		Autoloads.tile = body.local_to_map(body.position)
-	if Input.is_action_pressed("shift"):
+	if Input.is_action_just_pressed("shift"):
 		if SAVABLE:
-			_save()
+			$Camera2D/PlayerHealth.value = 10
+			OVERLAPPING_SAVE.call_deferred("_save")
 	if position.y > 175:
 		position.y = 0
 		position.x = 0
@@ -576,6 +576,8 @@ func _on_damage_collision_area_exited(area) -> void:
 func _on_crouch_exit_test_area_body_entered(body) -> void:
 	if body.is_in_group("save"):
 		SAVABLE = true
+		OVERLAPPING_SAVE = body
+		print("can save")
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	TARGET_POS = Vector2i(0, 0)
 	ATTACK_COLLISION = true

@@ -8,6 +8,10 @@ func _set_enemy():
 	var enemy6 = preload("res://scenes/enemy6.tscn").instantiate()
 	var enemy7 = preload("res://scenes/enemy7.tscn").instantiate()
 	var enemy1_1 = preload("res://scenes/enemy1.tscn").instantiate()
+	var save1 = preload("res://scenes/save.tscn").instantiate()
+	var save1_1 = preload("res://scenes/save.tscn").instantiate()
+	owner.add_child.call_deferred(save1_1)
+	owner.add_child.call_deferred(save1)
 	owner.add_child.call_deferred(enemy1_1)
 	owner.add_child.call_deferred(enemy1)
 	owner.add_child.call_deferred(enemy2)
@@ -24,6 +28,8 @@ func _set_enemy():
 	enemy6.call("_individual_set", 1)
 	enemy7.call("_individual_set", 1)
 	enemy1_1.call("_individual_set", 2)
+	save1.call("_placement", "test_1")
+	save1_1.call("_placement", "test_2")
 func _ready() -> void:
 	await get_tree().process_frame
 	_set_enemy()
