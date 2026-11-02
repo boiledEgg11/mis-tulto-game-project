@@ -9,8 +9,8 @@ The playable versions of the game is in the releases section! Please download th
 This release is in a zip file unlike the other releases; this is due to the pck file not being embedded. Please extract the pck file and the mis-tulto.exe from the Mis-tulto.zip in order to play on the release.
 ### For [release 0.2.0 alpha](https://github.com/boiledEgg11/mis-tulto-game-project/releases/tag/Pre-release2) and onward:
 Please download the mis-tulto.exe, which already has the pck file embedded in order to start playing the game. No extra files are needed in order to play the game. 
-## Features / Changelog:
-### Release 0.1.0 alpha:
+# Features / Changelog:
+## Release 0.1.0 alpha:
 A simple movement system with dashing/attacking, crouching, fast-falling, simple enemy, health
 Controls: WASD, which W is for jump, D is for crouch. Down while mid-air makes falling faster. Space key while moving allows dashing in the given direction; while done so, dash gives invincibility and attack area.
 The current tiles are all test tiles; the half blocks are sizes which crouch can go through, and the green ones are half collision tiles.
@@ -24,7 +24,7 @@ Getting hurt
 Crouching
 <img width="1920" height="1007" alt="スクリーンショット 2026-10-30 062225" src="https://github.com/user-attachments/assets/a91f9b99-60fc-44ba-ac7e-d395eb1fd97a" />
 Idle
-### Release 0.2.0 alpha
+## Release 0.2.0 alpha
 **Made possess system**<br>
 Now, the dash will deplete the *possess health* instead of the normal health. *The previous dash can still be done by dashing into the ground.* Once the dash depletes the enemy's possess health to 0, the player can possess the enemy. While doing so, the player will gain the enemy's appearance and the abilities; the status, too. For example, the orange enemy that appears in the game is a medium-speed moving enemy that attacks the player with a charge attack. Upon possessing the enemy, the player becomes the orange enemy, which can perform charge attacks to break the cyan blocks and defeat enemies.<br>
 **Other Features**<br>
@@ -44,3 +44,18 @@ Exploring the expanded area after falling
 Destryoing cyan tiles
 <img width="1920" height="1036" alt="Screenshot (52)" src="https://github.com/user-attachments/assets/106b1bdb-df0f-4804-95e2-6b18dc7c1ad4" />
 Moving away from the charging orange enemy
+## Release 0.3.0 alpha
+**Sprite additions**<br>
+Animations for the player sprites has been added; the new animations will play upon idle, hurt, crouch and moving. They will not change the hitbox from their original size; the animations are just asthetic. *also I adore the new sprites her idle is so adorable*
+****
+The gear enemies, which aren't really enemies but are gimic that can be moved via possessing. They move specific tilesets which are usually near the enemy. The camera will move to it during the possess.<br>
+A dashing enemy, which will detect if the player is around itself and dash towards the player if found. If the player possesses it, instead the enemies will be automatically detected.<br>
+Enemy4 now does an explosion attack just like the player's ability, just slowing down before it shoots.<br>
+Sprite changes, as stated before. Specifically the health bar got a green texture upon high health, red upon low health, the dash bar has blue while its still recovering, yellow when max, and orange if the ability is a charge ability like enemy4's.<br>
+Charge type abilities such as enemy 4's can be held by pressing space continuosly.<br>
+Changed enemy placement to creating a copy of it, thus being capable of creating copies of the same enemy without creating another node. From this, there are now 2 enemy1s; one that behaves like before, and another that jumps before turning.<br>
+Enemy3 will now jump upon ledges if its charging. It also has an increased player detection range.<br>
+<img width="1920" height="1080" alt="Screenshot (66)" src="https://github.com/user-attachments/assets/bbbd4e43-cd8c-410d-bf0a-36fb228ac770" />
+<img width="1920" height="1080" alt="Screenshot (59)" src="https://github.com/user-attachments/assets/36af08b7-2ae8-4bb0-a2c3-e3c2efe7e54f" />
+<img width="1920" height="1080" alt="Screenshot (58)" src="https://github.com/user-attachments/assets/083945ee-1f42-40ac-9557-9d3973d86e6d" />
+<img width="1920" height="1080" alt="Screenshot (63)" src="https://github.com/user-attachments/assets/f1e4a99f-b560-4436-986c-45a896b62408" />
