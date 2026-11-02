@@ -14,6 +14,7 @@ func _physics_process(delta: float) -> void:
 		position.y+= speed * delta
 func _on_body_entered(_body) -> void:
 	MOVING = false
+	$Sprite2D.texture = load("res://assets/placeholder_projectile_explosion.png")
 	$CollisionShape2D.shape.radius = 32
 	await get_tree().create_timer(0.1).timeout
 	$CollisionShape2D.shape.radius = 8

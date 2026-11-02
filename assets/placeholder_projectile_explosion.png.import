@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kyqnt6v0ve28"
-path="res://.godot/imported/Mis-tulto.png-1d16d7c5e264c7b934c7f30254f98187.ctex"
+uid="uid://1g0h1qbl56of"
+path="res://.godot/imported/placeholder_projectile_explosion.png-966f5d01740f6bc04ddb3e02c2b7a743.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icon/Mis-tulto.png"
-dest_files=["res://.godot/imported/Mis-tulto.png-1d16d7c5e264c7b934c7f30254f98187.ctex"]
+source_file="res://assets/placeholder_projectile_explosion.png"
+dest_files=["res://.godot/imported/placeholder_projectile_explosion.png-966f5d01740f6bc04ddb3e02c2b7a743.ctex"]
 
 [params]
 

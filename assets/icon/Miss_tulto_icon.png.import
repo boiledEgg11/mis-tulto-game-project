@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ecs5hjw15i05"
-path="res://.godot/imported/icon.svg-48e73a0a97266c61e0aaaa4c3abccd49.ctex"
+uid="uid://dwbhkpngynbx1"
+path="res://.godot/imported/Miss_tulto_icon.png-dabe2c18a7491c14bc7fd323673870d5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icon/icon.svg"
-dest_files=["res://.godot/imported/icon.svg-48e73a0a97266c61e0aaaa4c3abccd49.ctex"]
+source_file="res://assets/icon/Miss_tulto_icon.png"
+dest_files=["res://.godot/imported/Miss_tulto_icon.png-dabe2c18a7491c14bc7fd323673870d5.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

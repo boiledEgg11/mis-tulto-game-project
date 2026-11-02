@@ -11,9 +11,10 @@ config_version=5
 [application]
 
 config/name="Mis-tulto"
+config/description="A platformer game that you play as this little ghost; possess enemies and lead your way. -by Boiled"
 run/main_scene="uid://bficcnd31abcj"
 config/features=PackedStringArray("4.7", "Forward Plus")
-config/icon="res://assets/icon/icon.svg"
+config/icon="uid://dwbhkpngynbx1"
 
 [autoload]
 
