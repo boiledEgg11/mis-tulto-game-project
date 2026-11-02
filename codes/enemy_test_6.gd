@@ -22,6 +22,8 @@ func _physics_process(_delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if is_on_wall():
+			direction *= -1
 		var standing = $groundchecker.get_collider()
 		if standing:
 			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
@@ -56,12 +58,8 @@ func _physics_process(_delta: float) -> void:
 			_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	direction = 1
-	$Sprite2D.flip_h = false
-	$RayCast2D.target_position = Vector2(50, 0)
 func _on_right_collision_check_body_entered(_body: Node2D) -> void:
 	direction = -1
-	$Sprite2D.flip_h = true
-	$RayCast2D.target_position = Vector2(-50, 0)
 func _possess_stop() -> void:
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
@@ -81,11 +79,9 @@ func _process(_delta: float) -> void:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health == 0:
-		queue_free()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health < 0:
+	if health <= 0:
 		queue_free()
 	if possess_health == 0:
 		Autoloads.POSSESS_AMOUNT += 1

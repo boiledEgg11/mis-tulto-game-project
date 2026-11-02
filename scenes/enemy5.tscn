@@ -13,7 +13,7 @@ size = Vector2(0.1, 15)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kgb2g"]
 size = Vector2(15.5, 15.5)
 
-[node name="Node2D" type="Node2D" unique_id=1912250218]
+[node name="Node2D2" type="Node2D" unique_id=1912250218]
 script = ExtResource("1_mgl14")
 
 [node name="EnemyTest5" type="CharacterBody2D" parent="." unique_id=1712286494]

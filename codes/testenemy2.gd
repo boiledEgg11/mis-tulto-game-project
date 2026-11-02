@@ -89,11 +89,9 @@ func _process(_delta: float) -> void:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health == 0:
-		queue_free()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health < 0:
+	if health <= 0:
 		queue_free()
 	if possess_health == 0:
 		Autoloads.PLAYER_POSSESSING = true

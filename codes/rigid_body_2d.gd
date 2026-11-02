@@ -49,13 +49,19 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.visible = false
 			if Autoloads.PLAYER_POSSESS_STOP:
 				_possess_stop()
-func _death():
-	queue_free()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
-	direction = 1
+	if individual == 2 and is_on_floor():
+		velocity.y = -250
+		position.x += 8
+	else:
+		direction = 1
 	$Sprite2D.flip_h = false
 func _on_right_collision_check_body_entered(_body: Node2D) -> void:
-	direction = -1
+	if individual == 2 and is_on_floor():
+		velocity.y = -250
+		position.x -= 8
+	else:
+		direction = -1
 	$Sprite2D.flip_h = true
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
@@ -87,11 +93,9 @@ func _process(_delta: float) -> void:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health == 0:
-		queue_free()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health < 0:
+	if health <= 0:
 		queue_free()
 	if possess_health == 0:
 		Autoloads.POSSESS_AMOUNT += 1

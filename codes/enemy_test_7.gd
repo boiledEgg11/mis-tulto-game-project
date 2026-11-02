@@ -32,7 +32,7 @@ func _physics_process(_delta: float) -> void:
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 	if possess_health == -1:
-		position = Vector2i(0, 0)
+		START = false
 		Autoloads.CAMERA_LOCATION = Vector2i(1232, 0)
 		Autoloads.PLAYER_POSITION_X = Initial.x
 		Autoloads.PLAYER_POSITION_Y = Initial.y
@@ -66,11 +66,9 @@ func _process(_delta: float) -> void:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health == 0:
-		queue_free()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health < 0:
+	if health <= 0:
 		queue_free()
 	if possess_health == 0:
 		Autoloads.PLAYER_POSITION_X = Initial.x
