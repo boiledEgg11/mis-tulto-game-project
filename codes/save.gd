@@ -10,7 +10,7 @@ func _save(enemy):
 		"place": location,
 		"enemy": enemy
 	}
-	print(SAVE_STUFF)
+	_save_game()
 func _placement(placement):
 	match placement:
 		"test_1":
@@ -20,10 +20,18 @@ func _placement(placement):
 		_:
 			queue_free()
 	location = placement
-func _save_game():
+func _save_2():
 	var SAVE_FILE = FileAccess.open("user://saves.save", FileAccess.WRITE)
 	SAVE_FILE.store_var(SAVE_STUFF.duplicate())
+	print("added!")
 	SAVE_FILE.close()
+	await get_tree().process_frame
+	_load_game()
+func _save_game():
+	var SAVE_FILE = FileAccess.open("user://saves.save", FileAccess.WRITE)
+	DirAccess.remove_absolute("user://saves.save")
+	print("removed!")
+	_save_2()
 func _load_game():
 	var SAVE_FILE = FileAccess.open("user://saves.save", FileAccess.READ)
 	var data = SAVE_FILE.get_var()
@@ -38,6 +46,5 @@ func _process(delta: float) -> void:
 		print(SAVE_STUFF.enemy)
 	if Input.is_action_just_pressed("j"):
 		_load_game()
-		print(SAVE_STUFF.place)
-		print(SAVE_STUFF.enemy)
-	
+		Autoloads.location = SAVE_STUFF.place
+		Autoloads.POSSESS_ENEMY = SAVE_STUFF.enemy

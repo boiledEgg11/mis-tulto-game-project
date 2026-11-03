@@ -525,6 +525,7 @@ func _physics_process(delta: float) -> void:
 						velocity.x = 0
 					DASH_MOVE = false
 					$PossessArea/PossessShape.disabled = true
+					STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 func _process(_delta: float) -> void:
 	if $Camera2D/DashRecover.value == 60:
 		$Camera2D/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_max.png")
