@@ -7,7 +7,7 @@ var PLAYER_POSSESSING = false
 var PLAYER_POSSESS_STOP = false
 var POSSESS_AMOUNT = 0
 var POSSESS_ENEMY
-var PROGRESSION
+var location
 var tile
 var POSSESS_TYPE
 var tile_move = 0

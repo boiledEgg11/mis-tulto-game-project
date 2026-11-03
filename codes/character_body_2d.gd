@@ -132,7 +132,7 @@ func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("shift"):
 		if SAVABLE:
 			$Camera2D/PlayerHealth.value = 10
-			OVERLAPPING_SAVE.call_deferred("_save")
+			OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY)
 	if position.y > 175:
 		position.y = 0
 		position.x = 0
@@ -386,6 +386,7 @@ func _physics_process(delta: float) -> void:
 			STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 			_health_process(0)
 	if not Autoloads.PLAYER_POSSESSING:
+		Autoloads.POSSESS_ENEMY = "none"
 		Autoloads.POSSESS_TYPE = "none"
 		$Camera2D/DashRecover/Label.text = "dash"
 		$PlayerIndicator.visible = false
@@ -576,7 +577,7 @@ func _on_damage_collision_area_exited(area) -> void:
 func _on_crouch_exit_test_area_body_entered(body) -> void:
 	if body.is_in_group("save"):
 		SAVABLE = true
-		OVERLAPPING_SAVE = body
+		OVERLAPPING_SAVE = body.get_parent()
 		print("can save")
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	TARGET_POS = Vector2i(0, 0)
