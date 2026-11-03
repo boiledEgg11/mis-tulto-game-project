@@ -60,9 +60,9 @@ func _health_process(DAMAGE) -> void:
 		await get_tree().create_timer(1.8).timeout
 		INVINCIBLE = false
 func _death():
-	position = Vector2i(0, 0)
+	Autoloads._load_game()
+	get_parent().call("_load")
 	TEXTURE_LOCK = true
-	velocity.y = -600
 	if not Autoloads.PLAYER_POSSESSING:
 		$AnimatedSprite2D.play("hurt")
 	await get_tree().create_timer(1).timeout

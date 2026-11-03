@@ -2,10 +2,9 @@ extends Area2D
 var speed = 120
 var direction = 1
 var MOVING = true
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	if Autoloads.RESET:
+		queue_free()
 func _physics_process(delta: float) -> void:
 	if MOVING:
 		if direction != 0:

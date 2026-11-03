@@ -5,10 +5,9 @@ extends Node2D
 func _ready() -> void:
 	pass # Replace with function body.
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if Autoloads.RESET:
+		queue_free()
 func _individual_set(individual_set):
 	$EnemyTest2.individual = individual_set
 	$EnemyTest2.START = true

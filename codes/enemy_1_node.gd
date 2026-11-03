@@ -8,7 +8,8 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if Autoloads.RESET:
+		queue_free()
 func _individual_set(individual_set):
 	$EnemyTest.individual = individual_set
 	$EnemyTest.START = true
