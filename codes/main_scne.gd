@@ -6,8 +6,7 @@ var reset = false
 var tile_positions
 var POSSESS_TARGET
 func _ready():
-	if FileAccess.file_exists("user://saves.save"):
-		Autoloads.RESET = true
+	_reset()
 func _reset():
 	Autoloads.RESET = true
 	print("hi")
@@ -17,8 +16,10 @@ func _reset():
 	_load()
 	Autoloads.RESET = false
 	$StaticBody2D.call("_set_enemy")
+	Autoloads.POSSESS_AMOUNT = 0
+	Autoloads.PLAYER_POSSESSING = true
 	await get_tree().process_frame
-
+	_enemy_set()
 func _process(delta: float) -> void:
 	if not reset:
 		_reset()
@@ -31,6 +32,7 @@ func _load():
 			$Player.position = Vector2i(360, -8)
 		_:
 			$Player.position = Vector2i(0, 0)
+func _enemy_set():
 	if Autoloads.POSSESS_TARGET.species and Autoloads.POSSESS_TARGET.species != "none":
 		match Autoloads.POSSESS_TARGET.species:
 			"TestEnemy1":

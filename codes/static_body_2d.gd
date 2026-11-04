@@ -31,6 +31,3 @@ func _set_enemy():
 	enemy1_1.call("_individual_set", 2)
 	save1.call("_placement", "test_1")
 	save1_1.call("_placement", "test_2")
-func _ready() -> void:
-	await get_tree().process_frame
-	_set_enemy()

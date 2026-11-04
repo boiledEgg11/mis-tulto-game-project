@@ -104,13 +104,26 @@ func _process(_delta: float) -> void:
 		$Sprite2D.flip_h = false
 	if direction == -1:
 		$Sprite2D.flip_h = true
-	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
+	if not Autoloads.PLAYER_POSSESSING and POSSESSED and possess_health != 0:
 		_possess_stop()
+		print("1")
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
+		print("2")
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
+		Autoloads.POSSESS_TARGET = {"species": "TestEnemy4", "individual": individual}
+		Autoloads.POSSESS_AMOUNT += 1
+		Autoloads.POSSESS_ABILITY = "SHOOT"
+		Autoloads.POSSESS_ENEMY = "SHOOT"
+		Autoloads.POSSESS_STATUS = STATUS
+		possess_health = -1
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy_shoot.png"
+		Autoloads.PLAYER_POSSESSING = true
+		velocity.x = 0
+		velocity.y = 0
+func _possess_start():
 		Autoloads.POSSESS_TARGET = {"species": "TestEnemy4", "individual": individual}
 		Autoloads.POSSESS_AMOUNT += 1
 		Autoloads.POSSESS_ABILITY = "SHOOT"

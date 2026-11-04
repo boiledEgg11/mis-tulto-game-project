@@ -310,7 +310,7 @@ script = ExtResource("7_22dhx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/LoadedArea" unique_id=1829433778]
 shape = SubResource("RectangleShape2D_k6u5g")
-debug_color = Color(0, 0.6, 0.69803923, 0.101960786)
+debug_color = Color(0, 0.6, 0.69803923, 0)
 
 [node name="Camera2D" type="Camera2D" parent="Player" unique_id=1456672527]
 zoom = Vector2(4, 4)
@@ -364,7 +364,7 @@ theme_override_font_sizes/font_size = 12
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Camera2D/LoadedArea" unique_id=2145646649]
 shape = SubResource("RectangleShape2D_k6u5g")
-debug_color = Color(0, 0.6, 0.69803923, 0.078431375)
+debug_color = Color(0, 0.6, 0.69803923, 0)
 
 [node name="Player_Shape" type="CollisionShape2D" parent="Player" unique_id=1446692577]
 shape = SubResource("RectangleShape2D_b5jwi")

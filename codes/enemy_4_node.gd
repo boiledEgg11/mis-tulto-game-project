@@ -6,8 +6,7 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 func _possess_start():
-	$EnemyTest4.possess_health = 0
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+	$EnemyTest4.call("_possess_start")
 func _process(delta: float) -> void:
 	if Autoloads.RESET:
 		free()
