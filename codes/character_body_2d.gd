@@ -7,6 +7,7 @@ var DASH_Y_CHANGE = 0
 var CROUCH = false
 var DASH_DIRECTION = 0
 var DASH_MOVE = false
+var POSSESS_END = false
 var ANIMATION_MOVED = false
 var CROUCH_BLOCK = false
 var INVINCIBLE = false
@@ -373,7 +374,8 @@ func _physics_process(delta: float) -> void:
 				else:
 					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 					direction = 0
-		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1:
+		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1 or POSSESS_END:
+			POSSESS_END = false
 			Autoloads.POSSESS_AMOUNT = 0
 			Autoloads.tile_move = 0
 			$Sprite2D.rotation = 0

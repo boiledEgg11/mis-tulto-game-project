@@ -1,5 +1,6 @@
 extends StaticBody2D
 func _set_enemy():
+	print("enemy_set")
 	var enemy1 = preload("res://scenes/enemy1.tscn").instantiate()
 	var enemy2 = preload("res://scenes/enemy2.tscn").instantiate()
 	var enemy3 = preload("res://scenes/enemy3.tscn").instantiate()

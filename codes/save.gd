@@ -5,7 +5,8 @@ func _save(enemy):
 	print("saved!")
 	Autoloads.SAVE_STUFF = {
 		"place": location,
-		"enemy": enemy
+		"enemy": Autoloads.POSSESS_TARGET.species,
+		"enemy_id": Autoloads.POSSESS_TARGET.individual
 	}
 	_save_game()
 func _placement(placement):
@@ -23,7 +24,6 @@ func _save_2():
 	print("added!")
 	SAVE_FILE.close()
 	await get_tree().process_frame
-	Autoloads._load_game()
 func _save_game():
 	var SAVE_FILE = FileAccess.open("user://saves.save", FileAccess.WRITE)
 	DirAccess.remove_absolute("user://saves.save")
@@ -35,9 +35,5 @@ func _process(delta: float) -> void:
 		_save_game()
 		print(Autoloads.SAVE_STUFF.place)
 		print(Autoloads.SAVE_STUFF.enemy)
-	if Input.is_action_just_pressed("j"):
-		Autoloads._load_game()
-		Autoloads.location = Autoloads.SAVE_STUFF.place
-		Autoloads.POSSESS_ENEMY = Autoloads.SAVE_STUFF.enemy
 	if Autoloads.RESET:
 		queue_free()

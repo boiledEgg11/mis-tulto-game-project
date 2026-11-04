@@ -10,7 +10,7 @@ func _possess_start():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Autoloads.RESET:
-		queue_free()
+		free()
 func _individual_set(individual_set):
 	$EnemyTest4.individual = individual_set
 	$EnemyTest4.START = true

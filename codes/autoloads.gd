@@ -35,4 +35,3 @@ func _load_game():
 	Autoloads.location = Autoloads.SAVE_STUFF.place
 	Autoloads.POSSESS_TARGET.species = Autoloads.SAVE_STUFF.enemy
 	Autoloads.POSSESS_TARGET.individual = Autoloads.SAVE_STUFF.enemy_id
-	RESET = true
