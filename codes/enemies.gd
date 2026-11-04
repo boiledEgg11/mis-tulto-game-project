@@ -1,16 +1,14 @@
 extends Node2D
-
-
+func _erase():
+	queue_free()
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 func _possess_start():
-	$EnemyTest7.possess_health = 0
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
+	get_child(0).call("_possess_start")
 func _process(delta: float) -> void:
 	if Autoloads.RESET:
-		queue_free()
+		free()
 func _individual_set(individual_set):
-	$EnemyTest7.individual = individual_set
-	$EnemyTest7.START = true
+	get_child(0).individual = individual_set
+	get_child(0).START = true

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bhuqpl27xlkoe"]
 
-[ext_resource type="Script" uid="uid://b1jrv0k7c8cnc" path="res://codes/enemy_3_node.gd" id="1_kroph"]
+[ext_resource type="Script" uid="uid://c2lrpxkosfn2e" path="res://scenes/enemies.gd" id="1_kroph"]
 [ext_resource type="Script" uid="uid://s02jym0yktfw" path="res://codes/enemy_test_3.gd" id="1_o2iik"]
 [ext_resource type="Texture2D" uid="uid://g87vfgpql376" path="res://assets/placeholder_enemy_explosion.png" id="2_kroph"]
 [ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholder_explosion.png" id="3_xx6g3"]

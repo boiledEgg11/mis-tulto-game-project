@@ -9,7 +9,6 @@ func _ready():
 	_reset()
 func _reset():
 	Autoloads.RESET = true
-	print("hi")
 	reset = true
 	$Player.POSSESS_END = true
 	await get_tree().process_frame

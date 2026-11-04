@@ -387,6 +387,7 @@ func _physics_process(delta: float) -> void:
 			DASH_LOCK = false
 			STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 			_health_process(0)
+			POSSESS_END = false
 	if not Autoloads.PLAYER_POSSESSING:
 		Autoloads.POSSESS_ENEMY = "none"
 		Autoloads.POSSESS_TYPE = "none"

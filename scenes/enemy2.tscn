@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dd2gr0i3a5ybb"]
 
 [ext_resource type="Script" uid="uid://c5heq53boj1k3" path="res://codes/testenemy2.gd" id="1_3neu4"]
-[ext_resource type="Script" uid="uid://bky5uaqyct33n" path="res://codes/enemy_2_node.gd" id="1_mhmjl"]
+[ext_resource type="Script" uid="uid://c2lrpxkosfn2e" path="res://scenes/enemies.gd" id="1_mhmjl"]
 [ext_resource type="Texture2D" uid="uid://7kwhs2sblyyi" path="res://assets/placeholder_enemy_bouncy.png" id="2_mhmjl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fb6pl"]
