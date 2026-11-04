@@ -71,6 +71,7 @@ func _physics_process(delta: float) -> void:
 			$EnemyArea/CollisionShape2D.disabled = true
 			$Sprite2D.visible = false
 			if Autoloads.PLAYER_POSSESS_STOP:
+				print("released!")
 				_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	direction = 1
@@ -91,6 +92,7 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
+	print("freed")
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
@@ -104,7 +106,7 @@ func _process(_delta: float) -> void:
 		$Sprite2D.flip_h = false
 	if direction == -1:
 		$Sprite2D.flip_h = true
-	if not Autoloads.PLAYER_POSSESSING and POSSESSED and possess_health != 0:
+	if not Autoloads.PLAYER_POSSESSING and POSSESSED and possess_health == -1:
 		_possess_stop()
 		print("1")
 	if Autoloads.POSSESS_AMOUNT > 1:
@@ -118,11 +120,12 @@ func _process(_delta: float) -> void:
 		Autoloads.POSSESS_ABILITY = "SHOOT"
 		Autoloads.POSSESS_ENEMY = "SHOOT"
 		Autoloads.POSSESS_STATUS = STATUS
-		possess_health = -1
 		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy_shoot.png"
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
+		await get_tree().process_frame
+		possess_health = -1
 func _possess_start():
 		Autoloads.POSSESS_TARGET = {"species": "TestEnemy4", "individual": individual}
 		Autoloads.POSSESS_AMOUNT += 1

@@ -8,19 +8,25 @@ var POSSESS_TARGET
 func _ready():
 	_reset()
 func _reset():
-	Autoloads.RESET = true
 	reset = true
+	Autoloads.RESET = true
 	$Player.POSSESS_END = true
 	await get_tree().process_frame
 	_load()
+	print($Player.POSSESS_END)
+	Autoloads.POSSESS_AMOUNT = 0
+	Autoloads.PLAYER_POSSESSING = false
+	await get_tree().process_frame
+	print($Player.POSSESS_END)
 	Autoloads.RESET = false
 	$StaticBody2D.call("_set_enemy")
-	Autoloads.POSSESS_AMOUNT = 0
-	Autoloads.PLAYER_POSSESSING = true
+	print(Autoloads.PLAYER_POSSESSING)
+	Autoloads.PLAYER_POSSESSING = false
+	$Player.POSSESS_END = false
 	await get_tree().process_frame
 	_enemy_set()
 func _process(delta: float) -> void:
-	if not reset:
+	if not reset and Autoloads.RESET:
 		_reset()
 func _load():
 	Autoloads._load_game()

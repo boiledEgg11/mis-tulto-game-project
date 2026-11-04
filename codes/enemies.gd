@@ -5,7 +5,7 @@ func _erase():
 func _ready() -> void:
 	pass # Replace with function body.
 func _possess_start():
-	get_child(0).call("_possess_start")
+	get_child(0).possess_health = 0
 func _process(delta: float) -> void:
 	if Autoloads.RESET:
 		free()

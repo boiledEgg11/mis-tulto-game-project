@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholder_explosion.png" id="18_qkxkb"]
 [ext_resource type="Texture2D" uid="uid://q2xiqq3jrf1v" path="res://assets/placeholder_player_indicator.png" id="19_k8pa6"]
 [ext_resource type="Script" uid="uid://bgh78i64qfwdu" path="res://codes/static_body_2d.gd" id="20_4bto7"]
+[ext_resource type="Script" uid="uid://r5d8jl1g67yx" path="res://autoloads.gd" id="20_k6u5g"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q6r6c"]
 resource_local_to_scene = true
@@ -450,6 +451,9 @@ script = ExtResource("20_4bto7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1800047160]
 shape = SubResource("CircleShape2D_dmgr1")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=585567809]
+script = ExtResource("20_k6u5g")
 
 [connection signal="body_shape_entered" from="Player/LoadedArea" to="Player" method="_on_loaded_area_body_shape_entered"]
 [connection signal="body_shape_exited" from="Player/LoadedArea" to="Player" method="_on_loaded_area_body_shape_exited"]
