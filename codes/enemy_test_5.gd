@@ -71,6 +71,7 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
+		Autoloads.POSSESS_TARGET = {"species": "TestEnemy5", "individual": individual}
 		Autoloads.PLAYER_POSITION_X = Initial.x
 		Autoloads.PLAYER_POSITION_Y = Initial.y
 		Autoloads.POSSESS_AMOUNT += 1

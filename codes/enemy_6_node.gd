@@ -5,7 +5,8 @@ extends Node2D
 func _ready() -> void:
 	pass # Replace with function body.
 
-
+func _possess_start():
+	$EnemyTest6.possess_health = 0
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Autoloads.RESET:
