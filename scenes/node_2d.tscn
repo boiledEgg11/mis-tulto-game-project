@@ -11,8 +11,10 @@
 [ext_resource type="Texture2D" uid="uid://cruja23pe5w1v" path="res://assets/sprites/health_bar_high.png" id="10_l0qat"]
 [ext_resource type="Texture2D" uid="uid://ctmy1mvin5kpo" path="res://assets/sprites/dash_bar_high.png" id="11_wpu3o"]
 [ext_resource type="Script" uid="uid://bb5icce710kjn" path="res://codes/collision_shape_2d.gd" id="12_g3arh"]
+[ext_resource type="Texture2D" uid="uid://146igws2nbxk" path="res://assets/sprites/load_ui.png" id="13_2sxpt"]
 [ext_resource type="Texture2D" uid="uid://bnxvoakjqh3as" path="res://assets/sprites/player_crouch.png" id="13_unr0g"]
 [ext_resource type="Texture2D" uid="uid://d05tg6cnnvuhb" path="res://assets/sprites/player_hurt.png" id="14_jt3n0"]
+[ext_resource type="Texture2D" uid="uid://nmuoew8rhtmr" path="res://assets/sprites/return_ui.png" id="14_pblkq"]
 [ext_resource type="Texture2D" uid="uid://be42siuktuoj2" path="res://assets/sprites/player_idle.png" id="15_7pfoh"]
 [ext_resource type="Texture2D" uid="uid://dousl5g0sl2aj" path="res://assets/sprites/player_move.png" id="16_mchk4"]
 [ext_resource type="Texture2D" uid="uid://by0xtcu6q3j2l" path="res://assets/placeholder_player.png" id="17_gmqbl"]
@@ -380,12 +382,22 @@ layout_mode = 0
 offset_left = -100.0
 offset_top = -75.0
 offset_right = 100.0
-offset_bottom = -35.0
+offset_bottom = 75.0
+alignment = 1
+vertical = true
 
 [node name="TextureButton" type="TextureButton" parent="Player/Camera2D/Control/BoxContainer" unique_id=1050071743]
 layout_mode = 2
 texture_normal = ExtResource("21_coh8c")
 script = ExtResource("22_kmyi7")
+
+[node name="TextureButton2" type="TextureButton" parent="Player/Camera2D/Control/BoxContainer" unique_id=1948967655]
+layout_mode = 2
+texture_normal = ExtResource("13_2sxpt")
+
+[node name="TextureButton3" type="TextureButton" parent="Player/Camera2D/Control/BoxContainer" unique_id=17179335]
+layout_mode = 2
+texture_normal = ExtResource("14_pblkq")
 
 [node name="Player_Shape" type="CollisionShape2D" parent="Player" unique_id=1446692577]
 shape = SubResource("RectangleShape2D_b5jwi")

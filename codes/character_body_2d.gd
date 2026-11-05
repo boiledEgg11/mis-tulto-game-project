@@ -30,7 +30,7 @@ var HAS_TARGET = 0
 var OVERLAPPING_SAVE = "none"
 var SAVE = preload("res://scenes/save.tscn")
 func _ready() -> void:
-	$Camera2D/Control/BoxContainer/TextureButton.visible = false
+
 	$ExtraAttack/Sprite2D.visible = false
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$Camera2D/PlayerHealth.value = 10
@@ -131,10 +131,10 @@ func _physics_process(delta: float) -> void:
 				break
 		Autoloads.tile = body.local_to_map(body.position)
 	if not SAVABLE:
-		$Camera2D/Control/BoxContainer/TextureButton.visible = false
+		$Camera2D/Control/BoxContainer.visible = false
 	if Input.is_action_just_pressed("shift"):
 		if SAVABLE:
-			$Camera2D/Control/BoxContainer/TextureButton.visible = true
+			$Camera2D/Control/BoxContainer.visible = true
 			$Camera2D/PlayerHealth.value = 10
 	if position.y > 175:
 		get_parent().call("_reset")
