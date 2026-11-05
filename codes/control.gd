@@ -14,6 +14,10 @@ func _process(delta: float) -> void:
 		print(get_tree().paused)
 		$BoxContainer.visible = false
 		print("pause end")
+	if get_tree().paused:
+		$BoxContainer.visible = true
+	else:
+		$BoxContainer.visible = false
 	if not get_tree().paused and Input.is_action_just_pressed("l"):
 		get_tree().paused = true
 		$BoxContainer.visible = true

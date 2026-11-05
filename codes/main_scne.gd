@@ -62,3 +62,9 @@ func _on_texture_button_pressed() -> void:
 	if $Player.SAVABLE:
 		$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY)
 		_reset()
+
+
+func _on_texture_button_3_pressed() -> void:
+	get_tree().paused = false
+	if Autoloads.PLAYER_POSSESSING:
+		$Player/Sprite2D.visible = true

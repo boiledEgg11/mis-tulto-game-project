@@ -111,7 +111,7 @@ func _physics_process(delta: float) -> void:
 			INVINCIBLE = true
 			DASH_LOCK = true
 			ATTACK_COLLISION = true
-	if not TEXTURE_LOCK:
+	if not TEXTURE_LOCK and not Autoloads.PLAYER_POSSESSING:
 		$Sprite2D.visible = false
 		$AnimatedSprite2D.visible = true
 	if ATTACK_COLLISION:
@@ -129,12 +129,12 @@ func _physics_process(delta: float) -> void:
 		if not body.is_in_group("tile_breakable"):
 				break
 		Autoloads.tile = body.local_to_map(body.position)
-	if not SAVABLE:
-		$Camera2D/Control/BoxContainer.visible = false
 	if Input.is_action_just_pressed("shift"):
 		if SAVABLE:
-			get_parent().get_parent().call("_pause")
+			$Sprite2D.visible = false
+			$AnimatedSprite2D.visible = false
 			$Camera2D/Control/BoxContainer.visible = true
+			get_parent().get_parent().call("_pause")
 			$Camera2D/PlayerHealth.value = 10
 	if position.y > 175:
 		get_parent().call("_reset")
@@ -142,13 +142,14 @@ func _physics_process(delta: float) -> void:
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
-		$AnimatedSprite2D.visible = false
-		$Sprite2D.visible = true
+
 		if Autoloads.POSSESS_ABILITY != "None":
 			$Camera2D/DashRecover/Label.text = Autoloads.POSSESS_ABILITY
 		else:
 			$Camera2D/DashRecover/Label.text = ""
 		if POSSESS_START:
+			$AnimatedSprite2D.visible = false
+			$Sprite2D.visible = true
 			$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 		POSSESS_START = false
 		$PlayerIndicator.visible = true
@@ -520,8 +521,9 @@ func _physics_process(delta: float) -> void:
 						ATTACK_COLLISION = false
 						DASH_LOCK = false
 						INVINCIBLE = false
-						$AnimatedSprite2D.visible = true
-						$Sprite2D.visible = false
+						if not Autoloads.PLAYER_POSSESSING:
+							$AnimatedSprite2D.visible = true
+							$Sprite2D.visible = false
 					if not (DASH_Y_CHANGE and is_on_floor()): 
 						velocity.y = 0
 						velocity.x = 0
@@ -619,3 +621,6 @@ func _on_loaded_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_
 	body.add_to_group("is_on_screen")
 func _on_loaded_area_body_shape_exited(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	body.remove_from_group("is_on_screen")
+func _possess_revisible():
+	$Sprite2D.visible = true
+	$AnimatedSprite2D.visible = false

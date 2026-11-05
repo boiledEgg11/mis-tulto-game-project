@@ -10,6 +10,7 @@ func _pause():
 func _restart():
 	get_tree().paused = false
 	Autoloads.PAUSE = false
+	$Node2D2/Player.call("_possess_revisible")
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("j"):
