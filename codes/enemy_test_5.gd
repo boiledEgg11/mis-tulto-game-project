@@ -16,8 +16,10 @@ func _physics_process(_delta: float) -> void:
 		match individual:
 			1:
 				position = Vector2(512, -20)
+			2:
+				position = Vector2(1100, 30)
 			_:
-				position = Vector2i(512, -20)
+				position = Vector2i(0, 0)
 		Initial = position
 		START = false
 	move_and_slide()
@@ -33,7 +35,10 @@ func _physics_process(_delta: float) -> void:
 		$Sprite2D.visible = true
 	if possess_health == -1:
 		START = false
-		Autoloads.CAMERA_LOCATION = Vector2i(816, 64)
+		if individual == 1:
+			Autoloads.CAMERA_LOCATION = Vector2i(816, 64)
+		if individual == 2:
+			Autoloads.CAMERA_LOCATION = Vector2i(1232, 0)
 		Autoloads.PLAYER_POSITION_X = Initial.x
 		Autoloads.PLAYER_POSITION_Y = Initial.y
 		rotation = 0

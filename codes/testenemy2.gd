@@ -57,9 +57,7 @@ func _physics_process(delta: float) -> void:
 			$EnemyArea/CollisionShape2D.disabled = true
 			$Sprite2D.visible = false
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
-	direction = 1
-func _on_right_collision_check_body_entered(_body: Node2D) -> void:
-	direction = -1
+	direction *= -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
 		if area.is_in_group("player_damaging"):
@@ -81,6 +79,7 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
+	$LeftCollisionCheck.position.x = 8 * direction
 	if direction == 1:
 		$Sprite2D.flip_h = false
 	if direction == -1:

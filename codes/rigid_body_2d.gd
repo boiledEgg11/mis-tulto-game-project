@@ -7,7 +7,7 @@ var INVINCIBLE = false
 var POSSESSED = false
 var START = false
 var individual
-
+var WALL_EXISTED = false
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
@@ -31,6 +31,7 @@ func _physics_process(delta: float) -> void:
 			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
 				position.x += Autoloads.tile_move
 			if standing.is_in_group("moving_tile_y") and Autoloads.is_moving:
+				@warning_ignore("integer_division")
 				position.y -= Autoloads.tile_move / 2
 		if position.y > 175:
 			queue_free()
@@ -50,19 +51,12 @@ func _physics_process(delta: float) -> void:
 			if Autoloads.PLAYER_POSSESS_STOP:
 				_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
-	if individual == 2 and is_on_floor():
-		velocity.y = -250
-		position.x += 8
-	else:
-		direction = 1
-	$Sprite2D.flip_h = false
-func _on_right_collision_check_body_entered(_body: Node2D) -> void:
-	if individual == 2 and is_on_floor():
-		velocity.y = -250
-		position.x -= 8
-	else:
-		direction = -1
-	$Sprite2D.flip_h = true
+	if $LeftCollisionCheck.area_entered:
+		if individual == 2 and is_on_floor():
+			velocity.y = -250
+			position.x -= 6 * direction
+		else:
+			direction *= -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
 		if area.is_in_group("player_damaging"):
@@ -85,6 +79,7 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
+	$LeftCollisionCheck.position.x = 8 * direction
 	if direction == 1:
 		$Sprite2D.flip_h = false
 	if direction == -1:
@@ -108,7 +103,3 @@ func _process(_delta: float) -> void:
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
-func _individual_set(a):
-	pass
-func _possess_start():
-	pass

@@ -134,9 +134,7 @@ func _physics_process(delta: float) -> void:
 			$Camera2D/PlayerHealth.value = 10
 			OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY)
 	if position.y > 175:
-		position.y = 0
-		position.x = 0
-		_health_process(5)
+		get_parent().call("_reset")
 	Autoloads.PLAYER_POSITION_X = position.x
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
@@ -289,7 +287,7 @@ func _physics_process(delta: float) -> void:
 					else:
 						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 						direction = 0
-					if $groundchecker.is_colliding() and Input.is_action_pressed("up"):
+					if ($groundchecker.is_colliding() or is_on_floor()) and Input.is_action_pressed("up"):
 						velocity.y = STATUS.jump
 					if not is_on_floor():
 						if Input.is_action_pressed("down"):

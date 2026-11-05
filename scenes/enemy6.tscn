@@ -71,5 +71,5 @@ target_position = Vector2(0, 90)
 [connection signal="body_entered" from="EnemyTest6/LeftCollisionCheck" to="EnemyTest6" method="_on_left_collision_check_body_entered"]
 [connection signal="body_entered" from="EnemyTest6/RightCollisionCheck" to="EnemyTest6" method="_on_right_collision_check_body_entered"]
 [connection signal="area_entered" from="EnemyTest6/EnemyArea" to="EnemyTest6" method="_on_enemy_area_area_entered"]
-[connection signal="body_shape_entered" from="EnemyTest6/SearchArea" to="EnemyTest6" method="_on_search_area_body_shape_entered"]
 [connection signal="body_shape_entered" from="EnemyTest6/SearchArea" to="EnemyTest6" method="_on_area_2d_body_shape_entered"]
+[connection signal="body_shape_entered" from="EnemyTest6/SearchArea" to="EnemyTest6" method="_on_search_area_body_shape_entered"]

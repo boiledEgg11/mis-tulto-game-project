@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://bficcnd31abcj"]
+    [gd_scene format=4 uid="uid://bficcnd31abcj"]
 
 [ext_resource type="Script" uid="uid://cdnpymb5d1lks" path="res://codes/main_scne.gd" id="1_k6u5g"]
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="2_coh8c"]

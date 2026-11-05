@@ -28,15 +28,9 @@ texture = ExtResource("2_n665k")
 shape = SubResource("RectangleShape2D_8d1r1")
 
 [node name="LeftCollisionCheck" type="Area2D" parent="EnemyTest" unique_id=904269439]
-position = Vector2(-8.2, 0)
+position = Vector2(-8, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/LeftCollisionCheck" unique_id=462299243]
-shape = SubResource("RectangleShape2D_jsi8p")
-
-[node name="RightCollisionCheck" type="Area2D" parent="EnemyTest" unique_id=2126712388]
-position = Vector2(8.2, 0)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/RightCollisionCheck" unique_id=1543441504]
 shape = SubResource("RectangleShape2D_jsi8p")
 
 [node name="EnemyArea" type="Area2D" parent="EnemyTest" unique_id=1583314775 groups=["damage"]]
@@ -50,5 +44,4 @@ shape = SubResource("RectangleShape2D_ewymi")
 target_position = Vector2(0, 90)
 
 [connection signal="body_entered" from="EnemyTest/LeftCollisionCheck" to="EnemyTest" method="_on_left_collision_check_body_entered"]
-[connection signal="body_entered" from="EnemyTest/RightCollisionCheck" to="EnemyTest" method="_on_right_collision_check_body_entered"]
 [connection signal="area_entered" from="EnemyTest/EnemyArea" to="EnemyTest" method="_on_enemy_area_area_entered"]
