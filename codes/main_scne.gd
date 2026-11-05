@@ -56,3 +56,9 @@ func _enemy_set():
 		add_child.call_deferred(POSSESS_TARGET)
 		POSSESS_TARGET.call("_individual_set", Autoloads.POSSESS_TARGET.individual)
 		POSSESS_TARGET.call("_possess_start")
+
+
+func _on_texture_button_pressed() -> void:
+	if $Player.SAVABLE:
+		$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY)
+		_reset()
