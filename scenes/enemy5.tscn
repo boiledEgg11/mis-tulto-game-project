@@ -14,9 +14,11 @@ size = Vector2(0.1, 15)
 size = Vector2(15.5, 15.5)
 
 [node name="Node2D2" type="Node2D" unique_id=1912250218]
+process_mode = 3
 script = ExtResource("1_mgl14")
 
 [node name="EnemyTest5" type="CharacterBody2D" parent="." unique_id=1712286494]
+process_mode = 1
 position = Vector2(512, -20)
 collision_layer = 32
 collision_mask = 3

@@ -17,6 +17,7 @@ var is_moving = true
 var is_moving_2 = true
 var CAMERA_LOCATION = Vector2i(0, 0)
 var POSSESS_ABILITY = "none"
+var PAUSE = false
 var SAVE_STUFF: Dictionary = {
 	"place": "none",
 	"enemy": "none",

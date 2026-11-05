@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://bficcnd31abcj"]
 
 [ext_resource type="Script" uid="uid://cdnpymb5d1lks" path="res://codes/main_scne.gd" id="1_k6u5g"]
+[ext_resource type="Script" uid="uid://bhrl8gp713xxu" path="res://codes/main_main.gd" id="1_pblkq"]
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="2_coh8c"]
 [ext_resource type="Script" uid="uid://bneh7x1n7a1cs" path="res://codes/tile_map_layer_2.gd" id="3_kmyi7"]
 [ext_resource type="Script" uid="uid://d3q8m5uwx5lqa" path="res://codes/tile_map_layer_3.gd" id="4_ey6mn"]
@@ -12,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://ctmy1mvin5kpo" path="res://assets/sprites/dash_bar_high.png" id="11_wpu3o"]
 [ext_resource type="Script" uid="uid://bb5icce710kjn" path="res://codes/collision_shape_2d.gd" id="12_g3arh"]
 [ext_resource type="Texture2D" uid="uid://146igws2nbxk" path="res://assets/sprites/load_ui.png" id="13_2sxpt"]
+[ext_resource type="Script" uid="uid://ca4m7ys731iwl" path="res://scenes/control.gd" id="13_pblkq"]
 [ext_resource type="Texture2D" uid="uid://bnxvoakjqh3as" path="res://assets/sprites/player_crouch.png" id="13_unr0g"]
 [ext_resource type="Texture2D" uid="uid://d05tg6cnnvuhb" path="res://assets/sprites/player_hurt.png" id="14_jt3n0"]
 [ext_resource type="Texture2D" uid="uid://nmuoew8rhtmr" path="res://assets/sprites/return_ui.png" id="14_pblkq"]
@@ -23,7 +25,8 @@
 [ext_resource type="Script" uid="uid://bgh78i64qfwdu" path="res://codes/static_body_2d.gd" id="20_4bto7"]
 [ext_resource type="Script" uid="uid://r5d8jl1g67yx" path="res://autoloads.gd" id="20_k6u5g"]
 [ext_resource type="Texture2D" uid="uid://bi73d37mnk0nu" path="res://assets/sprites/save_ui.png" id="21_coh8c"]
-[ext_resource type="Script" uid="uid://boh8enb3hw4ha" path="res://scenes/button.gd" id="22_kmyi7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dmgr1"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_q6r6c"]
 resource_local_to_scene = true
@@ -272,18 +275,32 @@ radius = 30.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_8445k"]
 radius = 40.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_dmgr1"]
-
 [node name="Node2D" type="Node2D" unique_id=1755812023 groups=["SAVE"]]
+process_mode = 3
+script = ExtResource("1_pblkq")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=585567809]
+script = ExtResource("20_k6u5g")
+
+[node name="Node2D2" type="Node2D" parent="." unique_id=422704420]
+process_mode = 1
 script = ExtResource("1_k6u5g")
 
-[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1246592559 groups=["Player_collisoin", "tile"]]
+[node name="StaticBody2D" type="StaticBody2D" parent="Node2D2" unique_id=1394671393]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("20_4bto7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/StaticBody2D" unique_id=1800047160]
+shape = SubResource("CircleShape2D_dmgr1")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="Node2D2" unique_id=1246592559 groups=["Player_collisoin", "tile"]]
 light_mask = 261
 tile_map_data = PackedByteArray("AAAEAAQAAAAEAAEAAAAIAAQAAAAEAAEAAAAJAAQAAAAEAAEAAAAKAAQAAAAEAAEAAAALAAQAAAAEAAEAAAAMAAQAAAAEAAEAAAANAAQAAAAEAAEAAAAOAAQAAAAEAAEAAAAPAAQAAAAAAAMAAAADAAQAAAAEAAEAAAACAAQAAAAEAAEAAAABAAQAAAAEAAEAAAAAAAQAAAAEAAEAAAD//wQAAAAEAAEAAAD9/wQAAAAEAAEAAAD+/wQAAAAEAAEAAAD8/wQAAAAEAAEAAAD5/wQAAAABAAIAAAD5/wMAAAACAAEAAAD5/wIAAAACAAEAAAD5/wEAAAACAAEAAAD5//3/AAACAAAAAAD7/wEAAAADAAIAAAD8/wEAAAADAAIAAAD9/wEAAAADAAIAAAD+/wEAAAADAAIAAAD//wEAAAADAAIAAAAAAAEAAAADAAIAAAAEAAEAAAABAAMAAAAFAAEAAAACAAMAAAADAAMAAAABAAAAAAACAAMAAAAAAAAAAAAEAAMAAAACAAAAAAAPAAUAAAAEAAAAAAAPAAYAAAAEAAAAAAAPAAcAAAAEAAAAAAAPAAgAAAAEAAAAAAAPAAkAAAAAAAMAAAAOAAkAAAAEAAEAAAANAAkAAAAEAAEAAAAMAAkAAAAEAAEAAAALAAkAAAABAAMAAAD8/wMAAAAEAAMAAAD9/wMAAAAEAAMAAAD7/wMAAAAEAAMAAAD4//3/AAAAAAAAAAD3//3/AAABAAAAAAD2//3/AAABAAAAAAD1//3/AAACAAAAAAD0//3/AAAAAAAAAAD0//7/AAAAAAIAAAD0////AAAAAAEAAAD0/wAAAAAAAAEAAAD0/wEAAAAAAAEAAAD0/wIAAAAAAAEAAAD0/wMAAAAAAAEAAAD0/wQAAAAAAAIAAAD2/wcAAAAEAAEAAAD3/wcAAAAEAAEAAAD1/wcAAAAEAAEAAAD4/wcAAAACAAMAAAD1/wQAAAACAAIAAAD1/wMAAAACAAEAAAD1/wIAAAACAAEAAAD1/wEAAAACAAEAAAD1/wAAAAACAAEAAAD1////AAACAAEAAAD1//7/AAACAAIAAAD2//7/AAABAAIAAAD4/wEAAAAAAAEAAAD4/wIAAAAAAAEAAAD4/wMAAAAAAAEAAAD4/wQAAAAAAAIAAAD7/wQAAAADAAIAAAD6/wQAAAADAAIAAAD7/wcAAAACAAMAAAD6/wcAAAABAAMAAAACAAkAAAAEAAEAAAABAAkAAAAEAAEAAAADAAkAAAAEAAEAAAAEAAkAAAAEAAEAAAAFAAkAAAAEAAEAAAAGAAkAAAACAAMAAAAAAAkAAAABAAMAAAAIAAMAAAAAAAAAAAAJAAMAAAABAAAAAAAKAAMAAAACAAAAAAALAAMAAAAEAAQAAAAMAAMAAAAEAAQAAAANAAMAAAAEAAQAAAAMAAIAAAABAAMAAAANAAIAAAACAAMAAAD0/wcAAAAEAAEAAADz/wcAAAAEAAEAAADy/wcAAAABAAMAAAAqAAQAAAAAAAMAAAAVAP//AAADAAEAAAAVAP7/AAAEAAAAAAAVAP3/AAAEAAAAAAAVAPz/AAAEAAAAAAAVAPv/AAAEAAAAAAAVAPr/AAAEAAAAAAAVAPn/AAAAAAMAAAAUAPn/AAAEAAEAAAATAPn/AAAEAAEAAAASAPn/AAAEAAEAAAARAPn/AAAEAAEAAAAQAPn/AAAEAAEAAAAPAPn/AAAEAAEAAAAOAPn/AAAEAAEAAAANAPn/AAAEAAEAAAAMAPn/AAAEAAEAAAALAPn/AAAEAAEAAAAKAPn/AAAEAAEAAAAJAPn/AAAEAAEAAAAIAPn/AAAEAAEAAAAHAPn/AAAEAAEAAAAGAPn/AAAEAAEAAAAFAPn/AAAEAAEAAAAEAPn/AAAEAAEAAAADAPn/AAAEAAEAAAACAPn/AAAEAAEAAAABAPn/AAAEAAEAAAAAAPn/AAAEAAEAAAD///n/AAAEAAEAAAD+//n/AAAEAAEAAAD9//n/AAAEAAEAAAD8//n/AAAEAAEAAAD7//n/AAAEAAEAAAD6//n/AAAEAAEAAAD5//n/AAAEAAEAAAD4//n/AAAEAAEAAAD3//n/AAAEAAEAAAD2//n/AAAEAAEAAAD1//n/AAAEAAEAAAD0//n/AAAEAAEAAADz//n/AAAEAAEAAADy//n/AAAEAAEAAADx//n/AAAEAAEAAADw//n/AAAEAAEAAADv//n/AAAAAAMAAADv//r/AAAEAAAAAADv//v/AAAEAAAAAADv//z/AAAEAAAAAADv//3/AAAEAAAAAADv//7/AAAEAAAAAADv////AAAEAAAAAADv/wAAAAAEAAAAAADv/wEAAAAEAAAAAADv/wIAAAAEAAAAAADv/wMAAAAEAAAAAADv/wQAAAAEAAAAAADv/wUAAAAEAAAAAADv/wYAAAAEAAAAAADv/wcAAAAEAAAAAADv/wgAAAAEAAAAAADv/wkAAAAEAAAAAADv/woAAAAEAAAAAADv/wsAAAAEAAAAAADv/wwAAAAEAAAAAADv/w0AAAAEAAAAAAD6/wEAAAADAAIAAAAVAAAAAAAAAAMAAAAWAAAAAAABAAMAAAAXAAAAAAAEAAEAAAAYAAAAAAAEAAEAAAAZAAAAAAAEAAEAAAAaAAAAAAAEAAEAAAAbAAAAAAAEAAEAAAAcAAAAAAAEAAEAAAAdAAAAAAAEAAEAAAAeAAAAAAAEAAEAAAAfAAAAAAAEAAEAAAAgAAAAAAACAAMAAAAhAAAAAAAAAAMAAAAkAAIAAAADAAIAAAAjAAIAAAADAAIAAAAmAAIAAAADAAIAAAAlAAIAAAADAAIAAAAQAAQAAAAEAAEAAAARAAQAAAAEAAEAAAASAAQAAAAEAAEAAAATAAQAAAAEAAEAAAAUAAQAAAAEAAEAAAAVAAQAAAAEAAEAAAAWAAQAAAAEAAEAAAAXAAQAAAAEAAEAAAAYAAQAAAAEAAEAAAAZAAQAAAAEAAEAAAAaAAQAAAAEAAEAAAAbAAQAAAAEAAEAAAAcAAQAAAAEAAEAAAAdAAQAAAAEAAEAAAAeAAQAAAAEAAEAAAAfAAQAAAAEAAEAAAAgAAQAAAAEAAEAAAAhAAQAAAAEAAEAAAAiAAQAAAAEAAEAAAAjAAQAAAAEAAEAAAAkAAQAAAAEAAEAAAAlAAQAAAAEAAEAAAAmAAQAAAAEAAEAAAAnAAQAAAAEAAEAAAAoAAQAAAAEAAEAAAApAAQAAAAEAAEAAABIAAQAAAAEAAEAAABJAAQAAAAEAAEAAABKAAQAAAAEAAEAAABLAAQAAAAEAAEAAABMAAQAAAAEAAEAAABNAAQAAAAEAAEAAABOAAQAAAAEAAEAAABPAAQAAAAEAAEAAABQAAQAAAAEAAEAAABRAAQAAAAAAAMAAAA/AAQAAAAAAAMAAABAAAQAAAAEAAEAAABBAAQAAAAEAAEAAABCAAQAAAAEAAEAAABDAAQAAAAAAAQAAABEAAQAAAABAAEAAABFAAQAAAABAAEAAABGAAQAAAACAAQAAABHAAQAAAAEAAEAAAAhAAMAAAAEAAQAAAD6//7/AAAAAAMAAABIAP3/AAACAAMAAABHAP3/AAAEAAEAAABGAP3/AAAEAAEAAABFAP3/AAAEAAEAAABEAP3/AAAEAAEAAABDAP3/AAAEAAEAAABCAP3/AAAEAAEAAABBAP3/AAAEAAEAAABAAP3/AAAEAAEAAAA/AP3/AAAEAAEAAAA+AP3/AAAEAAEAAAA9AP3/AAAEAAEAAAA8AP3/AAAEAAEAAAA7AP3/AAAEAAEAAAA6AP3/AAAEAAEAAAA5AP3/AAAEAAEAAAA4AP3/AAAEAAEAAAA3AP3/AAAEAAEAAAA2AP3/AAAEAAEAAAA1AP3/AAAEAAEAAAA0AP3/AAAEAAEAAAAzAP3/AAABAAMAAABEAAMAAAABAAAAAABFAAMAAAABAAAAAABGAAMAAAACAAAAAABDAAMAAAAAAAAAAAD3//7/AAABAAIAAAD5//7/AAACAAIAAAD4/wAAAAAAAAEAAAD5/wAAAAACAAEAAAD4//7/AAAAAAIAAAAiAAEAAAADAAIAAAD4////AAAAAAEAAAD5////AAACAAEAAAA=")
 tile_set = SubResource("TileSet_413ny")
 physics_quadrant_size = 1
 
-[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=992050739 groups=["Player_collisoin", "tile", "tile_breakable"]]
+[node name="TileMapLayer2" type="TileMapLayer" parent="Node2D2" unique_id=992050739 groups=["Player_collisoin", "tile", "tile_breakable"]]
 light_mask = 261
 tile_map_data = PackedByteArray("AAAGAAQAAAADAAMAAAAHAAQAAAADAAMAAAAFAAQAAAADAAMAAAA=")
 tile_set = SubResource("TileSet_413ny")
@@ -291,36 +308,37 @@ rendering_quadrant_size = 1
 physics_quadrant_size = 1
 script = ExtResource("3_kmyi7")
 
-[node name="TileMapLayer3" type="TileMapLayer" parent="." unique_id=817629163 groups=["Player_collisoin", "moving_tile", "tile"]]
+[node name="TileMapLayer3" type="TileMapLayer" parent="Node2D2" unique_id=817629163 groups=["Player_collisoin", "moving_tile", "tile"]]
 light_mask = 261
 tile_map_data = PackedByteArray("AAAwAAQAAAADAAIAAAAxAAQAAAADAAIAAAAyAAQAAAADAAIAAAAzAAQAAAADAAIAAAA0AAQAAAADAAIAAAA=")
 tile_set = SubResource("TileSet_413ny")
 physics_quadrant_size = 1
 script = ExtResource("4_ey6mn")
 
-[node name="TileMapLayer4" type="TileMapLayer" parent="." unique_id=1209414367 groups=["Player_collisoin", "moving_tile_y", "tile"]]
+[node name="TileMapLayer4" type="TileMapLayer" parent="Node2D2" unique_id=1209414367 groups=["Player_collisoin", "moving_tile_y", "tile"]]
 light_mask = 261
 tile_map_data = PackedByteArray("AABKAAIAAAADAAIAAABLAAIAAAADAAIAAABMAAIAAAADAAIAAABNAAIAAAADAAIAAABOAAIAAAADAAIAAABPAAIAAAADAAIAAABQAAIAAAADAAIAAAA=")
 tile_set = SubResource("TileSet_413ny")
 physics_quadrant_size = 1
 script = ExtResource("5_2sxpt")
 
-[node name="Player" type="CharacterBody2D" parent="." unique_id=714223642 groups=["Player_collisoin", "SAVE"]]
+[node name="Player" type="CharacterBody2D" parent="Node2D2" unique_id=714223642 groups=["Player_collisoin", "SAVE"]]
 z_index = 1
 collision_layer = 16
 collision_mask = 5
 script = ExtResource("7_22dhx")
 
-[node name="LoadedArea" type="Area2D" parent="Player" unique_id=1817744735]
+[node name="LoadedArea" type="Area2D" parent="Node2D2/Player" unique_id=1817744735]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/LoadedArea" unique_id=1829433778]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/Player/LoadedArea" unique_id=1829433778]
 shape = SubResource("RectangleShape2D_k6u5g")
 debug_color = Color(0, 0.6, 0.69803923, 0)
 
-[node name="Camera2D" type="Camera2D" parent="Player" unique_id=1456672527]
+[node name="Camera2D" type="Camera2D" parent="Node2D2/Player" unique_id=1456672527]
+process_mode = 3
 zoom = Vector2(4, 4)
 
-[node name="PlayerHealth" type="TextureProgressBar" parent="Player/Camera2D" unique_id=971471211]
+[node name="PlayerHealth" type="TextureProgressBar" parent="Node2D2/Player/Camera2D" unique_id=971471211]
 offset_left = -130.0
 offset_top = 56.0
 offset_right = -50.0
@@ -331,7 +349,7 @@ texture_under = ExtResource("8_diulx")
 texture_over = ExtResource("9_nuk1v")
 texture_progress = ExtResource("10_l0qat")
 
-[node name="Label" type="Label" parent="Player/Camera2D/PlayerHealth" unique_id=416286721]
+[node name="Label" type="Label" parent="Node2D2/Player/Camera2D/PlayerHealth" unique_id=416286721]
 clip_contents = true
 layout_mode = 0
 offset_left = -10.0
@@ -343,7 +361,7 @@ theme_override_constants/shadow_outline_size = 0
 theme_override_font_sizes/font_size = 12
 text = "HP"
 
-[node name="DashRecover" type="TextureProgressBar" parent="Player/Camera2D" unique_id=1523865024]
+[node name="DashRecover" type="TextureProgressBar" parent="Node2D2/Player/Camera2D" unique_id=1523865024]
 offset_left = -130.0
 offset_top = 68.0
 offset_right = -50.0
@@ -354,7 +372,7 @@ texture_under = ExtResource("8_diulx")
 texture_over = ExtResource("9_nuk1v")
 texture_progress = ExtResource("11_wpu3o")
 
-[node name="Label" type="Label" parent="Player/Camera2D/DashRecover" unique_id=30597192]
+[node name="Label" type="Label" parent="Node2D2/Player/Camera2D/DashRecover" unique_id=30597192]
 clip_contents = true
 layout_mode = 0
 offset_left = -10.0
@@ -365,19 +383,21 @@ theme_override_colors/font_color = Color(0.856858, 0.7668405, 1, 1)
 theme_override_constants/shadow_outline_size = 0
 theme_override_font_sizes/font_size = 12
 
-[node name="LoadedArea" type="Area2D" parent="Player/Camera2D" unique_id=411460392]
+[node name="LoadedArea" type="Area2D" parent="Node2D2/Player/Camera2D" unique_id=411460392]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/Camera2D/LoadedArea" unique_id=2145646649]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/Player/Camera2D/LoadedArea" unique_id=2145646649]
 shape = SubResource("RectangleShape2D_k6u5g")
 debug_color = Color(0, 0.6, 0.69803923, 0)
 
-[node name="Control" type="Control" parent="Player/Camera2D" unique_id=922366591]
+[node name="Control" type="Control" parent="Node2D2/Player/Camera2D" unique_id=922366591]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("13_pblkq")
 
-[node name="BoxContainer" type="BoxContainer" parent="Player/Camera2D/Control" unique_id=1317686754]
+[node name="BoxContainer" type="BoxContainer" parent="Node2D2/Player/Camera2D/Control" unique_id=1317686754]
 layout_mode = 0
 offset_left = -100.0
 offset_top = -75.0
@@ -386,124 +406,112 @@ offset_bottom = 75.0
 alignment = 1
 vertical = true
 
-[node name="TextureButton" type="TextureButton" parent="Player/Camera2D/Control/BoxContainer" unique_id=1050071743]
+[node name="TextureButton" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer" unique_id=1050071743]
 layout_mode = 2
 texture_normal = ExtResource("21_coh8c")
-script = ExtResource("22_kmyi7")
 
-[node name="TextureButton2" type="TextureButton" parent="Player/Camera2D/Control/BoxContainer" unique_id=1948967655]
+[node name="TextureButton2" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer" unique_id=1948967655]
 layout_mode = 2
 texture_normal = ExtResource("13_2sxpt")
 
-[node name="TextureButton3" type="TextureButton" parent="Player/Camera2D/Control/BoxContainer" unique_id=17179335]
+[node name="TextureButton3" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer" unique_id=17179335]
 layout_mode = 2
 texture_normal = ExtResource("14_pblkq")
 
-[node name="Player_Shape" type="CollisionShape2D" parent="Player" unique_id=1446692577]
+[node name="Player_Shape" type="CollisionShape2D" parent="Node2D2/Player" unique_id=1446692577]
 shape = SubResource("RectangleShape2D_b5jwi")
 
-[node name="DamageCollision" type="Area2D" parent="Player" unique_id=604566733]
+[node name="DamageCollision" type="Area2D" parent="Node2D2/Player" unique_id=604566733]
 collision_mask = 18
 
-[node name="PlayerDamageCollision" type="CollisionShape2D" parent="Player/DamageCollision" unique_id=2075048318]
+[node name="PlayerDamageCollision" type="CollisionShape2D" parent="Node2D2/Player/DamageCollision" unique_id=2075048318]
 shape = SubResource("RectangleShape2D_euwu4")
 debug_color = Color(0, 0.6509804, 0.07450981, 1)
 script = ExtResource("12_g3arh")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=1928977834]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Node2D2/Player" unique_id=1928977834]
 sprite_frames = SubResource("SpriteFrames_euwu4")
 animation = &"move"
 
-[node name="Sprite2D" type="Sprite2D" parent="Player" unique_id=1032957902]
+[node name="Sprite2D" type="Sprite2D" parent="Node2D2/Player" unique_id=1032957902]
 texture = ExtResource("17_gmqbl")
 
-[node name="CrouchTestArea" type="Area2D" parent="Player" unique_id=1144540496]
+[node name="CrouchTestArea" type="Area2D" parent="Node2D2/Player" unique_id=1144540496]
 collision_layer = 4
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CrouchTestArea" unique_id=6903447]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/Player/CrouchTestArea" unique_id=6903447]
 shape = SubResource("RectangleShape2D_iyk0q")
 debug_color = Color(0.9650963, 1.4439225e-06, 0.49168748, 0.41960785)
 
-[node name="CrouchExitTestArea" type="Area2D" parent="Player" unique_id=1144140170]
+[node name="CrouchExitTestArea" type="Area2D" parent="Node2D2/Player" unique_id=1144140170]
 collision_layer = 4
 collision_mask = 81
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/CrouchExitTestArea" unique_id=359216176]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/Player/CrouchExitTestArea" unique_id=359216176]
 shape = SubResource("RectangleShape2D_8445k")
 
-[node name="AttackCollision" type="Area2D" parent="Player" unique_id=487374813]
+[node name="AttackCollision" type="Area2D" parent="Node2D2/Player" unique_id=487374813]
 collision_layer = 8
 collision_mask = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/AttackCollision" unique_id=832266739]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/Player/AttackCollision" unique_id=832266739]
 shape = SubResource("RectangleShape2D_7ucd7")
 debug_color = Color(0.42352942, 0, 0.6039216, 0.5882353)
 
-[node name="PossessArea" type="Area2D" parent="Player" unique_id=701140378]
+[node name="PossessArea" type="Area2D" parent="Node2D2/Player" unique_id=701140378]
 collision_layer = 8
 collision_mask = 8
 
-[node name="PossessShape" type="CollisionShape2D" parent="Player/PossessArea" unique_id=1164572365]
+[node name="PossessShape" type="CollisionShape2D" parent="Node2D2/Player/PossessArea" unique_id=1164572365]
 shape = SubResource("RectangleShape2D_kurx0")
 debug_color = Color(3.465414e-06, 0.6276734, 0.50268704, 0.41960785)
 
-[node name="ExtraAttack" type="Area2D" parent="Player" unique_id=1904654816 groups=["tile_break"]]
+[node name="ExtraAttack" type="Area2D" parent="Node2D2/Player" unique_id=1904654816 groups=["tile_break"]]
 collision_layer = 9
 collision_mask = 9
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/ExtraAttack" unique_id=677240736]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/Player/ExtraAttack" unique_id=677240736]
 shape = SubResource("CircleShape2D_b5jwi")
 disabled = true
 debug_color = Color(0.7005621, 0.3218768, 0.92896277, 0.41960785)
 
-[node name="RayCast2D" type="RayCast2D" parent="Player/ExtraAttack" unique_id=601599250]
+[node name="RayCast2D" type="RayCast2D" parent="Node2D2/Player/ExtraAttack" unique_id=601599250]
 target_position = Vector2(0, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="Player/ExtraAttack" unique_id=2121312290]
+[node name="Sprite2D" type="Sprite2D" parent="Node2D2/Player/ExtraAttack" unique_id=2121312290]
 texture = ExtResource("18_qkxkb")
 
-[node name="PlayerIndicator" type="Sprite2D" parent="Player" unique_id=1960989391]
+[node name="PlayerIndicator" type="Sprite2D" parent="Node2D2/Player" unique_id=1960989391]
 texture = ExtResource("19_k8pa6")
 
-[node name="groundchecker" type="RayCast2D" parent="Player" unique_id=1493795449]
+[node name="groundchecker" type="RayCast2D" parent="Node2D2/Player" unique_id=1493795449]
 target_position = Vector2(0, 90)
 
-[node name="DetectShape" type="Area2D" parent="Player" unique_id=725878902]
+[node name="DetectShape" type="Area2D" parent="Node2D2/Player" unique_id=725878902]
 collision_layer = 32
 collision_mask = 32
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player/DetectShape" unique_id=614346737]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/Player/DetectShape" unique_id=614346737]
 shape = SubResource("CircleShape2D_8445k")
 disabled = true
 
-[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1394671393]
-collision_layer = 0
-collision_mask = 0
-script = ExtResource("20_4bto7")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1800047160]
-shape = SubResource("CircleShape2D_dmgr1")
-
-[node name="Node2D" type="Node2D" parent="." unique_id=585567809]
-script = ExtResource("20_k6u5g")
-
-[connection signal="body_shape_entered" from="Player/LoadedArea" to="Player" method="_on_loaded_area_body_shape_entered"]
-[connection signal="body_shape_exited" from="Player/LoadedArea" to="Player" method="_on_loaded_area_body_shape_exited"]
-[connection signal="pressed" from="Player/Camera2D/Control/BoxContainer/TextureButton" to="." method="_on_texture_button_pressed"]
-[connection signal="area_entered" from="Player/DamageCollision" to="Player" method="_on_damage_collision_area_entered"]
-[connection signal="area_exited" from="Player/DamageCollision" to="Player" method="_on_damage_collision_area_exited"]
-[connection signal="area_shape_entered" from="Player/DamageCollision" to="Player" method="_on_damage_collision_area_shape_entered"]
-[connection signal="body_entered" from="Player/DamageCollision" to="Player" method="_on_attack_collision_area_body_entered"]
-[connection signal="body_exited" from="Player/DamageCollision" to="Player" method="_on_attack_collision_area_body_exited"]
-[connection signal="area_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_area_entered"]
-[connection signal="body_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_entered"]
-[connection signal="body_shape_entered" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_shape_entered"]
-[connection signal="body_shape_exited" from="Player/CrouchTestArea" to="Player" method="_on_crouch_test_area_body_shape_exited"]
-[connection signal="body_entered" from="Player/CrouchExitTestArea" to="Player" method="_on_crouch_exit_test_area_body_entered"]
-[connection signal="body_exited" from="Player/CrouchExitTestArea" to="Player" method="_on_crouch_exit_test_area_body_exited"]
-[connection signal="body_entered" from="Player/ExtraAttack" to="Player" method="_on_extra_attack_body_entered"]
-[connection signal="body_shape_entered" from="Player/ExtraAttack" to="." method="_on_extra_attack_body_shape_entered"]
-[connection signal="body_shape_entered" from="Player/ExtraAttack" to="TileMapLayer2" method="_on_extra_attack_body_shape_entered"]
-[connection signal="area_entered" from="Player/DetectShape" to="Player" method="_on_detect_shape_area_entered"]
-[connection signal="body_entered" from="Player/DetectShape" to="Player" method="_on_detect_shape_body_entered"]
-[connection signal="body_shape_entered" from="Player/DetectShape" to="Player" method="_on_detect_shape_body_shape_entered"]
+[connection signal="body_shape_entered" from="Node2D2/Player/LoadedArea" to="Node2D2/Player" method="_on_loaded_area_body_shape_entered"]
+[connection signal="body_shape_exited" from="Node2D2/Player/LoadedArea" to="Node2D2/Player" method="_on_loaded_area_body_shape_exited"]
+[connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/TextureButton" to="." method="_on_texture_button_pressed"]
+[connection signal="area_entered" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_damage_collision_area_entered"]
+[connection signal="area_exited" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_damage_collision_area_exited"]
+[connection signal="area_shape_entered" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_damage_collision_area_shape_entered"]
+[connection signal="body_entered" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_attack_collision_area_body_entered"]
+[connection signal="body_exited" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_attack_collision_area_body_exited"]
+[connection signal="area_entered" from="Node2D2/Player/CrouchTestArea" to="Node2D2/Player" method="_on_crouch_test_area_area_entered"]
+[connection signal="body_entered" from="Node2D2/Player/CrouchTestArea" to="Node2D2/Player" method="_on_crouch_test_area_body_entered"]
+[connection signal="body_shape_entered" from="Node2D2/Player/CrouchTestArea" to="Node2D2/Player" method="_on_crouch_test_area_body_shape_entered"]
+[connection signal="body_shape_exited" from="Node2D2/Player/CrouchTestArea" to="Node2D2/Player" method="_on_crouch_test_area_body_shape_exited"]
+[connection signal="body_entered" from="Node2D2/Player/CrouchExitTestArea" to="Node2D2/Player" method="_on_crouch_exit_test_area_body_entered"]
+[connection signal="body_exited" from="Node2D2/Player/CrouchExitTestArea" to="Node2D2/Player" method="_on_crouch_exit_test_area_body_exited"]
+[connection signal="body_entered" from="Node2D2/Player/ExtraAttack" to="Node2D2/Player" method="_on_extra_attack_body_entered"]
+[connection signal="body_shape_entered" from="Node2D2/Player/ExtraAttack" to="." method="_on_extra_attack_body_shape_entered"]
+[connection signal="body_shape_entered" from="Node2D2/Player/ExtraAttack" to="Node2D2/TileMapLayer2" method="_on_extra_attack_body_shape_entered"]
+[connection signal="area_entered" from="Node2D2/Player/DetectShape" to="Node2D2/Player" method="_on_detect_shape_area_entered"]
+[connection signal="body_entered" from="Node2D2/Player/DetectShape" to="Node2D2/Player" method="_on_detect_shape_body_entered"]
+[connection signal="body_shape_entered" from="Node2D2/Player/DetectShape" to="Node2D2/Player" method="_on_detect_shape_body_shape_entered"]
