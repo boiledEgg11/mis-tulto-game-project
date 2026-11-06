@@ -131,6 +131,7 @@ func _physics_process(delta: float) -> void:
 		Autoloads.tile = body.local_to_map(body.position)
 	if Input.is_action_just_pressed("shift"):
 		if SAVABLE:
+			$PlayerIndicator.visible = false
 			$Sprite2D.visible = false
 			$AnimatedSprite2D.visible = false
 			$Camera2D/Control/BoxContainer.visible = true
@@ -142,7 +143,6 @@ func _physics_process(delta: float) -> void:
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
-
 		if Autoloads.POSSESS_ABILITY != "None":
 			$Camera2D/DashRecover/Label.text = Autoloads.POSSESS_ABILITY
 		else:
@@ -151,8 +151,8 @@ func _physics_process(delta: float) -> void:
 			$AnimatedSprite2D.visible = false
 			$Sprite2D.visible = true
 			$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
-		POSSESS_START = false
-		$PlayerIndicator.visible = true
+			POSSESS_START = false
+			$PlayerIndicator.visible = true
 		$PlayerIndicator.position = Vector2i(0, STATUS.hitbox_y / -2 - (STATUS.hitbox_y / 1.5))
 		$Player_Shape.shape.size = Vector2(Autoloads.POSSESS_STATUS.hitbox_x, Autoloads.POSSESS_STATUS.hitbox_y)
 		$PossessArea/PossessShape.disabled = true
@@ -376,6 +376,8 @@ func _physics_process(delta: float) -> void:
 					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 					direction = 0
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1 or POSSESS_END:
+			Autoloads.POSSESS_TARGET.species = "none"
+			Autoloads.POSSESS_TARGET.individual = 0
 			POSSESS_END = false
 			Autoloads.POSSESS_AMOUNT = 0
 			Autoloads.tile_move = 0
@@ -624,3 +626,4 @@ func _on_loaded_area_body_shape_exited(body_rid: RID, body: Node2D, body_shape_i
 func _possess_revisible():
 	$Sprite2D.visible = true
 	$AnimatedSprite2D.visible = false
+	$PlayerIndicator.visible = true

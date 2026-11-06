@@ -25,6 +25,7 @@ func _reset():
 	$Player.POSSESS_END = false
 	await get_tree().process_frame
 	_enemy_set()
+	$Player.POSSESS_START = true
 func _process(delta: float) -> void:
 	if not reset and Autoloads.RESET:
 		_reset()
@@ -59,12 +60,11 @@ func _enemy_set():
 
 
 func _on_texture_button_pressed() -> void:
-	if $Player.SAVABLE:
-		$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY)
-		_reset()
-
-
+	$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY)
 func _on_texture_button_3_pressed() -> void:
 	get_tree().paused = false
 	if Autoloads.PLAYER_POSSESSING:
 		$Player/Sprite2D.visible = true
+		$Player/PlayerIndicator.visible = true
+func _on_texture_button_2_pressed() -> void:
+	_reset()
