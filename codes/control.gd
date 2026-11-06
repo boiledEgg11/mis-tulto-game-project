@@ -1,5 +1,5 @@
 extends Control
-
+var FILE_OPEN = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -14,7 +14,12 @@ func _process(delta: float) -> void:
 		print(get_tree().paused)
 		$BoxContainer.visible = false
 		print("pause end")
-	if get_tree().paused:
+	if FILE_OPEN:
+		$BoxContainer2.visible = true
+		
+	else:
+		$BoxContainer2.visible = false
+	if get_tree().paused and not FILE_OPEN:
 		$BoxContainer.visible = true
 	else:
 		$BoxContainer.visible = false

@@ -60,6 +60,7 @@ func _enemy_set():
 
 
 func _on_texture_button_pressed() -> void:
+	$Player/Camera2D/Control.FILE_OPEN = true
 	$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY)
 func _on_texture_button_3_pressed() -> void:
 	get_tree().paused = false

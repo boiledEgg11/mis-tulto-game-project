@@ -29,7 +29,6 @@ func _save_game():
 	DirAccess.remove_absolute("user://saves.save")
 	print("removed!")
 	_save_2()
-
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("i"):
 		_save_game()
