@@ -428,12 +428,6 @@ texture_normal = ExtResource("13_2sxpt")
 texture_pressed = ExtResource("19_l0qat")
 texture_hover = ExtResource("20_wpu3o")
 
-[node name="TextureButton3" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer" unique_id=17179335]
-layout_mode = 2
-texture_normal = ExtResource("14_pblkq")
-texture_pressed = ExtResource("22_g3arh")
-texture_hover = ExtResource("23_unr0g")
-
 [node name="BoxContainer2" type="BoxContainer" parent="Node2D2/Player/Camera2D/Control" unique_id=1080249617]
 layout_mode = 0
 offset_left = -100.0
@@ -457,8 +451,17 @@ texture_normal = ExtResource("26_mchk4")
 
 [node name="BoxContainer3" type="BoxContainer" parent="Node2D2/Player/Camera2D/Control" unique_id=1304540966]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 110.0
+offset_top = -70.0
+offset_right = 150.0
+offset_bottom = -30.0
+scale = Vector2(0.5, 0.5)
+
+[node name="TextureButton3" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer3" unique_id=17179335]
+layout_mode = 2
+texture_normal = ExtResource("14_pblkq")
+texture_pressed = ExtResource("22_g3arh")
+texture_hover = ExtResource("23_unr0g")
 
 [node name="Player_Shape" type="CollisionShape2D" parent="Node2D2/Player" unique_id=1446692577]
 shape = SubResource("RectangleShape2D_b5jwi")
@@ -543,7 +546,10 @@ disabled = true
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/TextureButton" to="Node2D2" method="_on_texture_button_pressed"]
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/TextureButton" to="Node2D2/Player/Camera2D/Control" method="_on_texture_button_pressed"]
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/TextureButton2" to="Node2D2" method="_on_texture_button_2_pressed"]
-[connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/TextureButton3" to="Node2D2" method="_on_texture_button_3_pressed"]
+[connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton4" to="Node2D2" method="_on_texture_button_4_pressed"]
+[connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton5" to="Node2D2" method="_on_texture_button_5_pressed"]
+[connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton6" to="Node2D2" method="_on_texture_button_6_pressed"]
+[connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer3/TextureButton3" to="Node2D2" method="_on_texture_button_3_pressed"]
 [connection signal="area_entered" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_damage_collision_area_entered"]
 [connection signal="area_exited" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_damage_collision_area_exited"]
 [connection signal="area_shape_entered" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_damage_collision_area_shape_entered"]

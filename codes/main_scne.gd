@@ -5,9 +5,10 @@ var bodies
 var reset = false
 var tile_positions
 var POSSESS_TARGET
+var SAVE_READY = true
 func _ready():
-	_reset()
-func _reset():
+	_reset(1)
+func _reset(file):
 	reset = true
 	Autoloads.RESET = true
 	$Player.POSSESS_END = true
@@ -28,9 +29,9 @@ func _reset():
 	$Player.POSSESS_START = true
 func _process(delta: float) -> void:
 	if not reset and Autoloads.RESET:
-		_reset()
+		_reset(1)
 func _load():
-	Autoloads._load_game()
+	Autoloads._load_game(1)
 	match Autoloads.location:
 		"test_1":
 			$Player.position = Vector2i(232, 136)
@@ -61,11 +62,27 @@ func _enemy_set():
 
 func _on_texture_button_pressed() -> void:
 	$Player/Camera2D/Control.FILE_OPEN = true
-	$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY)
+	SAVE_READY = true
 func _on_texture_button_3_pressed() -> void:
-	get_tree().paused = false
-	if Autoloads.PLAYER_POSSESSING:
-		$Player/Sprite2D.visible = true
-		$Player/PlayerIndicator.visible = true
+	if $Player/Camera2D/Control.FILE_OPEN:
+		$Player/Camera2D/Control.FILE_OPEN = false
+	else:
+		get_tree().paused = false
+		if Autoloads.PLAYER_POSSESSING:
+			$Player/Sprite2D.visible = true
+			$Player/PlayerIndicator.visible = true
 func _on_texture_button_2_pressed() -> void:
-	_reset()
+	$Player/Camera2D/Control.FILE_OPEN = true
+	SAVE_READY =  false
+func _on_texture_button_4_pressed() -> void:
+	_save_files(1)
+func _on_texture_button_5_pressed() -> void:
+	_save_files(2)
+
+func _save_files(file):
+	if SAVE_READY:
+		$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY, file)
+	if not SAVE_READY:
+		_reset(file)
+func _on_texture_button_6_pressed() -> void:
+	_save_files(3)

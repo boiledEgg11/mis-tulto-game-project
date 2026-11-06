@@ -14,7 +14,7 @@ func _process(delta: float) -> void:
 		print(get_tree().paused)
 		$BoxContainer.visible = false
 		print("pause end")
-	if FILE_OPEN:
+	if get_tree().paused and FILE_OPEN:
 		$BoxContainer2.visible = true
 		
 	else:
@@ -23,6 +23,10 @@ func _process(delta: float) -> void:
 		$BoxContainer.visible = true
 	else:
 		$BoxContainer.visible = false
+	if get_tree().paused:
+		$BoxContainer3.visible = true
+	else:
+		$BoxContainer3.visible = false
 	if not get_tree().paused and Input.is_action_just_pressed("l"):
 		get_tree().paused = true
 		$BoxContainer.visible = true

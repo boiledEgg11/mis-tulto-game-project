@@ -138,7 +138,7 @@ func _physics_process(delta: float) -> void:
 			get_parent().get_parent().call("_pause")
 			$Camera2D/PlayerHealth.value = 10
 	if position.y > 175:
-		get_parent().call("_reset")
+		get_parent().call("_reset", Autoloads.LAST_LOADED)
 	Autoloads.PLAYER_POSITION_X = position.x
 	Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()

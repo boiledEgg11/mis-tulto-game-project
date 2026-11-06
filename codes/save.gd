@@ -1,14 +1,14 @@
 extends Node2D
 var location
 
-func _save(enemy):
+func _save(enemy, file):
 	print("saved!")
 	Autoloads.SAVE_STUFF = {
 		"place": location,
 		"enemy": Autoloads.POSSESS_TARGET.species,
 		"enemy_id": Autoloads.POSSESS_TARGET.individual
 	}
-	_save_game()
+	_save_game(file)
 func _placement(placement):
 	match placement:
 		"test_1":
@@ -18,21 +18,31 @@ func _placement(placement):
 		_:
 			queue_free()
 	location = placement
-func _save_2():
-	var SAVE_FILE = FileAccess.open("user://saves.save", FileAccess.WRITE)
+func _save_2(file):
+	var SAVE_FILE
+	if file == 1:
+		SAVE_FILE = FileAccess.open("user://save_1.save", FileAccess.WRITE)
+	if file == 2:
+		SAVE_FILE = FileAccess.open("user://save_.save", FileAccess.WRITE)
+	if file == 3:
+		SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.WRITE)
 	SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
 	print("added!")
 	SAVE_FILE.close()
 	await get_tree().process_frame
-func _save_game():
-	var SAVE_FILE = FileAccess.open("user://saves.save", FileAccess.WRITE)
-	DirAccess.remove_absolute("user://saves.save")
+func _save_game(file):
+	var SAVE_FILE
+	if file == 1:
+		SAVE_FILE = FileAccess.open("user://save_1.save", FileAccess.WRITE)
+		DirAccess.remove_absolute("user://save_1.save")
+	if file == 2:
+		SAVE_FILE = FileAccess.open("user://save_2.save", FileAccess.WRITE)
+		DirAccess.remove_absolute("user://save_2.save")
+	if file == 3:
+		SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.WRITE)
+		DirAccess.remove_absolute("user://save_3.save")
 	print("removed!")
-	_save_2()
+	_save_2(file)
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("i"):
-		_save_game()
-		print(Autoloads.SAVE_STUFF.place)
-		print(Autoloads.SAVE_STUFF.enemy)
 	if Autoloads.RESET:
 		queue_free()
