@@ -21,10 +21,13 @@ func _placement(placement):
 func _save_2(file):
 	var SAVE_FILE
 	if file == 1:
+		print("file 1")
 		SAVE_FILE = FileAccess.open("user://save_1.save", FileAccess.WRITE)
 	if file == 2:
-		SAVE_FILE = FileAccess.open("user://save_.save", FileAccess.WRITE)
+		print("file 2")
+		SAVE_FILE = FileAccess.open("user://save_2.save", FileAccess.WRITE)
 	if file == 3:
+		print("file 3")
 		SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.WRITE)
 	SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
 	print("added!")

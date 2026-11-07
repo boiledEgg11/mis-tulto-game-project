@@ -18,6 +18,7 @@ var is_moving_2 = true
 var CAMERA_LOCATION = Vector2i(0, 0)
 var POSSESS_ABILITY = "none"
 var PAUSE = false
+var LAST_LOADED = 1
 var SAVE_STUFF: Dictionary = {
 	"place": "none",
 	"enemy": "none",
@@ -25,8 +26,18 @@ var SAVE_STUFF: Dictionary = {
 }
 var POSSESS_STATUS = {"speed": 0, "jump": 0, "slide": 0, "damage_multiplier": 0, "hitbox_y": 0, "hitbox_x": 0}
 # Called when the node enters the scene tree for the first time.
-func _load_game():
-	var SAVE_FILE = FileAccess.open("user://saves.save", FileAccess.READ)
+func _load_game(file):
+	LAST_LOADED = file
+	var SAVE_FILE
+	if file == 1:
+		print("file 1")
+		SAVE_FILE = FileAccess.open("user://save_1.save", FileAccess.READ)
+	if file == 2:
+		print("file 2")
+		SAVE_FILE = FileAccess.open("user://save_2.save", FileAccess.READ)
+	if file == 3:
+		print("file 3")
+		SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.READ)
 	var data = SAVE_FILE.get_var()
 	SAVE_FILE.close()
 	var SAVE_DATA = data

@@ -13,7 +13,7 @@ func _reset(file):
 	Autoloads.RESET = true
 	$Player.POSSESS_END = true
 	await get_tree().process_frame
-	_load()
+	_load(file)
 	print($Player.POSSESS_END)
 	Autoloads.POSSESS_AMOUNT = 0
 	Autoloads.PLAYER_POSSESSING = false
@@ -27,11 +27,8 @@ func _reset(file):
 	await get_tree().process_frame
 	_enemy_set()
 	$Player.POSSESS_START = true
-func _process(delta: float) -> void:
-	if not reset and Autoloads.RESET:
-		_reset(1)
-func _load():
-	Autoloads._load_game(1)
+func _load(file):
+	Autoloads._load_game(file)
 	match Autoloads.location:
 		"test_1":
 			$Player.position = Vector2i(232, 136)
