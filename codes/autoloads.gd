@@ -19,6 +19,7 @@ var CAMERA_LOCATION = Vector2i(0, 0)
 var POSSESS_ABILITY = "none"
 var PAUSE = false
 var LAST_LOADED = 1
+var CURRENT_STATE = "home"
 var SAVE_STUFF: Dictionary = {
 	"place": "none",
 	"enemy": "none",

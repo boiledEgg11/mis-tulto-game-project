@@ -429,6 +429,12 @@ texture_normal = ExtResource("17_li1wj")
 texture_pressed = ExtResource("18_wt704")
 texture_hover = ExtResource("19_2c1oc")
 
+[node name="HomeReturn" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer" unique_id=1519413864]
+layout_mode = 2
+texture_normal = ExtResource("20_dt3bb")
+texture_pressed = ExtResource("21_bc8a7")
+texture_hover = ExtResource("22_83a62")
+
 [node name="BoxContainer2" type="BoxContainer" parent="Node2D2/Player/Camera2D/Control" unique_id=555938803]
 layout_mode = 0
 offset_left = -100.0
@@ -552,6 +558,8 @@ disabled = true
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/TextureButton" to="Node2D2" method="_on_texture_button_pressed"]
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/TextureButton" to="Node2D2/Player/Camera2D/Control" method="_on_texture_button_pressed"]
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/TextureButton2" to="Node2D2" method="_on_texture_button_2_pressed"]
+[connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/HomeReturn" to="." method="_on_home_return_pressed"]
+[connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer/HomeReturn" to="Node2D2" method="_on_home_return_pressed"]
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton4" to="Node2D2" method="_on_texture_button_4_pressed"]
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton5" to="Node2D2" method="_on_texture_button_5_pressed"]
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton6" to="Node2D2" method="_on_texture_button_6_pressed"]

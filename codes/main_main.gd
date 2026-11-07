@@ -19,3 +19,15 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("l"):
 		get_tree().paused = true
 		Autoloads.PAUSE = true
+
+
+func _on_home_return_pressed() -> void:
+	if $Node2D2/Player/Camera2D/Control.FILE_OPEN:
+		$Node2D2/Player/Camera2D/Controlol.FILE_OPEN = false
+	else:
+		get_tree().paused = false
+		if Autoloads.PLAYER_POSSESSING:
+			$Node2D2/Player/Sprite2D.visible = true
+			$Node2D2/Player/PlayerIndicator.visible = true
+	Autoloads.CURRENT_STATE = "home"
+	queue_free()

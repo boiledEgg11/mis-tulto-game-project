@@ -80,3 +80,7 @@ func _save_files(file):
 		_reset(file)
 func _on_texture_button_6_pressed() -> void:
 	_save_files(3)
+
+
+func _on_home_return_pressed() -> void:
+	pass
