@@ -7,7 +7,7 @@ var tile_positions
 var POSSESS_TARGET
 var SAVE_READY = true
 func _ready():
-	_reset(1)
+	_reset(Autoloads.LAST_LOADED)
 func _reset(file):
 	reset = true
 	Autoloads.RESET = true

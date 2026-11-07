@@ -41,9 +41,12 @@ func _load_game(file):
 	var data = SAVE_FILE.get_var()
 	SAVE_FILE.close()
 	var SAVE_DATA = data
-	SAVE_STUFF.place = SAVE_DATA.place
-	SAVE_STUFF.enemy = SAVE_DATA.enemy
-	SAVE_STUFF.enemy_id = SAVE_DATA.enemy_id
+	if SAVE_DATA.place:
+		SAVE_STUFF.place = SAVE_DATA.place
+	if SAVE_DATA.enemy:
+		SAVE_STUFF.enemy = SAVE_DATA.enemy
+	if SAVE_DATA.enemy_id:
+		SAVE_STUFF.enemy_id = SAVE_DATA.enemy_id
 	Autoloads.location = Autoloads.SAVE_STUFF.place
 	Autoloads.POSSESS_TARGET.species = Autoloads.SAVE_STUFF.enemy
 	Autoloads.POSSESS_TARGET.individual = Autoloads.SAVE_STUFF.enemy_id

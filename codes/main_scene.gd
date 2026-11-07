@@ -3,14 +3,24 @@ var MAIN
 var OPENED = false
 var MODE = "new"
 var START = false
+var STARTED = false
 # Called when the node enters the scene tree for the first time.
 
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if START:
+	if START and not STARTED:
+		$Control/GameStarts.visible = false
+		$Control/SaveFiles.visible = false
+		$Control/Return.visible = false
+		STARTED = true
 		$Camera2D.enabled = false
+		$Control.visible = false
+		MAIN = preload("res://main_game_scene.tscn").instantiate()
+		add_child(MAIN)
+		if MODE == "continue":
+			var SAVE_SAVE_FILE = FileAccess.open("user://save_file.save", FileAccess.WRITE)
 	else:
 		if OPENED:
 			$Control/GameStarts.visible = false
@@ -26,18 +36,55 @@ func _on_new_game_pressed() -> void:
 func _on_continue_pressed() -> void:
 	OPENED = true
 	MODE = "continue"
-
-
 func _on_save_file_1_pressed() -> void:
-	pass # Replace with function body.
+	if MODE == "new":
+		$Control/GameStarts.visible = false
+		$Control/SaveFiles.visible = false
+		$Control/Return.visible = false
+		var SAVE_FILE = FileAccess.open("user://save_1.save", FileAccess.READ)
+		var SAVE_SAVE_FILE = FileAccess.open("user://save_file.save", FileAccess.WRITE)
+		SAVE_SAVE_FILE.store_var(SAVE_FILE.get_var())
+		SAVE_FILE.close()
+		SAVE_SAVE_FILE.close()
+		SAVE_FILE = FileAccess.open("user://save_1.save", FileAccess.WRITE)
+		SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
+		SAVE_FILE.close()
+	START = true
+	Autoloads.LAST_LOADED = 1
 
 
 func _on_save_file_2_pressed() -> void:
-	pass # Replace with function body.
+	if MODE == "new":
+		$Control/GameStarts.visible = false
+		$Control/SaveFiles.visible = false
+		$Control/Return.visible = false
+		var SAVE_FILE = FileAccess.open("user://save_2.save", FileAccess.READ)
+		var SAVE_SAVE_FILE = FileAccess.open("user://save_file.save", FileAccess.WRITE)
+		SAVE_SAVE_FILE.store_var(SAVE_FILE.get_var())
+		SAVE_FILE.close()
+		SAVE_SAVE_FILE.close()
+		SAVE_FILE = FileAccess.open("user://save_2.save", FileAccess.WRITE)
+		SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
+		SAVE_FILE.close()
+	START = true
+	Autoloads.LAST_LOADED = 2
 
 
 func _on_save_file_3_pressed() -> void:
-	pass # Replace with function body.
+	if MODE == "new":
+		$Control/GameStarts.visible = false
+		$Control/SaveFiles.visible = false
+		$Control/Return.visible = false
+		var SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.READ)
+		var SAVE_SAVE_FILE = FileAccess.open("user://save_file.save", FileAccess.WRITE)
+		SAVE_SAVE_FILE.store_var(SAVE_FILE.get_var())
+		SAVE_FILE.close()
+		SAVE_SAVE_FILE.close()
+		SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.WRITE)
+		SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
+		SAVE_FILE.close()
+	START = true
+	Autoloads.LAST_LOADED = 3
 
 
 func _on_return_pressed() -> void:
