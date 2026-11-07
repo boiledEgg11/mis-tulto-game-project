@@ -20,14 +20,20 @@
 [ext_resource type="Texture2D" uid="uid://df2omnm0h4dcf" path="res://assets/sprites/load_pressed_ui.png" id="18_wt704"]
 [ext_resource type="Texture2D" uid="uid://d1pya4qps1hcw" path="res://assets/sprites/load_selected_ui.png" id="19_2c1oc"]
 [ext_resource type="Texture2D" uid="uid://dccboadkuxfm2" path="res://assets/sprites/file_1_sprite.png" id="20_dt3bb"]
+[ext_resource type="Texture2D" uid="uid://cxp6vaocfgji3" path="res://assets/sprites/file_1_pressed_sprite.png" id="21_bc8a7"]
 [ext_resource type="Texture2D" uid="uid://c4t23ubdv2mf0" path="res://assets/sprites/file_2_sprite.png" id="21_uygnx"]
+[ext_resource type="Texture2D" uid="uid://cc7dl6dip42t4" path="res://assets/sprites/file_1_selected_sprite.png" id="22_83a62"]
 [ext_resource type="Texture2D" uid="uid://dlrhcf1jemvpj" path="res://assets/sprites/file_3_sprite.png" id="22_koyps"]
 [ext_resource type="Texture2D" uid="uid://nmuoew8rhtmr" path="res://assets/sprites/return_ui.png" id="23_ema1k"]
 [ext_resource type="Texture2D" uid="uid://cidb3cc5beehy" path="res://assets/sprites/return_pressed_ui.png" id="24_cbdbt"]
+[ext_resource type="Texture2D" uid="uid://cd5vqfseo7wmt" path="res://assets/sprites/file_2_pressed_sprite.png" id="24_iagg8"]
+[ext_resource type="Texture2D" uid="uid://cjdy5mvwudfk2" path="res://assets/sprites/file_2_selected_sprite.png" id="25_ignky"]
 [ext_resource type="Texture2D" uid="uid://chsa71rcicueq" path="res://assets/sprites/return_selected_ui.png" id="25_kjsss"]
 [ext_resource type="Script" uid="uid://bb5icce710kjn" path="res://codes/collision_shape_2d.gd" id="26_0djal"]
 [ext_resource type="Texture2D" uid="uid://bnxvoakjqh3as" path="res://assets/sprites/player_crouch.png" id="27_uwlpt"]
+[ext_resource type="Texture2D" uid="uid://buk2li5u3eng0" path="res://assets/sprites/file_3_presssed_sprite.png" id="27_xjhhg"]
 [ext_resource type="Texture2D" uid="uid://d05tg6cnnvuhb" path="res://assets/sprites/player_hurt.png" id="28_5ytpm"]
+[ext_resource type="Texture2D" uid="uid://yq8qomac3x42" path="res://assets/sprites/file_3_selected_sprite.png" id="28_u7mdp"]
 [ext_resource type="Texture2D" uid="uid://be42siuktuoj2" path="res://assets/sprites/player_idle.png" id="29_ckd1f"]
 [ext_resource type="Texture2D" uid="uid://dousl5g0sl2aj" path="res://assets/sprites/player_move.png" id="30_7c1a5"]
 [ext_resource type="Texture2D" uid="uid://by0xtcu6q3j2l" path="res://assets/placeholder_player.png" id="31_shnrd"]
@@ -435,14 +441,20 @@ vertical = true
 [node name="TextureButton4" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer2" unique_id=111981447]
 layout_mode = 2
 texture_normal = ExtResource("20_dt3bb")
+texture_pressed = ExtResource("21_bc8a7")
+texture_hover = ExtResource("22_83a62")
 
 [node name="TextureButton5" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer2" unique_id=1753140891]
 layout_mode = 2
 texture_normal = ExtResource("21_uygnx")
+texture_pressed = ExtResource("24_iagg8")
+texture_hover = ExtResource("25_ignky")
 
 [node name="TextureButton6" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer2" unique_id=2113500669]
 layout_mode = 2
 texture_normal = ExtResource("22_koyps")
+texture_pressed = ExtResource("27_xjhhg")
+texture_hover = ExtResource("28_u7mdp")
 
 [node name="BoxContainer3" type="BoxContainer" parent="Node2D2/Player/Camera2D/Control" unique_id=1955730591]
 layout_mode = 0

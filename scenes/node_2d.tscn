@@ -1,9 +1,107 @@
 [gd_scene format=3 uid="uid://bficcnd31abcj"]
 
+[ext_resource type="Script" uid="uid://dp6p7bbhvpr6v" path="res://scenes/main_scene.gd" id="1_4dvvg"]
+[ext_resource type="Texture2D" uid="uid://c6ofiv4iove36" path="res://assets/sprites/new_game_ui.png" id="3_08kqv"]
+[ext_resource type="Texture2D" uid="uid://b0ud3vgeynalw" path="res://assets/sprites/new_game_pressed__ui.png" id="4_f6ptj"]
+[ext_resource type="Texture2D" uid="uid://cjxm4ujxgv4jj" path="res://assets/sprites/new_game_selected__ui.png" id="5_hsdmi"]
+[ext_resource type="Texture2D" uid="uid://ct1bbxoycyeg4" path="res://assets/sprites/continue_ui.png" id="6_ifa78"]
+[ext_resource type="Texture2D" uid="uid://ctoi4fuak8glt" path="res://assets/sprites/continue_pressed_ui.png" id="7_xtx0q"]
+[ext_resource type="Texture2D" uid="uid://h8docxgtgl5a" path="res://assets/sprites/continue_selected_ui.png" id="8_3kg8w"]
+[ext_resource type="Texture2D" uid="uid://cxp6vaocfgji3" path="res://assets/sprites/file_1_pressed_sprite.png" id="10_hsdmi"]
+[ext_resource type="Texture2D" uid="uid://cc7dl6dip42t4" path="res://assets/sprites/file_1_selected_sprite.png" id="11_ifa78"]
+[ext_resource type="Texture2D" uid="uid://cd5vqfseo7wmt" path="res://assets/sprites/file_2_pressed_sprite.png" id="13_xtx0q"]
+[ext_resource type="Texture2D" uid="uid://cjdy5mvwudfk2" path="res://assets/sprites/file_2_selected_sprite.png" id="14_3kg8w"]
+[ext_resource type="Texture2D" uid="uid://nmuoew8rhtmr" path="res://assets/sprites/return_ui.png" id="14_pblkq"]
+[ext_resource type="Texture2D" uid="uid://buk2li5u3eng0" path="res://assets/sprites/file_3_presssed_sprite.png" id="16_x63s8"]
+[ext_resource type="Texture2D" uid="uid://yq8qomac3x42" path="res://assets/sprites/file_3_selected_sprite.png" id="17_0q20i"]
 [ext_resource type="Script" uid="uid://r5d8jl1g67yx" path="res://autoloads.gd" id="20_k6u5g"]
+[ext_resource type="Texture2D" uid="uid://cidb3cc5beehy" path="res://assets/sprites/return_pressed_ui.png" id="22_g3arh"]
+[ext_resource type="Texture2D" uid="uid://chsa71rcicueq" path="res://assets/sprites/return_selected_ui.png" id="23_unr0g"]
+[ext_resource type="Texture2D" uid="uid://dccboadkuxfm2" path="res://assets/sprites/file_1_sprite.png" id="24_unr0g"]
+[ext_resource type="Texture2D" uid="uid://c4t23ubdv2mf0" path="res://assets/sprites/file_2_sprite.png" id="25_7pfoh"]
+[ext_resource type="Texture2D" uid="uid://dlrhcf1jemvpj" path="res://assets/sprites/file_3_sprite.png" id="26_mchk4"]
 
 [node name="Node2D" type="Node2D" unique_id=1755812023 groups=["SAVE"]]
 process_mode = 3
+script = ExtResource("1_4dvvg")
 
 [node name="Node2D" type="Node2D" parent="." unique_id=585567809]
 script = ExtResource("20_k6u5g")
+
+[node name="Control" type="Control" parent="." unique_id=2101672007]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="GameStarts" type="BoxContainer" parent="Control" unique_id=1833633535]
+layout_mode = 0
+offset_left = -100.0
+offset_top = -42.0
+offset_right = 100.0
+offset_bottom = 42.0
+alignment = 1
+vertical = true
+
+[node name="NewGame" type="TextureButton" parent="Control/GameStarts" unique_id=1768619306]
+layout_mode = 2
+texture_normal = ExtResource("3_08kqv")
+texture_pressed = ExtResource("4_f6ptj")
+texture_hover = ExtResource("5_hsdmi")
+
+[node name="Continue" type="TextureButton" parent="Control/GameStarts" unique_id=1330176628]
+layout_mode = 2
+texture_normal = ExtResource("6_ifa78")
+texture_pressed = ExtResource("7_xtx0q")
+texture_hover = ExtResource("8_3kg8w")
+
+[node name="SaveFiles" type="BoxContainer" parent="Control" unique_id=1542631279]
+layout_mode = 0
+offset_left = -100.0
+offset_top = -64.0
+offset_right = 100.0
+offset_bottom = 64.0
+alignment = 1
+vertical = true
+
+[node name="SaveFile1" type="TextureButton" parent="Control/SaveFiles" unique_id=58168506]
+layout_mode = 2
+texture_normal = ExtResource("24_unr0g")
+texture_pressed = ExtResource("10_hsdmi")
+texture_hover = ExtResource("11_ifa78")
+
+[node name="SaveFile2" type="TextureButton" parent="Control/SaveFiles" unique_id=2052254307]
+layout_mode = 2
+texture_normal = ExtResource("25_7pfoh")
+texture_pressed = ExtResource("13_xtx0q")
+texture_hover = ExtResource("14_3kg8w")
+
+[node name="SaveFile3" type="TextureButton" parent="Control/SaveFiles" unique_id=2019446086]
+layout_mode = 2
+texture_normal = ExtResource("26_mchk4")
+texture_pressed = ExtResource("16_x63s8")
+texture_hover = ExtResource("17_0q20i")
+
+[node name="Return" type="BoxContainer" parent="Control" unique_id=1720869481]
+layout_mode = 0
+offset_left = 110.0
+offset_top = -70.0
+offset_right = 150.0
+offset_bottom = -30.0
+scale = Vector2(0.5, 0.5)
+
+[node name="Return" type="TextureButton" parent="Control/Return" unique_id=1387448733]
+layout_mode = 2
+texture_normal = ExtResource("14_pblkq")
+texture_pressed = ExtResource("22_g3arh")
+texture_hover = ExtResource("23_unr0g")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1461461182]
+zoom = Vector2(4, 4)
+
+[connection signal="pressed" from="Control/GameStarts/NewGame" to="." method="_on_new_game_pressed"]
+[connection signal="pressed" from="Control/GameStarts/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="Control/SaveFiles/SaveFile1" to="." method="_on_save_file_1_pressed"]
+[connection signal="pressed" from="Control/SaveFiles/SaveFile2" to="." method="_on_save_file_2_pressed"]
+[connection signal="pressed" from="Control/SaveFiles/SaveFile3" to="." method="_on_save_file_3_pressed"]
+[connection signal="pressed" from="Control/Return/Return" to="." method="_on_return_pressed"]

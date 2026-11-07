@@ -14,7 +14,6 @@ func _reset(file):
 	$Player.POSSESS_END = true
 	await get_tree().process_frame
 	_load(file)
-	print($Player.POSSESS_END)
 	Autoloads.POSSESS_AMOUNT = 0
 	Autoloads.PLAYER_POSSESSING = false
 	await get_tree().process_frame
@@ -55,8 +54,6 @@ func _enemy_set():
 		add_child.call_deferred(POSSESS_TARGET)
 		POSSESS_TARGET.call("_individual_set", Autoloads.POSSESS_TARGET.individual)
 		POSSESS_TARGET.call("_possess_start")
-
-
 func _on_texture_button_pressed() -> void:
 	$Player/Camera2D/Control.FILE_OPEN = true
 	SAVE_READY = true
