@@ -42,8 +42,14 @@ func _ready() -> void:
 	var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
 	var time_3_display = time_format % [DATA_3.hour, DATA_3.minute]
 	$Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton4/Label.text = time_1_display
+	$Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton4/Label2.text = DATA_1.place
+	$Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton4/Label3.text = DATA_1.enemy
 	$Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton5/Label.text = time_2_display
+	$Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton5/Label2.text = DATA_2.place
+	$Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton5/Label3.text = DATA_2.enemy
 	$Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton6/Label.text = time_3_display
+	$Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton6/Label2.text = DATA_3.place
+	$Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton6/Label3.text = DATA_3.enemy
 func _pause():
 	get_tree().paused = true
 	Autoloads.PAUSE = true

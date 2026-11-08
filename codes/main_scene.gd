@@ -65,8 +65,14 @@ func _ready() -> void:
 	var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
 	var time_3_display = time_format % [DATA_3.hour, DATA_3.minute]
 	$Control/SaveFiles/SaveFile1/Label.text = time_1_display
+	$Control/SaveFiles/SaveFile1/Label2.text = DATA_1.place
+	$Control/SaveFiles/SaveFile1/Label3.text = DATA_1.enemy
 	$Control/SaveFiles/SaveFile2/Label.text = time_2_display
+	$Control/SaveFiles/SaveFile2/Label2.text = DATA_2.place
+	$Control/SaveFiles/SaveFile2/Label3.text = DATA_2.enemy
 	$Control/SaveFiles/SaveFile3/Label.text = time_3_display
+	$Control/SaveFiles/SaveFile3/Label2.text = DATA_3.place
+	$Control/SaveFiles/SaveFile3/Label3.text = DATA_3.enemy
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	if Autoloads.CURRENT_STATE == "home":
