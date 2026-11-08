@@ -6,6 +6,11 @@ var START = false
 var STARTED = false
 var OPEN_FILE = 1
 var CHARGE = 0
+var file_new: Dictionary = {
+	"file_1": false,
+	"file_2": false,
+	"file_3": false
+}
 var SAVE_DEFAULT: Dictionary = {
 	"place": "none",
 	"enemy": "none",
@@ -31,6 +36,12 @@ func _ready() -> void:
 	var DATA_1 = SAVE_ACCESS_1.get_var()
 	var DATA_2 = SAVE_ACCESS_2.get_var()
 	var DATA_3 = SAVE_ACCESS_3.get_var()
+	if DATA_1 == SAVE_DEFAULT:
+		file_new.file_1 = true
+	if DATA_2 == SAVE_DEFAULT:
+		file_new.file_2 = true
+	if DATA_3 == SAVE_DEFAULT:
+		file_new.file_3 = true
 	DATA_1.hour = int(DATA_1.play_time / 360000)
 	DATA_1.minute = int(DATA_1.play_time / 60000 - DATA_1.hour * 60)
 	DATA_2.hour = int(DATA_2.play_time / 360000)
@@ -64,17 +75,35 @@ func _ready() -> void:
 	var time_1_display = time_format % [DATA_1.hour, DATA_1.minute]
 	var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
 	var time_3_display = time_format % [DATA_3.hour, DATA_3.minute]
-	$Control/SaveFiles/SaveFile1/Label.text = time_1_display
-	$Control/SaveFiles/SaveFile1/Label2.text = DATA_1.place
-	$Control/SaveFiles/SaveFile1/Label3.text = DATA_1.enemy
-	$Control/SaveFiles/SaveFile2/Label.text = time_2_display
-	$Control/SaveFiles/SaveFile2/Label2.text = DATA_2.place
-	$Control/SaveFiles/SaveFile2/Label3.text = DATA_2.enemy
-	$Control/SaveFiles/SaveFile3/Label.text = time_3_display
-	$Control/SaveFiles/SaveFile3/Label2.text = DATA_3.place
-	$Control/SaveFiles/SaveFile3/Label3.text = DATA_3.enemy
+	$Control/SaveFiles/SaveFile1/Control/Label.text = time_1_display
+	$Control/SaveFiles/SaveFile1/Control/Label2.text = DATA_1.place
+	$Control/SaveFiles/SaveFile1/Control/Label3.text = DATA_1.enemy
+	$Control/SaveFiles/SaveFile2/Control/Label.text = time_2_display
+	$Control/SaveFiles/SaveFile2/Control/Label2.text = DATA_2.place
+	$Control/SaveFiles/SaveFile2/Control/Label3.text = DATA_2.enemy
+	$Control/SaveFiles/SaveFile3/Control/Label.text = time_3_display
+	$Control/SaveFiles/SaveFile3/Control/Label2.text = DATA_3.place
+	$Control/SaveFiles/SaveFile3/Control/Label3.text = DATA_3.enemy
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
+	if file_new.file_1 and MODE == "continue":
+		$Control/SaveFiles/SaveFile1.disabled = true
+		$Control/SaveFiles/SaveFile1/Control.visible = false
+	else:
+		$Control/SaveFiles/SaveFile1.disabled = false
+		$Control/SaveFiles/SaveFile1/Control.visible = true
+	if file_new.file_2 and MODE == "continue":
+		$Control/SaveFiles/SaveFile2.disabled = true
+		$Control/SaveFiles/SaveFile2/Control.visible = false
+	else:
+		$Control/SaveFiles/SaveFile2.disabled = false
+		$Control/SaveFiles/SaveFile2/Control.visible = true
+	if file_new.file_3 and MODE == "continue":
+		$Control/SaveFiles/SaveFile3.disabled = true
+		$Control/SaveFiles/SaveFile3/Control.visible = false
+	else:
+		$Control/SaveFiles/SaveFile3.disabled = false
+		$Control/SaveFiles/SaveFile3/Control.visible = true
 	if Autoloads.CURRENT_STATE == "home":
 		Autoloads.CURRENT_STATE = "start"
 		START = false
@@ -84,6 +113,7 @@ func _process(delta: float) -> void:
 		print("home_return")
 	if START and not STARTED:
 		OPENED = false
+		$Control/Label.visible = false
 		$Control/GameStarts.visible = false
 		$Control/SaveFiles.visible = false
 		$Control/Return.visible = false
@@ -120,9 +150,11 @@ func _process(delta: float) -> void:
 			CHARGE = 0
 		if OPENED:
 			$Control/GameStarts.visible = false
+			$Control/Label.visible = false
 			$Control/SaveFiles.visible = true
 			$Control/Return.visible = true
 		if not OPENED:
+			$Control/Label.visible = true
 			$Control/GameStarts.visible = true
 			$Control/SaveFiles.visible = false
 			$Control/Return.visible = false
