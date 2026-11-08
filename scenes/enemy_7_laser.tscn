@@ -8,4 +8,6 @@ collide_with_areas = true
 script = ExtResource("1_v5afx")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1544211318]
-points = PackedVector2Array(0, 0, 0, 0)
+points = PackedVector2Array(0, 0, 0, 10)
+width = 20.0
+default_color = Color(0, 1, 1, 1)
