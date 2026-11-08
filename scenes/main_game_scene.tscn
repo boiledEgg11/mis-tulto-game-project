@@ -20,10 +20,13 @@
 [ext_resource type="Texture2D" uid="uid://df2omnm0h4dcf" path="res://assets/sprites/load_pressed_ui.png" id="18_wt704"]
 [ext_resource type="Texture2D" uid="uid://d1pya4qps1hcw" path="res://assets/sprites/load_selected_ui.png" id="19_2c1oc"]
 [ext_resource type="Texture2D" uid="uid://dccboadkuxfm2" path="res://assets/sprites/file_1_sprite.png" id="20_dt3bb"]
+[ext_resource type="Texture2D" uid="uid://c13h5fvu1vqri" path="res://assets/sprites/home_ui.png" id="20_ignky"]
 [ext_resource type="Texture2D" uid="uid://cxp6vaocfgji3" path="res://assets/sprites/file_1_pressed_sprite.png" id="21_bc8a7"]
 [ext_resource type="Texture2D" uid="uid://c4t23ubdv2mf0" path="res://assets/sprites/file_2_sprite.png" id="21_uygnx"]
+[ext_resource type="Texture2D" uid="uid://cvr2mlron8xwp" path="res://assets/sprites/home_pressed_ui.png" id="21_xjhhg"]
 [ext_resource type="Texture2D" uid="uid://cc7dl6dip42t4" path="res://assets/sprites/file_1_selected_sprite.png" id="22_83a62"]
 [ext_resource type="Texture2D" uid="uid://dlrhcf1jemvpj" path="res://assets/sprites/file_3_sprite.png" id="22_koyps"]
+[ext_resource type="Texture2D" uid="uid://ew3aa34nb58j" path="res://assets/sprites/home_selected_ui.png" id="22_u7mdp"]
 [ext_resource type="Texture2D" uid="uid://nmuoew8rhtmr" path="res://assets/sprites/return_ui.png" id="23_ema1k"]
 [ext_resource type="Texture2D" uid="uid://cidb3cc5beehy" path="res://assets/sprites/return_pressed_ui.png" id="24_cbdbt"]
 [ext_resource type="Texture2D" uid="uid://cd5vqfseo7wmt" path="res://assets/sprites/file_2_pressed_sprite.png" id="24_iagg8"]
@@ -431,9 +434,9 @@ texture_hover = ExtResource("19_2c1oc")
 
 [node name="HomeReturn" type="TextureButton" parent="Node2D2/Player/Camera2D/Control/BoxContainer" unique_id=1519413864]
 layout_mode = 2
-texture_normal = ExtResource("20_dt3bb")
-texture_pressed = ExtResource("21_bc8a7")
-texture_hover = ExtResource("22_83a62")
+texture_normal = ExtResource("20_ignky")
+texture_pressed = ExtResource("21_xjhhg")
+texture_hover = ExtResource("22_u7mdp")
 
 [node name="BoxContainer2" type="BoxContainer" parent="Node2D2/Player/Camera2D/Control" unique_id=555938803]
 layout_mode = 0

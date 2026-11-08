@@ -6,7 +6,8 @@ func _save(enemy, file):
 	Autoloads.SAVE_STUFF = {
 		"place": location,
 		"enemy": Autoloads.POSSESS_TARGET.species,
-		"enemy_id": Autoloads.POSSESS_TARGET.individual
+		"enemy_id": Autoloads.POSSESS_TARGET.individual,
+		"play_time": Autoloads.play_time
 	}
 	_save_game(file)
 func _placement(placement):
@@ -29,6 +30,7 @@ func _save_2(file):
 	if file == 3:
 		print("file 3")
 		SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.WRITE)
+	await get_tree().process_frame
 	SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
 	print("added!")
 	SAVE_FILE.close()

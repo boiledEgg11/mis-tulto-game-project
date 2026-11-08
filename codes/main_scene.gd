@@ -5,8 +5,35 @@ var MODE = "new"
 var START = false
 var STARTED = false
 var OPEN_FILE = 1
+var SAVE_DEFAULT: Dictionary = {
+	"place": "none",
+	"enemy": "none",
+	"enemy_id": 0,
+	"play_time": 0
+}
+func _ready() -> void:
+	if not FileAccess.file_exists("user://save_1.save"):
+		var SAVE_1 = FileAccess.open("user://save_1.save", FileAccess.WRITE)
+		SAVE_1.store_var(SAVE_DEFAULT.duplicate())
+		SAVE_1.close()
+	if not FileAccess.file_exists("user://save_2.save"):
+		var SAVE_2 = FileAccess.open("user://save_2.save", FileAccess.WRITE)
+		SAVE_2.store_var(SAVE_DEFAULT.duplicate())
+		SAVE_2.close()
+	if not FileAccess.file_exists("user://save_3.save"):
+		var SAVE_3 = FileAccess.open("user://save_file3.save", FileAccess.WRITE)
+		SAVE_3.store_var(SAVE_DEFAULT.duplicate())
+		SAVE_3.close()
 func _process(delta: float) -> void:
+	if Autoloads.CURRENT_STATE == "home":
+		Autoloads.CURRENT_STATE = "start"
+		START = false
+		STARTED = false
+		$Camera2D.enabled = true
+		$Control.visible = true
+		print("home_return")
 	if START and not STARTED:
+		OPENED = false
 		$Control/GameStarts.visible = false
 		$Control/SaveFiles.visible = false
 		$Control/Return.visible = false
@@ -55,12 +82,10 @@ func _on_save_file_1_pressed() -> void:
 		var SAVE_FILE = FileAccess.open("user://save_1.save", FileAccess.READ)
 		var SAVE_SAVE_FILE = FileAccess.open("user://save_file.save", FileAccess.WRITE)
 		SAVE_SAVE_FILE.store_var(SAVE_FILE.get_var())
-		print(SAVE_FILE.get_var())
-		print(SAVE_SAVE_FILE.get_var())
 		SAVE_FILE.close()
 		SAVE_SAVE_FILE.close()
 		SAVE_FILE = FileAccess.open("user://save_1.save", FileAccess.WRITE)
-		SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
+		SAVE_FILE.store_var(SAVE_DEFAULT.duplicate())
 		SAVE_FILE.close()
 	OPEN_FILE = 1
 	START = true
@@ -78,7 +103,7 @@ func _on_save_file_2_pressed() -> void:
 		SAVE_FILE.close()
 		SAVE_SAVE_FILE.close()
 		SAVE_FILE = FileAccess.open("user://save_2.save", FileAccess.WRITE)
-		SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
+		SAVE_FILE.store_var(SAVE_DEFAULT.duplicate())
 		SAVE_FILE.close()
 	OPEN_FILE = 2
 	START = true
@@ -96,7 +121,7 @@ func _on_save_file_3_pressed() -> void:
 		SAVE_FILE.close()
 		SAVE_SAVE_FILE.close()
 		SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.WRITE)
-		SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
+		SAVE_FILE.store_var(SAVE_DEFAULT.duplicate())
 		SAVE_FILE.close()
 	OPEN_FILE = 3
 	START = true
