@@ -34,6 +34,8 @@ func _load(file):
 			$Player.position = Vector2i(232, 136)
 		"test_2":
 			$Player.position = Vector2i(360, -8)
+		"test_3":
+			$Player.position = Vector2i(1048, -56)
 		_:
 			$Player.position = Vector2i(0, 0)
 func _enemy_set():
@@ -51,6 +53,8 @@ func _enemy_set():
 				POSSESS_TARGET = preload("res://scenes/enemy5.tscn").instantiate()
 			"TestEnemy6":
 				POSSESS_TARGET = preload("res://scenes/enemy6.tscn").instantiate()
+			"TestEnemy7":
+				POSSESS_TARGET = preload("res://scenes/enemy7.tscn").instantiate()
 		await get_tree().process_frame
 		add_child.call_deferred(POSSESS_TARGET)
 		POSSESS_TARGET.call("_individual_set", Autoloads.POSSESS_TARGET.individual)
