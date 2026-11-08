@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://h8docxgtgl5a" path="res://assets/sprites/continue_selected_ui.png" id="8_3kg8w"]
 [ext_resource type="Texture2D" uid="uid://cxp6vaocfgji3" path="res://assets/sprites/file_1_pressed_sprite.png" id="10_hsdmi"]
 [ext_resource type="Texture2D" uid="uid://cc7dl6dip42t4" path="res://assets/sprites/file_1_selected_sprite.png" id="11_ifa78"]
+[ext_resource type="Texture2D" uid="uid://dr0l0b56piqp7" path="res://assets/sprites/empty_file_sprite.png" id="12_kmyi7"]
 [ext_resource type="Texture2D" uid="uid://cd5vqfseo7wmt" path="res://assets/sprites/file_2_pressed_sprite.png" id="13_xtx0q"]
 [ext_resource type="Texture2D" uid="uid://cjdy5mvwudfk2" path="res://assets/sprites/file_2_selected_sprite.png" id="14_3kg8w"]
 [ext_resource type="Texture2D" uid="uid://nmuoew8rhtmr" path="res://assets/sprites/return_ui.png" id="14_pblkq"]
@@ -449,7 +450,7 @@ layout_mode = 2
 texture_normal = ExtResource("24_unr0g")
 texture_pressed = ExtResource("10_hsdmi")
 texture_hover = ExtResource("11_ifa78")
-texture_disabled = ExtResource("4_f6ptj")
+texture_disabled = ExtResource("12_kmyi7")
 
 [node name="Control" type="Control" parent="Control/SaveFiles/SaveFile1" unique_id=472807458]
 anchors_preset = 0
@@ -491,7 +492,7 @@ layout_mode = 2
 texture_normal = ExtResource("25_7pfoh")
 texture_pressed = ExtResource("13_xtx0q")
 texture_hover = ExtResource("14_3kg8w")
-texture_disabled = ExtResource("4_f6ptj")
+texture_disabled = ExtResource("12_kmyi7")
 
 [node name="Control" type="Control" parent="Control/SaveFiles/SaveFile2" unique_id=789280251]
 anchors_preset = 0
@@ -533,7 +534,7 @@ layout_mode = 2
 texture_normal = ExtResource("26_mchk4")
 texture_pressed = ExtResource("16_x63s8")
 texture_hover = ExtResource("17_0q20i")
-texture_disabled = ExtResource("4_f6ptj")
+texture_disabled = ExtResource("12_kmyi7")
 
 [node name="Control" type="Control" parent="Control/SaveFiles/SaveFile3" unique_id=412601895]
 anchors_preset = 0
