@@ -30,6 +30,7 @@
 [ext_resource type="Texture2D" uid="uid://dr0l0b56piqp7" path="res://assets/sprites/empty_file_sprite.png" id="22_kwefq"]
 [ext_resource type="Texture2D" uid="uid://ew3aa34nb58j" path="res://assets/sprites/home_selected_ui.png" id="22_u7mdp"]
 [ext_resource type="Texture2D" uid="uid://nmuoew8rhtmr" path="res://assets/sprites/return_ui.png" id="23_ema1k"]
+[ext_resource type="Theme" uid="uid://bcwfe016yu7op" path="res://assets/font.res" id="23_kwefq"]
 [ext_resource type="Texture2D" uid="uid://cidb3cc5beehy" path="res://assets/sprites/return_pressed_ui.png" id="24_cbdbt"]
 [ext_resource type="Texture2D" uid="uid://cd5vqfseo7wmt" path="res://assets/sprites/file_2_pressed_sprite.png" id="24_iagg8"]
 [ext_resource type="Texture2D" uid="uid://cjdy5mvwudfk2" path="res://assets/sprites/file_2_selected_sprite.png" id="25_ignky"]
@@ -113,13 +114,6 @@ sources/0 = SubResource("TileSetAtlasSource_g5sq0")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mlyi0"]
 size = Vector2(400, 200)
-
-[sub_resource type="Theme" id="Theme_u7mdp"]
-default_font = ExtResource("12_xjhhg")
-default_font_size = 12
-/colors/Save_normal = Color(0.3019608, 0.49411765, 0.5803922, 1)
-/colors/Save_pressed = Color(0.7294118, 0.91764706, 1, 1)
-/colors/Save_selected = Color(0.8509804, 0.9529412, 1, 1)
 
 [sub_resource type="Image" id="Image_k6u5g"]
 data = {
@@ -2249,7 +2243,7 @@ offset_left = 32.0
 offset_top = 4.0
 offset_right = 72.0
 offset_bottom = 15.0
-theme = SubResource("Theme_u7mdp")
+theme = ExtResource("23_kwefq")
 theme_override_fonts/font = SubResource("FontFile_xjhhg")
 theme_override_font_sizes/font_size = 16
 text = "100:00"
@@ -2260,6 +2254,7 @@ offset_left = 64.0
 offset_top = 13.0
 offset_right = 126.0
 offset_bottom = 24.0
+theme = ExtResource("23_kwefq")
 theme_override_fonts/font = SubResource("FontFile_0djal")
 theme_override_font_sizes/font_size = 16
 text = "Location"
