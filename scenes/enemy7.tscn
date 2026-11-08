@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://b87gkrr4wn4v4" path="res://scenes/enemy_test7.gd" id="1_7dl0u"]
 [ext_resource type="Script" uid="uid://c2lrpxkosfn2e" path="res://codes/enemies.gd" id="1_88gmq"]
 [ext_resource type="Texture2D" uid="uid://drgtym1my3gso" path="res://assets/placeholder_enemy.png" id="2_88gmq"]
+[ext_resource type="PackedScene" uid="uid://c07jva184p0nf" path="res://scenes/enemy_7_laser.tscn" id="4_8dftu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2jbxu"]
 size = Vector2(15.5, 15.5)
@@ -14,7 +15,7 @@ size = Vector2(0.1, 15)
 size = Vector2(15.5, 15.5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b5jwi"]
-size = Vector2(1, 1)
+size = Vector2(15.5, 1)
 
 [node name="Node2D" type="Node2D" unique_id=1013304387]
 script = ExtResource("1_88gmq")
@@ -44,14 +45,13 @@ collision_mask = 8
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/EnemyArea" unique_id=1105517453]
 shape = SubResource("RectangleShape2D_1cve1")
 
-[node name="groundchecker" type="RayCast2D" parent="EnemyTest" unique_id=1928494688]
-target_position = Vector2(0, 90)
-
 [node name="GroundExistingChecker" type="Area2D" parent="EnemyTest" unique_id=54191000]
-position = Vector2(9, 8)
+position = Vector2(0, 8)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/GroundExistingChecker" unique_id=1889085612]
 shape = SubResource("RectangleShape2D_b5jwi")
+
+[node name="Enemy7Laser" parent="EnemyTest" unique_id=62884777 instance=ExtResource("4_8dftu")]
 
 [connection signal="body_entered" from="EnemyTest/LeftCollisionCheck" to="EnemyTest" method="_on_left_collision_check_body_entered"]
 [connection signal="area_entered" from="EnemyTest/EnemyArea" to="EnemyTest" method="_on_enemy_area_area_entered"]

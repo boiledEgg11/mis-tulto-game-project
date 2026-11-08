@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c07jva184p0nf"]
+
+[ext_resource type="Script" uid="uid://unvvm31rftgl" path="res://scenes/enemy_7_laser.gd" id="1_v5afx"]
+
+[node name="Enemy7Laser" type="RayCast2D" unique_id=62884777]
+enabled = false
+target_position = Vector2(0, 0)
+collide_with_areas = true
+script = ExtResource("1_v5afx")

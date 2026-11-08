@@ -10,7 +10,6 @@ var STARTED = false
 var DATA_EMPTY
 var OPEN_FILE = 1
 var CHARGE = 0
-
 var file_new: Dictionary = {
 	"file_1": false,
 	"file_2": false,
@@ -188,28 +187,6 @@ func _process(delta: float) -> void:
 func _on_new_game_pressed() -> void:
 	OPENED = true
 	MODE = "new"
-	$Control/SaveFiles/SaveFile1.disabled = false
-	$Control/SaveFiles/SaveFile1/Control.visible = true
-	$Control/SaveFiles/SaveFile2.disabled = false
-	$Control/SaveFiles/SaveFile2/Control.visible = true
-	$Control/SaveFiles/SaveFile3.disabled = false
-	$Control/SaveFiles/SaveFile3/Control.visible = true
-	OPENED = false
-	$Control/Label.visible = false
-	$Control/GameStarts.visible = false
-	$Control/SaveFiles.visible = false
-	$Control/Return.visible = false
-	STARTED = true
-	$Camera2D.enabled = false
-	$Control.visible = false
-	MAIN = preload("res://main_game_scene.tscn").instantiate()
-	add_child(MAIN)
-	await get_tree().process_frame
-	await get_tree().process_frame
-	await get_tree().process_frame
-	await get_tree().process_frame
-	await get_tree().process_frame
-	Autoloads.START_TIME = Time.get_ticks_msec()
 func _on_continue_pressed() -> void:
 	OPENED = true
 	MODE = "continue"

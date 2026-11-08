@@ -47,6 +47,10 @@ moving_tile=""
 moving_tile_y=""
 is_on_screen=""
 
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+
 [input]
 
 left={

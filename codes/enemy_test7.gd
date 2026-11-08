@@ -8,32 +8,45 @@ var POSSESSED = false
 var START = false
 var individual
 var WALL_EXISTED = false
+var CHARGE = 0
+var CHARGE_LOCK = false
+var CHARGE_LOW = false
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
+func _attack():
+	CHARGE_LOCK = true
+	$Enemy7Laser.attacking = true
+	CHARGE_LOW = true
 func _physics_process(delta: float) -> void:
 	if START:
 		match individual:
 			1:
 				print("placed")
 				position = Vector2i(1016, -56)
+				$Enemy7Laser._placement(0, 0, 0, -200)
 			_:
 				print("none")
 				position = Vector2i(0, 0)
 		START = false
 	move_and_slide()
 	if possess_health > 0:
-		var standing = $groundchecker.get_collider()
-		if standing:
-			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
+		if not CHARGE_LOCK:
+			CHARGE += 1
+		if CHARGE > 60:
+			CHARGE = 0
+			print("attack!")
+			_attack()
+		var standing = $GroundExistingChecker.get_overlapping_bodies()
+		for body in standing:
+			if body.is_in_group("moving_tile") and Autoloads.is_moving:
 				position.x += Autoloads.tile_move
-			if standing.is_in_group("moving_tile_y") and Autoloads.is_moving:
+			if body.is_in_group("moving_tile_y") and Autoloads.is_moving:
 				@warning_ignore("integer_division")
 				position.y -= Autoloads.tile_move / 2
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		velocity.x = direction * STATUS.speed
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
