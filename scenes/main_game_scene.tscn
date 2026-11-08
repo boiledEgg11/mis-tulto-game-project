@@ -2447,7 +2447,7 @@ shape = SubResource("RectangleShape2D_d7vhh")
 
 [node name="DamageCollision" type="Area2D" parent="Node2D2/Player" unique_id=1480710148]
 collision_layer = 0
-collision_mask = 18
+collision_mask = 26
 
 [node name="PlayerDamageCollision" type="CollisionShape2D" parent="Node2D2/Player/DamageCollision" unique_id=1192970508]
 shape = SubResource("RectangleShape2D_38t8m")
