@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b0pbyi5sfg0cs"]
 
-[ext_resource type="Script" uid="uid://c2lrpxkosfn2e" path="res://scenes/enemies.gd" id="1_n665k"]
+[ext_resource type="Script" uid="uid://c2lrpxkosfn2e" path="res://codes/enemies.gd" id="1_n665k"]
 [ext_resource type="Script" uid="uid://cc0rtmvte20dk" path="res://codes/rigid_body_2d.gd" id="1_nb0t0"]
 [ext_resource type="Texture2D" uid="uid://drgtym1my3gso" path="res://assets/placeholder_enemy.png" id="2_n665k"]
 

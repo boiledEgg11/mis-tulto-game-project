@@ -70,14 +70,14 @@ func _on_texture_button_2_pressed() -> void:
 	$Player/Camera2D/Control.FILE_OPEN = true
 	SAVE_READY =  false
 func _on_texture_button_4_pressed() -> void:
-	Autoloads.play_time += Time.get_ticks_msec() - Autoloads.START_TIME
+	Autoloads.play_time = Time.get_ticks_msec() - Autoloads.START_TIME + Autoloads.recorded_time
 	Autoloads.played_time.hour = int(Autoloads.play_time / 360000)
 	Autoloads.played_time.minute = Autoloads.played_time.hour * -60 + int(Autoloads.play_time / 60000)
 	print(Autoloads.played_time.hour)
 	print(Autoloads.played_time.minute)
 	_save_files(1)
 func _on_texture_button_5_pressed() -> void:
-	Autoloads.play_time = Time.get_ticks_msec() - Autoloads.START_TIME
+	Autoloads.play_time = Time.get_ticks_msec() - Autoloads.START_TIME + Autoloads.recorded_time
 	Autoloads.played_time.hour = int(Autoloads.play_time / 360000)
 	Autoloads.played_time.minute = Autoloads.played_time.hour * -60 + int(Autoloads.play_time / 60000)
 	_save_files(2)
@@ -88,7 +88,7 @@ func _save_files(file):
 	if not SAVE_READY:
 		_reset(file)
 func _on_texture_button_6_pressed() -> void:
-	Autoloads.play_time = Time.get_ticks_msec() - Autoloads.START_TIME
+	Autoloads.play_time = Time.get_ticks_msec() - Autoloads.START_TIME + Autoloads.recorded_time
 	Autoloads.played_time.hour = int(Autoloads.play_time / 360000)
 	Autoloads.played_time.minute = Autoloads.played_time.hour * -60 + int(Autoloads.play_time / 60000)
 	_save_files(3)

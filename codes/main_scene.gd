@@ -5,6 +5,7 @@ var MODE = "new"
 var START = false
 var STARTED = false
 var OPEN_FILE = 1
+var CHARGE = 0
 var SAVE_DEFAULT: Dictionary = {
 	"place": "none",
 	"enemy": "none",
@@ -21,9 +22,36 @@ func _ready() -> void:
 		SAVE_2.store_var(SAVE_DEFAULT.duplicate())
 		SAVE_2.close()
 	if not FileAccess.file_exists("user://save_3.save"):
-		var SAVE_3 = FileAccess.open("user://save_file3.save", FileAccess.WRITE)
+		var SAVE_3 = FileAccess.open("user://save_3.save", FileAccess.WRITE)
 		SAVE_3.store_var(SAVE_DEFAULT.duplicate())
 		SAVE_3.close()
+	var SAVE_ACCESS_1 = FileAccess.open("user://save_1.save", FileAccess.READ)
+	var SAVE_ACCESS_2 = FileAccess.open("user://save_2.save", FileAccess.READ)
+	var SAVE_ACCESS_3 = FileAccess.open("user://save_3.save", FileAccess.READ)
+	var DATA_1 = SAVE_ACCESS_1.get_var()
+	var DATA_2 = SAVE_ACCESS_2.get_var()
+	var DATA_3 = SAVE_ACCESS_3.get_var()
+	DATA_1.hour = int(DATA_1.play_time / 360000)
+	DATA_1.minute = int(DATA_1.play_time / 60000 - DATA_1.hour * 60)
+	DATA_2.hour = int(DATA_2.play_time / 360000)
+	DATA_2.minute = int(DATA_2.play_time / 60000 - DATA_2.hour * 60)
+	DATA_3.hour = int(DATA_3.play_time / 360000)
+	DATA_3.minute = int(DATA_3.play_time / 60000 - DATA_3.hour * 60)
+	var extra_zero = "0%s"
+	if DATA_1.minute < 10:
+		DATA_1.minute  = extra_zero % [DATA_1.minute]
+	if DATA_2.minute < 10:
+		DATA_2.minute  = extra_zero % [DATA_2.minute]
+	if DATA_3.minute < 10:
+		DATA_3.minute  = extra_zero % [DATA_3.minute]
+	var time_format = "%s:%s"
+	var time_1_display = time_format % [DATA_1.hour, DATA_1.minute]
+	var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
+	var time_3_display = time_format % [DATA_3.hour, DATA_3.minute]
+	$Control/SaveFiles/SaveFile1/Label.text = time_1_display
+	$Control/SaveFiles/SaveFile2/Label.text = time_2_display
+	$Control/SaveFiles/SaveFile3/Label.text = time_3_display
+@warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	if Autoloads.CURRENT_STATE == "home":
 		Autoloads.CURRENT_STATE = "start"
@@ -47,6 +75,7 @@ func _process(delta: float) -> void:
 		await get_tree().process_frame
 		await get_tree().process_frame
 		await get_tree().process_frame
+		Autoloads.START_TIME = Time.get_ticks_msec()
 		if MODE == "new":
 			var SAVE_SAVE_FILE = FileAccess.open("user://save_file.save", FileAccess.READ)
 			var SAVE_FILE = FileAccess.open("user://save_1.save", FileAccess.READ)
@@ -60,6 +89,13 @@ func _process(delta: float) -> void:
 			SAVE_FILE.close()
 			SAVE_SAVE_FILE.close()
 	else:
+		if Input.is_action_pressed("t"):
+			CHARGE += 1
+			if CHARGE > 100 and Input.is_action_pressed("l"):
+				erase()
+				CHARGE = 0
+		else:
+			CHARGE = 0
 		if OPENED:
 			$Control/GameStarts.visible = false
 			$Control/SaveFiles.visible = true
@@ -130,3 +166,13 @@ func _on_save_file_3_pressed() -> void:
 
 func _on_return_pressed() -> void:
 	OPENED = false
+func erase():
+	var SAVE_1 = FileAccess.open("user://save_1.save", FileAccess.WRITE)
+	SAVE_1.store_var(SAVE_DEFAULT)
+	SAVE_1.close()
+	var SAVE_2 = FileAccess.open("user://save_2.save", FileAccess.WRITE)
+	SAVE_2.store_var(SAVE_DEFAULT)
+	SAVE_2.close()
+	var SAVE_3 = FileAccess.open("user://save_3.save", FileAccess.WRITE)
+	SAVE_3.store_var(SAVE_DEFAULT)
+	SAVE_3.close()

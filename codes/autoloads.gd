@@ -20,6 +20,7 @@ var POSSESS_ABILITY = "none"
 var PAUSE = false
 var LAST_LOADED = 1
 var play_time = 0
+var recorded_time = 0
 var played_time: Dictionary = {
 	"minute": 0,
 	"hour": 0
@@ -60,4 +61,4 @@ func _load_game(file):
 	Autoloads.location = Autoloads.SAVE_STUFF.place
 	Autoloads.POSSESS_TARGET.species = Autoloads.SAVE_STUFF.enemy
 	Autoloads.POSSESS_TARGET.individual = Autoloads.SAVE_STUFF.enemy_id
-	play_time = Autoloads.SAVE_STUFF.play_time
+	Autoloads.recorded_time = Autoloads.SAVE_STUFF.play_time
