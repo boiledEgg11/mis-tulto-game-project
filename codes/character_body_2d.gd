@@ -32,7 +32,7 @@ var SAVE = preload("res://scenes/save.tscn")
 func _ready() -> void:
 	$ExtraAttack/Sprite2D.visible = false
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
-	$Camera2D/PlayerHealth.value = 10
+	$Camera2D/BoxContainer/PlayerHealth.value = 10
 	$AttackCollision/CollisionShape2D.disabled = true
 	$PossessArea/PossessShape.disabled = true
 	$DamageCollision/PlayerDamageCollision.disabled = false
@@ -52,8 +52,8 @@ func _health_process(DAMAGE) -> void:
 		if DAMAGE > 0:
 			if not Autoloads.PLAYER_POSSESSING:
 				$AnimatedSprite2D.play("hurt")
-			$Camera2D/PlayerHealth.value += DAMAGE * STATUS.damage_multiplier
-		if $Camera2D/PlayerHealth.value <= 0:
+			$Camera2D/BoxContainer/PlayerHealth.value += DAMAGE * STATUS.damage_multiplier
+		if $Camera2D/BoxContainer/PlayerHealth.value <= 0:
 			_death()
 		INVINCIBLE = true
 		await get_tree().create_timer(0.2).timeout
@@ -61,12 +61,12 @@ func _health_process(DAMAGE) -> void:
 		await get_tree().create_timer(1.8).timeout
 		INVINCIBLE = false
 func _death():
-	get_parent().call("_reset")
+	get_parent().call("_reset", Autoloads.LAST_LOADED)
 	TEXTURE_LOCK = true
 	if not Autoloads.PLAYER_POSSESSING:
 		$AnimatedSprite2D.play("hurt")
 	await get_tree().create_timer(1).timeout
-	$Camera2D/PlayerHealth.value = 10
+	$Camera2D/BoxContainer/PlayerHealth.value = 10
 	TEXTURE_LOCK = false
 func _shoot():
 	var SHOOT_BULLET = preload("res://scenes/player_projectile.tscn").instantiate()
@@ -102,7 +102,7 @@ func _ability_use(ability):
 			$ExtraAttack.position = Vector2(0, 0)
 			ABILITY_LOCK = false
 	if ability != "none" or ability != "spin":
-		$Camera2D/DashRecover.value = 0
+		$Camera2D/BoxContainer/DashRecover.value = 0
 func _physics_process(delta: float) -> void:
 	if INVINCIBLE_HOLD:
 		if is_on_floor():
@@ -136,7 +136,7 @@ func _physics_process(delta: float) -> void:
 			$AnimatedSprite2D.visible = false
 			$Camera2D/Control/BoxContainer.visible = true
 			get_parent().get_parent().call("_pause")
-			$Camera2D/PlayerHealth.value = 10
+			$Camera2D/BoxContainer/PlayerHealth.value = 10
 	if position.y > 175:
 		get_parent().call("_reset", Autoloads.LAST_LOADED)
 	Autoloads.PLAYER_POSITION_X = position.x
@@ -144,9 +144,9 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
 		if Autoloads.POSSESS_ABILITY != "None":
-			$Camera2D/DashRecover/Label.text = Autoloads.POSSESS_ABILITY
+			$Camera2D/BoxContainer/DashRecover/Label.text = Autoloads.POSSESS_ABILITY
 		else:
-			$Camera2D/DashRecover/Label.text = ""
+			$Camera2D/BoxContainer/DashRecover/Label.text = ""
 		if POSSESS_START:
 			$AnimatedSprite2D.visible = false
 			$Sprite2D.visible = true
@@ -160,7 +160,7 @@ func _physics_process(delta: float) -> void:
 		if INVINCIBLE:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
 		if not DASH_MOVE:
-			if Input.is_action_just_pressed("space") and $Camera2D/DashRecover.value == 60:
+			if Input.is_action_just_pressed("space") and $Camera2D/BoxContainer/DashRecover.value == 60:
 				_ability_use(Autoloads.POSSESS_ABILITY)
 		match Autoloads.POSSESS_ABILITY:
 			"Jump":
@@ -212,10 +212,10 @@ func _physics_process(delta: float) -> void:
 				if $groundchecker.is_colliding():
 					CHARGE = 0
 				if not Input.is_action_pressed("space"):
-					if $Camera2D/DashRecover.value == 60:
+					if $Camera2D/BoxContainer/DashRecover.value == 60:
 						_ability_use(Autoloads.POSSESS_ABILITY)
 					else:
-						$Camera2D/DashRecover.value = 0
+						$Camera2D/BoxContainer/DashRecover.value = 0
 					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
 				else:
@@ -301,7 +301,7 @@ func _physics_process(delta: float) -> void:
 						else:
 							velocity.y = move_toward(velocity.y, 0, 30)
 			"EXPLOSIVE":
-				if $Camera2D/DashRecover.value == 0:
+				if $Camera2D/BoxContainer/DashRecover.value == 0:
 					$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
 				if not is_on_floor():
 					STATUS.slide = 2
@@ -319,10 +319,10 @@ func _physics_process(delta: float) -> void:
 				if not Input.is_action_pressed("space"):
 					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
-					if $Camera2D/DashRecover.value >= 60:
+					if $Camera2D/BoxContainer/DashRecover.value >= 60:
 						_ability_use(Autoloads.POSSESS_ABILITY)
 					else:
-						$Camera2D/DashRecover.value = 0
+						$Camera2D/BoxContainer/DashRecover.value = 0
 				else:
 					SPEED_MULTIPLIER = 0.25
 					DASH_LOCK = false
@@ -393,7 +393,7 @@ func _physics_process(delta: float) -> void:
 	if not Autoloads.PLAYER_POSSESSING:
 		Autoloads.POSSESS_ENEMY = "none"
 		Autoloads.POSSESS_TYPE = "none"
-		$Camera2D/DashRecover/Label.text = "dash"
+		$Camera2D/BoxContainer/DashRecover/Label.text = "dash"
 		$PlayerIndicator.visible = false
 		DASH_LOCK = false
 		if INVINCIBLE:
@@ -469,7 +469,7 @@ func _physics_process(delta: float) -> void:
 			if not direction:
 				velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 				direction = 0
-			if $Camera2D/DashRecover.value == 60 and abs(direction) + abs(DASH_Y_CHANGE) != 0:
+			if $Camera2D/BoxContainer/DashRecover.value == 60 and abs(direction) + abs(DASH_Y_CHANGE) != 0:
 				if Input.is_action_just_pressed("space"): 
 					DASH_LOCK = true
 					$AnimatedSprite2D.visible = false
@@ -483,7 +483,7 @@ func _physics_process(delta: float) -> void:
 					DASH_MOVE = true
 					INVINCIBLE = true
 					$Sprite2D.texture = load("res://assets/placeholder_dash.png")
-					$Camera2D/DashRecover.value = 0
+					$Camera2D/BoxContainer/DashRecover.value = 0
 					if DASH_DIRECTION == 0:
 						velocity.x = 0
 						$Sprite2D.flip_h = false
@@ -533,22 +533,22 @@ func _physics_process(delta: float) -> void:
 					$PossessArea/PossessShape.disabled = true
 					STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 func _process(_delta: float) -> void:
-	if $Camera2D/DashRecover.value == 60:
-		$Camera2D/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_max.png")
+	if $Camera2D/BoxContainer/DashRecover.value == 60:
+		$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_max.png")
 	else:
 		if Autoloads.POSSESS_TYPE == "charge":
-			$Camera2D/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_charge_charging.png")
+			$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_charge_charging.png")
 		else:
-			$Camera2D/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_high.png")
+			$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_high.png")
 	if Input.is_action_just_pressed("Any") and not DASH_MOVE:
 		ANIMATION_MOVED = false
 	if DASH_MOVE:
 		$Sprite2D.visible = true
 		$AnimatedSprite2D.visible = false
-	if $Camera2D/PlayerHealth.value <= 3:
-		$Camera2D/PlayerHealth.texture_progress = load("res://assets/sprites/health_bar_low.png")
+	if $Camera2D/BoxContainer/PlayerHealth.value <= 3:
+		$Camera2D/BoxContainer/PlayerHealth.texture_progress = load("res://assets/sprites/health_bar_low.png")
 	else:
-		$Camera2D/PlayerHealth.texture_progress = load("res://assets/sprites/health_bar_high.png")
+		$Camera2D/BoxContainer/PlayerHealth.texture_progress = load("res://assets/sprites/health_bar_high.png")
 	_dash_recover_process(1)
 	$AnimatedSprite2D.flip_h = $Sprite2D.flip_h
 	$AnimatedSprite2D.flip_v = $Sprite2D.flip_v
@@ -557,7 +557,7 @@ func _process(_delta: float) -> void:
 		$PossessArea/PossessShape.disabled = true
 func _dash_recover_process(delta:float) -> void:
 	if not DASH_LOCK:
-		$Camera2D/DashRecover.value += delta
+		$Camera2D/BoxContainer/DashRecover.value += delta
 func _on_crouch_exit_test_area_body_exited(body) -> void:
 	if body.is_in_group("tile"):
 		CROUCH_BLOCK = false

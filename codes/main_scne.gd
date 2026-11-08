@@ -26,9 +26,7 @@ func _reset(file):
 	await get_tree().process_frame
 	_enemy_set()
 	$Player.POSSESS_START = true
-	get_tree().paused = false
-	await get_tree().process_frame
-	get_tree().paused = true
+
 func _load(file):
 	Autoloads._load_game(file)
 	match Autoloads.location:
@@ -72,7 +70,7 @@ func _on_texture_button_2_pressed() -> void:
 	$Player/Camera2D/Control.FILE_OPEN = true
 	SAVE_READY =  false
 func _on_texture_button_4_pressed() -> void:
-	Autoloads.play_time = Time.get_ticks_msec() - Autoloads.START_TIME
+	Autoloads.play_time += Time.get_ticks_msec() - Autoloads.START_TIME
 	Autoloads.played_time.hour = int(Autoloads.play_time / 360000)
 	Autoloads.played_time.minute = Autoloads.played_time.hour * -60 + int(Autoloads.play_time / 60000)
 	print(Autoloads.played_time.hour)
