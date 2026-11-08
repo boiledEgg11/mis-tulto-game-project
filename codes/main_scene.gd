@@ -38,12 +38,28 @@ func _ready() -> void:
 	DATA_3.hour = int(DATA_3.play_time / 360000)
 	DATA_3.minute = int(DATA_3.play_time / 60000 - DATA_3.hour * 60)
 	var extra_zero = "0%s"
+	var extra_extra_zero = "00%s"
 	if DATA_1.minute < 10:
 		DATA_1.minute  = extra_zero % [DATA_1.minute]
 	if DATA_2.minute < 10:
 		DATA_2.minute  = extra_zero % [DATA_2.minute]
 	if DATA_3.minute < 10:
 		DATA_3.minute  = extra_zero % [DATA_3.minute]
+	if DATA_1.hour < 10:
+		DATA_1.hour = extra_extra_zero % [DATA_1.hour]
+	else:
+		if DATA_1.hour < 100:
+			DATA_1.hour = extra_zero % [DATA_1.hour]
+	if DATA_2.hour < 10:
+		DATA_2.hour = extra_extra_zero % [DATA_2.hour]
+	else:
+		if DATA_2.hour < 100:
+			DATA_2.hour = extra_zero % [DATA_2.hour]
+	if DATA_3.hour < 10:
+		DATA_3.hour = extra_extra_zero % [DATA_3.hour]
+	else:
+		if DATA_3.hour < 100:
+			DATA_3.hour = extra_zero % [DATA_3.hour]
 	var time_format = "%s:%s"
 	var time_1_display = time_format % [DATA_1.hour, DATA_1.minute]
 	var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
