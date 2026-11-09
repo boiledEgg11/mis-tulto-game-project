@@ -61,13 +61,8 @@ func _health_process(DAMAGE) -> void:
 		await get_tree().create_timer(1.8).timeout
 		INVINCIBLE = false
 func _death():
-	get_parent().call("_reset", Autoloads.LAST_LOADED)
-	TEXTURE_LOCK = true
-	if not Autoloads.PLAYER_POSSESSING:
-		$AnimatedSprite2D.play("hurt")
-	await get_tree().create_timer(1).timeout
 	$Camera2D/BoxContainer/PlayerHealth.value = 10
-	TEXTURE_LOCK = false
+	get_parent().call("_reset", Autoloads.LAST_LOADED)
 func _shoot():
 	var SHOOT_BULLET = preload("res://scenes/player_projectile.tscn").instantiate()
 	owner.add_child(SHOOT_BULLET)
@@ -142,8 +137,9 @@ func _physics_process(delta: float) -> void:
 			$Camera2D/BoxContainer/PlayerHealth.value = 10
 	if position.y > 175:
 		get_parent().call("_reset", Autoloads.LAST_LOADED)
-	Autoloads.PLAYER_POSITION_X = position.x
-	Autoloads.PLAYER_POSITION_Y = position.y
+	if Autoloads.POSSESS_ABILITY != "spin" and Autoloads.POSSESS_ABILITY != "LASER":
+		Autoloads.PLAYER_POSITION_X = position.x
+		Autoloads.PLAYER_POSITION_Y = position.y
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
 		if Autoloads.POSSESS_ABILITY != "None":
@@ -167,6 +163,8 @@ func _physics_process(delta: float) -> void:
 				_ability_use(Autoloads.POSSESS_ABILITY)
 		match Autoloads.POSSESS_ABILITY:
 			"LASER":
+				position.x = Autoloads.PLAYER_POSITION_X
+				position.y = Autoloads.PLAYER_POSITION_Y
 				velocity.x = 0
 				velocity.y = 0
 				if is_on_floor():
@@ -396,6 +394,7 @@ func _physics_process(delta: float) -> void:
 					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 					direction = 0
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1 or POSSESS_END:
+			INVINCIBLE  = true
 			Autoloads.POSSESS_TARGET.species = "none"
 			Autoloads.POSSESS_TARGET.individual = 0
 			POSSESS_END = false
@@ -596,7 +595,8 @@ func _on_damage_collision_area_entered(area) -> void:
 		if area.is_in_group("damage_2"):
 			INVINCIBLE = false
 			_health_process(5)
-		_health_process(1)
+		else:
+			_health_process(1)
 		print(INVINCIBLE)
 func _on_damage_collision_area_exited(area) -> void:
 	if area.is_in_group("damage"):
@@ -606,6 +606,10 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 		SAVABLE = true
 		OVERLAPPING_SAVE = body.get_parent()
 		print("can save")
+	if body.is_in_group("goal"):
+		_goal()
+func _goal():
+	
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	TARGET_POS = Vector2i(0, 0)
 	ATTACK_COLLISION = true

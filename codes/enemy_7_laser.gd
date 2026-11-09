@@ -8,7 +8,7 @@ var laser_move = Vector2(0, -10)
 var PLAYER_ATTACK = false
 func _ready() -> void:
 	$Line2D.set_point_position(0, Vector2(0, -7.5))
-
+	
 func _placement(x_pos, y_pos, x_length, y_length):
 	position = Vector2i(x_pos, y_pos)
 	max_length = Vector2i(x_length, y_length)
@@ -30,7 +30,7 @@ func _physics_process(delta: float) -> void:
 			target_position = laser_end_position
 			laser_end_position = to_local(get_collision_point())
 	if not attacking:
-		laser_end_position = Vector2i(0, 0)
+		laser_end_position = Vector2i(0, -7.5)
 		target_position = Vector2i(0, 0)
 	force_raycast_update()
 	$Line2D.set_point_position(1, laser_end_position)

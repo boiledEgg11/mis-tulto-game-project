@@ -1,20 +1,20 @@
 [gd_scene format=3 uid="uid://c07jva184p0nf"]
 
-[ext_resource type="Script" uid="uid://unvvm31rftgl" path="res://scenes/enemy_7_laser.gd" id="1_v5afx"]
-[ext_resource type="Script" uid="uid://d08awpkmqcq1k" path="res://scenes/line_2d.gd" id="2_w3jmj"]
+[ext_resource type="Script" uid="uid://unvvm31rftgl" path="res://codes/enemy_7_laser.gd" id="1_v5afx"]
+[ext_resource type="Script" uid="uid://d08awpkmqcq1k" path="res://codes/line_2d.gd" id="2_w3jmj"]
 
 [node name="Enemy7Laser" type="RayCast2D" unique_id=62884777]
 target_position = Vector2(0, 0)
 collide_with_areas = true
 script = ExtResource("1_v5afx")
 
-[node name="Line2D" type="Line2D" parent="." unique_id=1544211318 groups=["damage"]]
+[node name="Line2D" type="Line2D" parent="." unique_id=1544211318 groups=["damage", "damage_2", "player_damaging"]]
 points = PackedVector2Array(0, 0, 0, 0)
 width = 16.0
-default_color = Color(0.69411767, 0.105882354, 1, 0.78431374)
+default_color = Color(0.69411767, 0.105882354, 1, 0.67058825)
 script = ExtResource("2_w3jmj")
 
-[node name="Area2D" type="Area2D" parent="Line2D" unique_id=612551333 groups=["damage"]]
+[node name="Area2D" type="Area2D" parent="Line2D" unique_id=612551333 groups=["damage", "damage_2"]]
 collision_layer = 10
 collision_mask = 10
 

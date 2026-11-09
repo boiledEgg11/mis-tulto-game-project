@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bc40kkev2bwin"]
 
-[ext_resource type="Script" uid="uid://b87gkrr4wn4v4" path="res://scenes/enemy_test7.gd" id="1_7dl0u"]
+[ext_resource type="Script" uid="uid://b87gkrr4wn4v4" path="res://codes/enemy_test7.gd" id="1_7dl0u"]
 [ext_resource type="Script" uid="uid://c2lrpxkosfn2e" path="res://codes/enemies.gd" id="1_88gmq"]
 [ext_resource type="Texture2D" uid="uid://drgtym1my3gso" path="res://assets/placeholder_enemy.png" id="2_88gmq"]
 [ext_resource type="PackedScene" uid="uid://c07jva184p0nf" path="res://scenes/enemy_7_laser.tscn" id="4_8dftu"]

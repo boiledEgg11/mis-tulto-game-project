@@ -25,7 +25,7 @@ func _physics_process(delta: float) -> void:
 		match individual:
 			1:
 				print("placed")
-				position = Vector2i(1016, -56)
+				position = Vector2i(1016, -40)
 				$Enemy7Laser._placement(0, 0, 0, -200)
 			_:
 				print("none")
@@ -66,13 +66,6 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.visible = false
 			if Autoloads.PLAYER_POSSESS_STOP:
 				_possess_stop()
-func _on_left_collision_check_body_entered(_body: Node2D) -> void:
-	if $LeftCollisionCheck.area_entered:
-		if individual == 2 and is_on_floor():
-			velocity.y = -250
-			position.x -= 6 * direction
-		else:
-			direction *= -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
 		if area.is_in_group("player_damaging"):
