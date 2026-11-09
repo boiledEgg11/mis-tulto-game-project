@@ -9,18 +9,14 @@ collide_with_areas = true
 script = ExtResource("1_v5afx")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1544211318 groups=["damage"]]
-points = PackedVector2Array(0, 0, 0, 10)
+points = PackedVector2Array(0, 0, 0, 0)
 width = 16.0
-default_color = Color(0.69411767, 0.105882354, 1, 0)
+default_color = Color(0.69411767, 0.105882354, 1, 0.78431374)
 script = ExtResource("2_w3jmj")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="Line2D" unique_id=1153864644 groups=["damage"]]
-collision_layer = 8
-collision_mask = 8
 
 [node name="Area2D" type="Area2D" parent="Line2D" unique_id=612551333 groups=["damage"]]
 collision_layer = 10
 collision_mask = 10
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Line2D/Area2D" unique_id=878069071]
-debug_color = Color(0, 0.6, 0, 0.41960785)
+debug_color = Color(0, 0.6, 0.69803923, 0)

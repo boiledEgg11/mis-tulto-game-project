@@ -74,6 +74,9 @@ func _shoot():
 	SHOOT_BULLET.position = position
 func _ability_use(ability):
 	match ability:
+		"LASER":
+			Autoloads.POSSESS_ENEMY.call("_attack")
+			Autoloads.PLAYER_ATTACK = true
 		"TARGET_DASH":
 			$DetectShape/CollisionShape2D.disabled = false
 			await get_tree().create_timer(1).timeout
@@ -163,6 +166,23 @@ func _physics_process(delta: float) -> void:
 			if Input.is_action_just_pressed("space") and $Camera2D/BoxContainer/DashRecover.value == 60:
 				_ability_use(Autoloads.POSSESS_ABILITY)
 		match Autoloads.POSSESS_ABILITY:
+			"LASER":
+				velocity.x = 0
+				velocity.y = 0
+				if is_on_floor():
+					STATUS.slide = 100
+				else:
+					STATUS.slide = 45
+				if not is_on_floor():
+					velocity += get_gravity() * delta * 2.5
+				if not Input.is_action_pressed("space"):
+					DASH_LOCK = true
+					if $Camera2D/BoxContainer/DashRecover.value >= 60:
+						_ability_use(Autoloads.POSSESS_ABILITY)
+					else:
+						$Camera2D/BoxContainer/DashRecover.value = 0
+				else:
+					DASH_LOCK = false
 			"Jump":
 				direction = Input.get_axis("left", "right")
 				if direction > 0:

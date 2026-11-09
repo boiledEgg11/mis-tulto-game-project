@@ -11,10 +11,12 @@ var WALL_EXISTED = false
 var CHARGE = 0
 var CHARGE_LOCK = false
 var CHARGE_LOW = false
+var LAZER_DURATION = 120
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _attack():
+	LAZER_DURATION = 120
 	CHARGE_LOCK = true
 	$Enemy7Laser.attacking = true
 	CHARGE_LOW = true
@@ -31,9 +33,10 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		$Enemy7Laser/Line2D._attack_change(true)
 		if not CHARGE_LOCK:
 			CHARGE += 1
-		if CHARGE > 60:
+		if CHARGE > 180:
 			CHARGE = 0
 			print("attack!")
 			_attack()
@@ -52,10 +55,13 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
+			if not Autoloads.PLAYER_ATTACK:
+				_attack_end()
+			$Enemy7Laser/Line2D._attack_change(false)
 			INVINCIBLE = true
 			POSSESSED = true
-			position.x = Autoloads.PLAYER_POSITION_X
-			position.y = Autoloads.PLAYER_POSITION_Y
+			Autoloads.PLAYER_POSITION_X = position.x
+			Autoloads.PLAYER_POSITION_Y = position.y
 			$EnemyArea/CollisionShape2D.disabled = true
 			$Sprite2D.visible = false
 			if Autoloads.PLAYER_POSSESS_STOP:
@@ -88,7 +94,17 @@ func _possess_stop() -> void:
 	health = 1
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
+func _attack_end():
+	CHARGE_LOW = false
+	CHARGE_LOCK = false
+	$Enemy7Laser.attacking = false
+	CHARGE = 0
 func _process(_delta: float) -> void:
+	if CHARGE_LOW:
+		print(LAZER_DURATION)
+		LAZER_DURATION -= 1
+		if LAZER_DURATION < 0:
+			_attack_end()
 	$LeftCollisionCheck.position.x = 8 * direction
 	$GroundExistingChecker.position.x = 9 * direction
 	if direction == 1:
@@ -104,10 +120,15 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
+		CHARGE_LOW = false
+		CHARGE_LOCK = false
+		$Enemy7Laser.attacking = false
+		CHARGE = 0
+		Autoloads.POSSESS_ENEMY = get_child(-1)
 		Autoloads.POSSESS_TARGET = {"species": "TestEnemy7", "individual": individual}
 		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_ABILITY = "None"
-		Autoloads.POSSESS_ENEMY = "TEST"
+		Autoloads.POSSESS_TYPE = "charge"
+		Autoloads.POSSESS_ABILITY = "LASER"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
 		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy.png"
