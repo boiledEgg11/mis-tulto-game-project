@@ -1,6 +1,8 @@
 # mis-tulto-game-project
 ## Description
 A platformer game that I am currently making; its main feature is the “possess” feature which have been added since the second release (release 0.2.0 alpha) of the game. The main objective of this game is planned to go to a specific location while avoiding to get defeated by enemies. As of now, this game is currently mostly placeholders; the first stage and the ui is planned to be made soon. Until then, this game is simply a platformer with some simple enemies that only have movements, and no objectives.
+## Controls
+AD to move sideways, W to jump, S to crouch or to perform a fast fall. Space key while pressing any of WASD key will dash towards the direction pressed. Upon hitting any enemies, it will possess the enemy, making you able to use their abilities with space key! The enter key will stop the possess. On the save points which are the flower pots, pressing shift will allow saving!
 ## Why am I making this?
 Well, making a game was my dream since I was about 3rd grade; ever since, I have been having ideas about it. So this game project is something that I have thought for years; now that I have a motivation and learned a way how to develop, I am making this game. Also made for Terra.
 ## How to play
@@ -42,8 +44,8 @@ Exploring the expanded area
 Exploring the expanded area after falling
 <img width="1920" height="1032" alt="Screenshot (53)" src="https://github.com/user-attachments/assets/70a0b403-9539-41cc-812b-f8a1793f8b01" />
 Destryoing cyan tiles
-<img width="1920" height="1036" alt="Screenshot (52)" src="https://github.com/user-attachments/assets/106b1bdb-df0f-4804-95e2-6b18dc7c1ad4" />
-Moving away from the charging orange enemy
+<img width="1920" height="1036" alt="Screenshot (52)" src="https://gith<img width="1147" height="657" alt="スクリーンショット 2026-11-08 190545" src="https://github.com/user-attachments/assets/c0589ea9-9f44-43d7-8aa6-4704458f90d8"
+
 ## Release 0.3.0 alpha
 **Sprite additions**<br>
 Animations for the player sprites has been added; the new animations will play upon idle, hurt, crouch and moving. They will not change the hitbox from their original size; the animations are just asthetic. *also I adore the new sprites her idle is so adorable*
@@ -59,3 +61,13 @@ Enemy3 will now jump upon ledges if its charging. It also has an increased playe
 <img width="1920" height="1080" alt="Screenshot (59)" src="https://github.com/user-attachments/assets/36af08b7-2ae8-4bb0-a2c3-e3c2efe7e54f" />
 <img width="1920" height="1080" alt="Screenshot (58)" src="https://github.com/user-attachments/assets/083945ee-1f42-40ac-9557-9d3973d86e6d" />
 <img width="1920" height="1080" alt="Screenshot (63)" src="https://github.com/user-attachments/assets/f1e4a99f-b560-4436-986c-45a896b62408" />
+## Release 0.4.0
+**Save system**<br>
+The game has a save feature now, which it can save up to 3 file datas. It will save the location, the possessed enemy, and the total played time on the game. The file will be loaded upon the start up of the game, upon death, upon falling into the void, and upon selecting load in the save points. The save points are the flower pots across the game, which in this version are 3 of them; press shift, then it can save. On the start, the player can choose to start from a new game, continue from a file, or erase a file; this should be easy to tell from the ui.<br>
+*Other additions*<br>
+Enemy7, the purplish enemy near the last save point is a stationary enemy that shoots beam to a certain direction! make sure not to get hit, or else it may defeat you...<br>
+There is also a yellow s somewhere in the game, touch it and it will say congrats!<br>
+New fonts, made by me for the many features added in this update. As with this, the health and the ability will use the font from now on!<br>
+<img width="1147" height="657" alt="スクリーンショット 2026-11-08 190545" src="https://github.com/user-attachments/assets/68898f86-7659-4e40-a39f-d1887550c437" />
+<img width="1160" height="647" alt="スクリーンショット 2026-11-08 083801" src="https://github.com/user-attachments/assets/436e5403-b748-4300-8a65-0ec740abeecc" />
+<img width="1147" height="657" alt="スクリーンショット 2026-11-08 190545" src="https://github.com/user-attachments/assets/9b89e9fd-281c-42a2-a93b-cc1ca1ca6afb" />
