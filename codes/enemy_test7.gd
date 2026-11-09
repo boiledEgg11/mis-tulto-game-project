@@ -94,7 +94,6 @@ func _attack_end():
 	CHARGE = 0
 func _process(_delta: float) -> void:
 	if CHARGE_LOW:
-		print(LAZER_DURATION)
 		LAZER_DURATION -= 1
 		if LAZER_DURATION < 0:
 			_attack_end()

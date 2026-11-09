@@ -37,6 +37,7 @@ func _ready() -> void:
 	$PossessArea/PossessShape.disabled = true
 	$DamageCollision/PlayerDamageCollision.disabled = false
 	$DamageCollision/PlayerDamageCollision.shape.size = Vector2(15, 15)
+	$Camera2D/Celebration.visible = false
 func _dash_hold_stop():
 	await get_tree().create_timer(0.05).timeout
 	if is_on_floor():
@@ -606,10 +607,9 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 		SAVABLE = true
 		OVERLAPPING_SAVE = body.get_parent()
 		print("can save")
-	if body.is_in_group("goal"):
-		_goal()
+
 func _goal():
-	
+	$Camera2D/Celebration.visible = true
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	TARGET_POS = Vector2i(0, 0)
 	ATTACK_COLLISION = true
@@ -651,3 +651,16 @@ func _possess_revisible():
 	$Sprite2D.visible = true
 	$AnimatedSprite2D.visible = false
 	$PlayerIndicator.visible = true
+
+
+func _on_crouch_exit_test_area_area_entered(body) -> void:
+	if body.is_in_group("goal"):
+		print("congrats!")
+		_goal()
+		body.remove_from_group("goal")
+		await get_tree().create_timer(1)
+		body.add_to_group("goal")
+
+
+func _on_crouch_exit_test_area_area_exited(area: Area2D) -> void:
+	$Camera2D/Celebration.visible = false
