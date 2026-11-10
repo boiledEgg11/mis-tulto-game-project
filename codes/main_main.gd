@@ -77,3 +77,5 @@ func _on_home_return_pressed() -> void:
 			$Node2D2/Player/PlayerIndicator.visible = true
 	Autoloads.CURRENT_STATE = "home"
 	queue_free()
+func _tutorial():
+	$Node2D2/Player/Camera2D/TextBox._text_open(0)

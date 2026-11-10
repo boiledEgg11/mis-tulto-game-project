@@ -8,25 +8,16 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if get_tree().paused and Input.is_action_just_pressed("l"):
-		get_tree().paused = false
-		Autoloads.PAUSE = false
-		print(get_tree().paused)
-		$BoxContainer.visible = false
-		print("pause end")
-	if get_tree().paused and FILE_OPEN:
+	if Autoloads.SAVE_SCREEN and FILE_OPEN:
 		$BoxContainer2.visible = true
 		
 	else:
 		$BoxContainer2.visible = false
-	if get_tree().paused and not FILE_OPEN:
+	if Autoloads.SAVE_SCREEN and not FILE_OPEN:
 		$BoxContainer.visible = true
 	else:
 		$BoxContainer.visible = false
-	if get_tree().paused:
+	if Autoloads.SAVE_SCREEN:
 		$BoxContainer3.visible = true
 	else:
 		$BoxContainer3.visible = false
-	if not get_tree().paused and Input.is_action_just_pressed("l"):
-		get_tree().paused = true
-		$BoxContainer.visible = true

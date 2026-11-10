@@ -146,7 +146,7 @@ func _process(delta: float) -> void:
 		STARTED = true
 		$Camera2D.enabled = false
 		$Control.visible = false
-		MAIN = preload("res://main_game_scene.tscn").instantiate()
+		MAIN = preload("res://scenes/main_game_scene.tscn").instantiate()
 		add_child(MAIN)
 		await get_tree().process_frame
 		await get_tree().process_frame
@@ -166,6 +166,7 @@ func _process(delta: float) -> void:
 			SAVE_FILE.store_var(SAVE_SAVE_FILE.get_var())
 			SAVE_FILE.close()
 			SAVE_SAVE_FILE.close()
+			MAIN.call("_tutorial")
 	else:
 		if Input.is_action_pressed("t"):
 			CHARGE += 1
@@ -212,8 +213,6 @@ func _on_save_file_1_pressed() -> void:
 		OPEN_FILE = 1
 		START = true
 		Autoloads.LAST_LOADED = 1
-
-
 func _on_save_file_2_pressed() -> void:
 	if MODE == "erase":
 		var SAVE_2 = FileAccess.open("user://save_2.save", FileAccess.READ_WRITE)

@@ -68,6 +68,7 @@ func _on_texture_button_3_pressed() -> void:
 		$Player/Camera2D/Control.FILE_OPEN = false
 	else:
 		get_tree().paused = false
+		Autoloads.SAVE_SCREEN = false
 		if Autoloads.PLAYER_POSSESSING:
 			$Player/Sprite2D.visible = true
 			$Player/PlayerIndicator.visible = true

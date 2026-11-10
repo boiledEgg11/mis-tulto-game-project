@@ -30,6 +30,7 @@ var HAS_TARGET = 0
 var OVERLAPPING_SAVE = "none"
 var SAVE = preload("res://scenes/save.tscn")
 func _ready() -> void:
+
 	$ExtraAttack/Sprite2D.visible = false
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$Camera2D/BoxContainer/PlayerHealth.value = 10
@@ -134,6 +135,7 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.visible = false
 			$AnimatedSprite2D.visible = false
 			$Camera2D/Control/BoxContainer.visible = true
+			Autoloads.SAVE_SCREEN = true
 			get_parent().get_parent().call("_pause")
 			$Camera2D/BoxContainer/PlayerHealth.value = 10
 	if position.y > 175:
@@ -609,7 +611,7 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 		print("can save")
 
 func _goal():
-	$Camera2D/Celebration.visible = true
+	$Camera2D/TextBox._text_open(4)
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	TARGET_POS = Vector2i(0, 0)
 	ATTACK_COLLISION = true
@@ -658,9 +660,3 @@ func _on_crouch_exit_test_area_area_entered(body) -> void:
 		print("congrats!")
 		_goal()
 		body.remove_from_group("goal")
-		await get_tree().create_timer(1)
-		body.add_to_group("goal")
-
-
-func _on_crouch_exit_test_area_area_exited(area: Area2D) -> void:
-	$Camera2D/Celebration.visible = false

@@ -1,6 +1,9 @@
 special_line
 Welcome to Mis-tulto!
 Go to the right, and find the yellow box!
+text_break
 normal_line
 Hi there!
+Congratulations on getting to the goal.
+Good luck on the next!
 text_break

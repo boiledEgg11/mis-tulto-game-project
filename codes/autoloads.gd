@@ -10,6 +10,7 @@ var POSSESS_AMOUNT = 0
 var POSSESS_ENEMY
 var location
 var tile
+var SAVE_SCREEN
 var PLAYER_ATTACK = false
 var POSSESS_TYPE
 var tile_move = 0
