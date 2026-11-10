@@ -1,3 +1,6 @@
-Welcome to Mis-tulto!\n
-Go to the right, and find the yellow box!\n
-text_break\n
+special_line
+Welcome to Mis-tulto!
+Go to the right, and find the yellow box!
+normal_line
+Hi there!
+text_break
