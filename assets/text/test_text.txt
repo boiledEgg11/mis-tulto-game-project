@@ -1,0 +1,3 @@
+Welcome to Mis-tulto!\n
+Go to the right, and find the yellow box!\n
+text_break\n

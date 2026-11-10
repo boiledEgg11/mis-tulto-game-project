@@ -2148,6 +2148,14 @@ cache/0/36/0/underline_position = 5.375
 cache/0/36/0/underline_thickness = 1.796875
 cache/0/36/0/scale = 1.0
 
+[sub_resource type="InputEventKey" id="InputEventKey_wt704"]
+device = -1
+keycode = 90
+unicode = 122
+
+[sub_resource type="Shortcut" id="Shortcut_wt704"]
+events = [SubResource("InputEventKey_wt704")]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d7vhh"]
 size = Vector2(15.5, 15.5)
 
@@ -2479,6 +2487,7 @@ layout_mode = 0
 offset_top = 30.0
 offset_right = 280.0
 offset_bottom = 78.0
+shortcut = SubResource("Shortcut_wt704")
 texture_normal = ExtResource("43_li1wj")
 texture_pressed = ExtResource("44_wt704")
 texture_hover = ExtResource("45_2c1oc")
