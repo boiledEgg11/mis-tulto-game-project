@@ -9,6 +9,7 @@ var SAVE_READY = true
 func _ready():
 	_reset(Autoloads.LAST_LOADED)
 func _reset(file):
+	$Player/Camera2D/BoxContainer/PlayerHealth.value = 10
 	reset = true
 	Autoloads.RESET = true
 	$Player.POSSESS_END = true

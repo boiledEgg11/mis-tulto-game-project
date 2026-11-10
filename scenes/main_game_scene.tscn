@@ -45,6 +45,10 @@
 [ext_resource type="Texture2D" uid="uid://by0xtcu6q3j2l" path="res://assets/placeholder_player.png" id="31_shnrd"]
 [ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholder_explosion.png" id="32_iwanf"]
 [ext_resource type="Texture2D" uid="uid://q2xiqq3jrf1v" path="res://assets/placeholder_player_indicator.png" id="33_680ey"]
+[ext_resource type="Texture2D" uid="uid://bpv4sritnurrv" path="res://assets/sprites/textbox_ui.png" id="43_li1wj"]
+[ext_resource type="Script" uid="uid://b45l2nto7dmhc" path="res://text_box_main.gd" id="43_wt704"]
+[ext_resource type="Texture2D" uid="uid://ctqis8dkyb25x" path="res://assets/sprites/textbox_pressed_ui.png" id="44_wt704"]
+[ext_resource type="Texture2D" uid="uid://8tcjiph7x6t5" path="res://assets/sprites/textbox_selected_ui.png" id="45_2c1oc"]
 [ext_resource type="Texture2D" uid="uid://c7o36xe4q7agb" path="res://assets/placeholder_save.png" id="46_7w8cq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7u3wu"]
@@ -2462,6 +2466,33 @@ theme = ExtResource("23_kwefq")
 theme_override_font_sizes/font_size = 36
 text = "CONGRATULATIONS!!!"
 
+[node name="TextBox" type="Control" parent="Node2D2/Player/Camera2D" unique_id=29907146]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -140.0
+offset_right = -100.0
+offset_bottom = 40.0
+script = ExtResource("43_wt704")
+
+[node name="TextureButton" type="TextureButton" parent="Node2D2/Player/Camera2D/TextBox" unique_id=1466325260]
+layout_mode = 0
+offset_top = 30.0
+offset_right = 280.0
+offset_bottom = 78.0
+texture_normal = ExtResource("43_li1wj")
+texture_pressed = ExtResource("44_wt704")
+texture_hover = ExtResource("45_2c1oc")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Node2D2/Player/Camera2D/TextBox/TextureButton" unique_id=1827879349]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = 275.0
+offset_bottom = 42.0
+mouse_filter = 2
+theme = ExtResource("23_kwefq")
+theme_override_font_sizes/normal_font_size = 16
+
 [node name="Player_Shape" type="CollisionShape2D" parent="Node2D2/Player" unique_id=2108163099]
 shape = SubResource("RectangleShape2D_d7vhh")
 
@@ -2553,6 +2584,7 @@ texture = ExtResource("46_7w8cq")
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton5" to="Node2D2" method="_on_texture_button_5_pressed"]
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer2/TextureButton6" to="Node2D2" method="_on_texture_button_6_pressed"]
 [connection signal="pressed" from="Node2D2/Player/Camera2D/Control/BoxContainer3/TextureButton3" to="Node2D2" method="_on_texture_button_3_pressed"]
+[connection signal="pressed" from="Node2D2/Player/Camera2D/TextBox/TextureButton" to="Node2D2/Player/Camera2D/TextBox" method="_on_texture_button_pressed"]
 [connection signal="area_entered" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_damage_collision_area_entered"]
 [connection signal="area_exited" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_damage_collision_area_exited"]
 [connection signal="area_shape_entered" from="Node2D2/Player/DamageCollision" to="Node2D2/Player" method="_on_damage_collision_area_shape_entered"]
