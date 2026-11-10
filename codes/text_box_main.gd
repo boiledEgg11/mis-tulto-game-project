@@ -6,6 +6,7 @@ extends Control
 func _cycle_text():
 	current_text += 1
 	print("next text!")
+	_normal_text_call(current_text)
 func _close_text():
 	$TextureButton.visible = false
 func _normal_text_call(text_num):
@@ -13,7 +14,7 @@ func _normal_text_call(text_num):
 		$TextureButton.texture_normal = load("res://assets/sprites/textbox_ui.png")
 		$TextureButton.texture_hover = load("res://assets/sprites/textbox_selected_ui.png")
 		$TextureButton.texture_pressed = load("res://assets/sprites/textbox_pressed_ui.png")
-		$TextureButton/RichTextLabel.text = str(text_num)
+		$TextureButton/RichTextLabel.text = str(text_line[text_num])
 	else:
 		_close_text()
 	current_text = text_num
@@ -22,7 +23,7 @@ func _special_text_call(text_num):
 		$TextureButton.texture_normal = load("res://assets/sprites/textbox_special_ui.png")
 		$TextureButton.texture_hover = load("res://assets/sprites/textbox_special_selected_ui.png")
 		$TextureButton.texture_pressed = load("res://assets/sprites/textbox_special_pressed_ui.png")
-		$TextureButton/RichTextLabel.text = str(text_num)
+		$TextureButton/RichTextLabel.text = str(text_line[text_num])
 	else:
 		_close_text()
 	current_text = text_num
@@ -42,4 +43,4 @@ func _text_load(open_file):
 	text_line = file_content.split("\n")
 func _text_open():
 	$TextureButton.visible = true
-	_normal_text_call(1)
+	_normal_text_call(current_text)
