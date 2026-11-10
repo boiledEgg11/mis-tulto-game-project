@@ -20,7 +20,7 @@ func _reset(file):
 	await get_tree().process_frame
 	print($Player.POSSESS_END)
 	Autoloads.RESET = false
-	$StaticBody2D.call("_set_enemy")
+	$StaticBody2D.call("_set_enemy", "test_1")
 	print(Autoloads.PLAYER_POSSESSING)
 	Autoloads.PLAYER_POSSESSING = false
 	$Player.POSSESS_END = false

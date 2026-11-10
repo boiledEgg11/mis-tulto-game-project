@@ -29,8 +29,10 @@ var ATTACK_COLLISION = false
 var HAS_TARGET = 0
 var OVERLAPPING_SAVE = "none"
 var SAVE = preload("res://scenes/save.tscn")
+var MAP
 func _ready() -> void:
-
+	MAP = preload("res://scenes/test_level_map.tscn").instantiate()
+	owner.add_child.call_deferred(MAP)
 	$ExtraAttack/Sprite2D.visible = false
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
 	$Camera2D/BoxContainer/PlayerHealth.value = 10
@@ -659,8 +661,10 @@ func _on_crouch_exit_test_area_area_entered(body) -> void:
 		_goal()
 		body.remove_from_group("goal")
 func _change_map(next_map, location):
+	MAP.queue_free()
 	match next_map:
 		"test_level_map_2":
 			var MAP = preload("res://scenes/test_level_map_2.tscn").instantiate()
+			owner.add_child(MAP)
 	print(next_map)
 	print(location)
