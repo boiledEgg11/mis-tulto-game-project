@@ -481,8 +481,6 @@ func _physics_process(delta: float) -> void:
 				if Input.is_action_just_pressed("up"):
 					velocity.y = STATUS.jump
 			DASH_Y_CHANGE = Input.get_axis("up", "down")
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 			if direction:
 				if is_on_floor():
 					velocity.x = direction * STATUS.speed * SPEED_MULTIPLIER
@@ -611,7 +609,7 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 		print("can save")
 
 func _goal():
-	$Camera2D/TextBox._text_open(4)
+	$Camera2D/TextBox._text_open(4, false)
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	TARGET_POS = Vector2i(0, 0)
 	ATTACK_COLLISION = true
@@ -660,3 +658,9 @@ func _on_crouch_exit_test_area_area_entered(body) -> void:
 		print("congrats!")
 		_goal()
 		body.remove_from_group("goal")
+func _change_map(next_map, location):
+	match next_map:
+		"test_level_map_2":
+			var MAP = preload("res://scenes/test_level_map_2.tscn").instantiate()
+	print(next_map)
+	print(location)

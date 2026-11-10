@@ -1,6 +1,7 @@
 extends StaticBody2D
 func _set_enemy():
 	print("enemy_set")
+	var test_tile = preload("res://scenes/test_level_map.tscn").instantiate()
 	var enemy1 = preload("res://scenes/enemy1.tscn").instantiate()
 	var enemy2 = preload("res://scenes/enemy2.tscn").instantiate()
 	var enemy3 = preload("res://scenes/enemy3.tscn").instantiate()
@@ -13,6 +14,7 @@ func _set_enemy():
 	var save1_1 = preload("res://scenes/save.tscn").instantiate()
 	var enemy7 = preload("res://scenes/enemy7.tscn").instantiate()
 	var save1_2 = preload("res://scenes/save.tscn").instantiate()
+	owner.add_child(test_tile)
 	owner.add_child.call_deferred(save1_2)
 	owner.add_child.call_deferred(enemy7)
 	owner.add_child.call_deferred(save1_1)

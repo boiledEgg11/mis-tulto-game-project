@@ -57,7 +57,6 @@ func _restart():
 	get_tree().paused = false
 	Autoloads.PAUSE = false
 	$Node2D2/Player.call("_possess_revisible")
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("j"):
 		get_tree().paused = false
@@ -65,8 +64,6 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("l"):
 		get_tree().paused = true
 		Autoloads.PAUSE = true
-
-
 func _on_home_return_pressed() -> void:
 	if $Node2D2/Player/Camera2D/Control.FILE_OPEN:
 		$Node2D2/Player/Camera2D/Controlol.FILE_OPEN = false
@@ -78,4 +75,4 @@ func _on_home_return_pressed() -> void:
 	Autoloads.CURRENT_STATE = "home"
 	queue_free()
 func _tutorial():
-	$Node2D2/Player/Camera2D/TextBox._text_open(0)
+	$Node2D2/Player/Camera2D/TextBox._text_open(0, true)
