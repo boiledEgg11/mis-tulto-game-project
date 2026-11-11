@@ -1,6 +1,9 @@
 extends Node2D
 var location
-
+func _erase():
+	$Savepoint.call("_erase")
+	queue_free()
+	print("deletion")
 func _save(enemy, file):
 	print("saved!")
 	Autoloads.SAVE_STUFF = {

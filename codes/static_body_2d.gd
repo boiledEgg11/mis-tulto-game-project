@@ -3,7 +3,7 @@ var characters: Array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 @onready var enemies
 @onready var enemies_id
 @onready var enemy_types
-
+@onready var current_enemy_amount
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
@@ -30,6 +30,7 @@ func _set_enemy(level):
 		if enemy_types[i] == "_stop":
 			print("stop!")
 			break
+		current_enemy_amount = i
 		match enemy_types[i]:
 			"enemy_1":
 				characters[i] = preload("res://scenes/enemy1.tscn").instantiate()
@@ -56,3 +57,13 @@ func _set_enemy(level):
 				characters[i].call("_placement", enemies_id[i])
 			_:
 				print("missing type...")
+func _erase_enemy():
+	for i in range(current_enemy_amount):
+		match enemies[i]:
+			"enemy":
+				if characters[i].get_child(0).possess_health > 0:
+					characters[i].call_deferred("_erase")
+					characters[i] = preload("res://scenes/empty.tscn").instantiate()
+			"save":
+				characters[i].call_deferred("_erase")
+				characters[i] = preload("res://scenes/empty.tscn").instantiate()
