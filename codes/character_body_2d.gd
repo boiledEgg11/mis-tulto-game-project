@@ -665,6 +665,11 @@ func _change_map(next_map, location):
 	match next_map:
 		"test_level_map_2":
 			var MAP = preload("res://scenes/test_level_map_2.tscn").instantiate()
-			owner.add_child(MAP)
+			owner.add_child.call_deferred(MAP)
+	match location:
+		0:
+			global_position = Vector2(0, 0)
+		_:
+			global_position = Vector2(0, 0)
 	print(next_map)
 	print(location)
