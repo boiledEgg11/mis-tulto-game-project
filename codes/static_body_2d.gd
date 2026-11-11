@@ -1,8 +1,9 @@
 extends StaticBody2D
-var characters: Array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+var characters: Array = [ preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(),0]
 @onready var enemies
 @onready var enemies_id
 @onready var enemy_types
+@onready var file_start_point: int
 @onready var current_enemy_amount
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -26,8 +27,13 @@ func _set_enemy(level):
 	enemies_id = enemy_id.split("\n")
 	enemies = enemy_placement.split("\n")
 	enemy_types = enemy_specie.split("\n")
-	for i in range(enemy_types.size()):
-		if enemy_types[i] == "_stop":
+	match  level:
+		0:
+			file_start_point = 0
+		1:
+			file_start_point = 13
+	for i in range(file_start_point, enemy_types.size()):
+		if enemy_types[i] == "_stop" or enemy_types[i] == null:
 			print("stop!")
 			break
 		current_enemy_amount = i
@@ -47,6 +53,7 @@ func _set_enemy(level):
 			"enemy_7":
 				characters[i] = preload("res://scenes/enemy7.tscn").instantiate()
 			"save":
+				print("added enemies")
 				characters[i] = preload("res://scenes/save.tscn").instantiate()
 		owner.add_child.call_deferred(characters[i])
 		match enemies[i]:
@@ -65,7 +72,9 @@ func _erase_enemy():
 			"enemy":
 				if characters[i].get_child(0).possess_health > 0:
 					characters[i].call_deferred("_erase")
+					await get_tree().process_frame
 					characters[i] = preload("res://scenes/empty.tscn").instantiate()
 			"save":
 				characters[i].call_deferred("_erase")
+				await get_tree().process_frame
 				characters[i] = preload("res://scenes/empty.tscn").instantiate()

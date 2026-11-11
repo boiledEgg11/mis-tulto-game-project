@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://gwcd2nsskvq"]
 
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="1_g4sj6"]
+[ext_resource type="Script" uid="uid://bh7roa8gxpwkn" path="res://scenes/test_level_map.gd" id="1_lueuc"]
 [ext_resource type="Script" uid="uid://bneh7x1n7a1cs" path="res://codes/tile_map_layer_2.gd" id="2_w7cqt"]
 [ext_resource type="Script" uid="uid://d3q8m5uwx5lqa" path="res://codes/tile_map_layer_3.gd" id="3_lueuc"]
 [ext_resource type="Script" uid="uid://c80lr6d0j0ncq" path="res://codes/tile_map_layer_4.gd" id="4_up2yt"]
@@ -266,6 +267,7 @@ sources/0 = SubResource("TileSetAtlasSource_hlp6w")
 size = Vector2(107, 20)
 
 [node name="TestLevelMap" type="Node2D" unique_id=517136771]
+script = ExtResource("1_lueuc")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=727110854 groups=["Player_collisoin", "tile"]]
 light_mask = 261

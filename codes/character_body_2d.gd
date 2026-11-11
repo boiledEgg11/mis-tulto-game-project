@@ -653,32 +653,33 @@ func _possess_revisible():
 	$Sprite2D.visible = true
 	$AnimatedSprite2D.visible = false
 	$PlayerIndicator.visible = true
-
-
 func _on_crouch_exit_test_area_area_entered(body) -> void:
 	if body.is_in_group("goal"):
 		print("congrats!")
 		_goal()
 		body.remove_from_group("goal")
 func _change_map(next_map, location):
-	MAP.queue_free()
+	get_parent().call("_erase_enemies")
 	match next_map:
 		"test_level_map_1":
-			var MAP = preload("res://scenes/test_level_map.tscn").instantiate()
+			MAP.call_deferred("_erase")
+			MAP = preload("res://scenes/test_level_map.tscn").instantiate()
 			match location:
 				0:
 					global_position = Vector2(0, 0)
 				1:
 					global_position = Vector2(870, -219)
 			owner.add_child.call_deferred(MAP)
+			get_parent().call("_add_enemies", 0)
 		"test_level_map_2":
-			var MAP = preload("res://scenes/test_level_map_2.tscn").instantiate()
+			MAP.call_deferred("_erase")
+			MAP = preload("res://scenes/test_level_map_2.tscn").instantiate()
 			match location:
 				0:
 					global_position = Vector2(0, 0)
 				_:
 					global_position = Vector2(0, 0)
 			owner.add_child.call_deferred(MAP)
-	get_parent().call("_erase_enemies")
+			get_parent().call("_add_enemies", 1)
 	print(next_map)
 	print(location)

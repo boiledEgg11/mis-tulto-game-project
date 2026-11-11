@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://d0obr1tya45rh"]
 
+[ext_resource type="Script" uid="uid://cbmaxrenahlyn" path="res://scenes/test_level_map_2.gd" id="1_jddut"]
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="1_l703x"]
 [ext_resource type="Script" uid="uid://crn6gnff1v52b" path="res://scenes/area_change_test_2.gd" id="2_5isxy"]
 
@@ -71,6 +72,7 @@ sources/0 = SubResource("TileSetAtlasSource_5isxy")
 size = Vector2(107, 20)
 
 [node name="test_level_map_2" type="Node2D" unique_id=1276281677]
+script = ExtResource("1_jddut")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1682389899 groups=["Player_collisoin", "tile"]]
 light_mask = 261

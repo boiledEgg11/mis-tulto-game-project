@@ -29,6 +29,9 @@ func _reset(file):
 	$Player.POSSESS_START = true
 func _erase_enemies():
 	$StaticBody2D._erase_enemy()
+func _add_enemies(level):
+	print("adding enemies...")
+	$StaticBody2D._set_enemy(level)
 func _load(file):
 	Autoloads._load_game(file)
 	match Autoloads.location:
