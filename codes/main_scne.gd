@@ -6,10 +6,12 @@ var reset = false
 var tile_positions
 var POSSESS_TARGET
 var SAVE_READY = true
+var dash_recover_value: int
+var health_value: int
 func _ready():
 	_reset(Autoloads.LAST_LOADED)
 func _reset(file):
-	$Player/Camera2D/BoxContainer/PlayerHealth.value = 10
+	$Camera2D/BoxContainer/PlayerHealth.value = 10
 	reset = true
 	Autoloads.RESET = true
 	$Player.POSSESS_END = true
@@ -140,15 +142,15 @@ func _save_update(file):
 		var time_1_display = time_format % [DATA_1.hour, DATA_1.minute]
 		var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
 		var time_3_display = time_format % [DATA_3.hour, DATA_3.minute]
-		$Player/Camera2D/Control/BoxContainer2/TextureButton4/Label.text = time_1_display
-		$Player/Camera2D/Control/BoxContainer2/TextureButton4/Label2.text = DATA_1.place
-		$Player/Camera2D/Control/BoxContainer2/TextureButton4/Label3.text = DATA_1.enemy
-		$Player/Camera2D/Control/BoxContainer2/TextureButton5/Label.text = time_2_display
-		$Player/Camera2D/Control/BoxContainer2/TextureButton5/Label2.text = DATA_2.place
-		$Player/Camera2D/Control/BoxContainer2/TextureButton5/Label3.text = DATA_2.enemy
-		$Player/Camera2D/Control/BoxContainer2/TextureButton6/Label.text = time_3_display
-		$Player/Camera2D/Control/BoxContainer2/TextureButton6/Label2.text = DATA_3.place
-		$Player/Camera2D/Control/BoxContainer2/TextureButton6/Label3.text = DATA_3.enemy
+		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton4/Label.text = time_1_display
+		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton4/Label2.text = DATA_1.place
+		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton4/Label3.text = DATA_1.enemy
+		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton5/Label.text = time_2_display
+		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton5/Label2.text = DATA_2.place
+		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton5/Label3.text = DATA_2.enemy
+		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton6/Label.text = time_3_display
+		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton6/Label2.text = DATA_3.place
+		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton6/Label3.text = DATA_3.enemy
 func _save_files(file):
 	if SAVE_READY:
 		$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY, file)
@@ -170,3 +172,46 @@ func _on_texture_button_6_pressed() -> void:
 
 func _on_home_return_pressed() -> void:
 	pass
+func _open_text(number, pause):
+	$Camera2D/TextBox._text_open(number, pause)
+func _camera_position(x_value, y_value, global: bool):
+	if global:
+		$Camera2D.global_position = Vector2(x_value, y_value)
+	else:
+		$Camera2D.position = Vector2(x_value, y_value)
+func _player_health(value, setting):
+	if setting:
+		$Camera2D/BoxContainer/PlayerHealth.value = value
+	else:
+		$Camera2D/BoxContainer/PlayerHealth.value += value
+func _dash_recover(value, setting):
+	if setting:
+		$Camera2D/BoxContainer/DashRecover.value = value
+	else:
+		$Camera2D/BoxContainer/DashRecover.value += value
+func _ability_label(label):
+	$Camera2D/BoxContainer/DashRecover/Label.text = label
+func _get_dash_recover_value():
+	return $Camera2D/BoxContainer/DashRecover.value
+func _get_player_health():
+	return $Camera2D/BoxContainer/PlayerHealth.value
+func _sprite_change(object, texture):
+	match object:
+		"Camera2D/BoxContainer":
+			match texture:
+				"visible":
+					$Camera2D/Control/BoxContainer.visible = true
+		"PlayerHealth":
+			match texture:
+				"low_health":
+					$Camera2D/BoxContainer/PlayerHealth.texture_progress = load("res://assets/sprites/health_bar_low.png")
+				"high_health":
+					$Camera2D/BoxContainer/PlayerHealth.texture_progress = load("res://assets/sprites/health_bar_high.png")
+		"DashRecover":
+			match texture:
+				"max_dash":
+					$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_max.png")
+				"charge_dash":
+					$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_charge_charging.png")
+				"normal":
+					$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_high.png")
