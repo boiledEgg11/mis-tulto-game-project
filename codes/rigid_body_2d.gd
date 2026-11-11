@@ -20,7 +20,7 @@ func _physics_process(delta: float) -> void:
 			2:
 				position = Vector2(-20, 0)
 			3:
-				position = Vector2i(-112, 24)
+				position = Vector2i(-208, 24)
 			_:
 				print("none")
 				position = Vector2i(0, 0)

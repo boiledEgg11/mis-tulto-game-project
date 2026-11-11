@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="1_l703x"]
 [ext_resource type="Script" uid="uid://cuy08fmerufaw" path="res://scenes/door_test2.gd" id="3_mc08h"]
 [ext_resource type="Texture2D" uid="uid://c7h8roegujphu" path="res://assets/sprites/object_door.png" id="4_e7352"]
+[ext_resource type="Script" uid="uid://c587p8dq6yodr" path="res://scenes/test_level_2_tile_2.gd" id="5_e7352"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vhgoa"]
 resource_local_to_scene = true
@@ -77,7 +78,7 @@ script = ExtResource("1_jddut")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1682389899 groups=["Player_collisoin", "tile"]]
 light_mask = 261
-tile_map_data = PackedByteArray("AAD+/wIAAAABAAMAAAABAAIAAAACAAMAAAD//wIAAAAEAAEAAAAAAAIAAAAEAAEAAAD7/wIAAAACAAMAAAD6/wIAAAAEAAEAAAD5/wIAAAAEAAEAAAD4/wIAAAAEAAEAAAD3/wIAAAAEAAEAAAD2/wIAAAABAAMAAAA=")
+tile_map_data = PackedByteArray("AAD+/wIAAAABAAMAAAABAAIAAAAEAAEAAAD//wIAAAAEAAEAAAAAAAIAAAAEAAEAAAD7/wIAAAACAAMAAAD6/wIAAAAEAAEAAAD5/wIAAAAEAAEAAAD4/wIAAAAEAAEAAAD3/wIAAAAEAAEAAAD2/wIAAAABAAMAAADu/wIAAAABAAMAAADv/wIAAAAEAAEAAADw/wIAAAAEAAEAAADx/wIAAAAEAAEAAADy/wIAAAAEAAEAAADz/wIAAAACAAMAAADn/wIAAAAEAAEAAADm/wIAAAAEAAEAAADl/wIAAAAEAAEAAADk/wIAAAAEAAEAAADj/wIAAAAEAAEAAADo/wIAAAACAAMAAADi/wIAAAABAAMAAADv////AAADAAIAAADw////AAADAAIAAADx////AAADAAIAAADy////AAADAAIAAADU/wIAAAABAAMAAADV/wIAAAAEAAEAAADW/wIAAAAEAAEAAADX/wIAAAAEAAEAAADY/wIAAAAEAAEAAADZ/wIAAAAEAAEAAADa/wIAAAACAAMAAADd/wUAAAADAAIAAADe/wUAAAADAAIAAADf/wUAAAADAAIAAAACAAIAAAAAAAMAAAACAAEAAAAEAAAAAAACAAAAAAAEAAAAAAACAP//AAAEAAAAAAACAP7/AAAEAAAAAAACAP3/AAAEAAAAAAACAPz/AAAEAAAAAAACAPv/AAAEAAAAAAACAPr/AAAEAAAAAAACAPn/AAAEAAAAAAACAPj/AAAEAAAAAAACAPf/AAAEAAAAAAACAPX/AAAAAAMAAAACAPb/AAAEAAAAAADj//7/AAADAAIAAADk//7/AAADAAIAAADi//7/AAADAAIAAAD9//3/AAADAAIAAAD+//3/AAADAAIAAAD///3/AAADAAIAAAAAAP3/AAADAAIAAAABAP3/AAADAAIAAAA=")
 tile_set = SubResource("TileSet_jddut")
 physics_quadrant_size = 1
 
@@ -93,11 +94,12 @@ shape = SubResource("RectangleShape2D_neq3f")
 [node name="Sprite2D" type="Sprite2D" parent="Door" unique_id=1635552934]
 texture = ExtResource("4_e7352")
 
-[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=566523168 groups=["Player_collisoin", "tile"]]
+[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=566523168 groups=["Player_collisoin", "tile", "tile_move"]]
 light_mask = 261
-tile_map_data = PackedByteArray("AAD2//7/AAABAAMAAAD3//7/AAAEAAEAAAD4//7/AAAEAAEAAAD5//7/AAAEAAEAAAD6//7/AAAEAAEAAAD7//7/AAAEAAEAAAD8//7/AAACAAMAAAA=")
+tile_map_data = PackedByteArray("AADt//r/AAABAAMAAADu//r/AAAEAAEAAADv//r/AAAEAAEAAADw//r/AAAEAAEAAADx//r/AAACAAMAAAA=")
 tile_set = SubResource("TileSet_jddut")
 physics_quadrant_size = 1
+script = ExtResource("5_e7352")
 
 [connection signal="body_entered" from="Door" to="Door" method="_on_body_entered"]
 [connection signal="body_exited" from="Door" to="Door" method="_on_body_exited"]

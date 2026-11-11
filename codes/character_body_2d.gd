@@ -123,10 +123,14 @@ func _physics_process(delta: float) -> void:
 		$AttackCollision/CollisionShape2D.disabled = true
 	var standing = $groundchecker.get_collider()
 	if standing:
-		if standing.is_in_group("moving_tile") and Autoloads.is_moving:
-			position.x += Autoloads.tile_move
-		if standing.is_in_group("moving_tile_y") and Autoloads.is_moving:
-			position.y -= Autoloads.tile_move / 2
+			if standing.is_in_group("tile_move"):
+				position += standing.tile_move_value
+			if standing.is_in_group("moving_tile"):
+				if Autoloads.is_moving:
+					position.x += Autoloads.tile_move
+			if standing.is_in_group("moving_tile_y") and Autoloads.is_moving:
+				@warning_ignore("integer_division")
+				position.y -= Autoloads.tile_move / 2
 	bodies = $ExtraAttack.get_overlapping_bodies()
 	for body in bodies:
 		if not body.is_in_group("tile_breakable"):

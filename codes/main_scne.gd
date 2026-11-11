@@ -76,11 +76,11 @@ func _enemy_set():
 func _set_data():
 	$StaticBody2D._read_data(false, -1)
 func _on_texture_button_pressed() -> void:
-	$Player/Camera2D/Control.FILE_OPEN = true
+	$Camera2D/Control.FILE_OPEN = true
 	SAVE_READY = true
 func _on_texture_button_3_pressed() -> void:
-	if $Player/Camera2D/Control.FILE_OPEN:
-		$Player/Camera2D/Control.FILE_OPEN = false
+	if $Camera2D/Control.FILE_OPEN:
+		$Camera2D/Control.FILE_OPEN = false
 	else:
 		get_tree().paused = false
 		Autoloads.SAVE_SCREEN = false
@@ -88,7 +88,7 @@ func _on_texture_button_3_pressed() -> void:
 			$Player/Sprite2D.visible = true
 			$Player/PlayerIndicator.visible = true
 func _on_texture_button_2_pressed() -> void:
-	$Player/Camera2D/Control.FILE_OPEN = true
+	$Camera2D/Control.FILE_OPEN = true
 	SAVE_READY =  false
 func _on_texture_button_4_pressed() -> void:
 	Autoloads.play_time = Time.get_ticks_msec() - Autoloads.START_TIME + Autoloads.recorded_time
@@ -142,15 +142,15 @@ func _save_update(file):
 		var time_1_display = time_format % [DATA_1.hour, DATA_1.minute]
 		var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
 		var time_3_display = time_format % [DATA_3.hour, DATA_3.minute]
-		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton4/Label.text = time_1_display
-		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton4/Label2.text = DATA_1.place
-		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton4/Label3.text = DATA_1.enemy
-		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton5/Label.text = time_2_display
-		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton5/Label2.text = DATA_2.place
-		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton5/Label3.text = DATA_2.enemy
-		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton6/Label.text = time_3_display
-		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton6/Label2.text = DATA_3.place
-		$Player/Camera2D/Control/Camera2D/BoxContainer2/TextureButton6/Label3.text = DATA_3.enemy
+		$Camera2D/Control/BoxContainer2/TextureButton4/Label.text = time_1_display
+		$Camera2D/Control/BoxContainer2/TextureButton4/Label2.text = DATA_1.place
+		$Camera2D/Control/BoxContainer2/TextureButton4/Label3.text = DATA_1.enemy
+		$Camera2D/Control/BoxContainer2/TextureButton5/Label.text = time_2_display
+		$Camera2D/Control/BoxContainer2/TextureButton5/Label2.text = DATA_2.place
+		$Camera2D/Control/BoxContainer2/TextureButton5/Label3.text = DATA_2.enemy
+		$Camera2D/Control/BoxContainer2/TextureButton6/Label.text = time_3_display
+		$Camera2D/Control/BoxContainer2/TextureButton6/Label2.text = DATA_3.place
+		$Camera2D/Control/BoxContainer2/TextureButton6/Label3.text = DATA_3.enemy
 func _save_files(file):
 	if SAVE_READY:
 		$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY, file)

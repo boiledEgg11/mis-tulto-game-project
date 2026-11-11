@@ -29,7 +29,7 @@ func _physics_process(delta: float) -> void:
 				$Enemy7Laser._placement(0, 0, 0, -200)
 			2:
 				rotation_degrees = 180
-				position = Vector2i(-112, -8)
+				position = Vector2i(-248, -72)
 				$Enemy7Laser._placement(0, 0, 0, -200)
 			_:
 				print("none")
@@ -40,14 +40,19 @@ func _physics_process(delta: float) -> void:
 		$Enemy7Laser/Line2D._attack_change(true)
 		if not CHARGE_LOCK:
 			CHARGE += 1
+		if individual == 2:
+			CHARGE = 181
 		if CHARGE > 180:
 			CHARGE = 0
 			print("attack!")
 			_attack()
 		var standing = $GroundExistingChecker.get_overlapping_bodies()
 		for body in standing:
-			if body.is_in_group("moving_tile") and Autoloads.is_moving:
-				position.x += Autoloads.tile_move
+			if body.is_in_group("tile_move"):
+				position += body.tile_move_value
+			if body.is_in_group("moving_tile"):
+				if Autoloads.is_moving:
+					position.x += Autoloads.tile_move
 			if body.is_in_group("moving_tile_y") and Autoloads.is_moving:
 				@warning_ignore("integer_division")
 				position.y -= Autoloads.tile_move / 2
@@ -97,7 +102,7 @@ func _attack_end():
 	$Enemy7Laser.attacking = false
 	CHARGE = 0
 func _process(_delta: float) -> void:
-	if CHARGE_LOW:
+	if CHARGE_LOW and individual != 2:
 		LAZER_DURATION -= 1
 		if LAZER_DURATION < 0:
 			_attack_end()
