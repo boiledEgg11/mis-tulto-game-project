@@ -5,7 +5,8 @@
 [ext_resource type="Script" uid="uid://bneh7x1n7a1cs" path="res://codes/tile_map_layer_2.gd" id="2_w7cqt"]
 [ext_resource type="Script" uid="uid://d3q8m5uwx5lqa" path="res://codes/tile_map_layer_3.gd" id="3_lueuc"]
 [ext_resource type="Script" uid="uid://c80lr6d0j0ncq" path="res://codes/tile_map_layer_4.gd" id="4_up2yt"]
-[ext_resource type="Script" uid="uid://sph0spfoglk3" path="res://scenes/area_2d.gd" id="5_w7cqt"]
+[ext_resource type="Texture2D" uid="uid://c7h8roegujphu" path="res://assets/sprites/object_door.png" id="7_up2yt"]
+[ext_resource type="Script" uid="uid://kfx0j7vdmjyy" path="res://scenes/door_code.gd" id="7_vhgoa"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_g4sj6"]
 resource_local_to_scene = true
@@ -264,7 +265,7 @@ physics_layer_0/physics_material = SubResource("PhysicsMaterial_44jf2")
 sources/0 = SubResource("TileSetAtlasSource_hlp6w")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_euwu4"]
-size = Vector2(107, 20)
+size = Vector2(16, 32)
 
 [node name="TestLevelMap" type="Node2D" unique_id=517136771]
 script = ExtResource("1_lueuc")
@@ -297,14 +298,18 @@ tile_set = SubResource("TileSet_j3skq")
 physics_quadrant_size = 1
 script = ExtResource("4_up2yt")
 
-[node name="Area2D" type="Area2D" parent="." unique_id=704390043]
-position = Vector2(870, -219)
+[node name="Door" type="Area2D" parent="." unique_id=1809576797]
+position = Vector2(912, -208)
 collision_layer = 16
 collision_mask = 16
-script = ExtResource("5_w7cqt")
+script = ExtResource("7_vhgoa")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1339219896]
-position = Vector2(43.5, 0)
+[node name="DoorCollision" type="CollisionShape2D" parent="Door" unique_id=1327896578]
+position = Vector2(913.5, -219)
 shape = SubResource("RectangleShape2D_euwu4")
 
-[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]
+[node name="Sprite2D" type="Sprite2D" parent="Door" unique_id=88015990]
+texture = ExtResource("7_up2yt")
+
+[connection signal="body_entered" from="Door" to="Door" method="_on_body_entered"]
+[connection signal="body_exited" from="Door" to="Door" method="_on_body_exited"]

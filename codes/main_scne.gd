@@ -31,17 +31,24 @@ func _erase_enemies():
 	$StaticBody2D._erase_enemy()
 func _add_enemies(level):
 	print("adding enemies...")
-	$StaticBody2D._set_enemy(level)
+	$StaticBody2D._read_data(true, level)
 func _load(file):
 	Autoloads._load_game(file)
 	match Autoloads.location:
 		"test_1":
+			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(232, 136)
 		"test_2":
+			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(360, -8)
 		"test_3":
+			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(1048, -56)
+		"test_4":
+			$Player._change_map("test_level_map_2", -1)
+			$Player.position = Vector2i(0, 0)
 		_:
+			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(0, 0)
 func _enemy_set():
 	if Autoloads.POSSESS_TARGET.species and Autoloads.POSSESS_TARGET.species != "none":
@@ -64,6 +71,8 @@ func _enemy_set():
 		add_child.call_deferred(POSSESS_TARGET)
 		POSSESS_TARGET.call("_individual_set", Autoloads.POSSESS_TARGET.individual)
 		POSSESS_TARGET.call("_possess_start")
+func _set_data():
+	$StaticBody2D._read_data(false, -1)
 func _on_texture_button_pressed() -> void:
 	$Player/Camera2D/Control.FILE_OPEN = true
 	SAVE_READY = true

@@ -58,6 +58,9 @@ func _process(delta: float) -> void:
 		_text_open(current_text, true)
 	if Input.is_action_just_pressed("i"):
 		_close_text()
+	if Autoloads.RESET:
+		_close_text()
+		current_text = 0
 func _on_texture_button_pressed() -> void:
 	_cycle_text(false)
 func _ready() -> void:

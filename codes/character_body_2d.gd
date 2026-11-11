@@ -659,6 +659,7 @@ func _on_crouch_exit_test_area_area_entered(body) -> void:
 		_goal()
 		body.remove_from_group("goal")
 func _change_map(next_map, location):
+	get_parent().call("_set_data")
 	get_parent().call("_erase_enemies")
 	match next_map:
 		"test_level_map_1":

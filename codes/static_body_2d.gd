@@ -13,7 +13,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-func _set_enemy(level):
+func _read_data(start, level):
 	var enemy_file = FileAccess.open("res://assets/text/enemy_placement.txt", FileAccess.READ)
 	var enemy_ids = FileAccess.open("res://assets/text/character_ids.txt", FileAccess.READ)
 	var enemy_species = FileAccess.open("res://assets/text/enemy_type.txt", FileAccess.READ)
@@ -27,6 +27,9 @@ func _set_enemy(level):
 	enemies_id = enemy_id.split("\n")
 	enemies = enemy_placement.split("\n")
 	enemy_types = enemy_specie.split("\n")
+	if start:
+		_set_enemy(level)
+func _set_enemy(level):
 	match  level:
 		0:
 			file_start_point = 0
