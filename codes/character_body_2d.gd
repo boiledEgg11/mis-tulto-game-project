@@ -668,7 +668,7 @@ func _change_map(next_map, location):
 				0:
 					global_position = Vector2(0, 0)
 				1:
-					global_position = Vector2(870, -219)
+					global_position = Vector2(870, -180)
 			owner.add_child.call_deferred(MAP)
 			get_parent().call("_add_enemies", 0)
 		"test_level_map_2":

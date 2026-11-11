@@ -66,15 +66,11 @@ func _set_enemy(level):
 				print("missing type...")
 func _erase_enemy():
 	for i in range(enemies.size()):
-		if enemies[i] == "_stop":
-			break
 		match enemies[i]:
 			"enemy":
 				if characters[i].get_child(0).possess_health > 0:
 					characters[i].call_deferred("_erase")
-					await get_tree().process_frame
 					characters[i] = preload("res://scenes/empty.tscn").instantiate()
 			"save":
 				characters[i].call_deferred("_erase")
-				await get_tree().process_frame
 				characters[i] = preload("res://scenes/empty.tscn").instantiate()
