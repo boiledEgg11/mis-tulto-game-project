@@ -12,6 +12,7 @@ var CHARGE = 0
 var CHARGE_LOCK = false
 var CHARGE_LOW = false
 var LAZER_DURATION = 120
+var standing
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
@@ -31,46 +32,44 @@ func _physics_process(delta: float) -> void:
 				rotation_degrees = 180
 				position = Vector2i(-248, -72)
 				$Enemy7Laser._placement(0, 0, 0, -200)
+			3:
+				position = Vector2(-800, -24)
+				$Enemy7Laser._placement(0, 0, 0, -100)
+			4:
+				position = Vector2(-816, -24)
+				$Enemy7Laser._placement(0, 0, 0, -100)
 			_:
 				print("none")
 				position = Vector2i(0, 0)
 		START = false
 	move_and_slide()
+	standing = $GroundExistingChecker.get_overlapping_bodies()
+	for body in standing:
+		get_parent().reparent(body)
+	if not standing:
+			velocity += get_gravity() * delta * 1.5
 	if possess_health > 0:
 		$Enemy7Laser/Line2D._attack_change(true)
 		if not CHARGE_LOCK:
 			CHARGE += 1
-		if individual == 2:
+		if individual == 2 or individual == 3 or individual == 4:
 			CHARGE = 181
 		if CHARGE > 180:
 			CHARGE = 0
-			print("attack!")
 			_attack()
-		var standing = $GroundExistingChecker.get_overlapping_bodies()
-		for body in standing:
-			if body.is_in_group("tile_move"):
-				position += body.tile_move_value
-			if body.is_in_group("moving_tile"):
-				if Autoloads.is_moving:
-					position.x += Autoloads.tile_move
-			if body.is_in_group("moving_tile_y") and Autoloads.is_moving:
-				@warning_ignore("integer_division")
-				position.y -= Autoloads.tile_move / 2
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
-		if not standing:
-				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
 			if not Autoloads.PLAYER_ATTACK:
 				_attack_end()
 			$Enemy7Laser/Line2D._attack_change(false)
 			INVINCIBLE = true
 			POSSESSED = true
-			Autoloads.PLAYER_POSITION_X = position.x
-			Autoloads.PLAYER_POSITION_Y = position.y
+			Autoloads.PLAYER_POSITION_X = global_position.x
+			Autoloads.PLAYER_POSITION_Y = global_position.y
 			$EnemyArea/CollisionShape2D.disabled = true
 			$Sprite2D.visible = false
 			if Autoloads.PLAYER_POSSESS_STOP:
@@ -102,6 +101,7 @@ func _attack_end():
 	$Enemy7Laser.attacking = false
 	CHARGE = 0
 func _process(_delta: float) -> void:
+
 	if CHARGE_LOW and individual != 2:
 		LAZER_DURATION -= 1
 		if LAZER_DURATION < 0:

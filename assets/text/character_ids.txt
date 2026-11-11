@@ -11,3 +11,9 @@ test_2
 1
 test_3
 _stop
+test_4
+3
+2
+3
+4
+_stop

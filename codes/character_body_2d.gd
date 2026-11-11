@@ -173,8 +173,8 @@ func _physics_process(delta: float) -> void:
 				_ability_use(Autoloads.POSSESS_ABILITY)
 		match Autoloads.POSSESS_ABILITY:
 			"LASER":
-				position.x = Autoloads.PLAYER_POSITION_X
-				position.y = Autoloads.PLAYER_POSITION_Y
+				global_position.x = Autoloads.PLAYER_POSITION_X
+				global_position.y = Autoloads.PLAYER_POSITION_Y
 				velocity.x = 0
 				velocity.y = 0
 				if is_on_floor():
@@ -418,7 +418,8 @@ func _physics_process(delta: float) -> void:
 			POSSESS_START = true
 			DASH_LOCK = false
 			STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
-			_health_process(0)
+			await get_tree().create_timer(0.2).timeout
+			INVINCIBLE = false
 	if not Autoloads.PLAYER_POSSESSING:
 		get_parent().call("_camera_position", position.x, position.y, false)
 		Autoloads.POSSESS_ENEMY = "none"

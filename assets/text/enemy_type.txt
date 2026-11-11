@@ -11,3 +11,9 @@ save
 enemy_7
 save
 _stop
+save
+enemy_1
+enemy_7
+enemy_7
+enemy_7
+_stop
