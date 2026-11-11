@@ -41,6 +41,7 @@ func _physics_process(_delta: float) -> void:
 			Autoloads.CAMERA_LOCATION = Vector2i(1232, 0)
 		Autoloads.PLAYER_POSITION_X = Initial.x
 		Autoloads.PLAYER_POSITION_Y = Initial.y
+		position = Initial
 		rotation = 0
 		INVINCIBLE = true
 		POSSESSED = true

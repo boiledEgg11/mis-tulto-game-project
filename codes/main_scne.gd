@@ -169,16 +169,21 @@ func _on_texture_button_6_pressed() -> void:
 	Autoloads.played_time.minute = Autoloads.played_time.hour * -60 + int(Autoloads.play_time / 60000)
 	_save_files(3)
 
-
 func _on_home_return_pressed() -> void:
 	pass
 func _open_text(number, pause):
 	$Camera2D/TextBox._text_open(number, pause)
 func _camera_position(x_value, y_value, global: bool):
 	if global:
-		$Camera2D.global_position = Vector2(x_value, y_value)
-	else:
-		$Camera2D.position = Vector2(x_value, y_value)
+		if y_value < 100:
+			$Camera2D.global_position = Vector2(x_value, y_value)
+		else:
+			$Camera2D.global_position = Vector2(x_value, $Camera2D.global_position.y)
+	if not global:
+		if y_value < 100:
+			$Camera2D.position = Vector2(x_value, y_value)
+		else:
+			$Camera2D.global_position = Vector2(x_value, $Camera2D.global_position.y)
 func _player_health(value, setting):
 	if setting:
 		$Camera2D/BoxContainer/PlayerHealth.value = value

@@ -106,6 +106,7 @@ func _ability_use(ability):
 	if ability != "none" or ability != "spin":
 		get_parent().call("_dash_recover", 0, true)
 func _physics_process(delta: float) -> void:
+	get_parent().call("_camera_position", position.x, position.y, false)
 	if INVINCIBLE_HOLD:
 		if is_on_floor():
 			_dash_hold_stop()
@@ -281,7 +282,7 @@ func _physics_process(delta: float) -> void:
 				if not Input.is_action_pressed("space"):
 					get_parent().call("_camera_position", Autoloads.CAMERA_LOCATION.x, Autoloads.CAMERA_LOCATION.y, true)
 				else:
-					get_parent().call("_camera_position", 0, 0, false)
+					get_parent().call("_camera_position", position.x, position.y, false)
 				velocity.x = 0
 				velocity.y = 0
 				position.x = Autoloads.PLAYER_POSITION_X
@@ -415,6 +416,7 @@ func _physics_process(delta: float) -> void:
 			STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 			_health_process(0)
 	if not Autoloads.PLAYER_POSSESSING:
+		get_parent().call("_camera_position", position.x, position.y, false)
 		Autoloads.POSSESS_ENEMY = "none"
 		Autoloads.POSSESS_TYPE = "none"
 		get_parent().call("_ability_label", "dash")
