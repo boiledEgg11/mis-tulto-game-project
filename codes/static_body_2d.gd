@@ -71,9 +71,10 @@ func _erase_enemy():
 	for i in range(enemies.size()):
 		match enemies[i]:
 			"enemy":
-				if characters[i].get_child(0).possess_health > 0:
-					characters[i].call_deferred("_erase")
-					characters[i] = preload("res://scenes/empty.tscn").instantiate()
+				if characters[i].get_child(0) != null:
+					if characters[i].get_child(0).possess_health > 0:
+						characters[i].call_deferred("_erase")
+						characters[i] = preload("res://scenes/empty.tscn").instantiate()
 			"save":
 				characters[i].call_deferred("_erase")
 				characters[i] = preload("res://scenes/empty.tscn").instantiate()

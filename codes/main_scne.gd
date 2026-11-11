@@ -46,7 +46,7 @@ func _load(file):
 			$Player.position = Vector2i(1048, -56)
 		"test_4":
 			$Player._change_map("test_level_map_2", -1)
-			$Player.position = Vector2i(0, 0)
+			$Player.position = Vector2i(-24, 24)
 		_:
 			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(0, 0)

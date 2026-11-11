@@ -30,6 +30,7 @@ var HAS_TARGET = 0
 var OVERLAPPING_SAVE = "none"
 var SAVE = preload("res://scenes/save.tscn")
 var MAP
+var map_changable = 120
 func _ready() -> void:
 	MAP = preload("res://scenes/test_level_map.tscn").instantiate()
 	owner.add_child.call_deferred(MAP)
@@ -555,6 +556,8 @@ func _physics_process(delta: float) -> void:
 					$PossessArea/PossessShape.disabled = true
 					STATUS = {"speed": 120, "jump": -400, "damage_multiplier": -1, "slide": 0, "hitbox_x": 15.5, "hitbox_y": 15.5, "air_speed": 100}
 func _process(_delta: float) -> void:
+	if map_changable > 0:
+		map_changable -= 1
 	if $Camera2D/BoxContainer/DashRecover.value == 60:
 		$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_max.png")
 	else:
@@ -669,7 +672,7 @@ func _change_map(next_map, location):
 				0:
 					global_position = Vector2(0, 0)
 				1:
-					global_position = Vector2(870, -180)
+					global_position = Vector2(912, -208)
 			owner.add_child.call_deferred(MAP)
 			get_parent().call("_add_enemies", 0)
 		"test_level_map_2":
@@ -678,6 +681,8 @@ func _change_map(next_map, location):
 			match location:
 				0:
 					global_position = Vector2(0, 0)
+				1:
+					global_position = Vector2(24, 16)
 				_:
 					global_position = Vector2(0, 0)
 			owner.add_child.call_deferred(MAP)
