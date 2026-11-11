@@ -1,51 +1,58 @@
 extends StaticBody2D
-var characters: Array = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+var characters: Array = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 @onready var enemies
 @onready var enemies_id
+@onready var enemy_types
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
 func _set_enemy(level):
 	var enemy_file = FileAccess.open("res://assets/text/enemy_placement.txt", FileAccess.READ)
 	var enemy_ids = FileAccess.open("res://assets/text/character_ids.txt", FileAccess.READ)
+	var enemy_species = FileAccess.open("res://assets/text/enemy_type.txt", FileAccess.READ)
 	var enemy_placement = enemy_file.get_as_text()
 	var enemy_id = enemy_ids.get_as_text()
+	var enemy_specie = enemy_species.get_as_text()
 	enemy_ids.close()
 	enemy_file.close()
+	print("working...")
+	enemy_species.close()
 	enemies_id = enemy_id.split("\n")
 	enemies = enemy_placement.split("\n")
-	match level:
-		"test_1":
-			characters[0] = preload("res://scenes/enemy1.tscn").instantiate()
-			characters[1] = preload("res://scenes/enemy2.tscn").instantiate()
-			characters[2] = preload("res://scenes/enemy3.tscn").instantiate()
-			characters[3] = preload("res://scenes/enemy4.tscn").instantiate()
-			characters[4] = preload("res://scenes/enemy5.tscn").instantiate()
-			characters[5] = preload("res://scenes/enemy6.tscn").instantiate()
-			characters[6] = preload("res://scenes/enemy5.tscn").instantiate()
-			characters[7] = preload("res://scenes/enemy1.tscn").instantiate()
-			characters[8] = preload("res://scenes/save.tscn").instantiate()
-			characters[9] = preload("res://scenes/save.tscn").instantiate()
-			characters[10] = preload("res://scenes/enemy7.tscn").instantiate()
-			characters[11] = preload("res://scenes/save.tscn").instantiate()
-			owner.add_child.call_deferred(characters[0])
-			owner.add_child.call_deferred(characters[1])
-			owner.add_child.call_deferred(characters[2])
-			owner.add_child.call_deferred(characters[3])
-			owner.add_child.call_deferred(characters[4])
-			owner.add_child.call_deferred(characters[5])
-			owner.add_child.call_deferred(characters[6])
-			owner.add_child.call_deferred(characters[7])
-			owner.add_child.call_deferred(characters[8])
-			owner.add_child.call_deferred(characters[9])
-			owner.add_child.call_deferred(characters[10])
-			owner.add_child.call_deferred(characters[11])
-			characters[0].call("_individual_set", 1)
-			characters[1].call("_individual_set", 1)
-			characters[2].call("_individual_set", 1)
-			characters[3].call("_individual_set", 1)
-			characters[4].call("_individual_set", 1)
-			characters[5].call("_individual_set", 1)
-			characters[6].call("_individual_set", 2)
-			characters[7].call("_individual_set", 2)
-			characters[8].call("_placement", "test_1")
-			characters[9].call("_placement", "test_1")
-			characters[11].call("_placement", "test_3")
-			characters[10].call("_individual_set", 1)
+	enemy_types = enemy_specie.split("\n")
+	for i in range(enemy_types.size()):
+		if enemy_types[i] == "_stop":
+			print("stop!")
+			break
+		match enemy_types[i]:
+			"enemy_1":
+				characters[i] = preload("res://scenes/enemy1.tscn").instantiate()
+			"enemy_2":
+				characters[i] = preload("res://scenes/enemy2.tscn").instantiate()
+			"enemy_3":
+				characters[i] = preload("res://scenes/enemy3.tscn").instantiate()
+			"enemy_4":
+				characters[i] = preload("res://scenes/enemy4.tscn").instantiate()
+			"enemy_5":
+				characters[i] = preload("res://scenes/enemy5.tscn").instantiate()
+			"enemy_6":
+				characters[i] = preload("res://scenes/enemy6.tscn").instantiate()
+			"enemy_7":
+				characters[i] = preload("res://scenes/enemy7.tscn").instantiate()
+			"save":
+				characters[i] = preload("res://scenes/save.tscn").instantiate()
+		owner.add_child.call_deferred(characters[i])
+		match enemies[i]:
+			"enemy":
+				characters[i].call("_individual_set", int(enemies_id[i]))
+				print(enemies_id)
+			"save":
+				characters[i].call("_placement", enemies_id[i])
+			_:
+				print("missing type...")

@@ -47,6 +47,7 @@ moving_tile=""
 moving_tile_y=""
 is_on_screen=""
 goal=""
+player=""
 
 [gui]
 

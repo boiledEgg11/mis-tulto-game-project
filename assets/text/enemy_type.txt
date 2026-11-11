@@ -1,0 +1,13 @@
+enemy_1
+enemy_2
+enemy_3
+enemy_4
+enemy_5
+enemy_6
+enemy_5
+enemy_1
+save
+save
+enemy_7
+save
+_stop
