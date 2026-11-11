@@ -27,7 +27,8 @@ func _reset(file):
 	await get_tree().process_frame
 	_enemy_set()
 	$Player.POSSESS_START = true
-
+func _erase_enemies():
+	$StaticBody2D._erase_enemy()
 func _load(file):
 	Autoloads._load_game(file)
 	match Autoloads.location:

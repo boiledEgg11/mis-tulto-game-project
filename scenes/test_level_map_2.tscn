@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://d0obr1tya45rh"]
 
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="1_l703x"]
+[ext_resource type="Script" uid="uid://crn6gnff1v52b" path="res://scenes/area_change_test_2.gd" id="2_5isxy"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vhgoa"]
 resource_local_to_scene = true
@@ -66,6 +67,9 @@ physics_layer_0/collision_layer = 1
 physics_layer_0/physics_material = SubResource("PhysicsMaterial_vhgoa")
 sources/0 = SubResource("TileSetAtlasSource_5isxy")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jddut"]
+size = Vector2(107, 20)
+
 [node name="test_level_map_2" type="Node2D" unique_id=1276281677]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1682389899 groups=["Player_collisoin", "tile"]]
@@ -73,3 +77,15 @@ light_mask = 261
 tile_map_data = PackedByteArray(0, 0, 254, 255, 2, 0, 0, 0, 1, 0, 3, 0, 0, 0, 1, 0, 2, 0, 0, 0, 2, 0, 3, 0, 0, 0, 255, 255, 2, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 4, 0, 1, 0, 0, 0)
 tile_set = SubResource("TileSet_jddut")
 physics_quadrant_size = 1
+
+[node name="Area2D" type="Area2D" parent="." unique_id=361780720]
+position = Vector2(44, 41)
+collision_layer = 16
+collision_mask = 16
+script = ExtResource("2_5isxy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1855607204]
+position = Vector2(43.5, 0)
+shape = SubResource("RectangleShape2D_jddut")
+
+[connection signal="body_entered" from="Area2D" to="Area2D" method="_on_body_entered"]

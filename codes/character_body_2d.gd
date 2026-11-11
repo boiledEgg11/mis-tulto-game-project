@@ -663,13 +663,22 @@ func _on_crouch_exit_test_area_area_entered(body) -> void:
 func _change_map(next_map, location):
 	MAP.queue_free()
 	match next_map:
+		"test_level_map_1":
+			var MAP = preload("res://scenes/test_level_map.tscn").instantiate()
+			match location:
+				0:
+					global_position = Vector2(0, 0)
+				1:
+					global_position = Vector2(870, -219)
+			owner.add_child.call_deferred(MAP)
 		"test_level_map_2":
 			var MAP = preload("res://scenes/test_level_map_2.tscn").instantiate()
+			match location:
+				0:
+					global_position = Vector2(0, 0)
+				_:
+					global_position = Vector2(0, 0)
 			owner.add_child.call_deferred(MAP)
-	match location:
-		0:
-			global_position = Vector2(0, 0)
-		_:
-			global_position = Vector2(0, 0)
+	get_parent().call("_erase_enemies")
 	print(next_map)
 	print(location)
