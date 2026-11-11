@@ -297,8 +297,11 @@ func _physics_process(delta: float) -> void:
 					direction = Input.get_axis("left", "right")
 				Autoloads.tile_move = direction
 				if direction:
+					Autoloads.spin_moving = true
 					$Sprite2D.rotation_degrees += direction * 10
 					$DamageCollision.rotation_degrees += direction * 10
+				else:
+					Autoloads.spin_moving = false
 			"TARGET_DASH":
 				if HAS_TARGET == 2:
 						position.x = move_toward(position.x, TARGET_POS.x, 2)

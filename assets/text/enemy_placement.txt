@@ -16,4 +16,6 @@ enemy
 enemy
 enemy
 enemy
+enemy
+enemy
 _stop

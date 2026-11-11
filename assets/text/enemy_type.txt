@@ -16,4 +16,6 @@ enemy_1
 enemy_7
 enemy_7
 enemy_7
+enemy_5
+enemy_7
 _stop

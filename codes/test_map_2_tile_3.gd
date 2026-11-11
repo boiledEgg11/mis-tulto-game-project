@@ -1,5 +1,5 @@
 extends TileMapLayer
-@onready var tile_rotate_value = 3
+@onready var tile_rotate_value = 2
 @onready var initial_pos
 @onready var moving
 # Called when the node enters the scene tree for the first time.

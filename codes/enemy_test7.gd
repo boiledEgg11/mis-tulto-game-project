@@ -38,6 +38,10 @@ func _physics_process(delta: float) -> void:
 			4:
 				position = Vector2(-816, -24)
 				$Enemy7Laser._placement(0, 0, 0, -100)
+			5:
+				rotation_degrees = 90
+				position = Vector2(480, -112)
+				$Enemy7Laser._placement(0, 0, 0, -100)
 			_:
 				print("none")
 				position = Vector2i(0, 0)
@@ -45,7 +49,8 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	standing = $GroundExistingChecker.get_overlapping_bodies()
 	for body in standing:
-		get_parent().reparent(body)
+		if not body.is_in_group("enemy7_cancel"):
+			get_parent().reparent(body)
 	if not standing:
 			velocity += get_gravity() * delta * 1.5
 	if possess_health > 0:
