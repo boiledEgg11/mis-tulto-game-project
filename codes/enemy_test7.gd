@@ -27,6 +27,10 @@ func _physics_process(delta: float) -> void:
 				print("placed")
 				position = Vector2i(1016, -40)
 				$Enemy7Laser._placement(0, 0, 0, -200)
+			2:
+				rotation_degrees = 180
+				position = Vector2i(-112, -8)
+				$Enemy7Laser._placement(0, 0, 0, -200)
 			_:
 				print("none")
 				position = Vector2i(0, 0)
@@ -52,7 +56,7 @@ func _physics_process(delta: float) -> void:
 		POSSESSED = false
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
-		if not is_on_floor():
+		if not standing:
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
 			if not Autoloads.PLAYER_ATTACK:

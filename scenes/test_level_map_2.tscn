@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://d0obr1tya45rh"]
+[gd_scene format=4 uid="uid://d0obr1tya45rh"]
 
 [ext_resource type="Script" uid="uid://cbmaxrenahlyn" path="res://codes/test_level_map_2.gd" id="1_jddut"]
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="1_l703x"]
@@ -77,7 +77,7 @@ script = ExtResource("1_jddut")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1682389899 groups=["Player_collisoin", "tile"]]
 light_mask = 261
-tile_map_data = PackedByteArray(0, 0, 254, 255, 2, 0, 0, 0, 1, 0, 3, 0, 0, 0, 1, 0, 2, 0, 0, 0, 2, 0, 3, 0, 0, 0, 255, 255, 2, 0, 0, 0, 4, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 4, 0, 1, 0, 0, 0)
+tile_map_data = PackedByteArray("AAD+/wIAAAABAAMAAAABAAIAAAACAAMAAAD//wIAAAAEAAEAAAAAAAIAAAAEAAEAAAD7/wIAAAACAAMAAAD6/wIAAAAEAAEAAAD5/wIAAAAEAAEAAAD4/wIAAAAEAAEAAAD3/wIAAAAEAAEAAAD2/wIAAAABAAMAAAA=")
 tile_set = SubResource("TileSet_jddut")
 physics_quadrant_size = 1
 
@@ -92,6 +92,12 @@ shape = SubResource("RectangleShape2D_neq3f")
 
 [node name="Sprite2D" type="Sprite2D" parent="Door" unique_id=1635552934]
 texture = ExtResource("4_e7352")
+
+[node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=566523168 groups=["Player_collisoin", "tile"]]
+light_mask = 261
+tile_map_data = PackedByteArray("AAD2//7/AAABAAMAAAD3//7/AAAEAAEAAAD4//7/AAAEAAEAAAD5//7/AAAEAAEAAAD6//7/AAAEAAEAAAD7//7/AAAEAAEAAAD8//7/AAACAAMAAAA=")
+tile_set = SubResource("TileSet_jddut")
+physics_quadrant_size = 1
 
 [connection signal="body_entered" from="Door" to="Door" method="_on_body_entered"]
 [connection signal="body_exited" from="Door" to="Door" method="_on_body_exited"]

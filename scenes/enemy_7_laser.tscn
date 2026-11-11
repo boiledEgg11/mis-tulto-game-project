@@ -5,7 +5,6 @@
 
 [node name="Enemy7Laser" type="RayCast2D" unique_id=62884777]
 target_position = Vector2(0, 0)
-collide_with_areas = true
 script = ExtResource("1_v5afx")
 
 [node name="Line2D" type="Line2D" parent="." unique_id=1544211318 groups=["damage", "damage_2", "player_damaging"]]

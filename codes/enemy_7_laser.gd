@@ -30,7 +30,7 @@ func _physics_process(delta: float) -> void:
 			target_position = laser_end_position
 			laser_end_position = to_local(get_collision_point())
 	if not attacking:
-		laser_end_position = Vector2i(0, -7.5)
+		laser_end_position = Vector2i(0, 0)
 		target_position = Vector2i(0, 0)
 	force_raycast_update()
 	$Line2D.set_point_position(1, laser_end_position)

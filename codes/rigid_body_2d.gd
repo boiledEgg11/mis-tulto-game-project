@@ -19,6 +19,8 @@ func _physics_process(delta: float) -> void:
 				position = Vector2(98, 0)
 			2:
 				position = Vector2(-20, 0)
+			3:
+				position = Vector2i(-112, 24)
 			_:
 				print("none")
 				position = Vector2i(0, 0)
@@ -79,6 +81,7 @@ func _possess_stop() -> void:
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
 	$LeftCollisionCheck.position.x = 8 * direction
+	$GroundExistingChecker.position.x = 9 * direction
 	if direction == 1:
 		$Sprite2D.flip_h = false
 	if direction == -1:
@@ -102,3 +105,9 @@ func _process(_delta: float) -> void:
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
+
+
+func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
+	if individual == 3:
+		if body.is_in_group("tile"):
+			direction *= -1

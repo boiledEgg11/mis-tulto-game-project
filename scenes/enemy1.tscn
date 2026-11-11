@@ -13,6 +13,9 @@ size = Vector2(0.1, 15)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ewymi"]
 size = Vector2(15.5, 15.5)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_n665k"]
+size = Vector2(1, 1)
+
 [node name="Node2D" type="Node2D" unique_id=2001351235]
 process_mode = 3
 script = ExtResource("1_n665k")
@@ -45,5 +48,12 @@ shape = SubResource("RectangleShape2D_ewymi")
 [node name="groundchecker" type="RayCast2D" parent="EnemyTest" unique_id=1668793004]
 target_position = Vector2(0, 90)
 
+[node name="GroundExistingChecker" type="Area2D" parent="EnemyTest" unique_id=687299512]
+position = Vector2(9, 8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/GroundExistingChecker" unique_id=1132189104]
+shape = SubResource("RectangleShape2D_n665k")
+
 [connection signal="body_entered" from="EnemyTest/LeftCollisionCheck" to="EnemyTest" method="_on_left_collision_check_body_entered"]
 [connection signal="area_entered" from="EnemyTest/EnemyArea" to="EnemyTest" method="_on_enemy_area_area_entered"]
+[connection signal="body_exited" from="EnemyTest/GroundExistingChecker" to="EnemyTest" method="_on_ground_existing_checker_body_exited"]
