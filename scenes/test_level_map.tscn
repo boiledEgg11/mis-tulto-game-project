@@ -305,10 +305,10 @@ collision_mask = 16
 script = ExtResource("7_vhgoa")
 
 [node name="DoorCollision" type="CollisionShape2D" parent="Door" unique_id=1327896578]
-position = Vector2(913.5, -219)
 shape = SubResource("RectangleShape2D_euwu4")
 
 [node name="Sprite2D" type="Sprite2D" parent="Door" unique_id=88015990]
+visible = false
 texture = ExtResource("7_up2yt")
 
 [connection signal="body_entered" from="Door" to="Door" method="_on_body_entered"]
