@@ -14,6 +14,10 @@ var CHARGE_LOW = false
 var LAZER_DURATION = 120
 var standing
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
+func _solved(place):
+	match place:
+		0:
+			print("solved!")
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _attack():
@@ -40,8 +44,8 @@ func _physics_process(delta: float) -> void:
 				$Enemy7Laser._placement(0, 0, 0, -100)
 			5:
 				rotation_degrees = 90
-				position = Vector2(480, -112)
-				$Enemy7Laser._placement(0, 0, 0, -100)
+				position = Vector2(487, -104)
+				$Enemy7Laser._placement(0, 0, 0, -400)
 			_:
 				print("none")
 				position = Vector2i(0, 0)
@@ -52,12 +56,13 @@ func _physics_process(delta: float) -> void:
 		if not body.is_in_group("enemy7_cancel"):
 			get_parent().reparent(body)
 	if not standing:
+		if individual != 5:
 			velocity += get_gravity() * delta * 1.5
 	if possess_health > 0:
 		$Enemy7Laser/Line2D._attack_change(true)
 		if not CHARGE_LOCK:
 			CHARGE += 1
-		if individual == 2 or individual == 3 or individual == 4:
+		if individual == 2 or individual == 3 or individual == 4 or individual == 5:
 			CHARGE = 181
 		if CHARGE > 180:
 			CHARGE = 0

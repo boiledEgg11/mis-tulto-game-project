@@ -7,13 +7,13 @@ func _ready() -> void:
 func _process(_delta: float) -> void:
 	if Autoloads.spin_moving:
 		position.y += tile_move_value.y
-	if position.y > initial_pos.y - 64 and Autoloads.tile_move > 0:
-		tile_move_value.y = 5
-	if position.y < initial_pos.y + 64 and Autoloads.tile_move < 0:
-		tile_move_value.y = -5
-	if position.y < initial_pos.y - 64 or position.y > initial_pos.y + 64 or Autoloads.tile_move == 0:
+	if position.y > initial_pos.y - 62 and Autoloads.tile_move > 0:
+		tile_move_value.y = 2
+	if position.y < initial_pos.y + 62 and Autoloads.tile_move < 0:
+		tile_move_value.y = -2
+	if position.y < initial_pos.y - 62 or position.y > initial_pos.y + 62 or Autoloads.tile_move == 0:
 		tile_move_value.y = 0
-	if position.y < initial_pos.y - 64:
+	if position.y < initial_pos.y - 62:
 		position.y += 0.1
-	if position.y > initial_pos.y + 64:
+	if position.y > initial_pos.y + 62:
 		position.y -= 0.1

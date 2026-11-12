@@ -10,3 +10,7 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+func _puzzle_solved():
+	for i in range(3, 6):
+		for l in range(-69, -67):
+			$TileMapLayer5.erase_cell(Vector2i(l, i))

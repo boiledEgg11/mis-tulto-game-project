@@ -13,9 +13,9 @@ width = 16.0
 default_color = Color(0.69411767, 0.105882354, 1, 0.67058825)
 script = ExtResource("2_w3jmj")
 
-[node name="Area2D" type="Area2D" parent="Line2D" unique_id=612551333 groups=["damage", "damage_2"]]
-collision_layer = 10
-collision_mask = 10
+[node name="Area2D" type="Area2D" parent="Line2D" unique_id=612551333 groups=["damage", "damage_2", "enemy7"]]
+collision_layer = 138
+collision_mask = 138
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Line2D/Area2D" unique_id=878069071]
 debug_color = Color(0, 0.6, 0.69803923, 0)

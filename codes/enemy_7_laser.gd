@@ -12,8 +12,6 @@ func _ready() -> void:
 func _placement(x_pos, y_pos, x_length, y_length):
 	position = Vector2i(x_pos, y_pos)
 	max_length = Vector2i(x_length, y_length)
-func _process(delta: float) -> void:
-	pass
 func _physics_process(delta: float) -> void:
 	if PLAYER_ATTACK:
 		charge -= 1
