@@ -18,4 +18,8 @@ test_4
 4
 3
 5
+test_5
+_stop
+1
+test_6
 _stop

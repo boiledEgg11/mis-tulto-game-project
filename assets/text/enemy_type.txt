@@ -18,4 +18,8 @@ enemy_7
 enemy_7
 enemy_5
 enemy_7
+save
+_stop
+enemy_8
+save
 _stop

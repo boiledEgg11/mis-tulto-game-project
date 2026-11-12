@@ -18,4 +18,8 @@ enemy
 enemy
 enemy
 enemy
+save
+_stop
+enemy
+save
 _stop
