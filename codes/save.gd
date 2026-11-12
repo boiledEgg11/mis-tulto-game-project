@@ -24,6 +24,8 @@ func _placement(placement):
 			position = Vector2(-24, 24)
 		"test_5":
 			position = Vector2(-1050, 24)
+		"test_6":
+			position = Vector2(-24, 24)
 		_:
 			queue_free()
 	location = placement

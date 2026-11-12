@@ -8,9 +8,20 @@ var POSSESSED = false
 var START = false
 var individual
 var WALL_EXISTED = false
+var projectile_amount = 0
+var projectile: Array = [preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate()]
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
+func _summon_projectile(summon_amount):
+	for i in range(summon_amount):
+		projectile[i].queue_free()
+		projectile_amount += 1
+		projectile[i] = preload("res://scenes/enemy8_projectile.tscn").instantiate()
+		$SpinManager.add_child(projectile[i])
+		projectile[i].get_child(0).position = Vector2i(0, -50)
+		for l in range(0, i):
+			projectile[l].rotation_degrees += 72
 func _physics_process(delta: float) -> void:
 	if START:
 		match individual:
@@ -21,6 +32,8 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if projectile_amount < 5:
+			_summon_projectile(5 - projectile_amount)
 		var standing = $groundchecker.get_collider()
 		if standing:
 			if standing.is_in_group("moving_tile") and Autoloads.is_moving:

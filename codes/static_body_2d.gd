@@ -35,6 +35,8 @@ func _set_enemy(level):
 			file_start_point = 0
 		1:
 			file_start_point = 13
+		2:
+			file_start_point = 22
 	for i in range(file_start_point, enemy_types.size()):
 		if enemy_types[i] == "_stop" or enemy_types[i] == null:
 			print("stop!")
@@ -56,7 +58,7 @@ func _set_enemy(level):
 			"enemy_7":
 				characters[i] = preload("res://scenes/enemy7.tscn").instantiate()
 			"enemy_8":
-				characters[i] = preload("res://scenes/enemy_8.tscn").instantiate()
+				characters[i] = preload("res://scenes/enemy8.tscn").instantiate()
 			"save":
 				print("added enemies")
 				characters[i] = preload("res://scenes/save.tscn").instantiate()

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bfg2mqlwxv85o" path="res://scenes/test_level_map_3.gd" id="1_bxq25"]
 [ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="2_arlqm"]
-[ext_resource type="Script" uid="uid://cuy08fmerufaw" path="res://scenes/door_test2.gd" id="3_xa8fa"]
+[ext_resource type="Script" uid="uid://brd2ncnx8etjk" path="res://scenes/door_test3.gd" id="3_bxq25"]
 [ext_resource type="Texture2D" uid="uid://c7h8roegujphu" path="res://assets/sprites/object_door.png" id="4_idk0s"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vhgoa"]
@@ -85,7 +85,7 @@ physics_quadrant_size = 1
 position = Vector2(24, 16)
 collision_layer = 16
 collision_mask = 16
-script = ExtResource("3_xa8fa")
+script = ExtResource("3_bxq25")
 
 [node name="DoorCollision" type="CollisionShape2D" parent="Door" unique_id=345170215]
 shape = SubResource("RectangleShape2D_neq3f")
