@@ -14,6 +14,7 @@ func _on_body_exited(body: Node2D) -> void:
 		player_collision = false
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
+		get_parent().call("_puzzle_solved")
 		player_collision = true
 		player = body
 		print("player_colliding!")

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cblfyuw6f13dc"]
 
 [ext_resource type="Script" uid="uid://dwejpbltwd6se" path="res://codes/PlayerProjectile.gd" id="1_0gc0p"]
-[ext_resource type="Texture2D" uid="uid://cdbsg4jany1jc" path="res://assets/placeholder_enemy_projectile.png" id="2_73r22"]
+[ext_resource type="Texture2D" uid="uid://cdbsg4jany1jc" path="res://assets/placeholders/placeholder_enemy_projectile.png" id="2_73r22"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rjqkl"]
 radius = 8.0
@@ -23,3 +23,4 @@ rect = Rect2(-8, -4, 16, 8)
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]

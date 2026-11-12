@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dvs2kyjr6mdsa" path="res://codes/enemy_test_4.gd" id="1_cq41y"]
 [ext_resource type="Script" uid="uid://c2lrpxkosfn2e" path="res://codes/enemies.gd" id="1_pguuh"]
-[ext_resource type="Texture2D" uid="uid://dcwc4yricskq0" path="res://assets/placeholder_enemy_shoot.png" id="2_pguuh"]
+[ext_resource type="Texture2D" uid="uid://dcwc4yricskq0" path="res://assets/placeholders/placeholder_enemy_shoot.png" id="2_pguuh"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gbotl"]
 size = Vector2(15.5, 15.5)

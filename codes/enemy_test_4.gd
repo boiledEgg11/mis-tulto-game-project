@@ -120,7 +120,7 @@ func _process(_delta: float) -> void:
 		Autoloads.POSSESS_ABILITY = "SHOOT"
 		Autoloads.POSSESS_ENEMY = "SHOOT"
 		Autoloads.POSSESS_STATUS = STATUS
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy_shoot.png"
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder/enemy_shoot.png"
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
@@ -133,7 +133,7 @@ func _possess_start():
 		Autoloads.POSSESS_ENEMY = "SHOOT"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy_shoot.png"
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder/enemy_shoot.png"
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0

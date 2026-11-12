@@ -19,10 +19,10 @@ func _charging():
 	while attacking:
 		await get_tree().create_timer(0.3).timeout
 		if attacking:
-			$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder/enemy_explosive_charge.png")
 		await get_tree().create_timer(0.3).timeout
 		if attacking:
-			$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder/enemy_explosion.png")
 func _attack_charge():
 	charge = 1
 	_charging()
@@ -33,7 +33,7 @@ func _attack_charge():
 		$Area2D/CollisionShape2D.disabled = false
 		$Area2D/Sprite2D.visible = true
 		attacking = false
-		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
+		$Sprite2D.texture = load("res://assets/placeholders/placeholder/enemy_explosion.png")
 		await get_tree().create_timer(0.1).timeout
 		$Area2D/CollisionShape2D.disabled = true
 		$Area2D/Sprite2D.visible = false
@@ -158,7 +158,7 @@ func _process(_delta: float) -> void:
 		Autoloads.POSSESS_ENEMY = "EXPLOSIVE_ENEMY"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy_explosion.png"
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder/enemy_explosion.png"
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
@@ -168,3 +168,9 @@ func _on_player_detection_area_body_entered(body: Node2D) -> void:
 	if body.position.x < position.x:
 		direction = 1
 	attacking = true
+
+
+func _on_area_2d_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	if body.is_in_group("tile_breakable"):
+		var tiles = body.get_coords_for_body_rid(body_rid)
+		body.erase_cell(tiles)

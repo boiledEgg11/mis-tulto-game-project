@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://cbyokppa8wi0j"]
 
-[ext_resource type="Script" uid="uid://bfg2mqlwxv85o" path="res://scenes/test_level_map_3.gd" id="1_bxq25"]
-[ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="2_arlqm"]
-[ext_resource type="Script" uid="uid://brd2ncnx8etjk" path="res://scenes/door_test3.gd" id="3_bxq25"]
+[ext_resource type="Script" uid="uid://bfg2mqlwxv85o" path="res://codes/test_level_map_3.gd" id="1_bxq25"]
+[ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholders/placeholder_tileset.png" id="2_arlqm"]
+[ext_resource type="Script" uid="uid://brd2ncnx8etjk" path="res://codes/door_test3.gd" id="3_bxq25"]
 [ext_resource type="Texture2D" uid="uid://c7h8roegujphu" path="res://assets/sprites/object_door.png" id="4_idk0s"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vhgoa"]

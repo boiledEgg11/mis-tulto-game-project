@@ -1,15 +1,15 @@
 [gd_scene format=4 uid="uid://d0obr1tya45rh"]
 
 [ext_resource type="Script" uid="uid://cbmaxrenahlyn" path="res://codes/test_level_map_2.gd" id="1_jddut"]
-[ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholder_tileset.png" id="1_l703x"]
-[ext_resource type="Script" uid="uid://cuy08fmerufaw" path="res://scenes/door_test2.gd" id="3_mc08h"]
+[ext_resource type="Texture2D" uid="uid://dne3xiancyp7h" path="res://assets/placeholders/placeholder_tileset.png" id="1_l703x"]
+[ext_resource type="Script" uid="uid://cuy08fmerufaw" path="res://codes/door_test2.gd" id="3_mc08h"]
 [ext_resource type="Texture2D" uid="uid://c7h8roegujphu" path="res://assets/sprites/object_door.png" id="4_e7352"]
-[ext_resource type="Script" uid="uid://c587p8dq6yodr" path="res://scenes/test_level_2_tile_2.gd" id="5_e7352"]
-[ext_resource type="Script" uid="uid://c87utwn4b5q76" path="res://scenes/door2_test2.gd" id="5_rhvqs"]
-[ext_resource type="Script" uid="uid://b7t3qhs2e55d2" path="res://scenes/test_map_2_tile_3.gd" id="6_neq3f"]
-[ext_resource type="Script" uid="uid://cwr3okth5x8g1" path="res://scenes/tile_level_2_tile_4.gd" id="7_1x51d"]
+[ext_resource type="Script" uid="uid://c587p8dq6yodr" path="res://codes/test_level_2_tile_2.gd" id="5_e7352"]
+[ext_resource type="Script" uid="uid://c87utwn4b5q76" path="res://codes/door2_test2.gd" id="5_rhvqs"]
+[ext_resource type="Script" uid="uid://b7t3qhs2e55d2" path="res://codes/test_map_2_tile_3.gd" id="6_neq3f"]
+[ext_resource type="Script" uid="uid://cwr3okth5x8g1" path="res://codes/tile_level_2_tile_4.gd" id="7_1x51d"]
 [ext_resource type="Texture2D" uid="uid://b0rusxg4dqnk8" path="res://assets/sprites/dim_light_sprite.png" id="8_83gpe"]
-[ext_resource type="Script" uid="uid://cfp8g5pxitwyy" path="res://scenes/test_tile_2_light.gd" id="8_scmqa"]
+[ext_resource type="Script" uid="uid://cfp8g5pxitwyy" path="res://codes/test_tile_2_light.gd" id="8_scmqa"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_vhgoa"]
 resource_local_to_scene = true
@@ -151,7 +151,7 @@ shape = SubResource("RectangleShape2D_w3jmj")
 [node name="Sprite2D" type="Sprite2D" parent="Light" unique_id=285284920]
 texture = ExtResource("8_83gpe")
 
-[node name="TileMapLayer5" type="TileMapLayer" parent="." unique_id=649442047 groups=["Player_collisoin", "tile", "tile_move"]]
+[node name="TileMapLayer5" type="TileMapLayer" parent="." unique_id=649442047 groups=["Player_collisoin", "tile", "tile_breakable"]]
 process_mode = 1
 light_mask = 261
 tile_map_data = PackedByteArray("AAC8/wUAAAADAAMAAAC8/wQAAAADAAMAAAC8/wMAAAADAAMAAAC7/wUAAAADAAMAAAC7/wQAAAADAAMAAAC7/wMAAAADAAMAAAA=")

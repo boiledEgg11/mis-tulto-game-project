@@ -7,7 +7,7 @@ func _process(delta: float) -> void:
 	if player_collision and Input.is_action_pressed("up") and player.map_changable == 0:
 		player.map_changable = 60
 		player.velocity = Vector2(0, 0)
-		player.call("_change_map", "test_level_map_3", 1)
+		player.call("_change_map", "test_level_map_1", 1)
 		player.velocity = Vector2(0, 0)
 func _on_body_exited(body: Node2D) -> void:
 	if body.is_in_group("player"):
@@ -16,7 +16,7 @@ func _on_body_exited(body: Node2D) -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
-		get_parent().call("_puzzle_solved")
+
 		player_collision = true
 		player = body
 		print("player_colliding!")

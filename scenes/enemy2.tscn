@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c5heq53boj1k3" path="res://codes/testenemy2.gd" id="1_3neu4"]
 [ext_resource type="Script" uid="uid://c2lrpxkosfn2e" path="res://codes/enemies.gd" id="1_mhmjl"]
-[ext_resource type="Texture2D" uid="uid://7kwhs2sblyyi" path="res://assets/placeholder_enemy_bouncy.png" id="2_mhmjl"]
+[ext_resource type="Texture2D" uid="uid://7kwhs2sblyyi" path="res://assets/placeholders/placeholder_enemy_bouncy.png" id="2_mhmjl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fb6pl"]
 size = Vector2(15.5, 15.5)

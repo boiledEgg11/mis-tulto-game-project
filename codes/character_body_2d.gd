@@ -333,7 +333,7 @@ func _physics_process(delta: float) -> void:
 							velocity.y = move_toward(velocity.y, 0, 30)
 			"EXPLOSIVE":
 				if get_parent().call("_get_dash_recover_value") == 0:
-					$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
+					$Sprite2D.texture = load("res://assets/placeholders/placeholder/enemy_explosion.png")
 				if not is_on_floor():
 					STATUS.slide = 2
 					STATUS.damage_multiplier = -1.2
@@ -473,7 +473,7 @@ func _physics_process(delta: float) -> void:
 					if not ANIMATION_MOVED:
 						$AnimatedSprite2D.play("crouch")
 						ANIMATION_MOVED = true
-					$Sprite2D.texture = load("res://assets/placeholder_player_crouch.png")
+					$Sprite2D.texture = load("res://assets/placeholders/placeholder/player_crouch.png")
 				if not CROUCH:
 					ANIMATION_MOVED = false
 					STATUS.speed = 120
@@ -483,7 +483,7 @@ func _physics_process(delta: float) -> void:
 						@warning_ignore("integer_division")
 						$DamageCollision/PlayerDamageCollision.shape.size = Vector2(STATUS.hitbox_x - 0.5, STATUS.hitbox_y - 0.5)
 						$DamageCollision/PlayerDamageCollision.position = Vector2(0, 0)
-					$Sprite2D.texture = load("res://assets/placeholder_player.png")
+					$Sprite2D.texture = load("res://assets/placeholders/placeholder_player.png")
 			if is_on_floor():
 				if Input.is_action_pressed("down"):
 					CROUCH = true
@@ -514,7 +514,7 @@ func _physics_process(delta: float) -> void:
 						DASH_DIRECTION = 0
 					DASH_MOVE = true
 					INVINCIBLE = true
-					$Sprite2D.texture = load("res://assets/placeholder_dash.png")
+					$Sprite2D.texture = load("res://assets/placeholders/placeholder/dash.png")
 					get_parent().call("_dash_recover", 0, true)
 					if DASH_DIRECTION == 0:
 						velocity.x = 0
@@ -527,7 +527,7 @@ func _physics_process(delta: float) -> void:
 							velocity.y = DASH_Y_CHANGE * STATUS.speed * 4 / 1.5
 					else:
 						if DASH_Y_CHANGE != 0:
-							$Sprite2D.texture = load("res://assets/placeholder_dash_diagonal.png")
+							$Sprite2D.texture = load("res://assets/placeholders/placeholder/dash_diagonal.png")
 							if DASH_Y_CHANGE == 1:
 								$Sprite2D.flip_v = true
 						velocity.y = DASH_Y_CHANGE * STATUS.speed * 4 / 3
@@ -654,9 +654,9 @@ func _on_detect_shape_body_entered(body: Node2D) -> void:
 func _charge_blink():
 	while Input.is_action_pressed("space"):
 		await get_tree().create_timer(0.3).timeout
-		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosive_charge.png")
+		$Sprite2D.texture = load("res://assets/placeholders/placeholder/enemy_explosive_charge.png")
 		await get_tree().create_timer(0.3).timeout
-		$Sprite2D.texture = load("res://assets/placeholder_enemy_explosion.png")
+		$Sprite2D.texture = load("res://assets/placeholders/placeholder/enemy_explosion.png")
 func _on_loaded_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	body.add_to_group("is_on_screen")
 func _on_loaded_area_body_shape_exited(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
@@ -712,3 +712,9 @@ func _change_map(next_map, location):
 			get_parent().call("_add_enemies", 2)
 	print(next_map)
 	print(location)
+
+
+func _on_extra_attack_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	if body.is_in_group("tile_breakable"):
+		var tiles = body.get_coords_for_body_rid(body_rid)
+		body.erase_cell(tiles)

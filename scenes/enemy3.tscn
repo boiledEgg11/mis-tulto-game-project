@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://c2lrpxkosfn2e" path="res://codes/enemies.gd" id="1_kroph"]
 [ext_resource type="Script" uid="uid://s02jym0yktfw" path="res://codes/enemy_test_3.gd" id="1_o2iik"]
-[ext_resource type="Texture2D" uid="uid://g87vfgpql376" path="res://assets/placeholder_enemy_explosion.png" id="2_kroph"]
-[ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholder_explosion.png" id="3_xx6g3"]
+[ext_resource type="Texture2D" uid="uid://g87vfgpql376" path="res://assets/placeholders/placeholder_enemy_explosion.png" id="2_kroph"]
+[ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholders/placeholder_explosion.png" id="3_xx6g3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_o5vrm"]
 size = Vector2(15.5, 15.5)
@@ -90,4 +90,5 @@ shape = SubResource("CircleShape2D_m0xub")
 [connection signal="body_entered" from="EnemyTest3/LeftCollisionCheck" to="EnemyTest3" method="_on_left_collision_check_body_entered"]
 [connection signal="body_entered" from="EnemyTest3/RightCollisionCheck" to="EnemyTest3" method="_on_right_collision_check_body_entered"]
 [connection signal="area_entered" from="EnemyTest3/EnemyArea" to="EnemyTest3" method="_on_enemy_area_area_entered"]
+[connection signal="body_shape_entered" from="EnemyTest3/Area2D" to="EnemyTest3" method="_on_area_2d_body_shape_entered"]
 [connection signal="body_entered" from="EnemyTest3/PlayerDetectionArea" to="EnemyTest3" method="_on_player_detection_area_body_entered"]
