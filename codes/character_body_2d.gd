@@ -623,7 +623,7 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 		print("can save")
 
 func _goal():
-	get_parent().call("_open_text", 4, false)
+	get_parent().call("_open_text", 4, true)
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	TARGET_POS = Vector2i(0, 0)
 	ATTACK_COLLISION = true
