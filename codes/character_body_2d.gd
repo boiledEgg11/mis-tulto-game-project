@@ -692,6 +692,20 @@ func _change_map(next_map, location):
 					global_position = Vector2(0, 0)
 				1:
 					global_position = Vector2(24, 16)
+				2:
+					global_position = Vector2(-1144, 88)
+				_:
+					global_position = Vector2(0, 0)
+			owner.add_child.call_deferred(MAP)
+			get_parent().call("_add_enemies", 1)
+		"test_level_map_3":
+			MAP.call_deferred("_erase")
+			MAP = preload("res://scenes/test_level_map_3.tscn").instantiate()
+			match location:
+				0:
+					global_position = Vector2(0, 0)
+				1:
+					global_position = Vector2(24, 16)
 				_:
 					global_position = Vector2(0, 0)
 			owner.add_child.call_deferred(MAP)
