@@ -19,42 +19,42 @@ size = Vector2(1, 1)
 [node name="enemy8" type="Node2D" unique_id=848736696]
 script = ExtResource("1_wd7fj")
 
-[node name="EnemyTest" type="CharacterBody2D" parent="." unique_id=930684759 groups=["is_on_screen"]]
+[node name="Enemy8" type="CharacterBody2D" parent="." unique_id=930684759 groups=["is_on_screen"]]
 process_mode = 1
 collision_layer = 32
 collision_mask = 3
 script = ExtResource("2_hv4hh")
 
-[node name="Sprite2D" type="Sprite2D" parent="EnemyTest" unique_id=471937465]
+[node name="Sprite2D" type="Sprite2D" parent="Enemy8" unique_id=471937465]
 texture = ExtResource("3_l3xj2")
 
-[node name="EnemyTestCollision" type="CollisionShape2D" parent="EnemyTest" unique_id=989538713]
+[node name="EnemyTestCollision" type="CollisionShape2D" parent="Enemy8" unique_id=989538713]
 shape = SubResource("RectangleShape2D_kj048")
 
-[node name="LeftCollisionCheck" type="Area2D" parent="EnemyTest" unique_id=1217619886]
+[node name="LeftCollisionCheck" type="Area2D" parent="Enemy8" unique_id=1217619886]
 position = Vector2(-8, 0)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/LeftCollisionCheck" unique_id=1470233525]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy8/LeftCollisionCheck" unique_id=1470233525]
 shape = SubResource("RectangleShape2D_s5hgu")
 
-[node name="EnemyArea" type="Area2D" parent="EnemyTest" unique_id=1115837917 groups=["damage"]]
+[node name="EnemyArea" type="Area2D" parent="Enemy8" unique_id=1115837917 groups=["damage"]]
 collision_layer = 10
 collision_mask = 8
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/EnemyArea" unique_id=1280390933]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy8/EnemyArea" unique_id=1280390933]
 shape = SubResource("RectangleShape2D_cwuxw")
 
-[node name="groundchecker" type="RayCast2D" parent="EnemyTest" unique_id=768684151]
+[node name="groundchecker" type="RayCast2D" parent="Enemy8" unique_id=768684151]
 target_position = Vector2(0, 90)
 
-[node name="GroundExistingChecker" type="Area2D" parent="EnemyTest" unique_id=206030866]
+[node name="GroundExistingChecker" type="Area2D" parent="Enemy8" unique_id=206030866]
 position = Vector2(9, 8)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest/GroundExistingChecker" unique_id=1992183431]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy8/GroundExistingChecker" unique_id=1992183431]
 shape = SubResource("RectangleShape2D_1jl4k")
 
-[node name="SpinManager" type="Node2D" parent="EnemyTest" unique_id=2102121431]
+[node name="SpinManager" type="Node2D" parent="Enemy8" unique_id=2102121431]
 
-[connection signal="body_entered" from="EnemyTest/LeftCollisionCheck" to="EnemyTest" method="_on_left_collision_check_body_entered"]
-[connection signal="area_entered" from="EnemyTest/EnemyArea" to="EnemyTest" method="_on_enemy_area_area_entered"]
-[connection signal="body_exited" from="EnemyTest/GroundExistingChecker" to="EnemyTest" method="_on_ground_existing_checker_body_exited"]
+[connection signal="body_entered" from="Enemy8/LeftCollisionCheck" to="Enemy8" method="_on_left_collision_check_body_entered"]
+[connection signal="area_entered" from="Enemy8/EnemyArea" to="Enemy8" method="_on_enemy_area_area_entered"]
+[connection signal="body_exited" from="Enemy8/GroundExistingChecker" to="Enemy8" method="_on_ground_existing_checker_body_exited"]

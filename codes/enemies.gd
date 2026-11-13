@@ -1,5 +1,8 @@
 extends Node2D
 func _erase():
+	if get_child(0, false).name == "Enemy8":
+		for i in range(0, 5):
+			$Enemy8.projectile[i].call("_erase")
 	queue_free()
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

@@ -612,7 +612,7 @@ func _on_damage_collision_area_entered(area) -> void:
 			_health_process(5)
 		else:
 			_health_process(1)
-		print(INVINCIBLE)
+		print("damaged!")
 func _on_damage_collision_area_exited(area) -> void:
 	if area.is_in_group("damage"):
 		ENEMY_COLLISION = false

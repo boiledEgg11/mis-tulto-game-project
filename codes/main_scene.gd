@@ -93,7 +93,6 @@ func _ready() -> void:
 	$Control/SaveFiles/SaveFile3/Control/Label3.text = DATA_3.enemy
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
-	print(global_position)
 	if DATA_1.play_time == 0 and DATA_1.enemy == "none" and DATA_1.place == "none" and DATA_2.enemy_id == 0:
 		file_new.file_1 = true
 	else:

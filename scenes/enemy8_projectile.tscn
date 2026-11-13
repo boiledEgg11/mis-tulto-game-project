@@ -11,6 +11,8 @@ height = 40.0
 script = ExtResource("1_j4e40")
 
 [node name="Area2D" type="Area2D" parent="." unique_id=612444680 groups=["damage"]]
+collision_layer = 11
+collision_mask = 11
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=787442985]
 shape = SubResource("CapsuleShape2D_p8uj1")
@@ -19,7 +21,8 @@ shape = SubResource("CapsuleShape2D_p8uj1")
 texture = ExtResource("1_06i6u")
 
 [node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=632196685]
-rect = Rect2(-5, -20, 10, 40)
+position = Vector2(5, 0)
+rect = Rect2(-5.5, -20, 1, 0.1)
 
 [connection signal="body_shape_entered" from="Area2D" to="." method="_on_area_2d_body_shape_entered"]
 [connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

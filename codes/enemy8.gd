@@ -9,23 +9,29 @@ var START = false
 var individual
 var WALL_EXISTED = false
 var projectile_amount = 0
+var projectile_exists: Array = [false, false, false, false, false]
 var projectile: Array = [preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate()]
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _summon_projectile(summon_amount):
 	for i in range(summon_amount):
-		projectile[i].queue_free()
-		projectile_amount += 1
-		projectile[i] = preload("res://scenes/enemy8_projectile.tscn").instantiate()
-		projectile[i].projectile_number = i
-		$SpinManager.add_child(projectile[i])
-		projectile[i].get_child(0).position = Vector2i(0, -50)
-		for l in range(0, i):
-			projectile[l].rotation_degrees += 360 / summon_amount
+		if not projectile_exists[i]:
+			projectile_amount += 1
+			projectile[i].queue_free()
+			projectile[i] = preload("res://scenes/enemy8_projectile.tscn").instantiate()
+			projectile_exists[i] = true
+			projectile[i].projectile_number = i
+			$SpinManager.add_child(projectile[i])
+			projectile[i].get_child(0).position = Vector2i(0, -50)
+			for l in range(0, i):
+				projectile[l].rotation_degrees += 360 / summon_amount
 func _projectile_erase(projectile_number):
 	projectile[projectile_number].call("_erase")
 	projectile[projectile_number]  = preload("res://scenes/empty.tscn").instantiate()
+	projectile_exists[projectile_number] = false
+	projectile_amount -= 1
+	print(projectile_amount)
 func _physics_process(delta: float) -> void:
 	if START:
 		match individual:
@@ -36,7 +42,7 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
 		if projectile_amount < 3:
-			_summon_projectile(3 - projectile_amount)
+			_summon_projectile(3)
 		$SpinManager.rotation_degrees += 1
 		var standing = $groundchecker.get_collider()
 		if standing:
