@@ -16,13 +16,16 @@ func _ready() -> void:
 func _summon_projectile(summon_amount):
 	for i in range(summon_amount):
 		projectile[i].queue_free()
-
 		projectile_amount += 1
 		projectile[i] = preload("res://scenes/enemy8_projectile.tscn").instantiate()
+		projectile[i].projectile_number = i
 		$SpinManager.add_child(projectile[i])
 		projectile[i].get_child(0).position = Vector2i(0, -50)
 		for l in range(0, i):
-			projectile[l].rotation_degrees += 72
+			projectile[l].rotation_degrees += 360 / summon_amount
+func _projectile_erase(projectile_number):
+	projectile[projectile_number].call("_erase")
+	projectile[projectile_number]  = preload("res://scenes/empty.tscn").instantiate()
 func _physics_process(delta: float) -> void:
 	if START:
 		match individual:
@@ -32,8 +35,8 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
-		if projectile_amount < 5:
-			_summon_projectile(5 - projectile_amount)
+		if projectile_amount < 3:
+			_summon_projectile(3 - projectile_amount)
 		$SpinManager.rotation_degrees += 1
 		var standing = $groundchecker.get_collider()
 		if standing:

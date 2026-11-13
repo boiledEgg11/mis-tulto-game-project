@@ -100,6 +100,6 @@ func _process(_delta: float) -> void:
 		Autoloads.POSSESS_AMOUNT += 1
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholder_enemy_bouncy.png"
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy_bouncy.png"
 		velocity.x = 0
 		velocity.y = 0

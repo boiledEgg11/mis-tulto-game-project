@@ -48,6 +48,10 @@ moving_tile_y=""
 is_on_screen=""
 goal=""
 player=""
+tile_move=""
+tile_spin=""
+enemy7_cancel=""
+enemy7=""
 
 [gui]
 

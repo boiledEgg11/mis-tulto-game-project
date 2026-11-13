@@ -1,17 +1,25 @@
 [gd_scene format=3 uid="uid://bodbpisy0vqil"]
 
 [ext_resource type="Texture2D" uid="uid://bqe70ssrymldb" path="res://assets/sprites/enemy8_projectile.png" id="1_06i6u"]
+[ext_resource type="Script" uid="uid://c13qbh8vh80vl" path="res://codes/enemy_8_projectile.gd" id="1_j4e40"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p8uj1"]
 radius = 5.0
 height = 40.0
 
 [node name="enemy8_projectile" type="Node2D" unique_id=531352109]
+script = ExtResource("1_j4e40")
 
-[node name="Area2D" type="Area2D" parent="." unique_id=612444680]
+[node name="Area2D" type="Area2D" parent="." unique_id=612444680 groups=["damage"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=787442985]
 shape = SubResource("CapsuleShape2D_p8uj1")
 
 [node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=1000728529]
 texture = ExtResource("1_06i6u")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=632196685]
+rect = Rect2(-5, -20, 10, 40)
+
+[connection signal="body_shape_entered" from="Area2D" to="." method="_on_area_2d_body_shape_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
