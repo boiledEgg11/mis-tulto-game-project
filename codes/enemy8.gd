@@ -54,7 +54,7 @@ func _physics_process(delta: float) -> void:
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		velocity.x = direction * STATUS.speed
+		velocity.x = direction * STATUS.speed * 0
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
@@ -114,7 +114,7 @@ func _process(_delta: float) -> void:
 		Autoloads.POSSESS_ENEMY = "TEST"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder/enemy.png"
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy.png"
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
