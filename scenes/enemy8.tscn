@@ -16,6 +16,9 @@ size = Vector2(15.5, 15.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1jl4k"]
 size = Vector2(1, 1)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_wd7fj"]
+radius = 90.0
+
 [node name="enemy8" type="Node2D" unique_id=848736696]
 script = ExtResource("1_wd7fj")
 
@@ -55,6 +58,14 @@ shape = SubResource("RectangleShape2D_1jl4k")
 
 [node name="SpinManager" type="Node2D" parent="Enemy8" unique_id=2102121431]
 
+[node name="DetectionArea" type="Area2D" parent="Enemy8" unique_id=541884060]
+collision_layer = 16
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy8/DetectionArea" unique_id=1489463468]
+shape = SubResource("CircleShape2D_wd7fj")
+
 [connection signal="body_entered" from="Enemy8/LeftCollisionCheck" to="Enemy8" method="_on_left_collision_check_body_entered"]
 [connection signal="area_entered" from="Enemy8/EnemyArea" to="Enemy8" method="_on_enemy_area_area_entered"]
 [connection signal="body_exited" from="Enemy8/GroundExistingChecker" to="Enemy8" method="_on_ground_existing_checker_body_exited"]
+[connection signal="body_shape_entered" from="Enemy8/DetectionArea" to="Enemy8" method="_on_detection_area_body_shape_entered"]

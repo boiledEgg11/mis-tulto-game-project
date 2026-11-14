@@ -1,17 +1,18 @@
 extends CharacterBody2D
-var direction = -1
-var health = 1
-var possess_health = 1
-var SLIDE
-var INVINCIBLE = false
-var POSSESSED = false
-var START = false
-var individual
-var WALL_EXISTED = false
-var projectile_amount = 0
-var projectile_exists: Array = [false, false, false, false, false]
-var projectile: Array = [preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate()]
-var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
+@onready var projectile_cooldown = 0
+@onready var direction = -1
+@onready var health = 1
+@onready var possess_health = 1
+@onready var SLIDE
+@onready var INVINCIBLE = false
+@onready var POSSESSED = false
+@onready var START = false
+@onready var individual
+@onready var WALL_EXISTED = false
+@onready var projectile_amount = 0
+@onready var projectile_exists: Array = [false, false, false, false, false]
+@onready var projectile: Array = [preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate()]
+@onready var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _summon_projectile(summon_amount):
@@ -32,7 +33,15 @@ func _projectile_erase(projectile_number):
 	projectile_exists[projectile_number] = false
 	projectile_amount -= 1
 	print(projectile_amount)
+func _call_fly():
+	projectile_cooldown = 0
+	for child_projectile in $SpinManager.get_children(true):
+		child_projectile.call("_fly", Vector2(0, 0))
 func _physics_process(delta: float) -> void:
+	projectile_cooldown += 0.1
+	if projectile_cooldown > 30:
+		_call_fly()
+
 	if START:
 		match individual:
 			1:
@@ -124,3 +133,8 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	if individual == 3:
 		if body.is_in_group("tile"):
 			direction *= -1
+
+
+func _on_detection_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
+	if body.is_in_group("player"):
+		_call_fly()
