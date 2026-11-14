@@ -9,6 +9,7 @@ extends CharacterBody2D
 @onready var POSSESSED = false
 @onready var START = false
 @onready var individual
+@onready var projectile_released = false
 @onready var WALL_EXISTED = false
 @onready var projectile_amount = 0
 @onready var projectile_exists: Array = [false, false, false, false, false]
@@ -25,9 +26,12 @@ func _summon_projectile(summon_amount):
 			projectile_exists[i] = true
 			projectile[i].projectile_number = i
 			$SpinManager.add_child(projectile[i])
-			projectile[i].get_child(0).position = Vector2i(0, -50)
+			projectile[i].get_child(0).scale = Vector2(0.5, 0.5)
+			projectile[i].get_child(0).position = Vector2(0, 0)
 			for l in range(0, i):
 				projectile[l].rotation_degrees += 360 / summon_amount
+	await get_tree().create_timer(0.2).timeout
+	projectile_released = true
 	_enable_detect_collision()
 func _projectile_erase(projectile_number):
 	projectile[projectile_number].call("_erase")
@@ -43,6 +47,11 @@ func _call_fly():
 	for child_projectile in $SpinManager.get_children(true):
 		child_projectile.call("_fly", Vector2(0, 0))
 func _physics_process(delta: float) -> void:
+	for i in range(3):
+		if projectile[i].get_child(0).scale < Vector2(1, 1):
+			projectile[i].get_child(0).scale += Vector2(0.05, 0.05)
+		if projectile[i].get_child(0).position.y > -50:
+			projectile[i].get_child(0).position.y -= 2
 	if player:
 		if $DetectionArea.overlaps_body(player):
 			_call_fly()
@@ -67,8 +76,18 @@ func _physics_process(delta: float) -> void:
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		velocity.x = direction * STATUS.speed * 0
+		if player and $DetectionArea/CollisionShape2D:
+			if player.position.x > position.x:
+				direction = -1
+			if player.position.x < position.x:
+				direction = 1
+		if not $DetectionArea/CollisionShape2D.disabled and player:
+			if player.position.x > position.x:
+				direction = 1
+			if player.position.x < position.x:
+				direction = -1
 		$EnemyArea/CollisionShape2D.disabled = false
+		velocity.x = direction * STATUS.speed
 		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
