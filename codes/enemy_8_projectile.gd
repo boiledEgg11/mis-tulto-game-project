@@ -12,7 +12,7 @@ extends Node2D
 @onready var move_start = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	parent = get_parent()
+	parent = get_parent().get_parent()
 func _erase():
 	queue_free()
 func _process(delta: float) -> void:
@@ -37,7 +37,7 @@ func _process(delta: float) -> void:
 func _screen_not_visible():
 	reparent(parent)
 	print("removal")
-	get_parent().get_parent().call("_projectile_erase", projectile_number)
+	parent.call("_projectile_erase", projectile_number)
 func _fly(target: Vector2):
 	if not (moving or move_start or target_touched):
 		moving = true
@@ -50,4 +50,4 @@ func _fly(target: Vector2):
 		global_position = location
 		target_pos = target
 func _detect_collision_close():
-	get_parent().get_parent().call_deferred("_disable_detect_collision")
+	parent.call_deferred("_enable_detect_collision")

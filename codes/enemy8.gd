@@ -1,4 +1,5 @@
 extends CharacterBody2D
+@onready var player
 @onready var projectile_cooldown = 0
 @onready var direction = -1
 @onready var health = 1
@@ -27,21 +28,24 @@ func _summon_projectile(summon_amount):
 			projectile[i].get_child(0).position = Vector2i(0, -50)
 			for l in range(0, i):
 				projectile[l].rotation_degrees += 360 / summon_amount
+	_enable_detect_collision()
 func _projectile_erase(projectile_number):
 	projectile[projectile_number].call("_erase")
 	projectile[projectile_number]  = preload("res://scenes/empty.tscn").instantiate()
 	projectile_exists[projectile_number] = false
 	projectile_amount -= 1
 	print(projectile_amount)
+func _disable_collision_shape():
+	$DetectionArea/CollisionShape2D.disabled = true
 func _call_fly():
+	call_deferred("_disable_collision_shape")
 	projectile_cooldown = 0
 	for child_projectile in $SpinManager.get_children(true):
 		child_projectile.call("_fly", Vector2(0, 0))
 func _physics_process(delta: float) -> void:
-	projectile_cooldown += 0.1
-	if projectile_cooldown > 30:
-		_call_fly()
-
+	if player:
+		if $DetectionArea.overlaps_body(player):
+			_call_fly()
 	if START:
 		match individual:
 			1:
@@ -138,3 +142,6 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 func _on_detection_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("player"):
 		_call_fly()
+		player = body
+func _enable_detect_collision():
+	$DetectionArea/CollisionShape2D.disabled = false
