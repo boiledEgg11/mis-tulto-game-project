@@ -16,7 +16,7 @@ extends CharacterBody2D
 @onready var projectile_amount = 0
 @onready var projectile_exists: Array = [false, false, false, false, false]
 @onready var projectile: Array = [preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate()]
-@onready var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
+@onready var STATUS = {"speed": 80, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _summon_projectile(summon_amount):
@@ -95,7 +95,10 @@ func _physics_process(delta: float) -> void:
 				if player.position.x < position.x:
 					direction = -1
 		$EnemyArea/CollisionShape2D.disabled = false
-		velocity.x = direction * STATUS.speed
+		if  $DetectionArea/CollisionShape2D.disabled:
+			velocity.x = direction * STATUS.speed / 1.25
+		if not $DetectionArea/CollisionShape2D.disabled:
+			velocity.x = direction * STATUS.speed
 		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5

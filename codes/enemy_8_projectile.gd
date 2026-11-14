@@ -39,10 +39,9 @@ func _process(delta: float) -> void:
 			print("touched!")
 			_attack()
 	if moved_time > 20:
-			_screen_not_visible()
+		call_deferred("_screen_not_visible")
 func _screen_not_visible():
 	reparent(parent)
-	print("removal")
 	parent.call("_projectile_erase", projectile_number)
 func _fly(target: Vector2):
 	if not (moving or move_start or target_touched):
