@@ -15,12 +15,18 @@ func _ready() -> void:
 	parent = get_parent().get_parent()
 func _erase():
 	queue_free()
+func _shoot():
+	$Node2D/CharacterBody2D.velocity = target_position.normalized() * -190
+func _attack():
+	$Node2D/CharacterBody2D.velocity = target_position.normalized() * 80
+	await get_tree().create_timer(0.15).timeout
+	$Node2D/CharacterBody2D.velocity = target_position.normalized() * 0
+	await get_tree().create_timer(0.05).timeout
+	_shoot()
 func _process(delta: float) -> void:
 	$Node2D/CharacterBody2D.move_and_slide()
 	if Input.is_action_just_pressed("9"):
 		_fly(Vector2(0, 0))
-	if target_touched:
-		$Node2D/CharacterBody2D.velocity = target_position.normalized() * -180
 	if move_start:
 		moved_time += 0.1
 	if moving:
@@ -31,7 +37,7 @@ func _process(delta: float) -> void:
 			target_position = $Node2D/CharacterBody2D.global_position - $Node2D/CharacterBody2D/RayCast2D.get_collision_point()
 			moving = false
 			print("touched!")
-			target_touched = true
+			_attack()
 	if moved_time > 20:
 			_screen_not_visible()
 func _screen_not_visible():

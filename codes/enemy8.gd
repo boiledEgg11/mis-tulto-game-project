@@ -28,7 +28,7 @@ func _summon_projectile(summon_amount):
 			projectile_exists[i] = true
 			projectile[i].projectile_number = i
 			$SpinManager.add_child(projectile[i])
-			projectile[i].get_child(0).scale = Vector2(0.5, 0.5)
+			projectile[i].get_child(0).scale = Vector2(0.05, 0.05)
 			projectile[i].get_child(0).position = Vector2(0, 0)
 			for l in range(0, i):
 				projectile[l].rotation_degrees += 360 / summon_amount
@@ -63,6 +63,7 @@ func _physics_process(delta: float) -> void:
 				position = Vector2(0, 0)
 				position = Vector2i(0, 0)
 		START = false
+	$SpinManager.rotation_degrees += 3
 	move_and_slide()
 	if possess_health > 0:
 		if not ground_exist:
@@ -72,7 +73,6 @@ func _physics_process(delta: float) -> void:
 			_forced_direction_fix()
 		if projectile_amount < 3:
 			_summon_projectile(3)
-		$SpinManager.rotation_degrees += 1
 		var standing = $groundchecker.get_collider()
 		if standing:
 			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
@@ -100,14 +100,14 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
-			INVINCIBLE = true
-			POSSESSED = true
-			position.x = Autoloads.PLAYER_POSITION_X
-			position.y = Autoloads.PLAYER_POSITION_Y
-			$EnemyArea/CollisionShape2D.disabled = true
-			$Sprite2D.visible = false
-			if Autoloads.PLAYER_POSSESS_STOP:
-				_possess_stop()
+		INVINCIBLE = true
+		POSSESSED = true
+		position.x = Autoloads.PLAYER_POSITION_X
+		position.y = Autoloads.PLAYER_POSITION_Y
+		$EnemyArea/CollisionShape2D.disabled = true
+		$Sprite2D.visible = false
+		if Autoloads.PLAYER_POSSESS_STOP:
+			_possess_stop()
 
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	if $LeftCollisionCheck.area_entered:
@@ -149,10 +149,10 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
-		Autoloads.POSSESS_TARGET = {"species": "TestEnemy1", "individual": individual}
+		Autoloads.POSSESS_TARGET = {"species": "TestEnemy8", "individual": individual}
 		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_ABILITY = "None"
-		Autoloads.POSSESS_ENEMY = "TEST"
+		Autoloads.POSSESS_ABILITY = "sword shoot"
+		Autoloads.POSSESS_ENEMY = "SPIN_BLADE"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
 		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy.png"
