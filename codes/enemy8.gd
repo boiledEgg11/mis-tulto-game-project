@@ -5,6 +5,8 @@ extends CharacterBody2D
 @onready var health = 1
 @onready var possess_health = 1
 @onready var SLIDE
+@onready var ground_exist = true
+@onready var forced_direction = false
 @onready var INVINCIBLE = false
 @onready var POSSESSED = false
 @onready var START = false
@@ -63,6 +65,11 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if not ground_exist:
+			forced_direction = true
+			direction *= -1
+			ground_exist = true
+			_forced_direction_fix()
 		if projectile_amount < 3:
 			_summon_projectile(3)
 		$SpinManager.rotation_degrees += 1
@@ -76,16 +83,17 @@ func _physics_process(delta: float) -> void:
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		if player and $DetectionArea/CollisionShape2D:
-			if player.position.x > position.x:
-				direction = -1
-			if player.position.x < position.x:
-				direction = 1
-		if not $DetectionArea/CollisionShape2D.disabled and player:
-			if player.position.x > position.x:
-				direction = 1
-			if player.position.x < position.x:
-				direction = -1
+		if not forced_direction:
+			if player and $DetectionArea/CollisionShape2D:
+				if player.position.x > position.x:
+					direction = -1
+				if player.position.x < position.x:
+					direction = 1
+			if not $DetectionArea/CollisionShape2D.disabled and player:
+				if player.position.x > position.x:
+					direction = 1
+				if player.position.x < position.x:
+					direction = -1
 		$EnemyArea/CollisionShape2D.disabled = false
 		velocity.x = direction * STATUS.speed
 		$Sprite2D.visible = true
@@ -100,6 +108,7 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.visible = false
 			if Autoloads.PLAYER_POSSESS_STOP:
 				_possess_stop()
+
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	if $LeftCollisionCheck.area_entered:
 		direction *= -1
@@ -150,13 +159,13 @@ func _process(_delta: float) -> void:
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
-
+func _forced_direction_fix():
+	await get_tree().create_timer(0.5).timeout
+	forced_direction = false
 
 func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
-	if individual == 3:
-		if body.is_in_group("tile"):
-			direction *= -1
-
+	if body.is_in_group("tile"):
+		ground_exist = false
 
 func _on_detection_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("player"):
@@ -164,3 +173,8 @@ func _on_detection_area_body_shape_entered(body_rid: RID, body: Node2D, body_sha
 		player = body
 func _enable_detect_collision():
 	$DetectionArea/CollisionShape2D.disabled = false
+
+
+func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
+	if body.is_in_group("tile"):
+		ground_exist = true

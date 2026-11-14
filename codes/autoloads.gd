@@ -1,4 +1,5 @@
 extends Node
+var tiles: Array
 var POSSESS_TARGET = {"species": "none", "individual": "0"}
 var RESET = false
 var PLAYER_POSITION_X = 0
