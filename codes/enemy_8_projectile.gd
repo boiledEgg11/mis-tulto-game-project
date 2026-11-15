@@ -25,6 +25,7 @@ func _attack():
 	_shoot()
 func _process(delta: float) -> void:
 	if not attack_player:
+		$Node2D/CharacterBody2D/Area2D.add_to_group("player_damaging")
 		$Node2D/CharacterBody2D/Area2D.remove_from_group("damage")
 		$Node2D/CharacterBody2D/RayCast2D.set_collision_mask_value(5, false)
 		for i in range(2, 8, 2):
@@ -41,7 +42,6 @@ func _process(delta: float) -> void:
 		if $Node2D/CharacterBody2D/RayCast2D.is_colliding():
 			target_position = $Node2D/CharacterBody2D.global_position - $Node2D/CharacterBody2D/RayCast2D.get_collision_point()
 			moving = false
-			print("touched!")
 			_attack()
 	if moved_time > 20:
 		call_deferred("_screen_not_visible")

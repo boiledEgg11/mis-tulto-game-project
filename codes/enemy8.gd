@@ -10,13 +10,14 @@ extends CharacterBody2D
 @onready var INVINCIBLE = false
 @onready var POSSESSED = false
 @onready var START = false
+@onready var collision_layers: Array
 @onready var individual
 @onready var projectile_released = false
 @onready var WALL_EXISTED = false
 @onready var projectile_amount = 0
 @onready var projectile_exists: Array = [false, false, false, false, false]
 @onready var projectile: Array = [preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate()]
-@onready var STATUS = {"speed": 80, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 80, "damage": 1, "extra_damage": 1}
+@onready var STATUS = {"speed": 100, "jump": -400, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 80, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _summon_projectile(summon_amount, attack_player: bool):
@@ -35,7 +36,8 @@ func _summon_projectile(summon_amount, attack_player: bool):
 				projectile[l].rotation_degrees += 360 / summon_amount
 	await get_tree().create_timer(0.2).timeout
 	projectile_released = true
-	_enable_detect_collision()
+	if possess_health > 0:
+		_enable_detect_collision()
 func _projectile_erase(projectile_number):
 	projectile[projectile_number].call("_erase")
 	projectile[projectile_number]  = preload("res://scenes/empty.tscn").instantiate()
@@ -112,7 +114,6 @@ func _physics_process(delta: float) -> void:
 		$Sprite2D.visible = false
 		if Autoloads.PLAYER_POSSESS_STOP:
 			_possess_stop()
-
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	if $LeftCollisionCheck.area_entered:
 		direction *= -1
@@ -130,6 +131,8 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
+	$EnemyTestCollision.disabled = false
+	$DetectionArea/CollisionShape2D.disabled = false
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
@@ -162,6 +165,8 @@ func _process(_delta: float) -> void:
 		possess_health = -1
 		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy.png"
 		Autoloads.PLAYER_POSSESSING = true
+		$EnemyTestCollision.disabled = true
+		$DetectionArea/CollisionShape2D.disabled = true
 		velocity.x = 0
 		velocity.y = 0
 func _forced_direction_fix():
