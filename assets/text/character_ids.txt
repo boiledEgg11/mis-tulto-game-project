@@ -6,7 +6,7 @@
 1
 2
 2
-test_1
+treasure_1
 test_2
 1
 test_3

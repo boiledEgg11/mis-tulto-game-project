@@ -83,5 +83,6 @@ func _erase_enemy():
 								characters[i].call_deferred("_erase")
 								characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
 			_:
-				characters[i].call_deferred("_erase")
-				characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
+				if is_instance_valid(characters[i]):
+					characters[i].call_deferred("_erase")
+					characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()

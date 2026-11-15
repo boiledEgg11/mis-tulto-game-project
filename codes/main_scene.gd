@@ -19,7 +19,8 @@ var SAVE_DEFAULT: Dictionary = {
 	"place": "none",
 	"enemy": "none",
 	"enemy_id": 0,
-	"play_time": 0
+	"play_time": 0,
+	"treasure": [false, false, false, false, false]
 }
 func _ready() -> void:
 	if not FileAccess.file_exists("user://save_empty.save"):

@@ -6,7 +6,7 @@ enemy_5
 enemy_6
 enemy_5
 enemy_1
-save
+treasure
 save
 enemy_7
 save

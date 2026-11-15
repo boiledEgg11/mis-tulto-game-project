@@ -43,6 +43,7 @@ var START_TIME: int
 var POSSESS_STATUS = {"speed": 0, "jump": 0, "slide": 0, "damage_multiplier": 0, "hitbox_y": 0, "hitbox_x": 0}
 @onready var center 
 func _load_game(file):
+	
 	LAST_LOADED = file
 	var SAVE_FILE
 	if file == 1:
@@ -65,7 +66,7 @@ func _load_game(file):
 		SAVE_STUFF.enemy_id = SAVE_DATA.enemy_id
 	if SAVE_DATA.play_time:
 		SAVE_STUFF.play_time = SAVE_DATA.play_time
-	if SAVE_DATA.treasure != null:
+	if SAVE_DATA.treasure:
 		SAVE_STUFF.treasure = SAVE_DATA.treasure
 	START_TIME = Time.get_ticks_msec()
 	Autoloads.location = Autoloads.SAVE_STUFF.place

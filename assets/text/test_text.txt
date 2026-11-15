@@ -6,3 +6,6 @@ normal_line
 Hey there!
 Could you come up here?
 text_break
+special_line
+Congratulations! You found a treasure!
+text_break
