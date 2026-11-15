@@ -61,6 +61,8 @@ func _physics_process(delta: float) -> void:
 		match individual:
 			1:
 				position = Vector2(-128, 0)
+			2:
+				position = Vector2(-504, -76)
 			_:
 				position = Vector2(-128, 0)
 		START = false

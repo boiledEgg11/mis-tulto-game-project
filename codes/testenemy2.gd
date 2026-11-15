@@ -8,7 +8,7 @@ var individual
 var POSSESSED = false
 var INVINCIBLE = false
 var JUMP_CHARGE = 0
-var STATUS = {"speed": 80, "jump": -300, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed":100, "damage": 1, "extra_damage": 1}
+var STATUS = {"speed": 80, "jump": -275, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed":100, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
@@ -16,6 +16,8 @@ func _physics_process(delta: float) -> void:
 		match individual:
 			1:
 				position = Vector2(250, 0)
+			2:
+				position = Vector2(-320, 70)
 			_:
 				position = Vector2i(250, 0)
 		START = false

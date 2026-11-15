@@ -22,4 +22,6 @@ test_5
 _stop
 1
 test_6
+2
+2
 _stop
