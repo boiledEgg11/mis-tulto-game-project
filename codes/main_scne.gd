@@ -40,9 +40,6 @@ func _add_enemies(level):
 func _load(file):
 	Autoloads._load_game(file)
 	match Autoloads.location:
-		"test_1":
-			$Player._change_map("test_level_map_1", -1)
-			$Player.position = Vector2i(232, 136)
 		"test_2":
 			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(360, -8)

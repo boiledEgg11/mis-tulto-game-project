@@ -59,13 +59,16 @@ func _set_enemy(level):
 			"enemy_8":
 				characters[i] = preload("res://scenes/enemy/enemy8.tscn").instantiate()
 			"save":
-				print("added enemies")
 				characters[i] = preload("res://scenes/misc/save.tscn").instantiate()
+			"treasure":
+				characters[i] = preload("res://scenes/misc/hidden_stuff.tscn").instantiate()
 		owner.add_child.call_deferred(characters[i])
 		match enemies[i]:
 			"enemy":
 				characters[i].call("_individual_set", int(enemies_id[i]))
 			"save":
+				characters[i].call("_placement", enemies_id[i])
+			"treasure":
 				characters[i].call("_placement", enemies_id[i])
 			_:
 				print("missing type...")
@@ -79,6 +82,6 @@ func _erase_enemy():
 							if characters[i].get_child(-1, false).possess_health > 0:
 								characters[i].call_deferred("_erase")
 								characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
-			"save":
+			_:
 				characters[i].call_deferred("_erase")
 				characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
