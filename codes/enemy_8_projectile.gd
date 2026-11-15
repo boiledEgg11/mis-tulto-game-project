@@ -15,23 +15,20 @@ func _ready() -> void:
 	parent = get_parent().get_parent()
 func _erase():
 	queue_free()
-func _shoot():
-	$Node2D/CharacterBody2D.velocity = target_position.normalized() * -190
-func _attack():
+func _shoot(speed):
+	$Node2D/CharacterBody2D.velocity = target_position.normalized() * speed
+func _attack(speed):
 	$Node2D/CharacterBody2D.velocity = target_position.normalized() * 80
 	await get_tree().create_timer(0.15).timeout
 	$Node2D/CharacterBody2D.velocity = target_position.normalized() * 0
 	await get_tree().create_timer(0.05).timeout
-	_shoot()
+	_shoot(speed)
 func _process(delta: float) -> void:
 	if not attack_player:
 		$Node2D/CharacterBody2D/Area2D.add_to_group("player_damaging")
 		$Node2D/CharacterBody2D/Area2D.remove_from_group("damage")
 		$Node2D/CharacterBody2D/RayCast2D.set_collision_mask_value(5, false)
-
 	$Node2D/CharacterBody2D.move_and_slide()
-	if Input.is_action_just_pressed("9"):
-		_fly(Vector2(0, 0))
 	if move_start:
 		moved_time += 0.1
 	if moving:
@@ -41,7 +38,7 @@ func _process(delta: float) -> void:
 		if $Node2D/CharacterBody2D/RayCast2D.is_colliding():
 			target_position = $Node2D/CharacterBody2D.global_position - $Node2D/CharacterBody2D/RayCast2D.get_collision_point()
 			moving = false
-			_attack()
+			_attack(-190)
 	if moved_time > 20:
 		call_deferred("_screen_not_visible")
 func _screen_not_visible():
@@ -65,7 +62,6 @@ func _fly(target):
 			$Node2D.look_at(get_global_mouse_position())
 			$Node2D.global_rotation_degrees += 90
 			target_position = $Node2D/CharacterBody2D.global_position - get_global_mouse_position()
-			_attack()
-
+			_attack(-300)
 func _detect_collision_close():
 	parent.call_deferred("_enable_detect_collision")

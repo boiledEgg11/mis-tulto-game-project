@@ -29,6 +29,9 @@ func _reset(file):
 	await get_tree().process_frame
 	_enemy_set()
 	$Player.POSSESS_START = true
+	$Player.velocity = Vector2(0, 0)
+	$Camera2D/BoxContainer/DashRecover.value = 60
+	$Camera2D/BoxContainer/PlayerHealth.value = 10
 func _erase_enemies():
 	$StaticBody2D._erase_enemy()
 func _add_enemies(level):
@@ -54,7 +57,7 @@ func _load(file):
 			$Player.position = Vector2i(-1050, 24)
 		"test_6":
 			$Player._change_map("test_level_map_3", -1)
-			$Player.position = Vector2(-24, 24)
+			$Player.position = Vector2(-8, 24)
 		_:
 			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(0, 0)

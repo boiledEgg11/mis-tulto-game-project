@@ -9,7 +9,7 @@ extends CharacterBody2D
 @onready var forced_direction = false
 @onready var INVINCIBLE = false
 @onready var POSSESSED = false
-@onready var START = false
+@onready var START = true
 @onready var collision_layers: Array
 @onready var individual
 @onready var projectile_released = false
@@ -57,6 +57,13 @@ func _call_fly(position_target):
 		else:
 			child_projectile.call("_fly", position_target)
 func _physics_process(delta: float) -> void:
+	if START:
+		match individual:
+			1:
+				position = Vector2(-128, 0)
+			_:
+				position = Vector2(-128, 0)
+		START = false
 	if projectile_amount < 0:
 		projectile_amount = 0
 	for i in range(3):
@@ -67,12 +74,7 @@ func _physics_process(delta: float) -> void:
 	if player:
 		if $DetectionArea.overlaps_body(player):
 			_call_fly(null)
-	if START:
-		match individual:
-			1:
-				position = Vector2(0, 0)
-				position = Vector2i(0, 0)
-		START = false
+
 	$SpinManager.rotation_degrees += 3
 	move_and_slide()
 	if possess_health > 0:

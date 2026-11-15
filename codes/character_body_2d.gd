@@ -635,7 +635,6 @@ func _on_crouch_exit_test_area_body_exited(body) -> void:
 func _on_crouch_test_area_body_entered(body) -> void:
 	if body.is_in_group("tile"):
 		CROUCH_BLOCK = true
-
 func _on_damage_collision_area_entered(area) -> void:
 	if area.is_in_group("damage"):
 		ENEMY_COLLISION = true
@@ -732,10 +731,6 @@ func _change_map(next_map, location):
 					global_position = Vector2(0, 0)
 			owner.add_child.call_deferred(MAP)
 			get_parent().call("_add_enemies", 2)
-	print(next_map)
-	print(location)
-
-
 func _on_extra_attack_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("tile_breakable"):
 		var tiles = body.get_coords_for_body_rid(body_rid)
