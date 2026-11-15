@@ -1,5 +1,5 @@
 extends StaticBody2D
-var characters: Array = [ preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(),0]
+var characters: Array = [ preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(),0]
 @onready var enemies
 @onready var enemies_id
 @onready var enemy_types
@@ -39,29 +39,28 @@ func _set_enemy(level):
 			file_start_point = 22
 	for i in range(file_start_point, enemy_types.size()):
 		if enemy_types[i] == "_stop" or enemy_types[i] == null:
-			print("stop!")
 			break
 		current_enemy_amount = i
 		match enemy_types[i]:
 			"enemy_1":
-				characters[i] = preload("res://scenes/enemy1.tscn").instantiate()
+				characters[i] = preload("res://scenes/enemy/enemy1.tscn").instantiate()
 			"enemy_2":
-				characters[i] = preload("res://scenes/enemy2.tscn").instantiate()
+				characters[i] = preload("res://scenes/enemy/enemy2.tscn").instantiate()
 			"enemy_3":
-				characters[i] = preload("res://scenes/enemy3.tscn").instantiate()
+				characters[i] = preload("res://scenes/enemy/enemy3.tscn").instantiate()
 			"enemy_4":
-				characters[i] = preload("res://scenes/enemy4.tscn").instantiate()
+				characters[i] = preload("res://scenes/enemy/enemy4.tscn").instantiate()
 			"enemy_5":
-				characters[i] = preload("res://scenes/enemy5.tscn").instantiate()
+				characters[i] = preload("res://scenes/enemy/enemy5.tscn").instantiate()
 			"enemy_6":
-				characters[i] = preload("res://scenes/enemy6.tscn").instantiate()
+				characters[i] = preload("res://scenes/enemy/enemy6.tscn").instantiate()
 			"enemy_7":
-				characters[i] = preload("res://scenes/enemy7.tscn").instantiate()
+				characters[i] = preload("res://scenes/enemy/enemy7.tscn").instantiate()
 			"enemy_8":
-				characters[i] = preload("res://scenes/enemy8.tscn").instantiate()
+				characters[i] = preload("res://scenes/enemy/enemy8.tscn").instantiate()
 			"save":
 				print("added enemies")
-				characters[i] = preload("res://scenes/save.tscn").instantiate()
+				characters[i] = preload("res://scenes/misc/save.tscn").instantiate()
 		owner.add_child.call_deferred(characters[i])
 		match enemies[i]:
 			"enemy":
@@ -79,7 +78,7 @@ func _erase_enemy():
 						if characters[i].get_child(-1, false) != null:
 							if characters[i].get_child(-1, false).possess_health > 0:
 								characters[i].call_deferred("_erase")
-								characters[i] = preload("res://scenes/empty.tscn").instantiate()
+								characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
 			"save":
 				characters[i].call_deferred("_erase")
-				characters[i] = preload("res://scenes/empty.tscn").instantiate()
+				characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()

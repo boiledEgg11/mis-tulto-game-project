@@ -18,7 +18,7 @@ extends CharacterBody2D
 @onready var WALL_EXISTED = false
 @onready var projectile_amount = 0
 @onready var projectile_exists: Array = [false, false, false, false, false]
-@onready var projectile: Array = [preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate()]
+@onready var projectile: Array = [preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate()]
 @onready var STATUS = {"speed": 100, "jump": -400, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 80, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
@@ -28,7 +28,7 @@ func _summon_projectile(summon_amount, attack_player: bool):
 			projectile_exist = true
 			projectile_amount += 1
 			projectile[i].queue_free()
-			projectile[i] = preload("res://scenes/enemy8_projectile.tscn").instantiate()
+			projectile[i] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
 			projectile_exists[i] = true
 			projectile[i].projectile_number = i
 			$SpinManager.add_child(projectile[i])
@@ -42,7 +42,7 @@ func _summon_projectile(summon_amount, attack_player: bool):
 	if possess_health > 0:
 		_enable_detect_collision()
 func _projectile_erase(projectile_number):
-	projectile[projectile_number]  = preload("res://scenes/empty.tscn").instantiate()
+	projectile[projectile_number]  = preload("res://scenes/misc/empty.tscn").instantiate()
 	projectile_exists[projectile_number] = false
 	projectile_amount -= 1
 	print(projectile_amount)
@@ -54,6 +54,8 @@ func _call_fly():
 	for child_projectile in $SpinManager.get_children(true):
 		child_projectile.call("_fly", Vector2(0, 0))
 func _physics_process(delta: float) -> void:
+	if projectile_amount < 0:
+		projectile_amount = 0
 	for i in range(3):
 		if projectile[i].get_child(0).scale < Vector2(1, 1):
 			projectile[i].get_child(0).scale += Vector2(0.05, 0.05)

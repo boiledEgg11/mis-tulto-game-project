@@ -62,19 +62,19 @@ func _enemy_set():
 	if Autoloads.POSSESS_TARGET.species and Autoloads.POSSESS_TARGET.species != "none":
 		match Autoloads.POSSESS_TARGET.species:
 			"TestEnemy1":
-				POSSESS_TARGET = preload("res://scenes/enemy1.tscn").instantiate()
+				POSSESS_TARGET = preload("res://scenes/enemy/enemy1.tscn").instantiate()
 			"TestEnemy2":
-				POSSESS_TARGET = preload("res://scenes/enemy2.tscn").instantiate()
+				POSSESS_TARGET = preload("res://scenes/enemy/enemy2.tscn").instantiate()
 			"TestEnemy3":
-				POSSESS_TARGET = preload("res://scenes/enemy3.tscn").instantiate()
+				POSSESS_TARGET = preload("res://scenes/enemy/enemy3.tscn").instantiate()
 			"TestEnemy4":
-				POSSESS_TARGET = preload("res://scenes/enemy4.tscn").instantiate()
+				POSSESS_TARGET = preload("res://scenes/enemy/enemy4.tscn").instantiate()
 			"TestEnemy5":
-				POSSESS_TARGET = preload("res://scenes/enemy5.tscn").instantiate()
+				POSSESS_TARGET = preload("res://scenes/enemy/enemy5.tscn").instantiate()
 			"TestEnemy6":
-				POSSESS_TARGET = preload("res://scenes/enemy6.tscn").instantiate()
+				POSSESS_TARGET = preload("res://scenes/enemy/enemy6.tscn").instantiate()
 			"TestEnemy7":
-				POSSESS_TARGET = preload("res://scenes/enemy7.tscn").instantiate()
+				POSSESS_TARGET = preload("res://scenes/enemy/enemy7.tscn").instantiate()
 		await get_tree().process_frame
 		add_child.call_deferred(POSSESS_TARGET)
 		POSSESS_TARGET.call("_individual_set", Autoloads.POSSESS_TARGET.individual)

@@ -146,7 +146,7 @@ func _process(delta: float) -> void:
 		STARTED = true
 		$Camera2D.enabled = false
 		$Control.visible = false
-		MAIN = preload("res://scenes/main_game_scene.tscn").instantiate()
+		MAIN = preload("res://scenes/misc/main_game_scene.tscn").instantiate()
 		add_child(MAIN)
 		await get_tree().process_frame
 		await get_tree().process_frame

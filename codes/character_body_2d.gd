@@ -28,12 +28,12 @@ var TARGET_POS = Vector2(0, 0)
 var ATTACK_COLLISION = false
 var HAS_TARGET = 0
 var OVERLAPPING_SAVE = "none"
-var SAVE = preload("res://scenes/save.tscn")
+var SAVE = preload("res://scenes/misc/save.tscn")
 var MAP
 @onready var initial_y: int
 var map_changable = 120
 func _ready() -> void:
-	MAP = preload("res://scenes/test_level_map.tscn").instantiate()
+	MAP = preload("res://scenes/tile_map/test_level_map.tscn").instantiate()
 	owner.add_child.call_deferred(MAP)
 	$ExtraAttack/Sprite2D.visible = false
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
@@ -70,7 +70,7 @@ func _death():
 	get_parent().call("_player_health", 10, true)
 	get_parent().call("_reset", Autoloads.LAST_LOADED)
 func _shoot():
-	var SHOOT_BULLET = preload("res://scenes/player_projectile.tscn").instantiate()
+	var SHOOT_BULLET = preload("res://scenes/projectile/player_projectile.tscn").instantiate()
 	owner.add_child(SHOOT_BULLET)
 	SHOOT_BULLET.position = position
 func _ability_use(ability):
@@ -698,7 +698,7 @@ func _change_map(next_map, location):
 	match next_map:
 		"test_level_map_1":
 			MAP.call_deferred("_erase")
-			MAP = preload("res://scenes/test_level_map.tscn").instantiate()
+			MAP = preload("res://scenes/tile_map/test_level_map.tscn").instantiate()
 			match location:
 				0:
 					global_position = Vector2(0, 0)
@@ -708,7 +708,7 @@ func _change_map(next_map, location):
 			get_parent().call("_add_enemies", 0)
 		"test_level_map_2":
 			MAP.call_deferred("_erase")
-			MAP = preload("res://scenes/test_level_map_2.tscn").instantiate()
+			MAP = preload("res://scenes/tile_map/test_level_map_2.tscn").instantiate()
 			match location:
 				0:
 					global_position = Vector2(0, 0)
@@ -722,7 +722,7 @@ func _change_map(next_map, location):
 			get_parent().call("_add_enemies", 1)
 		"test_level_map_3":
 			MAP.call_deferred("_erase")
-			MAP = preload("res://scenes/test_level_map_3.tscn").instantiate()
+			MAP = preload("res://scenes/tile_map/test_level_map_3.tscn").instantiate()
 			match location:
 				0:
 					global_position = Vector2(0, 0)
