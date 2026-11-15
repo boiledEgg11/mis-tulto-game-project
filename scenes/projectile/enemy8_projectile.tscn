@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://bodbpisy0vqil"]
+
+[ext_resource type="Script" uid="uid://c13qbh8vh80vl" path="res://codes/enemy_8_projectile.gd" id="1_ek3k4"]
+[ext_resource type="Texture2D" uid="uid://bqe70ssrymldb" path="res://assets/sprites/enemy8_projectile.png" id="2_whopb"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p8uj1"]
+radius = 5.0
+height = 40.0
+
+[node name="enemy8_projectile" type="Node2D" unique_id=531352109]
+script = ExtResource("1_ek3k4")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=229533783]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="Node2D" unique_id=775841722]
+
+[node name="Area2D" type="Area2D" parent="Node2D/CharacterBody2D" unique_id=612444680 groups=["damage"]]
+collision_layer = 11
+collision_mask = 11
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D/CharacterBody2D/Area2D" unique_id=787442985]
+shape = SubResource("CapsuleShape2D_p8uj1")
+
+[node name="Sprite2D" type="Sprite2D" parent="Node2D/CharacterBody2D/Area2D" unique_id=1000728529]
+z_index = 5
+texture = ExtResource("2_whopb")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="Node2D/CharacterBody2D" unique_id=632196685]
+position = Vector2(5, 0)
+rect = Rect2(-5.5, -20, 1, 0.1)
+
+[node name="RayCast2D" type="RayCast2D" parent="Node2D/CharacterBody2D" unique_id=305411219]
+target_position = Vector2(0, -500)
+collision_mask = 16
+
+[connection signal="body_shape_entered" from="Node2D/CharacterBody2D/Area2D" to="." method="_on_area_2d_body_shape_entered"]
