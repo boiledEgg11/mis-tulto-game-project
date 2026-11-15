@@ -48,11 +48,14 @@ func _projectile_erase(projectile_number):
 	print(projectile_amount)
 func _disable_collision_shape():
 	$DetectionArea/CollisionShape2D.disabled = true
-func _call_fly():
+func _call_fly(position_target):
 	call_deferred("_disable_collision_shape")
 	projectile_cooldown = 0
 	for child_projectile in $SpinManager.get_children(true):
-		child_projectile.call("_fly", Vector2(0, 0))
+		if position_target == null:
+			child_projectile.call("_fly", null)
+		else:
+			child_projectile.call("_fly", position_target)
 func _physics_process(delta: float) -> void:
 	if projectile_amount < 0:
 		projectile_amount = 0
@@ -63,7 +66,7 @@ func _physics_process(delta: float) -> void:
 			projectile[i].get_child(0).position.y -= 2
 	if player:
 		if $DetectionArea.overlaps_body(player):
-			_call_fly()
+			_call_fly(null)
 	if START:
 		match individual:
 			1:
@@ -184,7 +187,7 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 
 func _on_detection_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("player"):
-		_call_fly()
+		_call_fly(null)
 		player = body
 func _enable_detect_collision():
 	$DetectionArea/CollisionShape2D.disabled = false

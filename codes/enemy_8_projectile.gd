@@ -28,8 +28,7 @@ func _process(delta: float) -> void:
 		$Node2D/CharacterBody2D/Area2D.add_to_group("player_damaging")
 		$Node2D/CharacterBody2D/Area2D.remove_from_group("damage")
 		$Node2D/CharacterBody2D/RayCast2D.set_collision_mask_value(5, false)
-		for i in range(2, 8, 2):
-			$Node2D/CharacterBody2D/RayCast2D.set_collision_mask_value(i, true)
+
 	$Node2D/CharacterBody2D.move_and_slide()
 	if Input.is_action_just_pressed("9"):
 		_fly(Vector2(0, 0))
@@ -49,9 +48,10 @@ func _screen_not_visible():
 	_erase()
 	if is_instance_valid(parent):
 		parent.call("_projectile_erase", projectile_number)
-func _fly(target: Vector2):
+func _fly(target):
 	if not (moving or move_start or target_touched):
-		moving = true
+		if target == null:
+			moving = true
 		location = global_position
 		position = Vector2(0, 0)
 		rotated = global_rotation
@@ -59,6 +59,8 @@ func _fly(target: Vector2):
 		call_deferred("reparent", Autoloads.center)
 		rotation = rotated
 		global_position = location
-		target_pos = target
+		if target != null:
+			target_pos = target
+			_attack()
 func _detect_collision_close():
 	parent.call_deferred("_enable_detect_collision")

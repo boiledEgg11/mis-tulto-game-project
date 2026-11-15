@@ -79,7 +79,7 @@ func _ability_use(ability):
 			if Autoloads.ENEMY_POSSESS.projectile_amount < 3:
 				Autoloads.ENEMY_POSSESS.call_deferred("_summon_projectile", 3, false)
 			else:
-				Autoloads.ENEMY_POSSESS.call_deferred("_call_fly")
+				Autoloads.ENEMY_POSSESS.call_deferred("_call_fly",get_global_mouse_position())
 		"LASER":
 			Autoloads.POSSESS_ENEMY.call("_attack")
 			Autoloads.PLAYER_ATTACK = true

@@ -26,6 +26,7 @@ window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 window/vsync/vsync_mode=2
 window/ios/allow_high_refresh_rate=false
+mouse_cursor/custom_image="uid://c3qeevwumdqsd"
 
 [editor_plugins]
 
