@@ -74,12 +74,15 @@ func _shoot():
 	owner.add_child(SHOOT_BULLET)
 	SHOOT_BULLET.position = position
 func _ability_use(ability):
+	if ability != "none" or ability != "spin":
+		get_parent().call("_dash_recover", 0, true)
 	match ability:
 		"SWORD_SHOOT":
 			if Autoloads.ENEMY_POSSESS.projectile_amount < 3:
 				Autoloads.ENEMY_POSSESS.call_deferred("_summon_projectile", 3, false)
 			else:
 				Autoloads.ENEMY_POSSESS.call_deferred("_call_fly",get_global_mouse_position())
+				get_parent().call("_dash_recover", 30, true)
 		"LASER":
 			Autoloads.POSSESS_ENEMY.call("_attack")
 			Autoloads.PLAYER_ATTACK = true
@@ -110,8 +113,7 @@ func _ability_use(ability):
 			$ExtraAttack/Sprite2D.visible = false
 			$ExtraAttack.position = Vector2(0, 0)
 			ABILITY_LOCK = false
-	if ability != "none" or ability != "spin":
-		get_parent().call("_dash_recover", 0, true)
+
 func _physics_process(delta: float) -> void:
 	get_parent().call("_camera_position", position.x, position.y, false)
 	if INVINCIBLE_HOLD:
