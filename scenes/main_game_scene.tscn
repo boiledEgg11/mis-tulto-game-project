@@ -2464,7 +2464,7 @@ target_position = Vector2(0, 90)
 
 [node name="DetectShape" type="Area2D" parent="Node2D2/Player" unique_id=1709546702]
 collision_layer = 32
-collision_mask = 32
+collision_mask = 42
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/Player/DetectShape" unique_id=1494066532]
 shape = SubResource("CircleShape2D_ycwuu")

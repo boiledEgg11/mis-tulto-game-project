@@ -30,6 +30,7 @@ var HAS_TARGET = 0
 var OVERLAPPING_SAVE = "none"
 var SAVE = preload("res://scenes/save.tscn")
 var MAP
+@onready var initial_y: int
 var map_changable = 120
 func _ready() -> void:
 	MAP = preload("res://scenes/test_level_map.tscn").instantiate()
@@ -304,17 +305,15 @@ func _physics_process(delta: float) -> void:
 					Autoloads.spin_moving = false
 			"TARGET_DASH":
 				if HAS_TARGET == 2:
-						position.x = move_toward(position.x, TARGET_POS.x, 2)
-						position.y = move_toward(position.y, TARGET_POS.y, 2)
-						await get_tree().create_timer(0.6).timeout
-						HAS_TARGET = 0
+					await get_tree().create_timer(0.6).timeout
+					HAS_TARGET = 0
 				if not MOVE_LOCK:
 					if direction > 0:
 						$Sprite2D.flip_h = false
 					if direction < 0:
 						$Sprite2D.flip_h = true
 					direction = Input.get_axis("left", "right")
-					if direction:
+					if direction and HAS_TARGET == 0:
 						if is_on_floor():
 							velocity.x = direction * STATUS.speed * SPEED_MULTIPLIER
 						if not is_on_floor():
@@ -625,28 +624,16 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 func _goal():
 	get_parent().call("_open_text", 4, true)
 func _on_detect_shape_body_entered(body: Node2D) -> void:
-	TARGET_POS = Vector2i(0, 0)
-	ATTACK_COLLISION = true
-	velocity = Vector2i(0, 0)
 	if HAS_TARGET == 0:
 		INVINCIBLE = true
 		MOVE_LOCK = true
-		velocity.x = 0
-		velocity.y = 0
+		ATTACK_COLLISION = true
+		$DetectShape/CollisionShape2D.call_deferred("set_disabled", true)
 		HAS_TARGET = 1
-		if body.position.x - global_position.x > 0:
-			direction = 1
-		else:
-			direction = -1
-		if body.position.x > global_position.x:
-			TARGET_POS.x = body.position.x + 150
-		if body.position.x < global_position.x:
-			TARGET_POS.x = body.position.x - 150
-		if body.position.y > global_position.y:
-			TARGET_POS.y = body.position.y + 150
-		if body.position.y < global_position.y:
-			TARGET_POS.y = body.position.y - 150
+		velocity = Vector2(0, 0)
+		TARGET_POS = global_position - body.global_position
 		await get_tree().create_timer(0.25).timeout
+		velocity = TARGET_POS.normalized() * -190
 		HAS_TARGET = 2
 		INVINCIBLE = false
 		MOVE_LOCK = false

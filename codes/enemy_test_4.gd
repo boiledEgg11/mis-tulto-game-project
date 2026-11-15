@@ -59,7 +59,7 @@ func _physics_process(delta: float) -> void:
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
-				velocity += get_gravity() * delta / 5
+				velocity += get_gravity() * delta / 12
 	if possess_health == -1:
 			position = Vector2i(0, 0)
 			Autoloads.POSSESS_TYPE = "charge"

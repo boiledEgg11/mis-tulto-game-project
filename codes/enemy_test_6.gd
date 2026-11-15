@@ -5,18 +5,20 @@ var possess_health = 1
 var SLIDE
 var INVINCIBLE = false
 var POSSESSED = false
-var TARGET_POS = Vector2i(0, 0)
+var TARGET_POS: Vector2
 var HAS_TARGET = 0
 var individual = 0
 var START = false
+@onready var initial_y: float
 var STATUS = {"speed": 0, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 70, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if START:
 		match individual:
 			1:
 				position = Vector2(0, 112)
+				initial_y = 112
 			_:
 				position = Vector2i(0, 112)
 		START = false
@@ -37,14 +39,18 @@ func _physics_process(_delta: float) -> void:
 		$EnemyTestCollision.disabled = false
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
-		velocity.y = move_toward(velocity.y, 0, 10)
 		if HAS_TARGET == 0:
+			if global_position.y != initial_y:
+				global_position.y = move_toward(global_position.y, initial_y, 15)
 			velocity.x = direction * STATUS.air_speed
 		if HAS_TARGET == 2:
-			position.x = move_toward(position.x, TARGET_POS.x, 2)
-			position.y = move_toward(position.y, TARGET_POS.y, 2)
 			await get_tree().create_timer(0.6).timeout
+			initial_y = global_position.y
 			HAS_TARGET = 0
+			await get_tree().process_frame
+			$SearchArea/CollisionShape2D.call_deferred("set_disabled", false)
+	if not is_on_floor():
+			velocity += get_gravity() * delta / 5
 	if possess_health == -1:
 		position = Vector2i(0, 0)
 		$EnemyTestCollision.disabled = true
@@ -97,23 +103,13 @@ func _process(_delta: float) -> void:
 
 func _on_search_area_body_shape_entered(_body_rid: RID, body: Node2D, _body_shape_index: int, _local_shape_index: int) -> void:
 	if HAS_TARGET == 0:
-		TARGET_POS = Vector2i(0, 0)
-		velocity.x = 0
-		velocity.y = 0
+		$SearchArea/CollisionShape2D.call_deferred("set_disabled", true)
 		HAS_TARGET = 1
-		if body.position.x - position.x > 0:
-			direction = 1
-		else:
-			direction = -1
-		if body.position.x > position.x:
-			TARGET_POS.x = body.position.x + 150
-		if body.position.x < position.x:
-			TARGET_POS.x = body.position.x - 150
-		if body.position.y > position.y:
-			TARGET_POS.y = body.position.y + 150
-		if body.position.y < position.y:
-			TARGET_POS.y = body.position.y - 150
-		await get_tree().create_timer(0.5).timeout
+		velocity = Vector2(0, 0)
+		TARGET_POS = global_position - body.global_position
+		TARGET_POS += Vector2(0, -10)
+		await get_tree().create_timer(0.25).timeout
+		velocity = TARGET_POS.normalized() * -190
 		HAS_TARGET = 2
 		print(TARGET_POS)
 func _on_enemy_area_area_entered(area: Area2D) -> void:

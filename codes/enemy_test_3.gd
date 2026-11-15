@@ -10,7 +10,7 @@ var attacking = false
 var charge = 0
 var individual
 var ATTACK = false
-var STATUS = {"speed": 85, "jump": -350, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100}
+var STATUS = {"speed": 85, "jump": -150, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100}
 func _ready() -> void:
 
 	$Area2D/Sprite2D.visible = false
@@ -19,10 +19,10 @@ func _charging():
 	while attacking:
 		await get_tree().create_timer(0.3).timeout
 		if attacking:
-			$Sprite2D.texture = load("res://assets/placeholders/placeholder/enemy_explosive_charge.png")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosive_charge.png")
 		await get_tree().create_timer(0.3).timeout
 		if attacking:
-			$Sprite2D.texture = load("res://assets/placeholders/placeholder/enemy_explosion.png")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
 func _attack_charge():
 	charge = 1
 	_charging()
@@ -33,7 +33,7 @@ func _attack_charge():
 		$Area2D/CollisionShape2D.disabled = false
 		$Area2D/Sprite2D.visible = true
 		attacking = false
-		$Sprite2D.texture = load("res://assets/placeholders/placeholder/enemy_explosion.png")
+		$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
 		await get_tree().create_timer(0.1).timeout
 		$Area2D/CollisionShape2D.disabled = true
 		$Area2D/Sprite2D.visible = false

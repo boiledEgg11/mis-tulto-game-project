@@ -10,7 +10,6 @@ extends Node2D
 @onready var target_position: Vector2
 @onready var moved_time: float
 @onready var move_start = false
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	parent = get_parent().get_parent()
 func _erase():
