@@ -9,7 +9,8 @@ func _save(enemy, file):
 		"place": location,
 		"enemy": Autoloads.POSSESS_TARGET.species,
 		"enemy_id": Autoloads.POSSESS_TARGET.individual,
-		"play_time": Autoloads.play_time
+		"play_time": Autoloads.play_time,
+		"treasure": Autoloads.FOUND_TREASURE
 	}
 	_save_game(file)
 func _placement(placement):

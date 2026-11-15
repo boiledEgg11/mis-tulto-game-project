@@ -26,6 +26,7 @@ var LAST_LOADED = 1
 var play_time = 0
 var recorded_time = 0
 var spin_moving = false
+var FOUND_TREASURE = [false, false, false, false, false]
 var played_time: Dictionary = {
 	"minute": 0,
 	"hour": 0
@@ -35,7 +36,8 @@ var SAVE_STUFF: Dictionary = {
 	"place": "none",
 	"enemy": "none",
 	"enemy_id": 0,
-	"play_time": 0
+	"play_time": 0,
+	"treasure": [false, false, false]
 }
 var START_TIME: int
 var POSSESS_STATUS = {"speed": 0, "jump": 0, "slide": 0, "damage_multiplier": 0, "hitbox_y": 0, "hitbox_x": 0}
@@ -63,8 +65,11 @@ func _load_game(file):
 		SAVE_STUFF.enemy_id = SAVE_DATA.enemy_id
 	if SAVE_DATA.play_time:
 		SAVE_STUFF.play_time = SAVE_DATA.play_time
+	if SAVE_DATA.treasure != null:
+		SAVE_STUFF.treasure = SAVE_DATA.treasure
 	START_TIME = Time.get_ticks_msec()
 	Autoloads.location = Autoloads.SAVE_STUFF.place
 	Autoloads.POSSESS_TARGET.species = Autoloads.SAVE_STUFF.enemy
 	Autoloads.POSSESS_TARGET.individual = Autoloads.SAVE_STUFF.enemy_id
 	Autoloads.recorded_time = Autoloads.SAVE_STUFF.play_time
+	Autoloads.FOUND_TREASURE = Autoloads.SAVE_STUFF.treasure

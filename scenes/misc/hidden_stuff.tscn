@@ -2,20 +2,22 @@
 
 [ext_resource type="Script" uid="uid://cr3227hw647dd" path="res://codes/hidden_stuff.gd" id="1_f0yk3"]
 [ext_resource type="Texture2D" uid="uid://cdh5x8msr8ud" path="res://assets/sprites/savepoint_3.png" id="2_7f0f1"]
+[ext_resource type="Script" uid="uid://chjo5585yffnv" path="res://scenes/misc/hidden_stuff_child.gd" id="2_aswen"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aswen"]
 size = Vector2(16, 16)
 
-[node name="HiddenStuff" type="Node2D" unique_id=1033381685]
+[node name="HiddenStuff" type="Node2D" unique_id=1033381685 groups=["treasure"]]
 script = ExtResource("1_f0yk3")
 
-[node name="Savepoint" type="StaticBody2D" parent="." unique_id=1578179870]
+[node name="HiddenStuff" type="StaticBody2D" parent="." unique_id=1578179870 groups=["treasure"]]
 collision_layer = 64
 collision_mask = 17
+script = ExtResource("2_aswen")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Savepoint" unique_id=490246911]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HiddenStuff" unique_id=490246911]
 shape = SubResource("RectangleShape2D_aswen")
 
-[node name="Sprite2D" type="Sprite2D" parent="Savepoint" unique_id=1329296248]
+[node name="Sprite2D" type="Sprite2D" parent="HiddenStuff" unique_id=1329296248]
 rotation = 3.1415927
 texture = ExtResource("2_7f0f1")

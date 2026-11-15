@@ -30,6 +30,8 @@ var HAS_TARGET = 0
 var OVERLAPPING_SAVE = "none"
 var SAVE = preload("res://scenes/misc/save.tscn")
 var MAP
+@onready var treasure: Node
+@onready var treasure_gettable = false
 @onready var initial_y: int
 var map_changable = 120
 func _ready() -> void:
@@ -154,6 +156,8 @@ func _physics_process(delta: float) -> void:
 			Autoloads.SAVE_SCREEN = true
 			get_parent().get_parent().call("_pause")
 			get_parent().call("_player_health", 10, true)
+		if treasure_gettable:
+			treasure.call_deferred("_found", self)
 	if position.y > 175:
 		get_parent().call("_reset", Autoloads.LAST_LOADED)
 	if Autoloads.POSSESS_ABILITY != "spin" and Autoloads.POSSESS_ABILITY != "LASER":
@@ -634,6 +638,9 @@ func _on_crouch_exit_test_area_body_exited(body) -> void:
 		print("can crouch")
 	if body.is_in_group("save"):
 		SAVABLE = false 
+	if body.is_in_group("treasure"):
+		print("out of treasure")
+		treasure_gettable = false
 func _on_crouch_test_area_body_entered(body) -> void:
 	if body.is_in_group("tile"):
 		CROUCH_BLOCK = true
@@ -656,6 +663,10 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 		SAVABLE = true
 		OVERLAPPING_SAVE = body.get_parent()
 		print("can save")
+	if body.is_in_group("treasure"):
+		print("can treasure")
+		treasure_gettable = true
+		treasure = body
 
 func _goal():
 	get_parent().call("_open_text", 4, true)

@@ -10,7 +10,7 @@ var attacking = false
 var charge = 0
 var individual
 var ATTACK = false
-var STATUS = {"speed": 85, "jump": -150, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100}
+var STATUS = {"speed": 85, "jump": -350, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100}
 func _ready() -> void:
 
 	$Area2D/Sprite2D.visible = false
@@ -158,7 +158,7 @@ func _process(_delta: float) -> void:
 		Autoloads.POSSESS_ENEMY = "EXPLOSIVE_ENEMY"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder/enemy_explosion.png"
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy_explosion.png"
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
