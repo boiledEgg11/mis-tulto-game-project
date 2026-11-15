@@ -66,7 +66,6 @@ func _set_enemy(level):
 		match enemies[i]:
 			"enemy":
 				characters[i].call("_individual_set", int(enemies_id[i]))
-				print(enemies_id)
 			"save":
 				characters[i].call("_placement", enemies_id[i])
 			_:
@@ -75,10 +74,11 @@ func _erase_enemy():
 	for i in range(enemies.size()):
 		match enemies[i]:
 			"enemy":
-				if characters[i].get_child(-1, false) != null:
-					if characters[i].get_child(-1, false).possess_health > 0:
-						characters[i].call_deferred("_erase")
-						characters[i] = preload("res://scenes/empty.tscn").instantiate()
+				if characters[i].get_child_count() > 0:
+					if characters[i].get_child(-1, false) != null:
+						if characters[i].get_child(-1, false).possess_health > 0:
+							characters[i].call_deferred("_erase")
+							characters[i] = preload("res://scenes/empty.tscn").instantiate()
 			"save":
 				characters[i].call_deferred("_erase")
 				characters[i] = preload("res://scenes/empty.tscn").instantiate()

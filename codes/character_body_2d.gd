@@ -74,6 +74,8 @@ func _shoot():
 	SHOOT_BULLET.position = position
 func _ability_use(ability):
 	match ability:
+		"SWORD_SHOOT":
+			Autoloads.ENEMY_POSSESS.call_deferred("_summon_projectile", 3)
 		"LASER":
 			Autoloads.POSSESS_ENEMY.call("_attack")
 			Autoloads.PLAYER_ATTACK = true
@@ -173,6 +175,35 @@ func _physics_process(delta: float) -> void:
 			if Input.is_action_just_pressed("space") and get_parent().call("_get_dash_recover_value") == 60:
 				_ability_use(Autoloads.POSSESS_ABILITY)
 		match Autoloads.POSSESS_ABILITY:
+			"SWORD_SHOOT":
+				direction = Input.get_axis("left", "right")
+				if direction > 0:
+					$Sprite2D.flip_h = false
+				if direction < 0:
+					$Sprite2D.flip_h = true
+				if not is_on_floor():
+					STATUS.slide = 0
+					STATUS.damage_multiplier = -1.2
+				else:
+					STATUS.slide = 30
+					STATUS.damage_multiplier = -1
+				if not is_on_floor():
+					if Input.is_action_pressed("down"):
+						velocity += get_gravity() * delta * 2.5
+					else:
+						velocity += get_gravity() * delta * 1.5
+				if is_on_floor():
+					if Input.is_action_just_pressed("up"):
+						velocity.y = STATUS.jump
+				if direction:
+					if not is_on_floor():
+						velocity.x = direction * STATUS.air_speed
+					if is_on_floor():
+						velocity.x = direction * STATUS.speed
+				if not direction:
+					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
+					direction = 0
+				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 			"LASER":
 				global_position.x = Autoloads.PLAYER_POSITION_X
 				global_position.y = Autoloads.PLAYER_POSITION_Y
@@ -322,7 +353,7 @@ func _physics_process(delta: float) -> void:
 						velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 						direction = 0
 					if ($groundchecker.is_colliding() or is_on_floor()) and Input.is_action_pressed("up"):
-						velocity.y = STATUS.jump
+						velocity.y = STATUS.jump / 4
 					if not is_on_floor():
 						if Input.is_action_pressed("down"):
 							velocity.y = STATUS.jump * -1
@@ -550,7 +581,6 @@ func _physics_process(delta: float) -> void:
 					$Sprite2D.rotation_degrees = 0
 					DASH_Y_CHANGE = 0
 					if not INVINCIBLE_HOLD:
-						print("dash stop!")
 						ATTACK_COLLISION = false
 						DASH_LOCK = false
 						INVINCIBLE = false

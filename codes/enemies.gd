@@ -12,6 +12,8 @@ func _possess_start():
 func _process(delta: float) -> void:
 	if Autoloads.RESET:
 		free()
+func _possessed():
+	Autoloads.ENEMY_POSSESS = get_child(0)
 func _individual_set(individual_set):
 	get_child(0).individual = individual_set
 	get_child(0).START = true

@@ -1,4 +1,5 @@
 extends Node
+@onready var ENEMY_POSSESS: Node2D
 var tiles: Array
 var POSSESS_TARGET = {"species": "none", "individual": "0"}
 var RESET = false
