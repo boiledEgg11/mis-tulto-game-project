@@ -13,6 +13,8 @@ extends CharacterBody2D
 @onready var collision_layers: Array
 @onready var individual
 @onready var projectile_released = false
+@onready var projectile_exist = false
+@onready var projectile_time = 0
 @onready var WALL_EXISTED = false
 @onready var projectile_amount = 0
 @onready var projectile_exists: Array = [false, false, false, false, false]
@@ -23,6 +25,7 @@ func _ready() -> void:
 func _summon_projectile(summon_amount, attack_player: bool):
 	for i in range(summon_amount):
 		if not projectile_exists[i]:
+			projectile_exist = true
 			projectile_amount += 1
 			projectile[i].queue_free()
 			projectile[i] = preload("res://scenes/enemy8_projectile.tscn").instantiate()
@@ -39,7 +42,6 @@ func _summon_projectile(summon_amount, attack_player: bool):
 	if possess_health > 0:
 		_enable_detect_collision()
 func _projectile_erase(projectile_number):
-	projectile[projectile_number].call("_erase")
 	projectile[projectile_number]  = preload("res://scenes/empty.tscn").instantiate()
 	projectile_exists[projectile_number] = false
 	projectile_amount -= 1
@@ -156,6 +158,7 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
+		_projectile_erase(3)
 		get_parent().call_deferred("_possessed")
 		Autoloads.POSSESS_TARGET = {"species": "TestEnemy8", "individual": individual}
 		Autoloads.POSSESS_AMOUNT += 1

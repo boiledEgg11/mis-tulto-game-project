@@ -53,9 +53,10 @@ func _dash_hold_stop():
 		$Sprite2D.visible = false
 func _health_process(DAMAGE) -> void:
 	if not INVINCIBLE:
-		TEXTURE_LOCK = true
+		if not CROUCH:
+			TEXTURE_LOCK = true
 		if DAMAGE > 0:
-			if not Autoloads.PLAYER_POSSESSING:
+			if not Autoloads.PLAYER_POSSESSING and not CROUCH:
 				$AnimatedSprite2D.play("hurt")
 			get_parent().call("_player_health", DAMAGE * STATUS.damage_multiplier, false)
 		if get_parent().call("_get_player_health") <= 0:
@@ -208,8 +209,8 @@ func _physics_process(delta: float) -> void:
 					direction = 0
 				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 			"LASER":
-				global_position.x = Autoloads.PLAYER_POSITION_X
-				global_position.y = Autoloads.PLAYER_POSITION_Y
+				global_position = Autoloads.ENEMY_POSSESS.global_position
+				global_rotation = Autoloads.ENEMY_POSSESS.global_rotation
 				velocity.x = 0
 				velocity.y = 0
 				if is_on_floor():
@@ -324,8 +325,8 @@ func _physics_process(delta: float) -> void:
 					get_parent().call("_camera_position", position.x, position.y, false)
 				velocity.x = 0
 				velocity.y = 0
-				position.x = Autoloads.PLAYER_POSITION_X
-				position.y = Autoloads.PLAYER_POSITION_Y
+				global_position = Autoloads.ENEMY_POSSESS.global_position
+				global_rotation = Autoloads.ENEMY_POSSESS.global_rotation
 				if Input.is_action_pressed("shift"):
 					direction = Input.get_axis("left", "right") * 10
 				else:
@@ -440,6 +441,7 @@ func _physics_process(delta: float) -> void:
 					velocity.x = move_toward(velocity.x, 0, STATUS.slide)
 					direction = 0
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1 or POSSESS_END:
+			rotation = 0
 			INVINCIBLE  = true
 			Autoloads.POSSESS_TARGET.species = "none"
 			Autoloads.POSSESS_TARGET.individual = 0

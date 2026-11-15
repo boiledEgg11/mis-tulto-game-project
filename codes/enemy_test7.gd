@@ -116,8 +116,6 @@ func _process(_delta: float) -> void:
 		LAZER_DURATION -= 1
 		if LAZER_DURATION < 0:
 			_attack_end()
-	$LeftCollisionCheck.position.x = 8 * direction
-	$GroundExistingChecker.position.x = 9 * direction
 	if direction == 1:
 		$Sprite2D.flip_h = false
 	if direction == -1:
@@ -131,6 +129,7 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
+		get_parent().call_deferred("_possessed")
 		CHARGE_LOW = false
 		CHARGE_LOCK = false
 		$Enemy7Laser.attacking = false
@@ -146,8 +145,6 @@ func _process(_delta: float) -> void:
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
-
-
 func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	if body.is_in_group("tile"):
 		direction *= -1

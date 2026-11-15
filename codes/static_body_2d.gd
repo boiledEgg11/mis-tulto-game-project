@@ -74,11 +74,12 @@ func _erase_enemy():
 	for i in range(enemies.size()):
 		match enemies[i]:
 			"enemy":
-				if characters[i].get_child_count() > 0:
-					if characters[i].get_child(-1, false) != null:
-						if characters[i].get_child(-1, false).possess_health > 0:
-							characters[i].call_deferred("_erase")
-							characters[i] = preload("res://scenes/empty.tscn").instantiate()
+				if is_instance_valid(characters[i]):
+					if characters[i].get_child_count() > 0:
+						if characters[i].get_child(-1, false) != null:
+							if characters[i].get_child(-1, false).possess_health > 0:
+								characters[i].call_deferred("_erase")
+								characters[i] = preload("res://scenes/empty.tscn").instantiate()
 			"save":
 				characters[i].call_deferred("_erase")
 				characters[i] = preload("res://scenes/empty.tscn").instantiate()

@@ -46,8 +46,9 @@ func _process(delta: float) -> void:
 	if moved_time > 20:
 		call_deferred("_screen_not_visible")
 func _screen_not_visible():
-	reparent(parent)
-	parent.call("_projectile_erase", projectile_number)
+	_erase()
+	if is_instance_valid(parent):
+		parent.call("_projectile_erase", projectile_number)
 func _fly(target: Vector2):
 	if not (moving or move_start or target_touched):
 		moving = true

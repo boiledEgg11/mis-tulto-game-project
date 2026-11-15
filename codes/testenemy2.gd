@@ -93,6 +93,7 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
+		get_parent().call_deferred("_possessed")
 		Autoloads.POSSESS_TARGET = {"species": "TestEnemy2", "individual": individual}
 		Autoloads.PLAYER_POSSESSING = true
 		Autoloads.POSSESS_ABILITY = "Jump"
