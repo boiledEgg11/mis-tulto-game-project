@@ -59,8 +59,13 @@ func _fly(target):
 		call_deferred("reparent", Autoloads.center)
 		rotation = rotated
 		global_position = location
+		await get_tree().process_frame
 		if target != null:
-			target_pos = target
+			move_start = true
+			$Node2D.look_at(get_global_mouse_position())
+			$Node2D.global_rotation_degrees += 90
+			target_position = $Node2D/CharacterBody2D.global_position - get_global_mouse_position()
 			_attack()
+
 func _detect_collision_close():
 	parent.call_deferred("_enable_detect_collision")
