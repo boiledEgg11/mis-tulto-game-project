@@ -10,6 +10,7 @@ extends Node2D
 @onready var target_position: Vector2
 @onready var moved_time: float
 @onready var move_start = false
+@onready var attack_player = true
 func _ready() -> void:
 	parent = get_parent().get_parent()
 func _erase():
@@ -23,6 +24,11 @@ func _attack():
 	await get_tree().create_timer(0.05).timeout
 	_shoot()
 func _process(delta: float) -> void:
+	if not attack_player:
+		$Node2D/CharacterBody2D/Area2D.remove_from_group("damage")
+		$Node2D/CharacterBody2D/RayCast2D.set_collision_mask_value(5, false)
+		for i in range(2, 8, 2):
+			$Node2D/CharacterBody2D/RayCast2D.set_collision_mask_value(i, true)
 	$Node2D/CharacterBody2D.move_and_slide()
 	if Input.is_action_just_pressed("9"):
 		_fly(Vector2(0, 0))

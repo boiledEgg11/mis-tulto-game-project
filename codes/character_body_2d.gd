@@ -75,7 +75,7 @@ func _shoot():
 func _ability_use(ability):
 	match ability:
 		"SWORD_SHOOT":
-			Autoloads.ENEMY_POSSESS.call_deferred("_summon_projectile", 3)
+			Autoloads.ENEMY_POSSESS.call_deferred("_summon_projectile", 3, false)
 		"LASER":
 			Autoloads.POSSESS_ENEMY.call("_attack")
 			Autoloads.PLAYER_ATTACK = true

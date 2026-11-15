@@ -16,10 +16,10 @@ extends CharacterBody2D
 @onready var projectile_amount = 0
 @onready var projectile_exists: Array = [false, false, false, false, false]
 @onready var projectile: Array = [preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate(), preload("res://scenes/empty.tscn").instantiate()]
-@onready var STATUS = {"speed": 80, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
+@onready var STATUS = {"speed": 80, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 80, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
-func _summon_projectile(summon_amount):
+func _summon_projectile(summon_amount, attack_player: bool):
 	for i in range(summon_amount):
 		if not projectile_exists[i]:
 			projectile_amount += 1
@@ -30,6 +30,7 @@ func _summon_projectile(summon_amount):
 			$SpinManager.add_child(projectile[i])
 			projectile[i].get_child(0).scale = Vector2(0.05, 0.05)
 			projectile[i].get_child(0).position = Vector2(0, 0)
+			projectile[i].attack_player = attack_player
 			for l in range(0, i):
 				projectile[l].rotation_degrees += 360 / summon_amount
 	await get_tree().create_timer(0.2).timeout
@@ -72,7 +73,7 @@ func _physics_process(delta: float) -> void:
 			ground_exist = true
 			_forced_direction_fix()
 		if projectile_amount < 3:
-			_summon_projectile(3)
+			_summon_projectile(3, true)
 		var standing = $groundchecker.get_collider()
 		if standing:
 			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
