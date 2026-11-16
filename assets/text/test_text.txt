@@ -9,3 +9,8 @@ text_break
 special_line
 Congratulations! You found a treasure!
 text_break
+normal_line
+Aaaaand thats it for this week's addition!
+Now that I have built a lot of things I want in the boss, I might make the boss next week!
+So good bye until next week!
+text_break

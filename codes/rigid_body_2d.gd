@@ -6,6 +6,7 @@ var SLIDE
 var INVINCIBLE = false
 var POSSESSED = false
 var START = false
+@onready var ground_exist = true
 var individual
 var WALL_EXISTED = false
 var STATUS = {"speed": 60, "jump": -250, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100, "damage": 1, "extra_damage": 1}
@@ -27,6 +28,9 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if not ground_exist:
+			direction *= -1
+			ground_exist = true
 		var standing = $groundchecker.get_collider()
 		if standing:
 			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
@@ -110,5 +114,11 @@ func _possess_start():
 		velocity.y = 0
 func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	if individual == 3:
-		if body.is_in_group("tile"):
-			direction *= -1
+		if body.is_in_group("tile") and is_on_floor():
+				ground_exist = false
+
+
+func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
+	if individual == 3:
+		if body.is_in_group("tile") and is_on_floor():
+				ground_exist = true

@@ -56,4 +56,5 @@ shape = SubResource("RectangleShape2D_n665k")
 
 [connection signal="body_entered" from="EnemyTest/LeftCollisionCheck" to="EnemyTest" method="_on_left_collision_check_body_entered"]
 [connection signal="area_entered" from="EnemyTest/EnemyArea" to="EnemyTest" method="_on_enemy_area_area_entered"]
+[connection signal="body_entered" from="EnemyTest/GroundExistingChecker" to="EnemyTest" method="_on_ground_existing_checker_body_entered"]
 [connection signal="body_exited" from="EnemyTest/GroundExistingChecker" to="EnemyTest" method="_on_ground_existing_checker_body_exited"]

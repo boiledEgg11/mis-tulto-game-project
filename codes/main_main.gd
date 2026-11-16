@@ -1,5 +1,6 @@
 extends Node2D
 var START_TIME: int = 0
+var count_format = "x %s"
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	var SAVE_ACCESS_1 = FileAccess.open("user://save_1.save", FileAccess.READ)
@@ -37,10 +38,25 @@ func _ready() -> void:
 	else:
 		if DATA_3.hour < 100:
 			DATA_3.hour = extra_zero % [DATA_3.hour]
+	var treasure_amount_1 = 0
+	for value in DATA_1.treasure:
+		if value:
+			treasure_amount_1 += 1
+	var treasure_amount_2 = 0
+	for value in DATA_2.treasure:
+		if value:
+			treasure_amount_2 += 1
+	var treasure_amount_3 = 0
+	for value in DATA_3.treasure:
+		if value:
+			treasure_amount_3 += 1
 	var time_format = "%s:%s"
 	var time_1_display = time_format % [DATA_1.hour, DATA_1.minute]
 	var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
 	var time_3_display = time_format % [DATA_3.hour, DATA_3.minute]
+	$Node2D2/Camera2D/Control/BoxContainer2/TextureButton4/TextureRect/Label4.text = count_format % treasure_amount_1
+	$Node2D2/Camera2D/Control/BoxContainer2/TextureButton5/TextureRect/Label4.text = count_format % treasure_amount_2
+	$Node2D2/Camera2D/Control/BoxContainer2/TextureButton6/TextureRect/Label4.text = count_format % treasure_amount_3
 	$Node2D2/Camera2D/Control/BoxContainer2/TextureButton4/Label.text = time_1_display
 	$Node2D2/Camera2D/Control/BoxContainer2/TextureButton4/Label2.text = DATA_1.place
 	$Node2D2/Camera2D/Control/BoxContainer2/TextureButton4/Label3.text = DATA_1.enemy

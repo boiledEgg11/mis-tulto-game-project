@@ -10,6 +10,7 @@ var STARTED = false
 var DATA_EMPTY
 var OPEN_FILE = 1
 var CHARGE = 0
+var count_format = "x %s"
 var file_new: Dictionary = {
 	"file_1": false,
 	"file_2": false,
@@ -79,10 +80,25 @@ func _ready() -> void:
 	else:
 		if DATA_3.hour < 100:
 			DATA_3.hour = extra_zero % [DATA_3.hour]
+	var treasure_amount_1 = 0
+	for value in DATA_1.treasure:
+		if value:
+			treasure_amount_1 += 1
+	var treasure_amount_2 = 0
+	for value in DATA_2.treasure:
+		if value:
+			treasure_amount_2 += 1
+	var treasure_amount_3 = 0
+	for value in DATA_3.treasure:
+		if value:
+			treasure_amount_3 += 1
 	var time_format = "%s:%s"
 	var time_1_display = time_format % [DATA_1.hour, DATA_1.minute]
 	var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
 	var time_3_display = time_format % [DATA_3.hour, DATA_3.minute]
+	$Control/SaveFiles/SaveFile1/TextureRect/Label4.text = count_format % treasure_amount_1
+	$Control/SaveFiles/SaveFile2/TextureRect/Label4.text = count_format % treasure_amount_2
+	$Control/SaveFiles/SaveFile3/TextureRect/Label4.text = count_format % treasure_amount_3
 	$Control/SaveFiles/SaveFile1/Control/Label.text = time_1_display
 	$Control/SaveFiles/SaveFile1/Control/Label2.text = DATA_1.place
 	$Control/SaveFiles/SaveFile1/Control/Label3.text = DATA_1.enemy
