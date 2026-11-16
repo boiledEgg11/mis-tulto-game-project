@@ -152,24 +152,26 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
-		Autoloads.POSSESS_TARGET = {"species": "TestEnemy3", "individual": individual}
-		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_ABILITY = "EXPLOSIVE"
-		Autoloads.POSSESS_ENEMY = "EXPLOSIVE_ENEMY"
-		Autoloads.POSSESS_STATUS = STATUS
-		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy_explosion.png"
-		Autoloads.PLAYER_POSSESSING = true
-		velocity.x = 0
-		velocity.y = 0
+		_possess_start()
+
 func _on_player_detection_area_body_entered(body: Node2D) -> void:
 	if body.position.x > position.x:
 		direction = -1
 	if body.position.x < position.x:
 		direction = 1
 	attacking = true
-
-
+func _possess_start():
+		get_parent().call_deferred("_possessed")
+		Autoloads.POSSESS_TARGET = {"species": "TestEnemy3", "individual": individual}
+		Autoloads.POSSESS_AMOUNT += 1
+		Autoloads.POSSESS_ABILITY = "EXPLOSIVE"
+		Autoloads.POSSESS_ENEMY = "EXPLOSIVE_ENEMY"
+		Autoloads.POSSESS_STATUS = STATUS
+		possess_health = -1
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholderenemy_explosion.png"
+		Autoloads.PLAYER_POSSESSING = true
+		velocity.x = 0
+		velocity.y = 0
 func _on_area_2d_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("tile_breakable"):
 		var tiles = body.get_coords_for_body_rid(body_rid)

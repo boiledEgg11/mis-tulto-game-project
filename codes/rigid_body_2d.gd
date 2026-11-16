@@ -95,6 +95,8 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
+		_possess_start()
+func _possess_start():
 		get_parent().call_deferred("_possessed")
 		Autoloads.POSSESS_TARGET = {"species": "TestEnemy1", "individual": individual}
 		Autoloads.POSSESS_AMOUNT += 1
@@ -106,8 +108,6 @@ func _process(_delta: float) -> void:
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
-
-
 func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	if individual == 3:
 		if body.is_in_group("tile"):

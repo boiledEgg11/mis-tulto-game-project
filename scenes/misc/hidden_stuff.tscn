@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cxvgf02hlwlvl"]
 
 [ext_resource type="Script" uid="uid://cr3227hw647dd" path="res://codes/hidden_stuff.gd" id="1_f0yk3"]
-[ext_resource type="Texture2D" uid="uid://cdh5x8msr8ud" path="res://assets/sprites/savepoint_3.png" id="2_7f0f1"]
 [ext_resource type="Script" uid="uid://chjo5585yffnv" path="res://scenes/misc/hidden_stuff_child.gd" id="2_aswen"]
+[ext_resource type="Texture2D" uid="uid://dl6n7n7i043pi" path="res://assets/sprites/object_treasure.png" id="3_aswen"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aswen"]
 size = Vector2(16, 16)
@@ -19,5 +19,4 @@ script = ExtResource("2_aswen")
 shape = SubResource("RectangleShape2D_aswen")
 
 [node name="Sprite2D" type="Sprite2D" parent="HiddenStuff" unique_id=1329296248]
-rotation = 3.1415927
-texture = ExtResource("2_7f0f1")
+texture = ExtResource("3_aswen")

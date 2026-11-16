@@ -75,6 +75,8 @@ func _enemy_set():
 				POSSESS_TARGET = preload("res://scenes/enemy/enemy6.tscn").instantiate()
 			"TestEnemy7":
 				POSSESS_TARGET = preload("res://scenes/enemy/enemy7.tscn").instantiate()
+			"TestEnemy8":
+				POSSESS_TARGET = preload("res://scenes/enemy/enemy8.tscn").instantiate()
 		await get_tree().process_frame
 		add_child.call_deferred(POSSESS_TARGET)
 		POSSESS_TARGET.call("_individual_set", Autoloads.POSSESS_TARGET.individual)

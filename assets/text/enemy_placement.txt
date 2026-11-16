@@ -19,9 +19,11 @@ enemy
 enemy
 enemy
 save
+treasure
 _stop
 enemy
 save
 enemy
 enemy
+treasure
 _stop

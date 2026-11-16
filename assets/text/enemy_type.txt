@@ -19,9 +19,11 @@ enemy_7
 enemy_5
 enemy_7
 save
+treasure
 _stop
 enemy_8
 save
 enemy_2
 enemy_8
+treasure
 _stop

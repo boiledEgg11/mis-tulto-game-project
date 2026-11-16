@@ -19,9 +19,11 @@ test_4
 3
 5
 test_5
+treasure_2
 _stop
 1
 test_6
 2
 2
+treasure_3
 _stop

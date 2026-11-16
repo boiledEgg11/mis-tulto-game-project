@@ -90,6 +90,8 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
+		_possess_start()
+func _possess_start():
 		get_parent().call_deferred("_possessed")
 		Autoloads.POSSESS_TARGET = {"species": "TestEnemy6", "individual": individual}
 		Autoloads.POSSESS_AMOUNT += 1
@@ -101,7 +103,6 @@ func _process(_delta: float) -> void:
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
-
 func _on_search_area_body_shape_entered(_body_rid: RID, body: Node2D, _body_shape_index: int, _local_shape_index: int) -> void:
 	if HAS_TARGET == 0:
 		$SearchArea/CollisionShape2D.call_deferred("set_disabled", true)

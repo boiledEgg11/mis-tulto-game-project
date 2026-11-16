@@ -64,7 +64,7 @@ func _physics_process(delta: float) -> void:
 			2:
 				position = Vector2(-504, -76)
 			_:
-				position = Vector2(-128, 0)
+				position = Vector2(0, 0)
 		START = false
 	if projectile_amount < 0:
 		projectile_amount = 0
@@ -167,20 +167,7 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
-		_projectile_erase(3)
-		get_parent().call_deferred("_possessed")
-		Autoloads.POSSESS_TARGET = {"species": "TestEnemy8", "individual": individual}
-		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_ABILITY = "SWORD_SHOOT"
-		Autoloads.POSSESS_ENEMY = "SPIN_BLADE"
-		Autoloads.POSSESS_STATUS = STATUS
-		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy_sword.png"
-		Autoloads.PLAYER_POSSESSING = true
-		$EnemyTestCollision.disabled = true
-		$DetectionArea/CollisionShape2D.disabled = true
-		velocity.x = 0
-		velocity.y = 0
+		_possess_start()
 func _forced_direction_fix():
 	await get_tree().create_timer(0.5).timeout
 	forced_direction = false
@@ -200,3 +187,18 @@ func _enable_detect_collision():
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
 		ground_exist = true
+func _possess_start():
+		_projectile_erase(3)
+		Autoloads.ENEMY_POSSESS = self
+		Autoloads.POSSESS_TARGET = {"species": "TestEnemy8", "individual": individual}
+		Autoloads.POSSESS_AMOUNT += 1
+		Autoloads.POSSESS_ABILITY = "SWORD_SHOOT"
+		Autoloads.POSSESS_ENEMY = "SPIN_BLADE"
+		Autoloads.POSSESS_STATUS = STATUS
+		possess_health = -1
+		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy_sword.png"
+		Autoloads.PLAYER_POSSESSING = true
+		$EnemyTestCollision.disabled = true
+		$DetectionArea/CollisionShape2D.disabled = true
+		velocity.x = 0
+		velocity.y = 0

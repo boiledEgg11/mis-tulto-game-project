@@ -45,6 +45,7 @@
 [ext_resource type="Script" uid="uid://bb5icce710kjn" path="res://codes/collision_shape_2d.gd" id="43_clpeo"]
 [ext_resource type="Texture2D" uid="uid://by0xtcu6q3j2l" path="res://assets/placeholders/placeholder_player.png" id="44_8r1ph"]
 [ext_resource type="Texture2D" uid="uid://cs8xk0ud1nj5h" path="res://assets/placeholders/placeholder_explosion.png" id="45_d30cp"]
+[ext_resource type="Script" uid="uid://kqyoew3mtb4o" path="res://codes/cursor.gd" id="46_wthio"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7u3wu"]
 
@@ -2111,6 +2112,9 @@ radius = 30.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_ycwuu"]
 radius = 40.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_wthio"]
+radius = 4.0
+
 [node name="Main_game_scene" type="Node2D" unique_id=366536366]
 script = ExtResource("1_8vgr4")
 
@@ -2308,6 +2312,7 @@ texture_pressed = ExtResource("26_wcx5q")
 texture_hover = ExtResource("27_3mit1")
 
 [node name="BoxContainer" type="BoxContainer" parent="Node2D2/Camera2D" unique_id=353338625]
+z_index = 6
 offset_left = -130.0
 offset_top = 52.5
 offset_right = -50.0
@@ -2358,6 +2363,7 @@ theme_override_font_sizes/font_size = 12
 text = "abilit"
 
 [node name="TextBox" type="Control" parent="Node2D2/Camera2D" unique_id=29907146]
+z_index = 2
 layout_mode = 3
 anchors_preset = 0
 offset_left = -140.0
@@ -2469,6 +2475,14 @@ collision_mask = 42
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/Player/DetectShape" unique_id=1494066532]
 shape = SubResource("CircleShape2D_ycwuu")
 disabled = true
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="Node2D2" unique_id=1949399060]
+collision_layer = 128
+collision_mask = 128
+script = ExtResource("46_wthio")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Node2D2/StaticBody2D2" unique_id=1894932831]
+shape = SubResource("CircleShape2D_wthio")
 
 [connection signal="pressed" from="Node2D2/Camera2D/Control/BoxContainer/TextureButton" to="Node2D2" method="_on_texture_button_pressed"]
 [connection signal="pressed" from="Node2D2/Camera2D/Control/BoxContainer/TextureButton" to="Node2D2/Camera2D/Control" method="_on_texture_button_pressed"]
