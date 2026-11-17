@@ -2,7 +2,8 @@ extends Node2D
 func _erase():
 	if get_child(0, false).name == "Enemy8":
 		for i in 5:
-			get_child(0).projectile[i].call_deferred("_screen_not_visible")
+			if get_child(0).projectile[i].name == "Enemy8_projectile":
+				get_child(0).projectile[i].call_deferred("_screen_not_visible")
 	queue_free()
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

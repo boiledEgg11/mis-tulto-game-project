@@ -3,7 +3,7 @@ extends Node2D
 @onready var attacking = false
 @onready var cooldown = 0.0
 @onready var player: Node2D
-@onready var projectile: Array = [0,0,0,0,0,0]
+@onready var projectile: Array = [0,0,0,0,0,0,0]
 func _erase():
 	queue_free()
 # Called when the node enters the scene tree for the first time.
@@ -19,7 +19,7 @@ func _puzzle_solved():
 			$TileMapLayer2.erase_cell(Vector2i(i, 5))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if attacking and cooldown > 4:
+	if attacking and cooldown > 1:
 		cooldown = 0
 		_attack()
 	if attacking:
@@ -27,17 +27,26 @@ func _process(delta: float) -> void:
 func _attack():
 	print("attack")
 	for i in range(0, 6):
-		if typeof(projectile[i]) == TYPE_NODE_PATH:
+		if typeof(projectile[i]) != TYPE_INT:
 			if is_instance_valid(projectile[i]):
-				return
 				print("none")
+				return
 			else:
+				print("replaced")
 				projectile[i] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
-				projectile[i].position = player.position + Vector2(0, -50)
+				add_child(projectile[i])
+				for l in i:
+					projectile[l].global_position += Vector2(10, 0)
+				projectile[i].global_position = player.position + Vector2(-25, -70)
+				projectile[i].call_deferred("_level_summon", player)
 		else:
-
+			print("added")
 			projectile[i] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
-			projectile[i].global_position = player.global_position
+			add_child(projectile[i])
+			for l in i:
+				projectile[l].global_position += Vector2(10, 0)
+			projectile[i].global_position = player.position + Vector2(-25, -70)
+			projectile[i].call_deferred("_level_summon", player)
 func _on_attack_start_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		attacking = true

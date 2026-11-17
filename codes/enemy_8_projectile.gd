@@ -44,10 +44,17 @@ func _process(delta: float) -> void:
 			_attack(-190)
 	if moved_time > 20:
 		call_deferred("_screen_not_visible")
+	if moved_time > 10 and type == 2:
+		call_deferred("_screen_not_visible")
 func _screen_not_visible():
 	_erase()
-	if is_instance_valid(parent):
+	if is_instance_valid(parent) and parent.name == "Enemy8":
 		parent.call("_projectile_erase", projectile_number)
+func _level_summon(parent_node):
+	type = 2
+	call_deferred("reparent", parent_node)
+	await get_tree().create_timer(0.2).timeout
+	_fly(null)
 func _fly(target):
 	if not (moving or move_start or target_touched):
 		if target == null:
