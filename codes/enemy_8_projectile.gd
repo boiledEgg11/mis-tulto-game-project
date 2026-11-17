@@ -37,14 +37,17 @@ func _process(delta: float) -> void:
 	if moving:
 		move_start = true
 		if not $Node2D/CharacterBody2D/RayCast2D.is_colliding():
-			$Node2D.rotation_degrees += 5
+			$Node2D.rotation_degrees += 7
 		if $Node2D/CharacterBody2D/RayCast2D.is_colliding():
 			target_position = $Node2D/CharacterBody2D.global_position - $Node2D/CharacterBody2D/RayCast2D.get_collision_point()
 			moving = false
-			_attack(-190)
-	if moved_time > 20:
+			if type != 2:
+				_attack(-190)
+			else:
+				_attack(-250)
+	if moved_time > 20 and type != 2:
 		call_deferred("_screen_not_visible")
-	if moved_time > 10 and type == 2:
+	if moved_time > 30 and type == 2:
 		call_deferred("_screen_not_visible")
 func _screen_not_visible():
 	_erase()
