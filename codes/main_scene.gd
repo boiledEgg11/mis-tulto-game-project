@@ -125,21 +125,27 @@ func _process(delta: float) -> void:
 	if file_new.file_1 and MODE != "new":
 		$Control/SaveFiles/SaveFile1.disabled = true
 		$Control/SaveFiles/SaveFile1/Control.visible = false
+		$Control/SaveFiles/SaveFile1/TextureRect.visible = false
 	else:
 		$Control/SaveFiles/SaveFile1.disabled = false
 		$Control/SaveFiles/SaveFile1/Control.visible = true
+		$Control/SaveFiles/SaveFile1/TextureRect.visible = true
 	if file_new.file_2 and MODE != "new":
 		$Control/SaveFiles/SaveFile2.disabled = true
 		$Control/SaveFiles/SaveFile2/Control.visible = false
+		$Control/SaveFiles/SaveFile2/TextureRect.visible = false
 	else:
 		$Control/SaveFiles/SaveFile2.disabled = false
 		$Control/SaveFiles/SaveFile2/Control.visible = true
+		$Control/SaveFiles/SaveFile2/TextureRect.visible = true
 	if file_new.file_3 and MODE != "new":
 		$Control/SaveFiles/SaveFile3.disabled = true
 		$Control/SaveFiles/SaveFile3/Control.visible = false
+		$Control/SaveFiles/SaveFile3/TextureRect.visible = false
 	else:
 		$Control/SaveFiles/SaveFile3.disabled = false
 		$Control/SaveFiles/SaveFile3/Control.visible = true
+		$Control/SaveFiles/SaveFile3/TextureRect.visible = true
 	if Autoloads.CURRENT_STATE == "home":
 		_ready()
 		Autoloads.CURRENT_STATE = "start"
@@ -252,8 +258,6 @@ func _on_save_file_2_pressed() -> void:
 		OPEN_FILE = 2
 		START = true
 		Autoloads.LAST_LOADED = 2
-
-
 func _on_save_file_3_pressed() -> void:
 	if MODE == "erase":
 		var SAVE_3 = FileAccess.open("user://save_3.save", FileAccess.WRITE)
@@ -290,8 +294,6 @@ func erase():
 	var SAVE_3 = FileAccess.open("user://save_3.save", FileAccess.WRITE)
 	SAVE_3.store_var(SAVE_DEFAULT)
 	SAVE_3.close()
-
-
 func _on_texture_button_pressed() -> void:
 	OPENED = true
 	MODE = "erase"

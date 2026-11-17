@@ -11,6 +11,7 @@ extends Node2D
 @onready var moved_time: float
 @onready var move_start = false
 @onready var attack_player = true
+@onready var type = 0
 func _ready() -> void:
 	parent = get_parent().get_parent()
 func _erase():
@@ -24,6 +25,8 @@ func _attack(speed):
 	await get_tree().create_timer(0.05).timeout
 	_shoot(speed)
 func _process(delta: float) -> void:
+	if Autoloads.RESET:
+		_screen_not_visible()
 	if not attack_player:
 		$Node2D/CharacterBody2D/Area2D.add_to_group("player_damaging")
 		$Node2D/CharacterBody2D/Area2D.remove_from_group("damage")

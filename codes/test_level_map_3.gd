@@ -1,5 +1,9 @@
 extends Node2D
 @onready var puzzle_amount = 0
+@onready var attacking = false
+@onready var cooldown = 0.0
+@onready var player: Node2D
+@onready var projectile: Array = [0,0,0,0,0,0]
 func _erase():
 	queue_free()
 # Called when the node enters the scene tree for the first time.
@@ -15,4 +19,31 @@ func _puzzle_solved():
 			$TileMapLayer2.erase_cell(Vector2i(i, 5))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if attacking and cooldown > 4:
+		cooldown = 0
+		_attack()
+	if attacking:
+		cooldown += 0.1
+func _attack():
+	print("attack")
+	for i in range(0, 6):
+		if typeof(projectile[i]) == TYPE_NODE_PATH:
+			if is_instance_valid(projectile[i]):
+				return
+				print("none")
+			else:
+				projectile[i] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
+				projectile[i].position = player.position + Vector2(0, -50)
+		else:
+
+			projectile[i] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
+			projectile[i].global_position = player.global_position
+func _on_attack_start_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		attacking = true
+
+
+func _on_attack_end_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		attacking = false
+		player = body
