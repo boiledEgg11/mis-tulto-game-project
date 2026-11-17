@@ -28,8 +28,8 @@ func _process(delta: float) -> void:
 		cooldown += 0.1
 		$Node2D.global_position = player.global_position
 func _attack():
-	var random_value = rng.randf_range(-90, 90)
-	var random_result =sqrt(abs(random_value * random_value * -1 + 8100))
+	var random_value = rng.randf_range(-85, 85)
+	var random_result =sqrt(abs(random_value * random_value * -1 + 7225))
 	print(Vector2(random_value, random_result))
 	projectile[next_projectile] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
 	add_child(projectile[next_projectile])
@@ -43,7 +43,8 @@ func _attack():
 func _on_attack_start_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		attacking = true
-
+func _attack_end():
+	attacking = false
 
 func _on_attack_end_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
