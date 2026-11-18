@@ -5,6 +5,8 @@ extends Node2D
 @onready var player: Node2D
 @onready var projectile: Array = [0,0,0,0,0,0,0]
 @onready var next_projectile:int = 0
+@onready var horizontal_projectile: Array = [0, 0, 0, 0, 0, 0]
+@onready var next_h_projectile: int = 0
 @onready var rng = RandomNumberGenerator.new()
 func _erase():
 	queue_free()
@@ -21,12 +23,16 @@ func _puzzle_solved():
 			$TileMapLayer2.erase_cell(Vector2i(i, 5))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if attacking and cooldown > 3:
+	if attacking and cooldown > 4:
 		cooldown = 0
 		_attack()
 	if attacking:
 		cooldown += 0.1
 		$Node2D.global_position = player.global_position
+func _quick_attck():
+	horizontal_projectile[next_h_projectile] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
+	add_child(horizontal_projectile[next_h_projectile])
+	horizontal_projectile[next_h_projectile] = player.global_position
 func _attack():
 	var random_value = rng.randf_range(-85, 85)
 	var random_result =sqrt(abs(random_value * random_value * -1 + 7225))

@@ -8,6 +8,7 @@ var POSSESS_TARGET
 var SAVE_READY = true
 var dash_recover_value: int
 var health_value: int
+var count_format = "x %s"
 func _ready():
 	_reset(Autoloads.LAST_LOADED)
 func _reset(file):
@@ -146,10 +147,25 @@ func _save_update(file):
 		else:
 			if DATA_3.hour < 100:
 				DATA_3.hour = extra_zero % [DATA_3.hour]
+		var treasure_amount_1 = 0
+		for value in DATA_1.treasure:
+			if value:
+				treasure_amount_1 += 1
+		var treasure_amount_2 = 0
+		for value in DATA_2.treasure:
+			if value:
+				treasure_amount_2 += 1
+		var treasure_amount_3 = 0
+		for value in DATA_3.treasure:
+			if value:
+				treasure_amount_3 += 1
 		var time_format = "%s:%s"
 		var time_1_display = time_format % [DATA_1.hour, DATA_1.minute]
 		var time_2_display = time_format % [DATA_2.hour, DATA_2.minute]
 		var time_3_display = time_format % [DATA_3.hour, DATA_3.minute]
+		$Camera2D/Control/BoxContainer2/TextureButton4/TextureRect/Label4.text = count_format % treasure_amount_1
+		$Camera2D/Control/BoxContainer2/TextureButton5/TextureRect/Label4.text = count_format % treasure_amount_2
+		$Camera2D/Control/BoxContainer2/TextureButton6/TextureRect/Label4.text = count_format % treasure_amount_3
 		$Camera2D/Control/BoxContainer2/TextureButton4/Label.text = time_1_display
 		$Camera2D/Control/BoxContainer2/TextureButton4/Label2.text = DATA_1.place
 		$Camera2D/Control/BoxContainer2/TextureButton4/Label3.text = DATA_1.enemy
@@ -183,12 +199,12 @@ func _open_text(number, pause):
 	$Camera2D/TextBox._text_open(number, pause)
 func _camera_position(x_value, y_value, global: bool):
 	if global:
-		if y_value < 100:
+		if y_value < 100 and y_value > -268:
 			$Camera2D.global_position = Vector2(x_value, y_value)
 		else:
 			$Camera2D.global_position = Vector2(x_value, $Camera2D.global_position.y)
 	if not global:
-		if y_value < 100:
+		if y_value < 100 and y_value > -268:
 			$Camera2D.position = Vector2(x_value, y_value)
 		else:
 			$Camera2D.global_position = Vector2(x_value, $Camera2D.global_position.y)
