@@ -26,6 +26,8 @@ func _physics_process(delta: float) -> void:
 		match individual:
 			1:
 				position = Vector2(300, 0)
+			2:
+				position = Vector2(-640, -80)
 			_:
 				position = Vector2i(300, 0)
 		initial_y = position.y

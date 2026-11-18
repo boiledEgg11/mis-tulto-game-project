@@ -38,7 +38,7 @@ func _set_enemy(level):
 		2:
 			file_start_point = 23
 		3:
-			file_start_point = 31
+			file_start_point = 29
 	for i in range(file_start_point, enemy_types.size()):
 		if enemy_types[i] == "_stop" or enemy_types[i] == null:
 			break

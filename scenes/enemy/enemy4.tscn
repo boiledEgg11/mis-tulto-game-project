@@ -50,11 +50,12 @@ collision_mask = 8
 shape = SubResource("RectangleShape2D_lbsx0")
 
 [node name="RayCast2D" type="RayCast2D" parent="EnemyTest4" unique_id=167205855]
-target_position = Vector2(0, 90)
+target_position = Vector2(0, 120)
 collision_mask = 16
 
 [node name="groundchecker" type="RayCast2D" parent="EnemyTest4" unique_id=1728323499]
 target_position = Vector2(0, 90)
+collision_mask = 16
 
 [connection signal="body_entered" from="EnemyTest4/LeftCollisionCheck" to="EnemyTest4" method="_on_left_collision_check_body_entered"]
 [connection signal="body_entered" from="EnemyTest4/RightCollisionCheck" to="EnemyTest4" method="_on_right_collision_check_body_entered"]
