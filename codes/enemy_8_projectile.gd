@@ -18,6 +18,12 @@ func _erase():
 	queue_free()
 func _shoot(speed):
 	$Node2D/CharacterBody2D.velocity = target_position.normalized() * speed
+func _h_attack(speed):
+	$Node2D/CharacterBody2D.velocity = target_position.normalized() * -80
+	await get_tree().create_timer(0.1).timeout
+	$Node2D/CharacterBody2D.velocity = target_position.normalized() * 0
+	await get_tree().create_timer(0.05).timeout
+	_shoot(speed)
 func _attack(speed):
 	$Node2D/CharacterBody2D.velocity = target_position.normalized() * 80
 	await get_tree().create_timer(0.15).timeout
@@ -53,13 +59,20 @@ func _screen_not_visible():
 	_erase()
 	if is_instance_valid(parent) and parent.name == "Enemy8":
 		parent.call("_projectile_erase", projectile_number)
+func _h_summon(parent_node):
+	type = 3
+	$Node2D.global_rotation_degrees = 90
+	call_deferred("reparent", Autoloads.center)
+	await get_tree().create_timer(0.1).timeout
+	target_position = Vector2(20, 0)
+	_h_attack(300)
 func _level_summon(parent_node):
 	type = 2
 	call_deferred("reparent", parent_node)
 	await get_tree().create_timer(0.2).timeout
 	_fly(null)
 func _fly(target):
-	if not (moving or move_start or target_touched):
+	if not (moving or move_start or target_touched or type == 3):
 		if target == null:
 			moving = true
 		location = global_position
