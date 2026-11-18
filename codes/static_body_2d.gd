@@ -38,7 +38,7 @@ func _set_enemy(level):
 		2:
 			file_start_point = 23
 		3:
-			file_start_point = 29
+			file_start_point = 31
 	for i in range(file_start_point, enemy_types.size()):
 		if enemy_types[i] == "_stop" or enemy_types[i] == null:
 			break
@@ -71,6 +71,7 @@ func _set_enemy(level):
 			"save":
 				characters[i].call("_placement", enemies_id[i])
 			"treasure":
+				print("treasure added")
 				characters[i].call("_placement", enemies_id[i])
 			_:
 				print("missing type...")
@@ -84,7 +85,11 @@ func _erase_enemy():
 							if characters[i].get_child(-1, false).possess_health > 0:
 								characters[i].call_deferred("_erase")
 								characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
-			_:
+			"save":
+				if is_instance_valid(characters[i]):
+					characters[i].call_deferred("_erase")
+					characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
+			"treasure":
 				if is_instance_valid(characters[i]):
 					characters[i].call_deferred("_erase")
 					characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()

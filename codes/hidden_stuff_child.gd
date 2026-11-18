@@ -1,5 +1,6 @@
 extends StaticBody2D
-
+func _erase():
+	get_parent().call_deferred("_erase")
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

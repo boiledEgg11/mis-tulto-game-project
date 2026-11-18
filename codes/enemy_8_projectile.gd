@@ -51,6 +51,8 @@ func _process(delta: float) -> void:
 				_attack(-190)
 			else:
 				_attack(-250)
+	if moved_time > 2.5 and type == 3:
+		call_deferred("_screen_not_visible")
 	if moved_time > 20 and type != 2:
 		call_deferred("_screen_not_visible")
 	if moved_time > 30 and type == 2:
@@ -62,10 +64,10 @@ func _screen_not_visible():
 func _h_summon(parent_node):
 	type = 3
 	$Node2D.global_rotation_degrees = 90
-	call_deferred("reparent", Autoloads.center)
+	call_deferred("reparent", parent_node)
 	await get_tree().create_timer(0.1).timeout
 	target_position = Vector2(20, 0)
-	_h_attack(300)
+	_h_attack(450)
 func _level_summon(parent_node):
 	type = 2
 	call_deferred("reparent", parent_node)

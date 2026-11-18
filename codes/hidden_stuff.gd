@@ -1,6 +1,7 @@
 extends Node2D
 @onready var treasure_id: int
 func _erase():
+	print("treasure deletion")
 	queue_free()
 func _placement(placement):
 	match placement:
@@ -10,6 +11,8 @@ func _placement(placement):
 			position = Vector2(-1160,-72)
 		"treasure_3":
 			position = Vector2(-504 ,120)
+		_:
+			_erase()
 	treasure_id = int(placement)
 	if Autoloads.FOUND_TREASURE[treasure_id]:
 		$HiddenStuff/Sprite2D.texture = load("res://assets/sprites/object_treasure_opened.png")

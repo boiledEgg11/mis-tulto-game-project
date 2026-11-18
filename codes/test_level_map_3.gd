@@ -39,7 +39,7 @@ func _quick_attck():
 	horizontal_projectile[next_h_projectile] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
 	add_child(horizontal_projectile[next_h_projectile])
 	horizontal_projectile[next_h_projectile].global_position = player.global_position + Vector2(-120, height_random)
-	horizontal_projectile[next_h_projectile].call_deferred("_h_summon", $Node2D)
+	horizontal_projectile[next_h_projectile].call_deferred("_h_summon", self)
 	if next_h_projectile == 5:
 		next_h_projectile = 0
 	else:
