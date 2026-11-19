@@ -1,16 +1,31 @@
 extends CharacterBody2D
-var direction = -1
-var health = 1
-var possess_health = 1
-var SLIDE
-var START = false
-var INVINCIBLE = false
-var POSSESSED = false
-var attacking = false
-var charge = 0
-var individual
-var ATTACK = false
-var STATUS = {"speed": 85, "jump": -350, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 100}
+@export var direction: int = -1
+@export var health: int = 1
+@export var possess_health: int = 1
+@export var START: bool = false
+@export var INVINCIBLE: bool = false
+@export var POSSESSED: bool = false
+@export var attacking: bool = false
+@export var charge: float = 0.0
+@export var player_colliding: Node2D
+@export var parent: Node2D
+@export var parent_parent: Node2D
+@export var info: Dictionary = {
+	"species": "TestEnemy3",
+	"individual": 0,
+	"ability": "EXPLOSIVE",
+	"sprite": "res://assets/placeholders/placeholderenemy_explosion.png",
+}
+@export var STATUS: Dictionary = {
+	"speed": 80,
+	"jump": -350,
+	"slide": 60,
+	"damage_multiplier": -0.8,
+	"hitbox": Vector2(15.5, 15.5),
+	"air_speed": 80,
+	"damage": 1,
+	"extra_damage": 5
+}
 func _ready() -> void:
 
 	$Area2D/Sprite2D.visible = false
@@ -41,7 +56,7 @@ func _attack_charge():
 	direction *= -1
 func _physics_process(delta: float) -> void:
 	if START:
-		match individual:
+		match info.individual:
 			1:
 				position = Vector2(250, 0)
 			_:
@@ -86,13 +101,11 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
-		position = Vector2i(0, 0)
 		Autoloads.POSSESS_TYPE = "charge"
 		$Area2D/CollisionShape2D.disabled = true
 		INVINCIBLE = true
 		POSSESSED = true
-		position.x = Autoloads.PLAYER_POSITION_X
-		position.y = Autoloads.PLAYER_POSITION_Y
+		parent.call_deferred("reparent", player_colliding)
 		$EnemyArea/CollisionShape2D.disabled = true
 		$Sprite2D.visible = false
 		if Autoloads.PLAYER_POSSESS_STOP:
@@ -122,7 +135,9 @@ func _on_enemy_area_area_entered(area) -> void:
 			health -= 5
 		if area.name == "PossessArea":
 			possess_health -= 1
+			player_colliding = area.get_parent()
 func _possess_stop() -> void:
+	parent.call_deferred("reparent", parent_parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
@@ -162,13 +177,9 @@ func _on_player_detection_area_body_entered(body: Node2D) -> void:
 	attacking = true
 func _possess_start():
 		get_parent().call_deferred("_possessed")
-		Autoloads.POSSESS_TARGET = {"species": "TestEnemy3", "individual": individual}
 		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_ABILITY = "EXPLOSIVE"
-		Autoloads.POSSESS_ENEMY = "EXPLOSIVE_ENEMY"
 		Autoloads.POSSESS_STATUS = STATUS
 		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholderenemy_explosion.png"
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0

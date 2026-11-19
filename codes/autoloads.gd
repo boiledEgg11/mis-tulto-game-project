@@ -16,13 +16,9 @@ var location
 var tile
 var SAVE_SCREEN
 var PLAYER_ATTACK = false
-var POSSESS_TYPE
 var tile_move = 0
 var move_amount = false
-var is_moving = true
-var is_moving_2 = true
 var CAMERA_LOCATION = Vector2i(0, 0)
-var POSSESS_ABILITY = "none"
 var PAUSE = false
 var LAST_LOADED = 1
 var play_time = 0
