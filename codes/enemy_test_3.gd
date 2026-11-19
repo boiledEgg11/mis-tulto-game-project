@@ -10,13 +10,10 @@ extends CharacterBody2D
 @export var player_colliding: Node2D
 @export var parent: Node2D
 @export var parent_parent: Node2D
-@export var info: Dictionary = {
-	"species": "TestEnemy3",
-	"individual": 0,
-	"ability": "EXPLOSIVE",
-	"sprite": "res://assets/placeholders/placeholderenemy_explosion.png",
+@export var default_stats: Dictionary = {
+
 }
-@export var STATUS: Dictionary = {
+@export var stats: Dictionary = {
 	"speed": 80,
 	"jump": -350,
 	"slide": 60,
@@ -24,7 +21,10 @@ extends CharacterBody2D
 	"hitbox": Vector2(15.5, 15.5),
 	"air_speed": 80,
 	"damage": 1,
-	"extra_damage": 5
+	"extra_damage": 5,
+	"ability_display": "EXPLOSIVE",
+	"ability": "Pyrofighto",
+	"tag": ["charge"]
 }
 func _ready() -> void:
 
@@ -56,7 +56,7 @@ func _attack_charge():
 	direction *= -1
 func _physics_process(delta: float) -> void:
 	if START:
-		match info.individual:
+		match stats.individual:
 			1:
 				position = Vector2(250, 0)
 			_:
@@ -91,9 +91,9 @@ func _physics_process(delta: float) -> void:
 			$RayCast2D.rotation_degrees = 0
 			$RayCast2D.position = Vector2i(10, 0)
 		if not attacking and charge == 0:
-			velocity.x = direction * STATUS.speed
+			velocity.x = direction * stats.speed
 		if attacking:
-			velocity.x = direction * STATUS.speed / 2.5
+			velocity.x = direction * stats.speed / 2.5
 			if charge == 0:
 				_attack_charge()
 		$EnemyArea/CollisionShape2D.disabled = false
@@ -178,7 +178,8 @@ func _on_player_detection_area_body_entered(body: Node2D) -> void:
 func _possess_start():
 		get_parent().call_deferred("_possessed")
 		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_STATUS = STATUS
+		player_colliding.stats = stats
+		Autoloads.POSSESS_stats = stats
 		possess_health = -1
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
