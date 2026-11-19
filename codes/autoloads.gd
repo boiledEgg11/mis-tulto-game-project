@@ -1,5 +1,7 @@
 extends Node
 @onready var ENEMY_POSSESS: Node2D
+@onready var progression: Array = [0]
+@export var progression_side = [0, 0]
 var tiles: Array
 var POSSESS_TARGET = {"species": "none", "individual": "0"}
 var RESET = false
@@ -37,7 +39,9 @@ var SAVE_STUFF: Dictionary = {
 	"enemy": "none",
 	"enemy_id": 0,
 	"play_time": 0,
-	"treasure": [false, false, false]
+	"treasure": [false, false, false],
+	"progression_stage": [0],
+	"progression_side": [0, 0]
 }
 var START_TIME: int
 var POSSESS_STATUS = {"speed": 0, "jump": 0, "slide": 0, "damage_multiplier": 0, "hitbox_y": 0, "hitbox_x": 0}

@@ -34,6 +34,7 @@ var MAP
 @onready var treasure_gettable = false
 @onready var initial_y: int
 var map_changable = 120
+@onready var fixed_camera = false
 func _ready() -> void:
 	MAP = preload("res://scenes/tile_map/test_level_map.tscn").instantiate()
 	owner.add_child.call_deferred(MAP)
@@ -117,7 +118,8 @@ func _ability_use(ability):
 			ABILITY_LOCK = false
 
 func _physics_process(delta: float) -> void:
-	get_parent().call("_camera_position", position.x, position.y, false)
+	if not fixed_camera:
+		get_parent().call("_camera_position", position.x, position.y, false)
 	if INVINCIBLE_HOLD:
 		if is_on_floor():
 			_dash_hold_stop()
