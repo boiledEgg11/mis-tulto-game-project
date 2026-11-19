@@ -176,14 +176,14 @@ func _on_player_detection_area_body_entered(body: Node2D) -> void:
 		direction = 1
 	attacking = true
 func _possess_start():
-		get_parent().call_deferred("_possessed")
-		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.player.stats = stats
-		possess_health = -1
-		Autoloads.PLAYER_POSSESSING = true
-		velocity.x = 0
-		velocity.y = 0
-		parent.call_deferred("reparent", player_colliding)
+	get_parent().call_deferred("_possessed")
+	Autoloads.POSSESS_AMOUNT += 1
+	Autoloads.player.stats = stats
+	possess_health = -1
+	Autoloads.PLAYER_POSSESSING = true
+	global_position = Autoloads.player.global_position
+	velocity = Vector2(0, 0)
+	parent.call_deferred("reparent", player_colliding)
 func _on_area_2d_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("tile_breakable"):
 		var tiles = body.get_coords_for_body_rid(body_rid)

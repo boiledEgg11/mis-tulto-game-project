@@ -109,6 +109,7 @@ func _shoot():
 	owner.add_child(SHOOT_BULLET)
 	SHOOT_BULLET.position = position
 func _ability_use(ability):
+	print(ability)
 	if stats.tag.has("no_recover_usage"):
 		get_parent().call("_dash_recover", 0, true)
 	match ability:
@@ -135,7 +136,7 @@ func _ability_use(ability):
 					velocity.y = stats.jump * -4
 				else:
 					velocity.y = stats.jump * 1.5
-		"EXPLOSIVE":
+		"pyrophyto":
 			ABILITY_LOCK = true
 			$ExtraAttack/CollisionShape2D.disabled = false
 			$ExtraAttack/Sprite2D.visible = true
@@ -630,7 +631,7 @@ func _physics_process(delta: float) -> void:
 						velocity.x = 0
 					DASH_MOVE = false
 					$PossessArea/PossessShape.disabled = true
-					stats = DEF_stats
+
 func _process(_delta: float) -> void:
 	if map_changable > 0:
 		map_changable -= 1
