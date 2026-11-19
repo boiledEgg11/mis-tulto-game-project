@@ -189,7 +189,7 @@ func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 		ground_exist = true
 func _possess_start():
 		_projectile_erase(3)
-		Autoloads.ENEMY_POSSESS = self
+		Autoloads.POSSESS_ENEMY = self
 		Autoloads.POSSESS_TARGET = {"species": "TestEnemy8", "individual": individual}
 		Autoloads.POSSESS_AMOUNT += 1
 		Autoloads.POSSESS_ABILITY = "SWORD_SHOOT"

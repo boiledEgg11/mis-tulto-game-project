@@ -25,7 +25,8 @@ extends CharacterBody2D
 	"ability": "Tulto",
 	"species": "Tulto",
 	"individual": 0,
-	"sprite": "player_sprites"
+	"sprite": "player_sprites",
+	"tag": ["no_possess_stop"]
 }
 @export var stats: Dictionary = {
 	"speed": 120,
@@ -40,7 +41,8 @@ extends CharacterBody2D
 	"ability": "Tulto",
 	"species": "Tulto",
 	"individual": 0,
-	"sprite": "player_sprites"
+	"sprite": "player_sprites",
+	"tag": ["no_possess_stop"]
 }
 @export var TEXTURE_LOCK: bool
 @export var CHARGE = 0
@@ -65,6 +67,7 @@ extends CharacterBody2D
 @export var map_changable = 120
 @export var fixed_camera = false
 func _ready() -> void:
+	Autoloads.player = self
 	MAP = preload("res://scenes/tile_map/test_level_map.tscn").instantiate()
 	owner.add_child.call_deferred(MAP)
 	$ExtraAttack/Sprite2D.visible = false
@@ -106,14 +109,14 @@ func _shoot():
 	owner.add_child(SHOOT_BULLET)
 	SHOOT_BULLET.position = position
 func _ability_use(ability):
-	if ability != "none" or ability != "spin":
+	if stats.tag.has("no_recover_usage"):
 		get_parent().call("_dash_recover", 0, true)
 	match ability:
 		"SWORD_SHOOT":
-			if Autoloads.ENEMY_POSSESS.projectile_amount < 3:
-				Autoloads.ENEMY_POSSESS.call_deferred("_summon_projectile", 3, false)
+			if Autoloads.POSSESS_ENEMY.projectile_amount < 3:
+				Autoloads.POSSESS_ENEMY.call_deferred("_summon_projectile", 3, false)
 			else:
-				Autoloads.ENEMY_POSSESS.call_deferred("_call_fly",get_global_mouse_position())
+				Autoloads.POSSESS_ENEMY.call_deferred("_call_fly",get_global_mouse_position())
 				get_parent().call("_dash_recover", 30, true)
 		"LASER":
 			Autoloads.POSSESS_ENEMY.call("_attack")
@@ -193,14 +196,14 @@ func _physics_process(delta: float) -> void:
 		get_parent().call("_reset", Autoloads.LAST_LOADED)
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
-		if stats.display_ability != "None":
+		if stats.ability_display != "None":
 			get_parent().call("_ability_label", stats.ability_display)
 		else:
 			get_parent().call("_ability_label", "")
 		if POSSESS_START:
 			$AnimatedSprite2D.visible = false
 			$Sprite2D.visible = true
-			$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
+			$Sprite2D.texture = load(stats.sprite)
 			POSSESS_START = false
 			$PlayerIndicator.visible = true
 		$PlayerIndicator.position = Vector2i(0, stats.hitbox.y / -2 - (stats.hitbox.y / 1.5))
@@ -255,7 +258,7 @@ func _physics_process(delta: float) -> void:
 				if not Input.is_action_pressed("space"):
 					DASH_LOCK = true
 					if get_parent().call("_get_dash_recover_value") >= 60:
-						_ability_use(Autoloads.POSSESS_ABILITY)
+						_ability_use(stats.ability)
 					else:
 						get_parent().call("_dash_recover", 0, true)
 				else:
@@ -310,7 +313,7 @@ func _physics_process(delta: float) -> void:
 					CHARGE = 0
 				if not Input.is_action_pressed("space"):
 					if get_parent().call("_get_dash_recover_value") == 60:
-						_ability_use(Autoloads.POSSESS_ABILITY)
+						_ability_use(stats.ability)
 					else:
 						get_parent().call("_dash_recover", 0, true)
 					SPEED_MULTIPLIER = 1
@@ -418,7 +421,7 @@ func _physics_process(delta: float) -> void:
 					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
 					if get_parent().call("_get_dash_recover_value") >= 60:
-						_ability_use(Autoloads.POSSESS_ABILITY)
+						_ability_use(stats.ability)
 					else:
 						get_parent().call("_dash_recover", 0, true)
 				else:
@@ -634,7 +637,7 @@ func _process(_delta: float) -> void:
 	if get_parent().call("_get_dash_recover_value") == 60:
 		get_parent().call("_sprite_change", "DashRecover", "max_dash")
 	else:
-		if Autoloads.POSSESS_TYPE == "charge":
+		if stats.tag.has("charge"):
 			get_parent().call("_sprite_change", "DashRecover", "charge_dash")
 		else:
 			get_parent().call("_sprite_change", "DashRecover", "normal")

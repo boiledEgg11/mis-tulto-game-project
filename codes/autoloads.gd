@@ -1,13 +1,16 @@
 extends Node
-@onready var ENEMY_POSSESS: Node2D
+@onready var ENEMY_POSSESS: Dictionary = {
+	"species": null,
+	"individual": null
+}
 @onready var progression: Array = [0]
 @export var progression_side = [0, 0]
+@export var player: Node2D
+@export var tile_move: int = 0
 var tiles: Array
-var POSSESS_TARGET = {"species": "none", "individual": "0"}
 var RESET = false
 var PLAYER_POSITION_X = 0
 var PLAYER_POSITION_Y = 0
-var POSSESS_SPRITE = "none"
 var PLAYER_POSSESSING = false
 var PLAYER_POSSESS_STOP = false
 var POSSESS_AMOUNT = 0
@@ -16,13 +19,14 @@ var location
 var tile
 var SAVE_SCREEN
 var PLAYER_ATTACK = false
-var tile_move = 0
 var move_amount = false
 var CAMERA_LOCATION = Vector2i(0, 0)
 var PAUSE = false
 var LAST_LOADED = 1
 var play_time = 0
 var recorded_time = 0
+var is_moving: bool
+var is_moving_2: bool
 var spin_moving = false
 var FOUND_TREASURE = [false, false, false, false, false]
 var played_time: Dictionary = {
@@ -40,10 +44,8 @@ var SAVE_STUFF: Dictionary = {
 	"progression_side": [0, 0]
 }
 var START_TIME: int
-var POSSESS_STATUS = {"speed": 0, "jump": 0, "slide": 0, "damage_multiplier": 0, "hitbox_y": 0, "hitbox_x": 0}
 @onready var center 
 func _load_game(file):
-	
 	LAST_LOADED = file
 	var SAVE_FILE
 	if file == 1:
@@ -69,8 +71,8 @@ func _load_game(file):
 	if SAVE_DATA.treasure:
 		SAVE_STUFF.treasure = SAVE_DATA.treasure
 	START_TIME = Time.get_ticks_msec()
-	Autoloads.location = Autoloads.SAVE_STUFF.place
-	Autoloads.POSSESS_TARGET.species = Autoloads.SAVE_STUFF.enemy
-	Autoloads.POSSESS_TARGET.individual = Autoloads.SAVE_STUFF.enemy_id
-	Autoloads.recorded_time = Autoloads.SAVE_STUFF.play_time
-	Autoloads.FOUND_TREASURE = Autoloads.SAVE_STUFF.treasure
+	location = Autoloads.SAVE_STUFF.place
+	ENEMY_POSSESS.species = Autoloads.SAVE_STUFF.enemy
+	ENEMY_POSSESS.individual = Autoloads.SAVE_STUFF.enemy_id
+	recorded_time = Autoloads.SAVE_STUFF.play_time
+	FOUND_TREASURE = Autoloads.SAVE_STUFF.treasure

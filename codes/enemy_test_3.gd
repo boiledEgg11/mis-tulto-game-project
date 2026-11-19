@@ -22,8 +22,10 @@ extends CharacterBody2D
 	"air_speed": 80,
 	"damage": 1,
 	"extra_damage": 5,
+	"sprite": "res://assets/placeholders/placeholder_enemy_explosion.png",
 	"ability_display": "EXPLOSIVE",
 	"ability": "Pyrofighto",
+	"species": "Pyrofighto",
 	"tag": ["charge"]
 }
 func _ready() -> void:
@@ -101,11 +103,9 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
-		Autoloads.POSSESS_TYPE = "charge"
 		$Area2D/CollisionShape2D.disabled = true
 		INVINCIBLE = true
 		POSSESSED = true
-		parent.call_deferred("reparent", player_colliding)
 		$EnemyArea/CollisionShape2D.disabled = true
 		$Sprite2D.visible = false
 		if Autoloads.PLAYER_POSSESS_STOP:
@@ -178,12 +178,12 @@ func _on_player_detection_area_body_entered(body: Node2D) -> void:
 func _possess_start():
 		get_parent().call_deferred("_possessed")
 		Autoloads.POSSESS_AMOUNT += 1
-		player_colliding.stats = stats
-		Autoloads.POSSESS_stats = stats
+		Autoloads.player.stats = stats
 		possess_health = -1
 		Autoloads.PLAYER_POSSESSING = true
 		velocity.x = 0
 		velocity.y = 0
+		parent.call_deferred("reparent", player_colliding)
 func _on_area_2d_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("tile_breakable"):
 		var tiles = body.get_coords_for_body_rid(body_rid)

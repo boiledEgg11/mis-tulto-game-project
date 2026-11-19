@@ -3,12 +3,12 @@ var location
 func _erase():
 	$Savepoint.call("_erase")
 	queue_free()
-func _save(enemy, file):
+func _save(enemy, file, player):
 	print("saved!")
 	Autoloads.SAVE_STUFF = {
 		"place": location,
-		"enemy": Autoloads.POSSESS_TARGET.species,
-		"enemy_id": Autoloads.POSSESS_TARGET.individual,
+		"enemy": player.stats.species,
+		"enemy_id": player.stats.individual,
 		"play_time": Autoloads.play_time,
 		"treasure": Autoloads.FOUND_TREASURE
 	}
@@ -66,3 +66,4 @@ func _save_game(file):
 func _process(delta: float) -> void:
 	if Autoloads.RESET:
 		queue_free()
+	

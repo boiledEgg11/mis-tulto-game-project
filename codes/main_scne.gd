@@ -4,7 +4,7 @@ var save_info
 var bodies
 var reset = false
 var tile_positions
-var POSSESS_TARGET
+var POSSESS_ENEMY: Node2D
 var SAVE_READY = true
 var dash_recover_value: int
 var health_value: int
@@ -23,7 +23,7 @@ func _reset(file):
 	await get_tree().process_frame
 	print($Player.POSSESS_END)
 	Autoloads.RESET = false
-	$StaticBody2D.call("_set_enemy", "test_1")
+	$ObjectPlacement.call("_set_enemy", "test_1")
 	print(Autoloads.PLAYER_POSSESSING)
 	Autoloads.PLAYER_POSSESSING = false
 	$Player.POSSESS_END = false
@@ -34,10 +34,10 @@ func _reset(file):
 	$Camera2D/BoxContainer/DashRecover.value = 60
 	$Camera2D/BoxContainer/PlayerHealth.value = 10
 func _erase_enemies():
-	$StaticBody2D._erase_enemy()
+	$ObjectPlacement._erase_enemy()
 func _add_enemies(level):
 	print("adding enemies...")
-	$StaticBody2D._read_data(true, level)
+	$ObjectPlacement._read_data(true, level)
 func _load(file):
 	Autoloads._load_game(file)
 	match Autoloads.location:
@@ -66,30 +66,30 @@ func _load(file):
 			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(0, 0)
 func _enemy_set():
-	if Autoloads.POSSESS_TARGET.species and Autoloads.POSSESS_TARGET.species != "none":
-		match Autoloads.POSSESS_TARGET.species:
+	if Autoloads.ENEMY_POSSESS.species and Autoloads.ENEMY_POSSESS.species != "none":
+		match Autoloads.ENEMY_POSSESS.species:
 			"TestEnemy1":
-				POSSESS_TARGET = preload("res://scenes/enemy/enemy1.tscn").instantiate()
+				POSSESS_ENEMY = preload("res://scenes/enemy/enemy1.tscn").instantiate()
 			"TestEnemy2":
-				POSSESS_TARGET = preload("res://scenes/enemy/enemy2.tscn").instantiate()
+				POSSESS_ENEMY = preload("res://scenes/enemy/enemy2.tscn").instantiate()
 			"TestEnemy3":
-				POSSESS_TARGET = preload("res://scenes/enemy/enemy3.tscn").instantiate()
+				POSSESS_ENEMY = preload("res://scenes/enemy/enemy3.tscn").instantiate()
 			"TestEnemy4":
-				POSSESS_TARGET = preload("res://scenes/enemy/enemy4.tscn").instantiate()
+				POSSESS_ENEMY = preload("res://scenes/enemy/enemy4.tscn").instantiate()
 			"TestEnemy5":
-				POSSESS_TARGET = preload("res://scenes/enemy/enemy5.tscn").instantiate()
+				POSSESS_ENEMY = preload("res://scenes/enemy/enemy5.tscn").instantiate()
 			"TestEnemy6":
-				POSSESS_TARGET = preload("res://scenes/enemy/enemy6.tscn").instantiate()
+				POSSESS_ENEMY = preload("res://scenes/enemy/enemy6.tscn").instantiate()
 			"TestEnemy7":
-				POSSESS_TARGET = preload("res://scenes/enemy/enemy7.tscn").instantiate()
+				POSSESS_ENEMY = preload("res://scenes/enemy/enemy7.tscn").instantiate()
 			"TestEnemy8":
-				POSSESS_TARGET = preload("res://scenes/enemy/enemy8.tscn").instantiate()
+				POSSESS_ENEMY = preload("res://scenes/enemy/enemy8.tscn").instantiate()
 		await get_tree().process_frame
-		add_child.call_deferred(POSSESS_TARGET)
-		POSSESS_TARGET.call("_individual_set", Autoloads.POSSESS_TARGET.individual)
-		POSSESS_TARGET.call("_possess_start")
+		add_child.call_deferred(POSSESS_ENEMY)
+		POSSESS_ENEMY.call("_individual_set", Autoloads.POSSESS_ENEMY.individual)
+		POSSESS_ENEMY.call("_possess_start")
 func _set_data():
-	$StaticBody2D._read_data(false, -1)
+	$ObjectPlacement._read_data(false, -1)
 func _on_texture_button_pressed() -> void:
 	$Camera2D/Control.FILE_OPEN = true
 	SAVE_READY = true

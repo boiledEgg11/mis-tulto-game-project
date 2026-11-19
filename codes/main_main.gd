@@ -78,7 +78,7 @@ func _process(delta: float) -> void:
 		get_tree().paused = false
 		Autoloads.PAUSE = false
 	if Input.is_action_just_pressed("l"):
-		$Node2D2/StaticBody2D._erase_enemy()
+		$Node2D2/ObjectPlacement._erase_enemy()
 func _on_home_return_pressed() -> void:
 	if $Node2D2/Camera2D/Control.FILE_OPEN:
 		$Node2D2/Camera2D/Controlol.FILE_OPEN = false
