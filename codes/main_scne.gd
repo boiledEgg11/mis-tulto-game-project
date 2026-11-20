@@ -31,7 +31,7 @@ func _reset(file):
 	_enemy_set()
 	$Player.POSSESS_START = true
 	$Player.velocity = Vector2(0, 0)
-	$Camera2D/BoxContainer/DashRecover.value = 60
+	$Camera2D/BoxContainer/DashRecover.value = 30
 	$Camera2D/BoxContainer/PlayerHealth.value = 10
 func _erase_enemies():
 	$ObjectPlacement._erase_enemy()
@@ -66,23 +66,23 @@ func _load(file):
 			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(0, 0)
 func _enemy_set():
-	if Autoloads.ENEMY_POSSESS.species and Autoloads.ENEMY_POSSESS.species != "none":
+	if Autoloads.ENEMY_POSSESS.species and Autoloads.ENEMY_POSSESS.species != "Tulto":
 		match Autoloads.ENEMY_POSSESS.species:
-			"TestEnemy1":
+			"Slimy":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy1.tscn").instantiate()
-			"TestEnemy2":
+			"Bouncer":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy2.tscn").instantiate()
 			"Pyrofighto":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy3.tscn").instantiate()
-			"TestEnemy4":
+			"Dropper":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy4.tscn").instantiate()
-			"TestEnemy5":
+			"Spinner":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy5.tscn").instantiate()
-			"TestEnemy6":
+			"WhistleDasher":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy6.tscn").instantiate()
-			"TestEnemy7":
+			"Crystaline":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy7.tscn").instantiate()
-			"TestEnemy8":
+			"BladeShooter":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy8.tscn").instantiate()
 		await get_tree().process_frame
 		add_child.call_deferred(POSSESS_ENEMY)

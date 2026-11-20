@@ -113,16 +113,16 @@ func _ability_use(ability):
 	if stats.tag.has("no_recover_usage"):
 		get_parent().call("_dash_recover", 0, true)
 	match ability:
-		"SWORD_SHOOT":
+		"BladeShooter":
 			if Autoloads.POSSESS_ENEMY.projectile_amount < 3:
 				Autoloads.POSSESS_ENEMY.call_deferred("_summon_projectile", 3, false)
 			else:
 				Autoloads.POSSESS_ENEMY.call_deferred("_call_fly",get_global_mouse_position())
 				get_parent().call("_dash_recover", 30, true)
-		"LASER":
+		"Crystaline":
 			Autoloads.POSSESS_ENEMY.call("_attack")
 			Autoloads.PLAYER_ATTACK = true
-		"TARGET_DASH":
+		"WhistleDasher":
 			$DetectShape/CollisionShape2D.disabled = false
 			await get_tree().create_timer(1).timeout
 			$DetectShape/CollisionShape2D.disabled = true
@@ -217,7 +217,7 @@ func _physics_process(delta: float) -> void:
 			if Input.is_action_just_pressed("space") and get_parent().call("_get_dash_recover_value") == 60:
 				_ability_use(stats.ability)
 		match stats.species:
-			"SWORD_SHOOT":
+			"BladeShooter":
 				direction = Input.get_axis("left", "right")
 				if direction > 0:
 					$Sprite2D.flip_h = false
@@ -246,7 +246,7 @@ func _physics_process(delta: float) -> void:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
 				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
-			"LASER":
+			"Crystaline":
 				global_position = Autoloads.POSSESS_ENEMY.global_position
 				global_rotation = Autoloads.POSSESS_ENEMY.global_rotation
 				velocity.x = 0
@@ -375,7 +375,7 @@ func _physics_process(delta: float) -> void:
 					$DamageCollision.rotation_degrees += direction * 10
 				else:
 					Autoloads.spin_moving = false
-			"TARGET_DASH":
+			"WhistleDasher":
 				if HAS_TARGET == 2:
 					await get_tree().create_timer(0.6).timeout
 					HAS_TARGET = 0

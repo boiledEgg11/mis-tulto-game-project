@@ -19,7 +19,7 @@ extends CharacterBody2D
 	"damage": 1,
 	"extra_damage": 1,
 	"sprite": "res://assets/placeholders/placeholder_enemy_sword.png",
-	"ability_display": "SWORD_SHOOT",
+	"ability_display": "Shoot swords",
 	"ability": "BladeShooter",
 	"species": "BladeShooter",
 	"tag": []
@@ -34,7 +34,7 @@ extends CharacterBody2D
 	"damage": 1,
 	"extra_damage": 1,
 	"sprite": "res://assets/placeholders/placeholder_enemy_sword.png",
-	"ability_display": "SWORD_SHOOT",
+	"ability_display": "Shoot Swords!",
 	"ability": "BladeShooter",
 	"species": "BladeShooter",
 	"tag": []
@@ -100,10 +100,11 @@ func _physics_process(delta: float) -> void:
 	if projectile_amount < 0:
 		projectile_amount = 0
 	for i in range(3):
-		if projectile[i].get_child(0).scale < Vector2(1, 1):
-			projectile[i].get_child(0).scale += Vector2(0.05, 0.05)
-		if projectile[i].get_child(0).position.y > -50:
-			projectile[i].get_child(0).position.y -= 2
+		if is_instance_valid(projectile[i]):
+			if projectile[i].get_child(0).scale < Vector2(1, 1):
+				projectile[i].get_child(0).scale += Vector2(0.05, 0.05)
+			if projectile[i].get_child(0).position.y > -50:
+				projectile[i].get_child(0).position.y -= 2
 	if Autoloads.player:
 		if $DetectionArea.overlaps_body(Autoloads.player):
 			_call_fly(null)
@@ -188,7 +189,7 @@ func _process(_delta: float) -> void:
 		$Sprite2D.flip_h = false
 	if direction == -1:
 		$Sprite2D.flip_h = true
-	if not Autoloads.Autoloads.player_POSSESSING and POSSESSED:
+	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
