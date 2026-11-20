@@ -72,7 +72,7 @@ func _enemy_set():
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy1.tscn").instantiate()
 			"TestEnemy2":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy2.tscn").instantiate()
-			"TestEnemy3":
+			"Pyrofighto":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy3.tscn").instantiate()
 			"TestEnemy4":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy4.tscn").instantiate()
@@ -86,7 +86,9 @@ func _enemy_set():
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy8.tscn").instantiate()
 		await get_tree().process_frame
 		add_child.call_deferred(POSSESS_ENEMY)
-		POSSESS_ENEMY.call("_individual_set", Autoloads.POSSESS_ENEMY.individual)
+		await get_tree().process_frame
+		if Autoloads.ENEMY_POSSESS.species != null:
+			POSSESS_ENEMY.call("_individual_set", Autoloads.ENEMY_POSSESS.individual)
 		POSSESS_ENEMY.call("_possess_start")
 func _set_data():
 	$ObjectPlacement._read_data(false, -1)
@@ -183,9 +185,8 @@ func _save_update(file):
 		$Camera2D/Control/BoxContainer2/TextureButton6/Label3.text = DATA_3.enemy
 func _save_files(file):
 	if SAVE_READY:
-		$Player.OVERLAPPING_SAVE.call_deferred("_save", Autoloads.POSSESS_ENEMY, file)
-		await get_tree().process_frame
-		await get_tree().process_frame
+		print("saved!")
+		$Player.OVERLAPPING_SAVE.call_deferred("_save", $Player.stats.species, file, $Player)
 		await get_tree().process_frame
 		await get_tree().process_frame
 		await get_tree().process_frame
