@@ -1,19 +1,50 @@
 extends CharacterBody2D
-var direction = -1
-var health = 1
-var possess_health = 1
-var SLIDE
-var START = false
-var individual
-var POSSESSED = false
-var INVINCIBLE = false
-var JUMP_CHARGE = 0
-var STATUS = {"speed": 80, "jump": -275, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed":100, "damage": 1, "extra_damage": 1}
+@export var direction: int = -1
+@export var health: int = 1
+@export var possess_health: int = 1
+@export var START: bool = false
+@export var INVINCIBLE: bool = false
+@export var POSSESSED: bool = false
+@export var attacking: bool = false
+@export var charge: float = 0.0
+@export var player_colliding: Node2D
+@export var parent: Node2D
+@export var parent_parent: Node2D
+@export var default_stats: Dictionary = {
+	"speed": 80,
+	"jump": -350,
+	"slide": 60,
+	"damage_multiplier": -0.8,
+	"hitbox": Vector2(15.5, 15.5),
+	"air_speed": 80,
+	"damage": 1,
+	"extra_damage": 5,
+	"sprite": "res://assets/placeholders/placeholder_enemy_explosion.png",
+	"ability_display": "EXPLOSIVE",
+	"ability": "Pyrofighto",
+	"species": "Pyrofighto",
+	"tag": ["charge"]
+}
+@export var stats: Dictionary = {
+	"speed": 80,
+	"jump": -275,
+	"slide": 60,
+	"damage_multiplier": -0.8,
+	"hitbox": Vector2(15.5, 15.5),
+	"air_speed": 100,
+	"damage": 1,
+	"extra_damage": 5,
+	"sprite": "res://assets/placeholders/placeholder_enemy_bouncy.png",
+	"ability_display": "Super Jump!",
+	"ability": "Bouncer",
+	"species": "Bouncer",
+	"tag": []
+}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
 	if START:
-		match individual:
+		match stats.individual:
 			1:
 				position = Vector2(250, 0)
 			2:
@@ -35,13 +66,13 @@ func _physics_process(delta: float) -> void:
 		if is_on_wall_only():
 			direction *= -1
 		if not is_on_floor():
-			velocity.x = direction * STATUS.air_speed
+			velocity.x = direction * stats.air_speed
 		if is_on_floor():
-			JUMP_CHARGE += 1
+			charge += 1
 			velocity.x = 0
-			if JUMP_CHARGE > 30:
-				JUMP_CHARGE = 0
-				velocity.y = STATUS.jump
+			if charge > 30:
+				charge = 0
+				velocity.y = stats.jump
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
@@ -51,13 +82,12 @@ func _physics_process(delta: float) -> void:
 		if velocity.x < 0:
 			$Sprite2D.flip_h = true
 	if possess_health == -1:
-			position = Vector2i(0, 0)
-			INVINCIBLE = true
-			POSSESSED = true
-			position.x = Autoloads.PLAYER_POSITION_X
-			position.y = Autoloads.PLAYER_POSITION_Y
-			$EnemyArea/CollisionShape2D.disabled = true
-			$Sprite2D.visible = false
+		INVINCIBLE = true
+		POSSESSED = true
+		$EnemyArea/CollisionShape2D.disabled = true
+		$Sprite2D.visible = false
+		if Autoloads.PLAYER_POSSESS_STOP:
+			_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	direction *= -1
 func _on_enemy_area_area_entered(area) -> void:
@@ -73,11 +103,15 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
+	global_position = Autoloads.player.global_position
+	parent.global_position = global_position
+	call_deferred("reparent", parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
 	velocity.x = 0
 	health = 1
+	$Sprite2D.visible = true
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
@@ -97,14 +131,11 @@ func _process(_delta: float) -> void:
 	if possess_health == 0:
 		_possess_start()
 func _possess_start():
-		get_parent().call_deferred("_possessed")
-		Autoloads.POSSESS_TARGET = {"species": "TestEnemy2", "individual": individual}
-		Autoloads.PLAYER_POSSESSING = true
-		Autoloads.POSSESS_ABILITY = "Jump"
-		Autoloads.POSSESS_ENEMY = "frog"
-		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_STATUS = STATUS
-		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy_bouncy.png"
-		velocity.x = 0
-		velocity.y = 0
+	get_parent().call_deferred("_possessed")
+	Autoloads.POSSESS_AMOUNT += 1
+	Autoloads.player.stats = stats
+	possess_health = -1
+	Autoloads.PLAYER_POSSESSING = true
+	global_position = Autoloads.player.global_position
+	velocity = Vector2(0, 0)
+	call_deferred("reparent", Autoloads.player)

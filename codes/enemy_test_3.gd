@@ -149,8 +149,6 @@ func _on_enemy_area_area_entered(area) -> void:
 			possess_health -= 1
 			player_colliding = area.get_parent()
 func _possess_stop() -> void:
-	global_position = Autoloads.player.global_position
-	parent.global_position = global_position
 	call_deferred("reparent", parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
@@ -158,6 +156,8 @@ func _possess_stop() -> void:
 	velocity.x = 0
 	health = 1
 	$Sprite2D.visible = true
+	global_position = Autoloads.player.global_position
+	parent.global_position = global_position
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
