@@ -136,7 +136,7 @@ func _ability_use(ability):
 					velocity.y = stats.jump * -4
 				else:
 					velocity.y = stats.jump * 1.5
-		"pyrophyto":
+		"pyrofighto":
 			ABILITY_LOCK = true
 			$ExtraAttack/CollisionShape2D.disabled = false
 			$ExtraAttack/Sprite2D.visible = true
@@ -246,8 +246,8 @@ func _physics_process(delta: float) -> void:
 					direction = 0
 				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 			"LASER":
-				global_position = Autoloads.ENEMY_POSSESS.global_position
-				global_rotation = Autoloads.ENEMY_POSSESS.global_rotation
+				global_position = Autoloads.POSSESS_ENEMY.global_position
+				global_rotation = Autoloads.POSSESS_ENEMY.global_rotation
 				velocity.x = 0
 				velocity.y = 0
 				if is_on_floor():
@@ -352,7 +352,7 @@ func _physics_process(delta: float) -> void:
 						direction = 0
 					if ABILITY_LOCK:
 						velocity.x = move_toward(velocity.x, 0, stats.slide)
-			"SPIN":
+			"Spinny":
 				Autoloads.move_amount = true
 				if Input.is_action_just_pressed("ability"):
 					Autoloads.move_amount = false
@@ -362,8 +362,8 @@ func _physics_process(delta: float) -> void:
 					get_parent().call("_camera_position", position.x, position.y, false)
 				velocity.x = 0
 				velocity.y = 0
-				global_position = Autoloads.ENEMY_POSSESS.global_position
-				global_rotation = Autoloads.ENEMY_POSSESS.global_rotation
+				global_position = Autoloads.POSSESS_ENEMY.global_position
+				global_rotation = Autoloads.POSSESS_ENEMY.global_rotation
 				if Input.is_action_pressed("shift"):
 					direction = Input.get_axis("left", "right") * 10
 				else:

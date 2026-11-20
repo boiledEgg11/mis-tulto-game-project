@@ -1,19 +1,51 @@
 extends CharacterBody2D
-var direction = -1
-var health = 1
-var possess_health = 1
-var SLIDE
-var INVINCIBLE = false
-var individual
-var START = false
-var Initial = Vector2(0, 0)
-var POSSESSED = false
-var STATUS = {"speed": 0, "jump": 0, "slide": 200, "damage_multiplier": -0.8, "hitbox_y": 22, "hitbox_x": 22, "air_speed": 0, "damage": 1, "extra_damage": 1}
+@export var direction: int = -1
+@export var health: int = 1
+@export var possess_health: int = 1
+@export var START: bool = false
+@export var INVINCIBLE: bool = false
+@export var POSSESSED: bool = false
+@export var attacking: bool = false
+@export var charge: float = 0.0
+@export var player_colliding: Node2D
+@export var parent: Node2D
+@export var parent_parent: Node2D
+@export var default_stats: Dictionary = {
+	"speed": 80,
+	"jump": -350,
+	"slide": 60,
+	"damage_multiplier": -0.8,
+	"hitbox": Vector2(15.5, 15.5),
+	"air_speed": 80,
+	"damage": 1,
+	"extra_damage": 5,
+	"sprite": "res://assets/placeholders/placeholder_enemy_explosion.png",
+	"ability_display": "EXPLOSIVE",
+	"ability": "Pyrofighto",
+	"species": "Pyrofighto",
+	"tag": ["charge"]
+}
+@export var stats: Dictionary = {
+	"speed": 0,
+	"jump": -0,
+	"slide": 200,
+	"damage_multiplier": -0.25,
+	"hitbox": Vector2(22, 22),
+	"air_speed": 0,
+	"damage": 1,
+	"extra_damage": 1,
+	"sprite": "res://assets/placeholders/placeholder_gear.png",
+	"ability_display": "SPIN",
+	"ability": "Spinny",
+	"species": "Spinny",
+	"tag": ["no_recover_usage"]
+}
+@export var Initial = Vector2(0, 0)
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(_delta: float) -> void:
 	if START:
-		match individual:
+		match stats.individual:
 			1:
 				position = Vector2(512, -20)
 			2:
@@ -37,11 +69,11 @@ func _physics_process(_delta: float) -> void:
 		$Sprite2D.visible = true
 	if possess_health == -1:
 		START = false
-		if individual == 1:
+		if stats.individual == 1:
 			Autoloads.CAMERA_LOCATION = Vector2i(816, 64)
-		if individual == 2:
+		if stats.individual == 2:
 			Autoloads.CAMERA_LOCATION = Vector2i(1232, 0)
-		if individual == 3:
+		if stats.individual == 3:
 			Autoloads.CAMERA_LOCATION = Vector2i(600, -104)
 		Autoloads.PLAYER_POSITION_X = Initial.x
 		Autoloads.PLAYER_POSITION_Y = Initial.y
@@ -81,16 +113,13 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
-		get_parent().call_deferred("_possessed")
-		Autoloads.POSSESS_TARGET = {"species": "TestEnemy5", "individual": individual}
-		Autoloads.PLAYER_POSITION_X = Initial.x
-		Autoloads.PLAYER_POSITION_Y = Initial.y
-		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_ABILITY = "SPIN"
-		Autoloads.POSSESS_ENEMY = "SPIN"
-		Autoloads.POSSESS_STATUS = STATUS
-		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_gear.png"
-		Autoloads.PLAYER_POSSESSING = true
-		velocity.x = 0
-		velocity.y = 0
+		_possess_start()
+func _possess_start():
+	Autoloads.POSSESS_ENEMY = self
+	get_parent().call_deferred("_possessed")
+	Autoloads.POSSESS_AMOUNT += 1
+	Autoloads.player.stats = stats
+	possess_health = -1
+	Autoloads.PLAYER_POSSESSING = true
+	global_position = Autoloads.player.global_position
+	velocity = Vector2(0, 0)

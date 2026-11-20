@@ -17,8 +17,8 @@ func _process(delta: float) -> void:
 func _possessed():
 	Autoloads.POSSESS_ENEMY = get_child(0)
 func _individual_set(individual_set):
-	if get_child(0).name != "EnemyTest3":
-		get_child(0).individual = individual_set
-	else:
+	if get_child(0).name == "EnemyTest3" or get_child(0).name == "EnemyTest5":
 		get_child(0).stats.individual = individual_set
+	else:
+		get_child(0).individual = individual_set
 	get_child(0).START = true
