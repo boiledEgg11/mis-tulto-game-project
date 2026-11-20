@@ -1,5 +1,4 @@
 extends Node2D
-var child = get_child(0)
 func _erase():
 	if get_child(0).name == "Enemy8":
 		for i in 5:
@@ -16,7 +15,7 @@ func _process(delta: float) -> void:
 	if Autoloads.RESET:
 		free()
 func _possessed():
-	Autoloads.POSSESS_ENEMY = child
+	Autoloads.POSSESS_ENEMY = get_child(0)
 func _individual_set(individual_set):
 	if get_child(0).name != "EnemyTest3":
 		get_child(0).individual = individual_set

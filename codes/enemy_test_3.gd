@@ -11,7 +11,19 @@ extends CharacterBody2D
 @export var parent: Node2D
 @export var parent_parent: Node2D
 @export var default_stats: Dictionary = {
-
+	"speed": 80,
+	"jump": -350,
+	"slide": 60,
+	"damage_multiplier": -0.8,
+	"hitbox": Vector2(15.5, 15.5),
+	"air_speed": 80,
+	"damage": 1,
+	"extra_damage": 5,
+	"sprite": "res://assets/placeholders/placeholder_enemy_explosion.png",
+	"ability_display": "EXPLOSIVE",
+	"ability": "Pyrofighto",
+	"species": "Pyrofighto",
+	"tag": ["charge"]
 }
 @export var stats: Dictionary = {
 	"speed": 80,
@@ -29,7 +41,7 @@ extends CharacterBody2D
 	"tag": ["charge"]
 }
 func _ready() -> void:
-
+	parent_parent = get_parent().get_parent()
 	$Area2D/Sprite2D.visible = false
 	$EnemyArea/CollisionShape2D.disabled = false
 func _charging():
@@ -137,12 +149,15 @@ func _on_enemy_area_area_entered(area) -> void:
 			possess_health -= 1
 			player_colliding = area.get_parent()
 func _possess_stop() -> void:
-	parent.call_deferred("reparent", parent_parent)
+	global_position = Autoloads.player.global_position
+	parent.global_position = global_position
+	call_deferred("reparent", parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
 	velocity.x = 0
 	health = 1
+	$Sprite2D.visible = true
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
@@ -183,7 +198,7 @@ func _possess_start():
 	Autoloads.PLAYER_POSSESSING = true
 	global_position = Autoloads.player.global_position
 	velocity = Vector2(0, 0)
-	parent.call_deferred("reparent", player_colliding)
+	call_deferred("reparent", Autoloads.player)
 func _on_area_2d_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("tile_breakable"):
 		var tiles = body.get_coords_for_body_rid(body_rid)

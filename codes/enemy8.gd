@@ -1,25 +1,56 @@
 extends CharacterBody2D
-@onready var player
-@onready var projectile_cooldown = 0
-@onready var direction = -1
-@onready var health = 1
-@onready var possess_health = 1
-@onready var SLIDE
-@onready var ground_exist = true
-@onready var forced_direction = false
-@onready var INVINCIBLE = false
-@onready var POSSESSED = false
-@onready var START = true
-@onready var collision_layers: Array
-@onready var individual
-@onready var projectile_released = false
-@onready var projectile_exist = false
-@onready var projectile_time = 0
-@onready var WALL_EXISTED = false
-@onready var projectile_amount = 0
-@onready var projectile_exists: Array = [false, false, false, false, false]
-@onready var projectile: Array = [preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate()]
-@onready var STATUS = {"speed": 100, "jump": -400, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 80, "damage": 1, "extra_damage": 1}
+@export var direction: int = -1
+@export var health: int = 1
+@export var possess_health: int = 1
+@export var START: bool = false
+@export var INVINCIBLE: bool = false
+@export var POSSESSED: bool = false
+@export var attacking: bool = false
+@export var charge: float = 0.0
+@export var parent: Node2D
+@export var parent_parent: Node2D
+@export var default_stats: Dictionary = {
+	"speed": 100,
+	"jump": -400,
+	"slide": 60,
+	"damage_multiplier": -0.8,
+	"hitbox": Vector2(15.5, 15.5),
+	"air_speed": 100,
+	"damage": 1,
+	"extra_damage": 1,
+	"sprite": "res://assets/placeholders/placeholder_enemy_sword.png",
+	"ability_display": "SWORD_SHOOT",
+	"ability": "BladeShooter",
+	"species": "BladeShooter",
+	"tag": []
+}
+@export var stats: Dictionary = {
+	"speed": 100,
+	"jump": -400,
+	"slide": 60,
+	"damage_multiplier": -0.8,
+	"hitbox": Vector2(15.5, 15.5),
+	"air_speed": 100,
+	"damage": 1,
+	"extra_damage": 1,
+	"sprite": "res://assets/placeholders/placeholder_enemy_sword.png",
+	"ability_display": "SWORD_SHOOT",
+	"ability": "BladeShooter",
+	"species": "BladeShooter",
+	"tag": []
+}
+@export var projectile_cooldown = 0
+@export var ground_exist = true
+@export var forced_direction = false
+@export var collision_layers: Array
+@export var projectile_released = false
+@export var projectile_exist = false
+@export var projectile_time = 0
+@export var WALL_EXISTED = false
+@export var projectile_amount = 0
+@export var projectile_exists: Array = [false, false, false, false, false]
+@export var projectile: Array = [preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate()]
+@export var STATUS = {"speed": 100, "jump": -400, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 80, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _summon_projectile(summon_amount, attack_player: bool):
@@ -58,7 +89,7 @@ func _call_fly(position_target):
 			child_projectile.call("_fly", position_target)
 func _physics_process(delta: float) -> void:
 	if START:
-		match individual:
+		match stats.individual:
 			1:
 				position = Vector2(-128, 0)
 			2:
@@ -73,8 +104,8 @@ func _physics_process(delta: float) -> void:
 			projectile[i].get_child(0).scale += Vector2(0.05, 0.05)
 		if projectile[i].get_child(0).position.y > -50:
 			projectile[i].get_child(0).position.y -= 2
-	if player:
-		if $DetectionArea.overlaps_body(player):
+	if Autoloads.player:
+		if $DetectionArea.overlaps_body(Autoloads.player):
 			_call_fly(null)
 
 	$SpinManager.rotation_degrees += 3
@@ -98,15 +129,15 @@ func _physics_process(delta: float) -> void:
 			queue_free()
 		POSSESSED = false
 		if not forced_direction:
-			if player and $DetectionArea/CollisionShape2D:
-				if player.position.x > position.x:
+			if Autoloads.player and $DetectionArea/CollisionShape2D:
+				if Autoloads.player.position.x > position.x:
 					direction = -1
-				if player.position.x < position.x:
+				if Autoloads.player.position.x < position.x:
 					direction = 1
-			if not $DetectionArea/CollisionShape2D.disabled and player:
-				if player.position.x > position.x:
+			if not $DetectionArea/CollisionShape2D.disabled and Autoloads.player:
+				if Autoloads.player.position.x > position.x:
 					direction = 1
-				if player.position.x < position.x:
+				if Autoloads.player.position.x < position.x:
 					direction = -1
 		$EnemyArea/CollisionShape2D.disabled = false
 		if  $DetectionArea/CollisionShape2D.disabled:
@@ -119,20 +150,20 @@ func _physics_process(delta: float) -> void:
 	if possess_health == -1:
 		INVINCIBLE = true
 		POSSESSED = true
-		position.x = Autoloads.PLAYER_POSITION_X
-		position.y = Autoloads.PLAYER_POSITION_Y
+		position.x = Autoloads.Autoloads.player_POSITION_X
+		position.y = Autoloads.Autoloads.player_POSITION_Y
 		$EnemyArea/CollisionShape2D.disabled = true
 		$Sprite2D.visible = false
-		if Autoloads.PLAYER_POSSESS_STOP:
+		if Autoloads.Autoloads.player_POSSESS_STOP:
 			_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	if $LeftCollisionCheck.area_entered:
 		direction *= -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
-		if area.is_in_group("player_damaging"):
+		if area.is_in_group("Autoloads.player_damaging"):
 			health -= 1
-		if area.name == "PlayerProjectile":
+		if area.name == "Autoloads.playerProjectile":
 			health -= 1
 			print("hit!")
 		if area.name == "AttackCollision":
@@ -142,8 +173,7 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
-	$EnemyTestCollision.disabled = false
-	$DetectionArea/CollisionShape2D.disabled = false
+	parent.call_deferred("reparent", parent_parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
@@ -158,7 +188,7 @@ func _process(_delta: float) -> void:
 		$Sprite2D.flip_h = false
 	if direction == -1:
 		$Sprite2D.flip_h = true
-	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
+	if not Autoloads.Autoloads.player_POSSESSING and POSSESSED:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
@@ -177,9 +207,9 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 		ground_exist = false
 
 func _on_detection_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
-	if body.is_in_group("player"):
+	if body.is_in_group("Autoloads.player"):
 		_call_fly(null)
-		player = body
+		Autoloads.player = body
 func _enable_detect_collision():
 	$DetectionArea/CollisionShape2D.disabled = false
 
@@ -188,17 +218,15 @@ func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
 		ground_exist = true
 func _possess_start():
-		_projectile_erase(3)
-		Autoloads.POSSESS_ENEMY = self
-		Autoloads.POSSESS_TARGET = {"species": "TestEnemy8", "individual": individual}
-		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_ABILITY = "SWORD_SHOOT"
-		Autoloads.POSSESS_ENEMY = "SPIN_BLADE"
-		Autoloads.POSSESS_STATUS = STATUS
-		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy_sword.png"
-		Autoloads.PLAYER_POSSESSING = true
-		$EnemyTestCollision.disabled = true
-		$DetectionArea/CollisionShape2D.disabled = true
-		velocity.x = 0
-		velocity.y = 0
+	_projectile_erase(3)
+	get_parent().call_deferred("_possessed")
+	Autoloads.POSSESS_AMOUNT += 1
+	Autoloads.player.stats = stats
+	possess_health = -1
+	Autoloads.PLAYER_POSSESSING = true
+	global_position = Autoloads.player.global_position
+	velocity = Vector2(0, 0)
+	parent.call_deferred("reparent", Autoloads.player)
+	Autoloads.POSSESS_ENEMY = self
+	$EnemyTestCollision.disabled = true
+	$DetectionArea/CollisionShape2D.disabled = true
