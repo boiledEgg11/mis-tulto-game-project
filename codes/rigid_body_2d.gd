@@ -39,7 +39,7 @@ extends CharacterBody2D
 	"ability_display": "None",
 	"ability": "Slimy",
 	"species": "Slimy",
-	"tag": [""]
+	"tag": ["no_recover_usage"]
 }
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false

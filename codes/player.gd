@@ -128,8 +128,7 @@ func _ability_use(ability):
 			$DetectShape/CollisionShape2D.disabled = true
 		"Dropper":
 			_shoot()
-			get_parent().call("_dash_recover", 0, true)
-		"Jump":
+		"Bouncer":
 			if is_on_floor():
 				velocity.y = stats.jump * 2
 			else:
@@ -137,7 +136,7 @@ func _ability_use(ability):
 					velocity.y = stats.jump * -4
 				else:
 					velocity.y = stats.jump * 1.5
-		"pyrofighto":
+		"Pyrofighto":
 			ABILITY_LOCK = true
 			$ExtraAttack/CollisionShape2D.disabled = false
 			$ExtraAttack/Sprite2D.visible = true
@@ -150,7 +149,8 @@ func _ability_use(ability):
 			$ExtraAttack/Sprite2D.visible = false
 			$ExtraAttack.position = Vector2(0, 0)
 			ABILITY_LOCK = false
-
+	if not stats.tag.has("no_recover_usage"):
+		get_parent().call_deferred("_dash_recover", 0, true)
 func _physics_process(delta: float) -> void:
 	if not fixed_camera:
 		get_parent().call("_camera_position", position.x, position.y, false)
@@ -265,7 +265,7 @@ func _physics_process(delta: float) -> void:
 						get_parent().call("_dash_recover", 0, true)
 				else:
 					DASH_LOCK = false
-			"Jump":
+			"Bouncer":
 				direction = Input.get_axis("left", "right")
 				if direction > 0:
 					$Sprite2D.flip_h = false
@@ -298,7 +298,6 @@ func _physics_process(delta: float) -> void:
 				if not direction:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
-				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 			"Dropper":
 				if not is_on_floor():
 					stats.slide = 2
@@ -403,7 +402,7 @@ func _physics_process(delta: float) -> void:
 							velocity += get_gravity() * delta
 						else:
 							velocity.y = move_toward(velocity.y, 0, 30)
-			"EXPLOSIVE":
+			"Pyrofighto":
 				if get_parent().call("_get_dash_recover_value") == 0:
 					$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
 				if not is_on_floor():
@@ -486,7 +485,6 @@ func _physics_process(delta: float) -> void:
 			Autoloads.tile_move = 0
 			$Sprite2D.rotation = 0
 			$DamageCollision.rotation = 0
-			get_parent().call("_camera_position", 0, 0, false)
 			Autoloads.PLAYER_POSSESS_STOP = true
 			Autoloads.PLAYER_POSSESSING = false
 			POSSESS_START = true

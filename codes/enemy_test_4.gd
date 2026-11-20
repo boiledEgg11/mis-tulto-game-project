@@ -51,6 +51,7 @@ func _charging():
 	CHARGING = false
 	if possess_health > 0:
 		var SHOOT_BULLET = preload("res://scenes/projectile/enemy_projectile.tscn").instantiate()
+		await get_tree().process_frame
 		owner.add_child(SHOOT_BULLET)
 		SHOOT_BULLET.position = position
 func _physics_process(delta: float) -> void:
@@ -120,13 +121,16 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
-	print("freed")
+	global_position = Autoloads.player.global_position
+	parent.global_position = global_position
+	call_deferred("reparent", parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
 	velocity.x = 0
-	health = 1
 	initial_y = position.y
+	health = 1
+	$Sprite2D.visible = true
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
