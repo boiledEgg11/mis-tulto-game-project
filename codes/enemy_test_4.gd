@@ -1,16 +1,48 @@
 extends CharacterBody2D
-var direction = -1
-var health = 1
-var possess_health = 1
-var SLIDE
-var charge = 0
+@export var direction: int = -1
+@export var health: int = 1
+@export var possess_health: int = 1
+@export var START: bool = false
+@export var INVINCIBLE: bool = false
+@export var POSSESSED: bool = false
+@export var attacking: bool = false
+@export var charge: float = 0.0
+@export var player_colliding: Node2D
+@export var parent: Node2D
+@export var parent_parent: Node2D
+@export var default_stats: Dictionary = {
+	"speed": 30,
+	"jump": -300,
+	"slide": 40,
+	"damage_multiplier": -0.8,
+	"hitbox": Vector2(15.5, 15.5),
+	"air_speed": 120,
+	"damage": 1,
+	"extra_damage": 1,
+	"sprite": "res://assets/placeholders/placeholder_enemy_shoot.png",
+	"ability_display": "SHOOT",
+	"ability": "Dropper",
+	"species": "Dropper",
+	"tag": ["charge"]
+}
+@export var stats: Dictionary = {
+	"speed": 30,
+	"jump": -300,
+	"slide": 40,
+	"damage_multiplier": -0.8,
+	"hitbox": Vector2(15.5, 15.5),
+	"air_speed": 120,
+	"damage": 1,
+	"extra_damage": 1,
+	"sprite": "res://assets/placeholders/placeholder_enemy_shoot.png",
+	"ability_display": "SHOOT",
+	"ability": "Dropper",
+	"species": "Dropper",
+	"tag": ["charge"]
+}
 var CHARGING = false
 var initial_y = 0
 var WAIT = 0
-var START = false
-var individual
-var INVINCIBLE = false
-var POSSESSED = false
 var STATUS = {"speed": 30, "jump": -300, "slide": 40, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 120, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
@@ -23,7 +55,7 @@ func _charging():
 		SHOOT_BULLET.position = position
 func _physics_process(delta: float) -> void:
 	if START:
-		match individual:
+		match stats.individual:
 			1:
 				position = Vector2(300, 0)
 			2:
@@ -63,18 +95,12 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta / 12
 	if possess_health == -1:
-			position = Vector2i(0, 0)
-			Autoloads.POSSESS_TYPE = "charge"
-			$EnemyTestCollision.disabled = true
-			INVINCIBLE = true
-			POSSESSED = true
-			position.x = Autoloads.PLAYER_POSITION_X
-			position.y = Autoloads.PLAYER_POSITION_Y
-			$EnemyArea/CollisionShape2D.disabled = true
-			$Sprite2D.visible = false
-			if Autoloads.PLAYER_POSSESS_STOP:
-				print("released!")
-				_possess_stop()
+		INVINCIBLE = true
+		POSSESSED = true
+		$EnemyArea/CollisionShape2D.disabled = true
+		$Sprite2D.visible = false
+		if Autoloads.PLAYER_POSSESS_STOP:
+			_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	direction = 1
 	$Sprite2D.flip_h = false
@@ -117,26 +143,13 @@ func _process(_delta: float) -> void:
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
-		get_parent().call_deferred("_possessed")
-		Autoloads.POSSESS_TARGET = {"species": "TestEnemy4", "individual": individual}
-		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_ABILITY = "SHOOT"
-		Autoloads.POSSESS_ENEMY = "SHOOT"
-		Autoloads.POSSESS_STATUS = STATUS
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder_enemy_shoot.png"
-		Autoloads.PLAYER_POSSESSING = true
-		velocity.x = 0
-		velocity.y = 0
-		await get_tree().process_frame
-		possess_health = -1
+		_possess_start()
 func _possess_start():
-		Autoloads.POSSESS_TARGET = {"species": "TestEnemy4", "individual": individual}
-		Autoloads.POSSESS_AMOUNT += 1
-		Autoloads.POSSESS_ABILITY = "SHOOT"
-		Autoloads.POSSESS_ENEMY = "SHOOT"
-		Autoloads.POSSESS_STATUS = STATUS
-		possess_health = -1
-		Autoloads.POSSESS_SPRITE = "res://assets/placeholders/placeholder/enemy_shoot.png"
-		Autoloads.PLAYER_POSSESSING = true
-		velocity.x = 0
-		velocity.y = 0
+	get_parent().call_deferred("_possessed")
+	Autoloads.POSSESS_AMOUNT += 1
+	Autoloads.player.stats = stats
+	possess_health = -1
+	Autoloads.PLAYER_POSSESSING = true
+	global_position = Autoloads.player.global_position
+	velocity = Vector2(0, 0)
+	call_deferred("reparent", Autoloads.player)

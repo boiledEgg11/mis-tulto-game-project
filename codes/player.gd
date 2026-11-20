@@ -126,8 +126,9 @@ func _ability_use(ability):
 			$DetectShape/CollisionShape2D.disabled = false
 			await get_tree().create_timer(1).timeout
 			$DetectShape/CollisionShape2D.disabled = true
-		"SHOOT":
+		"Dropper":
 			_shoot()
+			get_parent().call("_dash_recover", 0, true)
 		"Jump":
 			if is_on_floor():
 				velocity.y = stats.jump * 2
@@ -298,7 +299,7 @@ func _physics_process(delta: float) -> void:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
 				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
-			"SHOOT":
+			"Dropper":
 				if not is_on_floor():
 					stats.slide = 2
 					stats.damage_multiplier = -1.2
