@@ -18,7 +18,7 @@ var file_new: Dictionary = {
 }
 var SAVE_DEFAULT: Dictionary = {
 	"place": "none",
-	"enemy": "none",
+	"enemy": "Tulto",
 	"enemy_id": 0,
 	"play_time": 0,
 	"treasure": [false, false, false, false, false]

@@ -56,6 +56,7 @@ func _process(delta: float) -> void:
 	if moved_time > 20 and type != 2:
 		call_deferred("_screen_not_visible")
 	if moved_time > 30 and type == 2:
+		print("time limit")
 		call_deferred("_screen_not_visible")
 func _screen_not_visible():
 	if is_instance_valid(parent):

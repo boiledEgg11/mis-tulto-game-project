@@ -21,7 +21,6 @@ func _reset(file):
 	Autoloads.POSSESS_AMOUNT = 0
 	Autoloads.PLAYER_POSSESSING = false
 	await get_tree().process_frame
-	print($Player.POSSESS_END)
 	Autoloads.RESET = false
 	$ObjectPlacement.call("_set_enemy", "test_1")
 	print(Autoloads.PLAYER_POSSESSING)
@@ -87,9 +86,9 @@ func _enemy_set():
 		await get_tree().process_frame
 		add_child.call_deferred(POSSESS_ENEMY)
 		await get_tree().process_frame
-		if Autoloads.ENEMY_POSSESS.species != null:
+		if Autoloads.ENEMY_POSSESS.species != null and not Autoloads.ENEMY_POSSESS.species == "none":
 			POSSESS_ENEMY.call("_individual_set", Autoloads.ENEMY_POSSESS.individual)
-		POSSESS_ENEMY.call("_possess_start")
+			POSSESS_ENEMY.call("_possess_start")
 func _set_data():
 	$ObjectPlacement._read_data(false, -1)
 func _on_texture_button_pressed() -> void:

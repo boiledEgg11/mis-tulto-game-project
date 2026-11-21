@@ -36,7 +36,7 @@ var played_time: Dictionary = {
 var CURRENT_STATE = "home"
 var SAVE_STUFF: Dictionary = {
 	"place": "none",
-	"enemy": "none",
+	"enemy": "Tulto",
 	"enemy_id": 0,
 	"play_time": 0,
 	"treasure": [false, false, false],

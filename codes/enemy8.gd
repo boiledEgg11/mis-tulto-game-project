@@ -52,6 +52,7 @@ extends CharacterBody2D
 @export var projectile: Array = [preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate()]
 @export var STATUS = {"speed": 100, "jump": -400, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 80, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
+	parent_parent = parent.get_parent()
 	$EnemyArea/CollisionShape2D.disabled = false
 func _summon_projectile(summon_amount, attack_player: bool):
 	print("summon!")
@@ -175,12 +176,13 @@ func _on_enemy_area_area_entered(area) -> void:
 func _possess_stop() -> void:
 	global_position = Autoloads.player.global_position
 	parent.global_position = global_position
-	call_deferred("reparent", parent)
+	parent.call_deferred("reparent", parent_parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
 	velocity.x = 0
 	health = 1
+	$EnemyTestCollision.disabled = false
 	$Sprite2D.visible = true
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
@@ -215,8 +217,6 @@ func _on_detection_area_body_shape_entered(body_rid: RID, body: Node2D, body_sha
 		Autoloads.player = body
 func _enable_detect_collision():
 	$DetectionArea/CollisionShape2D.disabled = false
-
-
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
 		ground_exist = true

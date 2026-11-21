@@ -43,8 +43,8 @@ extends CharacterBody2D
 var CHARGING = false
 var initial_y = 0
 var WAIT = 0
-var STATUS = {"speed": 30, "jump": -300, "slide": 40, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 120, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
+	parent_parent = parent.get_parent()
 	$EnemyArea/CollisionShape2D.disabled = false
 func _charging():
 	await get_tree().create_timer(1).timeout
@@ -52,7 +52,7 @@ func _charging():
 	if possess_health > 0:
 		var SHOOT_BULLET = preload("res://scenes/projectile/enemy_projectile.tscn").instantiate()
 		await get_tree().process_frame
-		owner.add_child(SHOOT_BULLET)
+		parent_parent.add_child(SHOOT_BULLET)
 		SHOOT_BULLET.position = position
 func _physics_process(delta: float) -> void:
 	if START:
@@ -83,19 +83,20 @@ func _physics_process(delta: float) -> void:
 			CHARGING = true
 		POSSESSED = false
 		if is_on_floor():
-			velocity.y = STATUS.jump
+			velocity.y = stats.jump
 		if not is_on_floor():
 			if position.y > initial_y:
-				velocity.y = STATUS.jump / 4
+				velocity.y = stats.jump / 4
 			if CHARGING:
-				velocity.x = direction * STATUS.air_speed / 4
+				velocity.x = direction * stats.air_speed / 4
 			else:
-				velocity.x = direction * STATUS.air_speed
+				velocity.x = direction * stats.air_speed
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta / 12
 	if possess_health == -1:
+		print(Autoloads.player.global_position - global_position)
 		INVINCIBLE = true
 		POSSESSED = true
 		$EnemyArea/CollisionShape2D.disabled = true
@@ -121,9 +122,8 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
-	global_position = Autoloads.player.global_position
-	parent.global_position = global_position
 	call_deferred("reparent", parent)
+	global_position = Autoloads.player.global_position
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
