@@ -1,5 +1,61 @@
 extends StaticBody2D
-var characters: Array = [ preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(),0]
+var characters: Array = [
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(), 
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	preload("res://scenes/misc/empty.tscn").instantiate(),
+	0
+	]
 @onready var enemies
 @onready var enemies_id
 @onready var enemy_types
@@ -8,9 +64,6 @@ var characters: Array = [ preload("res://scenes/misc/empty.tscn").instantiate(),
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Autoloads.center = self
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
 func _read_data(start, level):

@@ -1,7 +1,7 @@
 extends Node2D
 @onready var projectile_number: int
 @onready var location
-@onready var parent
+@onready var parent: Node2D
 @onready var released = false
 @onready var target_pos: Vector2
 @onready var moving = false
@@ -59,7 +59,7 @@ func _process(delta: float) -> void:
 		print("time limit")
 		call_deferred("_screen_not_visible")
 func _screen_not_visible():
-	if is_instance_valid(parent):
+	if is_instance_valid(parent) and (type == 0 or type == 1):
 		parent.projectile_exists[projectile_number] = false
 		parent.projectile_amount -= 1
 		if is_instance_valid(parent):
@@ -71,6 +71,7 @@ func _h_summon(parent_node):
 	$Node2D.global_rotation_degrees = 90
 	call_deferred("reparent", parent_node)
 	await get_tree().create_timer(0.1).timeout
+	call_deferred("reparent", Autoloads.center)
 	target_position = Vector2(20, 0)
 	_h_attack(450)
 func _level_summon(parent_node):

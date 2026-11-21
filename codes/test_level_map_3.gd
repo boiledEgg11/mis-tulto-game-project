@@ -24,7 +24,7 @@ func _puzzle_solved():
 			$TileMapLayer2.erase_cell(Vector2i(i, 5))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	if attacking and cooldown > 4.5:
+	if attacking and cooldown > 6:
 		cooldown = 0
 		_attack()
 	if attacking and h_cooldown > 9:
@@ -38,8 +38,9 @@ func _quick_attck():
 	var height_random = rng.randf_range(-30, 30)
 	horizontal_projectile[next_h_projectile] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
 	add_child(horizontal_projectile[next_h_projectile])
+	horizontal_projectile[next_h_projectile].parent = $Node2D
 	horizontal_projectile[next_h_projectile].global_position = player.global_position + Vector2(-120, height_random)
-	horizontal_projectile[next_h_projectile].call_deferred("_h_summon", self)
+	horizontal_projectile[next_h_projectile].call_deferred("_h_summon", $Node2D)
 	if next_h_projectile == 5:
 		next_h_projectile = 0
 	else:
@@ -50,7 +51,8 @@ func _attack():
 	print(Vector2(random_value, random_result))
 	projectile[next_projectile] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
 	add_child(projectile[next_projectile])
-	projectile[next_projectile].global_position = player.global_position - Vector2(random_result * -1, random_value)
+	projectile[next_projectile].parent = $Node2D
+	projectile[next_projectile].global_position = Autoloads.player.global_position - Vector2(random_result * -1, random_value)
 	projectile[next_projectile].call_deferred("_level_summon", $Node2D)
 	if next_projectile == 6:
 		next_projectile = 0
