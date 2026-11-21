@@ -4,6 +4,7 @@ func _erase():
 	$Savepoint.call("_erase")
 	queue_free()
 func _save(enemy, file, player):
+
 	print("saved!")
 	Autoloads.SAVE_STUFF = {
 		"place": location,
@@ -45,11 +46,9 @@ func _save_2(file):
 	if file == 3:
 		print("file 3")
 		SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.WRITE)
-	await get_tree().process_frame
 	SAVE_FILE.store_var(Autoloads.SAVE_STUFF.duplicate())
 	print("added!")
 	SAVE_FILE.close()
-	await get_tree().process_frame
 func _save_game(file):
 	var SAVE_FILE
 	if file == 1:

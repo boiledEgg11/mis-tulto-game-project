@@ -120,8 +120,10 @@ func _set_enemy(level):
 		owner.add_child.call_deferred(characters[i])
 		match enemies[i]:
 			"enemy":
+				print("placed enemies")
 				characters[i].call("_individual_set", int(enemies_id[i]))
 			"save":
+				print("placed saves")
 				characters[i].call("_placement", enemies_id[i])
 			"treasure":
 				print("treasure added")

@@ -20,13 +20,11 @@ func _reset(file):
 	_load(file)
 	Autoloads.POSSESS_AMOUNT = 0
 	Autoloads.PLAYER_POSSESSING = false
-	await get_tree().process_frame
 	Autoloads.RESET = false
-	$ObjectPlacement.call("_set_enemy", "test_1")
+	$ObjectPlacement.call_deferred("_read_data", false, null)
 	print(Autoloads.PLAYER_POSSESSING)
 	Autoloads.PLAYER_POSSESSING = false
 	$Player.POSSESS_END = false
-	await get_tree().process_frame
 	_enemy_set()
 	$Player.POSSESS_START = true
 	$Player.velocity = Vector2(0, 0)
@@ -83,9 +81,7 @@ func _enemy_set():
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy7.tscn").instantiate()
 			"BladeShooter":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy8.tscn").instantiate()
-		await get_tree().process_frame
 		add_child.call_deferred(POSSESS_ENEMY)
-		await get_tree().process_frame
 		if Autoloads.ENEMY_POSSESS.species != null and not Autoloads.ENEMY_POSSESS.species == "none":
 			POSSESS_ENEMY.call("_individual_set", Autoloads.ENEMY_POSSESS.individual)
 			POSSESS_ENEMY.call("_possess_start")
@@ -186,10 +182,6 @@ func _save_files(file):
 	if SAVE_READY:
 		print("saved!")
 		$Player.OVERLAPPING_SAVE.call_deferred("_save", $Player.stats.species, file, $Player)
-		await get_tree().process_frame
-		await get_tree().process_frame
-		await get_tree().process_frame
-		await get_tree().process_frame
 		_save_update(file)
 	if not SAVE_READY:
 		_reset(file)
