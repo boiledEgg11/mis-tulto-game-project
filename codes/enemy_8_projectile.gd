@@ -12,8 +12,6 @@ extends Node2D
 @onready var move_start = false
 @onready var attack_player = true
 @onready var type = 0
-func _ready() -> void:
-	parent = get_parent().get_parent()
 func _erase():
 	queue_free()
 func _shoot(speed):
@@ -31,6 +29,8 @@ func _attack(speed):
 	await get_tree().create_timer(0.05).timeout
 	_shoot(speed)
 func _process(delta: float) -> void:
+	if not is_instance_valid(parent):
+		_erase()
 	if Autoloads.RESET:
 		_screen_not_visible()
 	if not attack_player:
@@ -58,9 +58,13 @@ func _process(delta: float) -> void:
 	if moved_time > 30 and type == 2:
 		call_deferred("_screen_not_visible")
 func _screen_not_visible():
-	_erase()
-	if is_instance_valid(parent) and parent.name == "Enemy8":
-		parent.call("_projectile_erase", projectile_number)
+	if is_instance_valid(parent):
+		parent.projectile_exists[projectile_number] = false
+		parent.projectile_amount -= 1
+		if is_instance_valid(parent):
+			parent.call("_projectile_erase", projectile_number)
+		print("erase")
+		_erase()
 func _h_summon(parent_node):
 	type = 3
 	$Node2D.global_rotation_degrees = 90

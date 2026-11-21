@@ -115,8 +115,10 @@ func _ability_use(ability):
 	match ability:
 		"BladeShooter":
 			if Autoloads.POSSESS_ENEMY.projectile_amount < 3:
+				print(Autoloads.POSSESS_ENEMY.projectile_amount)
 				Autoloads.POSSESS_ENEMY.call_deferred("_summon_projectile", 3, false)
 			else:
+				print("shoot!")
 				Autoloads.POSSESS_ENEMY.call_deferred("_call_fly",get_global_mouse_position())
 				get_parent().call("_dash_recover", 30, true)
 		"Crystaline":
@@ -245,7 +247,6 @@ func _physics_process(delta: float) -> void:
 				if not direction:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
-				$Sprite2D.texture = load(Autoloads.POSSESS_SPRITE)
 			"Crystaline":
 				global_position = Autoloads.POSSESS_ENEMY.global_position
 				global_rotation = Autoloads.POSSESS_ENEMY.global_rotation

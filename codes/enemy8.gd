@@ -25,12 +25,12 @@ extends CharacterBody2D
 	"tag": []
 }
 @export var stats: Dictionary = {
-	"speed": 100,
+	"speed": 80,
 	"jump": -400,
 	"slide": 60,
 	"damage_multiplier": -0.8,
 	"hitbox": Vector2(15.5, 15.5),
-	"air_speed": 100,
+	"air_speed": 80,
 	"damage": 1,
 	"extra_damage": 1,
 	"sprite": "res://assets/placeholders/placeholder_enemy_sword.png",
@@ -54,11 +54,12 @@ extends CharacterBody2D
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _summon_projectile(summon_amount, attack_player: bool):
+	print("summon!")
+	print(summon_amount)
 	for i in range(summon_amount):
 		if not projectile_exists[i]:
 			projectile_exist = true
 			projectile_amount += 1
-			projectile[i].queue_free()
 			projectile[i] = preload("res://scenes/projectile/enemy8_projectile.tscn").instantiate()
 			projectile_exists[i] = true
 			projectile[i].projectile_number = i
@@ -66,6 +67,7 @@ func _summon_projectile(summon_amount, attack_player: bool):
 			projectile[i].get_child(0).scale = Vector2(0.05, 0.05)
 			projectile[i].get_child(0).position = Vector2(0, 0)
 			projectile[i].attack_player = attack_player
+			projectile[i].parent = self
 			for l in range(0, i):
 				projectile[l].rotation_degrees += 360 / summon_amount
 	await get_tree().create_timer(0.2).timeout
@@ -73,9 +75,8 @@ func _summon_projectile(summon_amount, attack_player: bool):
 	if possess_health > 0:
 		_enable_detect_collision()
 func _projectile_erase(projectile_number):
+	print("erased!")
 	projectile[projectile_number]  = preload("res://scenes/misc/empty.tscn").instantiate()
-	projectile_exists[projectile_number] = false
-	projectile_amount -= 1
 	print(projectile_amount)
 func _disable_collision_shape():
 	$DetectionArea/CollisionShape2D.disabled = true
@@ -91,7 +92,7 @@ func _physics_process(delta: float) -> void:
 	if START:
 		match stats.individual:
 			1:
-				position = Vector2(-128, 0)
+				position = Vector2(-192, 0)
 			2:
 				position = Vector2(-504, -76)
 			_:
@@ -151,11 +152,9 @@ func _physics_process(delta: float) -> void:
 	if possess_health == -1:
 		INVINCIBLE = true
 		POSSESSED = true
-		position.x = Autoloads.Autoloads.player_POSITION_X
-		position.y = Autoloads.Autoloads.player_POSITION_Y
 		$EnemyArea/CollisionShape2D.disabled = true
 		$Sprite2D.visible = false
-		if Autoloads.Autoloads.player_POSSESS_STOP:
+		if Autoloads.PLAYER_POSSESS_STOP:
 			_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	if $LeftCollisionCheck.area_entered:
@@ -174,12 +173,15 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
-	parent.call_deferred("reparent", parent_parent)
+	global_position = Autoloads.player.global_position
+	parent.global_position = global_position
+	call_deferred("reparent", parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
 	velocity.x = 0
 	health = 1
+	$Sprite2D.visible = true
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
