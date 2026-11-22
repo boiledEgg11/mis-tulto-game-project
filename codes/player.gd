@@ -793,7 +793,6 @@ func _raid_end():
 	await get_tree().create_timer(0.2).timeout
 	get_parent().call_deferred("_raid_end")
 func _raid(map):
-	print(map)
 	match map:
 		"test_level_4":
 			fixed_camera = true

@@ -1,60 +1,6 @@
 extends StaticBody2D
 var characters: Array = [
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(), 
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	preload("res://scenes/misc/empty.tscn").instantiate(),
-	0
+
 	]
 @onready var enemies
 @onready var enemies_id
@@ -73,13 +19,16 @@ func _read_data(start, level):
 	var enemy_placement = enemy_file.get_as_text()
 	var enemy_id = enemy_ids.get_as_text()
 	var enemy_specie = enemy_species.get_as_text()
+	var characters_array = enemy_file.get_as_text()
 	enemy_ids.close()
 	enemy_file.close()
 	print("working...")
 	enemy_species.close()
+	characters = characters_array.split("\n")
 	enemies_id = enemy_id.split("\n")
 	enemies = enemy_placement.split("\n")
 	enemy_types = enemy_specie.split("\n")
+	Array(characters)
 	if start:
 		_set_enemy(level)
 func _set_enemy(level):
