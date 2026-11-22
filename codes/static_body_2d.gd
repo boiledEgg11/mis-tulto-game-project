@@ -11,6 +11,7 @@ var characters: Array[Node2D]
 @onready var raid_enemy: Array[Node2D]
 @onready var raid_child: Array[Node2D]
 @onready var raid_enemies: Array[bool]
+@onready var raid_target: Array[Node2D]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Autoloads.center = self
@@ -24,10 +25,14 @@ func alive_check(alive):
 func _process(delta: float) -> void:
 	if raid_enemies.all(alive_check) and raid:
 		raid_end()
-	for i in raid_enemy.size():
+	if raid_target.size() >= 1:
+		if is_instance_valid(raid_target[1]):
+			raid_target[1].queue_free()
+			print("erased raid")
+	for i in range(raid_target.size()):
 		if is_instance_valid(raid_enemy[i]):
 			if raid_enemy[i].get_children() != null:
-				print(raid_enemies)
+				print(raid_target)
 			if raid_enemy[i].possessed:
 				raid_enemies[i] = true
 		else:
@@ -106,6 +111,8 @@ func _set_enemy(level):
 			characters[i].global_position = Vector2(-1160, -56)
 			raid_enemy.append(characters[i])
 			raid_enemies.resize(raid_enemy.size())
+			for m in raid_enemy:
+				raid_target = raid_enemy
 func _force_erase():
 	if loaded:
 		for i in range(enemies.size()):
