@@ -247,12 +247,14 @@ func _sprite_change(object, texture):
 					$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_charge_charging.png")
 				"normal":
 					$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_high.png")
-func _raid(map):
+func _raid(map, area):
 	$Camera2D.position_smoothing_enabled = true
 	match map:
 		"test_map_4":
 			print("attack!")
 			_camera_position(-1064, -87, true)
+			await get_tree().create_timer(0.5).timeout
 			$ObjectPlacement._set_enemy("raid_1")
+			$ObjectPlacement._raid_area(area)
 func _raid_end():
 	$Camera2D.position_smoothing_enabled = false

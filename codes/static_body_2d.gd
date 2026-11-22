@@ -12,28 +12,33 @@ var characters: Array[Node2D]
 @onready var raid_child: Array[Node2D]
 @onready var raid_enemies: Array[bool]
 @onready var raid_target: Array[Node2D]
+@onready var current_raid_area: Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Autoloads.center = self
+func _raid_area(area):
+	current_raid_area = area
 func raid_end():
 	raid = false
 	print("win!")
 	raid_enemy.clear()
 	raid_enemies.clear()
+	if current_raid_area != null:
+		current_raid_area.call_deferred("_raid_end")
 func alive_check(alive):
 	return alive == true
 func _process(delta: float) -> void:
-	if raid_enemies.all(alive_check) and raid:
-		raid_end()
-
-	for i in range(raid_target.size()):
-		if is_instance_valid(raid_enemy[i]):
-			if raid_enemy[i].get_children() != null:
-				print(raid_target)
-			if raid_enemy[i].possessed:
+	if raid:
+		if raid_enemies.all(alive_check) and raid:
+			raid_end()
+		for i in range(raid_target.size()):
+			if is_instance_valid(raid_enemy[i]):
+				if raid_enemy[i].possessed:
+					raid_enemies[i] = true
+				if not raid_enemy[i].possessed:
+					raid_enemies[i] = false
+			else:
 				raid_enemies[i] = true
-		else:
-			raid_enemies[i] = true
 func _read_data(start, level):
 	loaded = true
 	var enemy_file = FileAccess.open("res://assets/text/enemy_placement.txt", FileAccess.READ)

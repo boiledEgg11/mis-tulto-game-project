@@ -21,12 +21,14 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("6"):
 		_raid_end()
 func _raid_start():
-	Autoloads.player.call_deferred("_raid", "test_level_4")
+	Autoloads.player.call_deferred("_raid", "test_level_4", self)
+	await get_tree().create_timer(0.5).timeout
+	$Area2D/Sprite2D.visible = false
 func _on_enemy_raid_start_body_entered(body: Node2D) -> void:
 	_raid_start()
 	bar_move_state = 1
 func _raid_end():
 	bar_move_state = 2
-
+	$EnemyRaidStart/CollisionShape2D.disabled = true
 func _on_enemy_raid_start_body_exited(body: Node2D) -> void:
 	Autoloads.player.call_deferred("_raid_end")

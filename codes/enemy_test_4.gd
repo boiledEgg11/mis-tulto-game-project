@@ -49,11 +49,12 @@ func _ready() -> void:
 func _charging():
 	await get_tree().create_timer(1).timeout
 	CHARGING = false
+	print(possess_health)
 	if possess_health > 0:
+		print("shot!")
 		var SHOOT_BULLET = preload("res://scenes/projectile/enemy_projectile.tscn").instantiate()
-		await get_tree().process_frame
-		parent_parent.add_child(SHOOT_BULLET)
-		SHOOT_BULLET.position = position
+		Autoloads.center.add_child(SHOOT_BULLET)
+		SHOOT_BULLET.global_position = global_position
 func _physics_process(delta: float) -> void:
 	if START:
 		match stats.individual:
@@ -122,6 +123,7 @@ func _on_enemy_area_area_entered(area) -> void:
 			possess_health -= 1
 func _possess_stop() -> void:
 	call_deferred("reparent", parent)
+	parent.call_deferred("_possess_end")
 	global_position = Autoloads.player.global_position
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
