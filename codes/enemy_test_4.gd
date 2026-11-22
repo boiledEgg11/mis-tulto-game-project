@@ -144,7 +144,7 @@ func _process(_delta: float) -> void:
 		_possess_stop()
 		print("2")
 	if health <= 0:
-		queue_free()
+		get_parent().call_deferred("_erase")
 	if possess_health == 0:
 		_possess_start()
 func _possess_start():

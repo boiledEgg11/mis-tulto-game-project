@@ -25,10 +25,7 @@ func alive_check(alive):
 func _process(delta: float) -> void:
 	if raid_enemies.all(alive_check) and raid:
 		raid_end()
-	if raid_target.size() >= 1:
-		if is_instance_valid(raid_target[1]):
-			raid_target[1].queue_free()
-			print("erased raid")
+
 	for i in range(raid_target.size()):
 		if is_instance_valid(raid_enemy[i]):
 			if raid_enemy[i].get_children() != null:
