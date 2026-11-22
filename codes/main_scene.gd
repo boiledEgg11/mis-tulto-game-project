@@ -172,10 +172,6 @@ func _process(delta: float) -> void:
 		MAIN = preload("res://scenes/misc/main_game_scene.tscn").instantiate()
 		add_child(MAIN)
 		await get_tree().process_frame
-		await get_tree().process_frame
-		await get_tree().process_frame
-		await get_tree().process_frame
-		await get_tree().process_frame
 		Autoloads.START_TIME = Time.get_ticks_msec()
 		if MODE == "new":
 			var SAVE_SAVE_FILE = FileAccess.open("user://save_file.save", FileAccess.READ)

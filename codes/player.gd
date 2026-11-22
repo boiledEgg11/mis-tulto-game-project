@@ -494,8 +494,6 @@ func _physics_process(delta: float) -> void:
 			await get_tree().create_timer(0.2).timeout
 			INVINCIBLE = false
 	if not Autoloads.PLAYER_POSSESSING:
-		get_parent().call("_camera_position", position.x, position.y, false)
-		
 		get_parent().call("_ability_label", stats.ability_display)
 		$PlayerIndicator.visible = false
 		DASH_LOCK = false
@@ -790,3 +788,15 @@ func _on_extra_attack_body_shape_entered(body_rid: RID, body: Node2D, body_shape
 	if body.is_in_group("tile_breakable"):
 		var tiles = body.get_coords_for_body_rid(body_rid)
 		body.erase_cell(tiles)
+func _raid_end():
+	fixed_camera = false
+	await get_tree().create_timer(0.2).timeout
+	get_parent().call_deferred("_raid_end")
+func _raid(map):
+	print(map)
+	match map:
+		"test_level_4":
+			fixed_camera = true
+			get_parent().call_deferred("_raid", "test_map_4")
+		_:
+			pass

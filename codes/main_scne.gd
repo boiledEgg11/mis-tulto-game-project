@@ -15,8 +15,9 @@ func _reset(file):
 	$Camera2D/BoxContainer/PlayerHealth.value = 10
 	reset = true
 	Autoloads.RESET = true
+	
+	_erase_enemies()
 	$Player.POSSESS_END = true
-	await get_tree().process_frame
 	_load(file)
 	Autoloads.POSSESS_AMOUNT = 0
 	Autoloads.PLAYER_POSSESSING = false
@@ -118,6 +119,7 @@ func _save_update(file):
 		var SAVE_ACCESS_1 = FileAccess.open("user://save_1.save", FileAccess.READ)
 		var SAVE_ACCESS_2 = FileAccess.open("user://save_2.save", FileAccess.READ)
 		var SAVE_ACCESS_3 = FileAccess.open("user://save_3.save", FileAccess.READ)
+		await get_tree().process_frame
 		var DATA_1 = SAVE_ACCESS_1.get_var()
 		var DATA_2 = SAVE_ACCESS_2.get_var()
 		var DATA_3 = SAVE_ACCESS_3.get_var()
@@ -242,3 +244,10 @@ func _sprite_change(object, texture):
 					$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_charge_charging.png")
 				"normal":
 					$Camera2D/BoxContainer/DashRecover.texture_progress = load("res://assets/sprites/dash_bar_high.png")
+func _raid(map):
+	$Camera2D.position_smoothing_enabled = true
+	match map:
+		"test_map_4":
+			_camera_position(-1064, -87, true)
+func _raid_end():
+	$Camera2D.position_smoothing_enabled = false

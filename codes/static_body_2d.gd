@@ -131,20 +131,21 @@ func _set_enemy(level):
 			_:
 				print("missing type...")
 func _erase_enemy():
-	for i in range(enemies.size()):
-		match enemies[i]:
-			"enemy":
-				if is_instance_valid(characters[i]):
-					if characters[i].get_child_count() > 0:
-						if characters[i].get_child(-1, false) != null:
-							if characters[i].get_child(-1, false).possess_health > 0:
-								characters[i].call_deferred("_erase")
-								characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
-			"save":
-				if is_instance_valid(characters[i]):
-					characters[i].call_deferred("_erase")
-					characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
-			"treasure":
-				if is_instance_valid(characters[i]):
-					characters[i].call_deferred("_erase")
-					characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
+	if not enemies == null:
+		for i in range(enemies.size()):
+			match enemies[i]:
+				"enemy":
+					if is_instance_valid(characters[i]):
+						if characters[i].get_child_count() > 0:
+							if characters[i].get_child(-1, false) != null:
+								if characters[i].get_child(-1, false).possess_health > 0:
+									characters[i].call_deferred("_erase")
+									characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
+				"save":
+					if is_instance_valid(characters[i]):
+						characters[i].call_deferred("_erase")
+						characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
+				"treasure":
+					if is_instance_valid(characters[i]):
+						characters[i].call_deferred("_erase")
+						characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()

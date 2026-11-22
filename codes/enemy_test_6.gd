@@ -22,8 +22,8 @@ extends CharacterBody2D
 	"extra_damage": 5,
 	"sprite": "res://assets/placeholders/placeholder_enemy_dash.png",
 	"ability_display": "Dash to target!",
-	"ability": "WhistleDasho",
-	"species": "WhistleDasho",
+	"ability": "WhistleDasher",
+	"species": "WhistleDasher",
 	"tag": [""]
 }
 @export var stats: Dictionary = {
@@ -37,8 +37,8 @@ extends CharacterBody2D
 	"extra_damage": 5,
 	"sprite": "res://assets/placeholders/placeholder_enemy_dash.png",
 	"ability_display": "Dash to target!",
-	"ability": "WhistleDasho",
-	"species": "WhistleDasho",
+	"ability": "WhistleDasher",
+	"species": "WhistleDasher",
 	"tag": [""]
 }
 @export var TARGET_POS: Vector2

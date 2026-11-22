@@ -96,7 +96,6 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 				velocity += get_gravity() * delta / 12
 	if possess_health == -1:
-		print(Autoloads.player.global_position - global_position)
 		INVINCIBLE = true
 		POSSESSED = true
 		$EnemyArea/CollisionShape2D.disabled = true
