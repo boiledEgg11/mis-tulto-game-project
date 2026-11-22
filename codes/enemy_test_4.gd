@@ -62,7 +62,7 @@ func _physics_process(delta: float) -> void:
 			2:
 				position = Vector2(-640, -80)
 			_:
-				position = Vector2i(300, 0)
+				position = Vector2i(0, 0)
 		initial_y = position.y
 		START = false
 	move_and_slide()

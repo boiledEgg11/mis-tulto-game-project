@@ -14,6 +14,7 @@ func _ready():
 func _force_erase():
 	$ObjectPlacement._force_erase()
 func _reset(file):
+	$ObjectPlacement.raid_end()
 	if is_instance_valid(POSSESS_ENEMY):
 		POSSESS_ENEMY.call_deferred("_erase")
 	$Camera2D/BoxContainer/PlayerHealth.value = 10

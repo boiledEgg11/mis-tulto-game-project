@@ -9,22 +9,27 @@ var characters: Array[Node2D]
 @onready var POSSESS_ENEMY: Node2D
 @onready var raid: bool
 @onready var raid_enemy: Array[Node2D]
+@onready var raid_child: Array[Node2D]
 @onready var raid_enemies: Array[bool]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Autoloads.center = self
 func raid_end():
 	raid = false
+	print("win!")
+	raid_enemy.clear()
+	raid_enemies.clear()
 func alive_check(alive):
 	return alive == true
 func _process(delta: float) -> void:
 	if raid_enemies.all(alive_check) and raid:
 		raid_end()
-		print("finish")
 	for i in raid_enemy.size():
 		if is_instance_valid(raid_enemy[i]):
 			if raid_enemy[i].get_children() != null:
-				print("alive")
+				print(raid_enemies)
+			if raid_enemy[i].possessed:
+				raid_enemies[i] = true
 		else:
 			raid_enemies[i] = true
 func _read_data(start, level):

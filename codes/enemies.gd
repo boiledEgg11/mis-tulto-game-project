@@ -1,4 +1,5 @@
 extends Node2D
+@onready var possessed:bool = false
 func _erase():
 	if get_child(0) != null:
 		if get_child(0).name == "Enemy8":
@@ -15,6 +16,10 @@ func _possess_start():
 func _process(delta: float) -> void:
 	if Autoloads.RESET:
 		free()
+	if get_child_count() != 0:
+		if is_instance_valid(get_child(0)):
+			if get_child(0).possess_health == 0:
+				possessed = true
 func _possessed():
 	Autoloads.POSSESS_ENEMY = get_child(0)
 func _individual_set(individual_set):
