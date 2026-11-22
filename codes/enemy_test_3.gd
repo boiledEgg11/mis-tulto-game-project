@@ -74,7 +74,7 @@ func _physics_process(delta: float) -> void:
 			1:
 				position = Vector2(250, 0)
 			_:
-				position = Vector2i(250, 0)
+				position = Vector2i(0, 0)
 		START = false
 	move_and_slide()
 	if possess_health > 0:
@@ -180,7 +180,7 @@ func _process(_delta: float) -> void:
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
 	if health <= 0:
-		queue_free()
+		get_parent().call_deferred("_erase")
 	if possess_health == 0:
 		_possess_start()
 

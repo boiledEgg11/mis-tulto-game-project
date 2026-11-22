@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://bvu1hjeo3t0v0" path="res://codes/test_map_4_layer_2.gd" id="3_dwn7j"]
 [ext_resource type="Script" uid="uid://ccgcy0wx1i8l4" path="res://codes/test_map_4_layer_3.gd" id="4_5l4t0"]
 [ext_resource type="Texture2D" uid="uid://3ig55wdh0jyv" path="res://assets/placeholders/placeholder_bar_sheet.png" id="5_gf7m3"]
+[ext_resource type="Script" uid="uid://bp72iwjvfwoot" path="res://codes/raid_test_1_summon_area.gd" id="6_x1miv"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_g4sj6"]
 resource_local_to_scene = true
@@ -89,6 +90,8 @@ sources/0 = SubResource("TileSetAtlasSource_x1miv")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b5jwi"]
 size = Vector2(288, 162)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_gf7m3"]
+
 [node name="test_level_map_4" type="Node2D" unique_id=1180530083]
 script = ExtResource("1_nr7be")
 
@@ -124,6 +127,16 @@ collision_mask = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyRaidStart" unique_id=222733492]
 shape = SubResource("RectangleShape2D_b5jwi")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=406501617]
+position = Vector2(-1160, -56)
+script = ExtResource("6_x1miv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=394006848]
+shape = SubResource("CircleShape2D_gf7m3")
+debug_color = Color(0.7544041, 0.3510306, 0.7487253, 0.41960785)
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=898897924]
 
 [connection signal="body_entered" from="EnemyRaidStart" to="." method="_on_enemy_raid_start_body_entered"]
 [connection signal="body_exited" from="EnemyRaidStart" to="." method="_on_enemy_raid_start_body_exited"]

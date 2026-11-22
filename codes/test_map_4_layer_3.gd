@@ -14,4 +14,3 @@ func _process(delta: float) -> void:
 		tile_move_value.x = 2
 	if position.x > initial_pos.x + 120:
 		tile_move_value.x = -2
-	

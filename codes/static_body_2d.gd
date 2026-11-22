@@ -9,15 +9,24 @@ var characters: Array[Node2D]
 @onready var POSSESS_ENEMY: Node2D
 @onready var raid: bool
 @onready var raid_enemy: Array[Node2D]
+@onready var raid_enemies: Array[bool]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Autoloads.center = self
+func raid_end():
+	raid = false
+func alive_check(alive):
+	return alive == true
 func _process(delta: float) -> void:
-	for i in raid_enemy:
-		if is_instance_valid(i):
-			if i.get_child(get_child_count() - 1) != null:
-				if i.get_child(0).health <= 0 or i.get_child(0).possess_health <= 0:
-					print("win!")
+	if raid_enemies.all(alive_check) and raid:
+		raid_end()
+		print("finish")
+	for i in raid_enemy.size():
+		if is_instance_valid(raid_enemy[i]):
+			if raid_enemy[i].get_children() != null:
+				print("alive")
+		else:
+			raid_enemies[i] = true
 func _read_data(start, level):
 	loaded = true
 	var enemy_file = FileAccess.open("res://assets/text/enemy_placement.txt", FileAccess.READ)
@@ -89,8 +98,9 @@ func _set_enemy(level):
 			_:
 				print("missing type...")
 		if raid:
-			characters[i].global_position = Autoloads.player.global_position
+			characters[i].global_position = Vector2(-1160, -56)
 			raid_enemy.append(characters[i])
+			raid_enemies.resize(raid_enemy.size())
 func _force_erase():
 	if loaded:
 		for i in range(enemies.size()):
@@ -101,15 +111,12 @@ func _force_erase():
 						if characters[i].get_child_count() > 0:
 							if characters[i].get_child(-1, false) != null:
 									characters[i].call_deferred("_erase")
-									characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
 				"save":
 					if is_instance_valid(characters[i]):
 						characters[i].call_deferred("_erase")
-						characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
 				"treasure":
 					if is_instance_valid(characters[i]):
 						characters[i].call_deferred("_erase")
-						characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
 		if is_instance_valid(POSSESS_ENEMY):
 						if POSSESS_ENEMY.get_child_count() > 0:
 							if POSSESS_ENEMY.get_child(-1, false) != null:
@@ -126,15 +133,12 @@ func _erase_enemy():
 							if characters[i].get_child(-1, false) != null:
 								if characters[i].get_child(-1, false).possess_health > 0:
 									characters[i].call_deferred("_erase")
-									characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
 				"save":
 					if is_instance_valid(characters[i]):
 						characters[i].call_deferred("_erase")
-						characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
 				"treasure":
 					if is_instance_valid(characters[i]):
 						characters[i].call_deferred("_erase")
-						characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
 		if is_instance_valid(POSSESS_ENEMY):
 			print("erased!")
 			if POSSESS_ENEMY.get_child_count() > 0:
