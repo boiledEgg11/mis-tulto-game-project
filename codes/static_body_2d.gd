@@ -7,11 +7,17 @@ var characters: Array[Node2D]
 @onready var current_enemy_amount
 @onready var loaded: bool = false
 @onready var POSSESS_ENEMY: Node2D
+@onready var raid: bool
+@onready var raid_enemy: Array[Node2D]
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Autoloads.center = self
 func _process(delta: float) -> void:
-	pass
+	for i in raid_enemy:
+		if is_instance_valid(i):
+			if i.get_child(get_child_count() - 1) != null:
+				if i.get_child(0).health <= 0 or i.get_child(0).possess_health <= 0:
+					print("win!")
 func _read_data(start, level):
 	loaded = true
 	var enemy_file = FileAccess.open("res://assets/text/enemy_placement.txt", FileAccess.READ)
@@ -31,6 +37,7 @@ func _read_data(start, level):
 	if start:
 		_set_enemy(level)
 func _set_enemy(level):
+	raid = false
 	match  level:
 		0:
 			file_start_point = 0
@@ -40,6 +47,9 @@ func _set_enemy(level):
 			file_start_point = 23
 		3:
 			file_start_point = 29
+		"raid_1":
+			raid = true
+			file_start_point = 34
 	for i in range(file_start_point, enemy_types.size()):
 		if enemy_types[i] == "_stop" or enemy_types[i] == null:
 			break
@@ -78,6 +88,9 @@ func _set_enemy(level):
 				characters[i].call("_placement", enemies_id[i])
 			_:
 				print("missing type...")
+		if raid:
+			characters[i].global_position = Autoloads.player.global_position
+			raid_enemy.append(characters[i])
 func _force_erase():
 	if loaded:
 		for i in range(enemies.size()):

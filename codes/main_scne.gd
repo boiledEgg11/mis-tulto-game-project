@@ -250,6 +250,8 @@ func _raid(map):
 	$Camera2D.position_smoothing_enabled = true
 	match map:
 		"test_map_4":
+			print("attack!")
 			_camera_position(-1064, -87, true)
+			$ObjectPlacement._set_enemy("raid_1")
 func _raid_end():
 	$Camera2D.position_smoothing_enabled = false

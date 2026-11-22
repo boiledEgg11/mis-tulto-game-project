@@ -9,13 +9,17 @@ func _ready() -> void:
 			Autoloads.tiles.append(i)
 func _process(delta: float) -> void:
 	if bar_move_state == 1:
+		if $TileMapLayer4.position.y >= 0:
+			bar_move_state = 0
+			return
 		$TileMapLayer4.position.y += 4
-		if $TileMapLayer4.position.y == 0:
-			bar_move_state = 0
 	if bar_move_state == 2:
-		$TileMapLayer4.position.y -= 4
-		if $TileMapLayer4.position.y == -80:
+		if $TileMapLayer4.position.y <=-80:
 			bar_move_state = 0
+			return
+		$TileMapLayer4.position.y -= 4
+	if Input.is_action_just_pressed("6"):
+		_raid_end()
 func _raid_start():
 	Autoloads.player.call_deferred("_raid", "test_level_4")
 func _on_enemy_raid_start_body_entered(body: Node2D) -> void:
