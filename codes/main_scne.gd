@@ -11,17 +11,18 @@ var health_value: int
 var count_format = "x %s"
 func _ready():
 	_reset(Autoloads.LAST_LOADED)
+func _force_erase():
+	$ObjectPlacement._force_erase()
 func _reset(file):
+	if is_instance_valid(POSSESS_ENEMY):
+		POSSESS_ENEMY.call_deferred("_erase")
 	$Camera2D/BoxContainer/PlayerHealth.value = 10
 	reset = true
-	Autoloads.RESET = true
-	
-	_erase_enemies()
+	_force_erase()
 	$Player.POSSESS_END = true
 	_load(file)
 	Autoloads.POSSESS_AMOUNT = 0
 	Autoloads.PLAYER_POSSESSING = false
-	Autoloads.RESET = false
 	$ObjectPlacement.call_deferred("_read_data", false, null)
 	print(Autoloads.PLAYER_POSSESSING)
 	Autoloads.PLAYER_POSSESSING = false
@@ -86,6 +87,7 @@ func _enemy_set():
 		if Autoloads.ENEMY_POSSESS.species != null and not Autoloads.ENEMY_POSSESS.species == "none":
 			POSSESS_ENEMY.call("_individual_set", Autoloads.ENEMY_POSSESS.individual)
 			POSSESS_ENEMY.call("_possess_start")
+			$ObjectPlacement.call_deferred("_possess_enemy_set", POSSESS_ENEMY)
 func _set_data():
 	$ObjectPlacement._read_data(false, -1)
 func _on_texture_button_pressed() -> void:

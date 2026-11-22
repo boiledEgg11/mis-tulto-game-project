@@ -1,34 +1,33 @@
 extends StaticBody2D
-var characters: Array = [
-
-	]
+var characters: Array[Node2D]
 @onready var enemies
 @onready var enemies_id
 @onready var enemy_types
 @onready var file_start_point: int
 @onready var current_enemy_amount
+@onready var loaded: bool = false
+@onready var POSSESS_ENEMY: Node2D
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Autoloads.center = self
 func _process(delta: float) -> void:
 	pass
 func _read_data(start, level):
+	loaded = true
 	var enemy_file = FileAccess.open("res://assets/text/enemy_placement.txt", FileAccess.READ)
 	var enemy_ids = FileAccess.open("res://assets/text/character_ids.txt", FileAccess.READ)
 	var enemy_species = FileAccess.open("res://assets/text/enemy_type.txt", FileAccess.READ)
 	var enemy_placement = enemy_file.get_as_text()
 	var enemy_id = enemy_ids.get_as_text()
 	var enemy_specie = enemy_species.get_as_text()
-	var characters_array = enemy_file.get_as_text()
 	enemy_ids.close()
 	enemy_file.close()
 	print("working...")
 	enemy_species.close()
-	characters = characters_array.split("\n")
 	enemies_id = enemy_id.split("\n")
 	enemies = enemy_placement.split("\n")
 	enemy_types = enemy_specie.split("\n")
-	Array(characters)
+	characters.resize(enemies.size())
 	if start:
 		_set_enemy(level)
 func _set_enemy(level):
@@ -79,12 +78,37 @@ func _set_enemy(level):
 				characters[i].call("_placement", enemies_id[i])
 			_:
 				print("missing type...")
-func _erase_enemy():
-	if not enemies == null:
+func _force_erase():
+	if loaded:
 		for i in range(enemies.size()):
 			match enemies[i]:
 				"enemy":
+					print(typeof(characters[i]))
 					if is_instance_valid(characters[i]):
+						if characters[i].get_child_count() > 0:
+							if characters[i].get_child(-1, false) != null:
+									characters[i].call_deferred("_erase")
+									characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
+				"save":
+					if is_instance_valid(characters[i]):
+						characters[i].call_deferred("_erase")
+						characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
+				"treasure":
+					if is_instance_valid(characters[i]):
+						characters[i].call_deferred("_erase")
+						characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
+		if is_instance_valid(POSSESS_ENEMY):
+						if POSSESS_ENEMY.get_child_count() > 0:
+							if POSSESS_ENEMY.get_child(-1, false) != null:
+								POSSESS_ENEMY.call_deferred("_erase")
+func _erase_enemy():
+	if loaded:
+		for i in range(enemies.size()):
+			match enemies[i]:
+				"enemy":
+					print(typeof(characters[i]))
+					if is_instance_valid(characters[i]):
+						print("erased!")
 						if characters[i].get_child_count() > 0:
 							if characters[i].get_child(-1, false) != null:
 								if characters[i].get_child(-1, false).possess_health > 0:
@@ -98,3 +122,11 @@ func _erase_enemy():
 					if is_instance_valid(characters[i]):
 						characters[i].call_deferred("_erase")
 						characters[i] = preload("res://scenes/misc/empty.tscn").instantiate()
+		if is_instance_valid(POSSESS_ENEMY):
+			print("erased!")
+			if POSSESS_ENEMY.get_child_count() > 0:
+					if POSSESS_ENEMY.get_child(-1, false) != null:
+						if POSSESS_ENEMY.get_child(-1, false).possess_health > 0:
+								POSSESS_ENEMY.call_deferred("_erase")
+func _possess_enemy_set(enemy):
+	POSSESS_ENEMY = enemy
