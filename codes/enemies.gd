@@ -1,7 +1,7 @@
 extends Node2D
 @onready var possessed:bool = false
 func _erase():
-	if get_child(0) != null:
+	if get_child_count() != 0:
 		if get_child(0).name == "Enemy8":
 			for i in 5:
 				if get_child(0).projectile[i].name == "Enemy8_projectile":
@@ -22,6 +22,8 @@ func _process(delta: float) -> void:
 				possessed = true
 func _possessed():
 	Autoloads.POSSESS_ENEMY = get_child(0)
+func _possess_end():
+	possessed = false
 func _individual_set(individual_set):
 	get_child(0).stats.individual = individual_set
 	get_child(0).START = true

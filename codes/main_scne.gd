@@ -8,16 +8,16 @@ var POSSESS_ENEMY: Node2D
 var SAVE_READY = true
 var dash_recover_value: int
 var health_value: int
+@onready var designated_position_player:Vector2
 var count_format = "x %s"
 func _ready():
 	_reset(Autoloads.LAST_LOADED)
 func _force_erase():
 	$ObjectPlacement._force_erase()
 func _reset(file):
-	$ObjectPlacement.raid_end()
+	$Player/Player_Shape.set_deferred("disabled", true)
 	if is_instance_valid(POSSESS_ENEMY):
 		POSSESS_ENEMY.call_deferred("_erase")
-	$Camera2D/BoxContainer/PlayerHealth.value = 10
 	reset = true
 	_force_erase()
 	$Player.POSSESS_END = true
@@ -44,27 +44,39 @@ func _load(file):
 		"test_2":
 			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(360, -8)
+			designated_position_player = Vector2(360, -8)
 		"test_3":
 			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(1048, -56)
+			designated_position_player = Vector2(1048, -56)
 		"test_4":
 			$Player._change_map("test_level_map_2", -1)
 			$Player.position = Vector2i(-24, 24)
+			designated_position_player = Vector2(-24, 24)
 		"test_5":
 			$Player._change_map("test_level_map_2", -1)
 			$Player.position = Vector2i(-1050, 24)
+			designated_position_player = Vector2(-1050, 24)
 		"test_6":
 			$Player._change_map("test_level_map_3", -1)
 			$Player.position = Vector2(-8, 24)
+			designated_position_player = Vector2(-8, 24)
 		"test_7":
 			$Player._change_map("test_level_map_4", -1)
 			$Player.position = Vector2(0, -24)
+			designated_position_player = Vector2(0, -24)
 		"test_8":
 			$Player._change_map("test_level_map_4", -1)
 			$Player.position = Vector2(-864, -40)
+			designated_position_player = Vector2(-864, -40)
 		_:
 			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(0, 0)
+			designated_position_player = Vector2(0, 0)
+	await get_tree().process_frame
+	$Player/Player_Shape.disabled = false
+	$Player._raid_end()
+	$ObjectPlacement.raid = false
 func _enemy_set():
 	if Autoloads.ENEMY_POSSESS.species and Autoloads.ENEMY_POSSESS.species != "Tulto":
 		match Autoloads.ENEMY_POSSESS.species:

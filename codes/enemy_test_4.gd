@@ -135,6 +135,8 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
+	if not is_instance_valid(parent):
+		queue_free()
 	if direction == 1:
 		$Sprite2D.flip_h = false
 	if direction == -1:
@@ -146,7 +148,7 @@ func _process(_delta: float) -> void:
 		_possess_stop()
 		print("2")
 	if health <= 0:
-		get_parent().call_deferred("_erase")
+		parent.call_deferred("_erase")
 	if possess_health == 0:
 		_possess_start()
 func _possess_start():

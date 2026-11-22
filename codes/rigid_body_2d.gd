@@ -24,7 +24,7 @@ extends CharacterBody2D
 	"ability_display": "None",
 	"ability": "Slimy",
 	"species": "Slimy",
-	"tag": [""]
+	"tag": ["no_recover_usage"]
 }
 @export var stats: Dictionary = {
 	"speed": 60,
@@ -130,7 +130,7 @@ func _process(_delta: float) -> void:
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
 	if health <= 0:
-		queue_free()
+		parent.call_deferred("_erase")
 	if possess_health == 0:
 		_possess_start()
 func _possess_start():
