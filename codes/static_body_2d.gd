@@ -92,6 +92,8 @@ func _set_enemy(level):
 				characters[i] = preload("res://scenes/enemy/enemy7.tscn").instantiate()
 			"enemy_8":
 				characters[i] = preload("res://scenes/enemy/enemy8.tscn").instantiate()
+			"enemy_9":
+				characters[i] = preload("res://scenes/enemy/enemy9.tscn").instantiate()
 			"save":
 				characters[i] = preload("res://scenes/misc/save.tscn").instantiate()
 			"treasure":

@@ -96,6 +96,8 @@ func _enemy_set():
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy7.tscn").instantiate()
 			"BladeShooter":
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy8.tscn").instantiate()
+			"BigSlimy":
+				POSSESS_ENEMY = preload("res://scenes/enemy/enemy9.tscn").instantiate()
 		add_child.call_deferred(POSSESS_ENEMY)
 		if Autoloads.ENEMY_POSSESS.species != null and not Autoloads.ENEMY_POSSESS.species == "none":
 			POSSESS_ENEMY.call("_individual_set", Autoloads.ENEMY_POSSESS.individual)
