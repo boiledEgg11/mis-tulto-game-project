@@ -22,6 +22,7 @@ extends CharacterBody2D
 @onready var wait_time: float = 0
 @onready var waiting: bool = false
 @onready var after_wait: bool = false
+@onready var no_stomp: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -83,7 +84,7 @@ func _physics_process(delta: float) -> void:
 			if cooldown > 24:
 				charge_attack = true
 				cooldown = 0
-		if charge_attack:
+		if charge_attack and not defeated:
 			charge += 0.1
 			if charge > 3:
 				_attack()
@@ -164,8 +165,8 @@ func _possess_stop() -> void:
 	defeated = true
 	POSSESSED = false
 	global_position = Autoloads.player.global_position
-	parent.global_position = global_position
 	if is_instance_valid(parent):
+		parent.global_position = global_position
 		print("reparented!")
 		call_deferred("reparent", parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
@@ -213,7 +214,7 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	pass
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
-		if not defeated and not drop:
+		if not defeated and not drop and not no_stomp:
 			call_deferred("_stomp_attack", velocity.x)
 		if drop:
 			drop = false
@@ -238,3 +239,7 @@ func _stomp_attack(speed):
 	attack_2.global_position = global_position + Vector2(0, 6)
 	attack_1.call_deferred("_summon", -1, possess_health, speed)
 	attack_2.call_deferred("_summon", 1, possess_health, speed)
+func _stomp_stop():
+	no_stomp = true
+func _stomp_start():
+	no_stomp = false

@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://cbydwgkygjh0b"]
+
+[ext_resource type="Script" uid="uid://cvl74kkvb4q3a" path="res://codes/enemy_9_stomp_strong.gd" id="1_ke8ta"]
+[ext_resource type="Script" uid="uid://20j62isbq6sa" path="res://codes/enemy9_stomp_strong.gd" id="2_kb8ff"]
+[ext_resource type="Texture2D" uid="uid://dxqtb26qyms4a" path="res://assets/sprites/eneny9_stomp_strong.png" id="3_ke8ta"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bvb3s"]
+radius = 2.5
+height = 10.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_yfgym"]
+radius = 0.01
+
+[node name="enemy9_stomp_strong" type="Node2D" unique_id=676397928]
+script = ExtResource("1_ke8ta")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1163163195]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("2_kb8ff")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=543668529]
+texture = ExtResource("3_ke8ta")
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D" unique_id=1461310788 groups=["damage"]]
+collision_layer = 59
+collision_mask = 59
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D" unique_id=64571141]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_bvb3s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1065138734]
+shape = SubResource("CircleShape2D_yfgym")

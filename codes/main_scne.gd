@@ -29,6 +29,8 @@ func _reset(file):
 	_enemy_set()
 	$Player.POSSESS_START = true
 	$Player.velocity = Vector2(0, 0)
+	$Player.DASH_LOCK = false
+	$Player.ABILITY_LOCK = false
 	$Camera2D/BoxContainer/DashRecover.value = 30
 	$Camera2D/BoxContainer/PlayerHealth.value = 10
 func _erase_enemies():

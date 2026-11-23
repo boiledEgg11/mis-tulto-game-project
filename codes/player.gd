@@ -123,6 +123,7 @@ func _shoot():
 	owner.add_child(SHOOT_BULLET)
 	SHOOT_BULLET.position = position
 func _big_slimy_ability():
+	INVINCIBLE = true
 	DASH_LOCK = true
 	CHARGE = 0
 	TARGET_POS = get_local_mouse_position()
@@ -134,6 +135,7 @@ func _ability_use(ability):
 		get_parent().call("_dash_recover", 0, true)
 	match ability:
 		"BigSlimy":
+			Autoloads.POSSESS_ENEMY.call_deferred("_stomp_stop")
 			call_deferred("_big_slimy_ability")
 		"BladeShooter":
 			if Autoloads.POSSESS_ENEMY.projectile_amount < 3:
@@ -241,10 +243,17 @@ func _physics_process(delta: float) -> void:
 		match stats.species:
 			"BigSlimy":
 				if ABILITY_LOCK:
+					$AttackCollision/CollisionShape2D.disabled = false
 					_gravity(3, delta)
 					if is_on_floor():
+						Autoloads.POSSESS_ENEMY.call_deferred("_huge_stomp", velocity.x)
 						ABILITY_LOCK = false
 						DASH_LOCK = false
+						await get_tree().process_frame
+						await  get_tree().process_frame
+						Autoloads.POSSESS_ENEMY.call_deferred("_stomp_start")
+						$AttackCollision/CollisionShape2D.disabled = true
+						INVINCIBLE = false
 				if DASH_LOCK:
 					CHARGE += 0.1
 					if CHARGE > 3:
