@@ -23,6 +23,7 @@ extends CharacterBody2D
 @onready var waiting: bool = false
 @onready var after_wait: bool = false
 @onready var no_stomp: bool = false
+@onready var knockback: int = 0
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -79,6 +80,9 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if defeated:
+			velocity.x = move_toward(velocity.x, 0, 10)
+			velocity += get_gravity() * 1.5 * delta
 		if not attacking or not charge_attack:
 			cooldown += 0.1
 			if cooldown > 24:
@@ -140,26 +144,30 @@ func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 			position.x -= 6 * direction
 		else:
 			direction *= -1
-func _on_enemy_area_area_entered(area) -> void:
-	if not INVINCIBLE and not defeated:
-		if area.is_in_group("player_damaging"):
-			health -= 1
-		if area.name == "PlayerProjectile":
-			health -= 1
-		if area.name == "AttackCollision":
-			health -= 1
-		if area.name == "ExtraAttack":
-			health -= 5
+func _on_enemy_area_area_entered(area:Node2D) -> void:
 	if not INVINCIBLE:
+		if not defeated:
+			if area.is_in_group("player_damaging"):
+				health -= 1
+			if area.name == "PlayerProjectile":
+				health -= 1
+			if area.name == "AttackCollision":
+				health -= 1
+			if area.name == "ExtraAttack":
+				health -= 5
 		if area.name == "PossessArea":
 			if defeated:
 				possess_health -= 1
 			else:
 				health -= 1
-	if health <= 0 and not defeated:
-		defeated = true
-		$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_stun.png")
-		velocity = Vector2(0, 0)
+		if area.global_position > global_position:
+			knockback = -1
+		else:
+			knockback = 1
+		if health <= 0 and not defeated:
+			defeated = true
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_stun.png")
+			velocity = Vector2(300 * knockback, -500)
 func _possess_stop() -> void:
 	print("possess stop")
 	defeated = true
