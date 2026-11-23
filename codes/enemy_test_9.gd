@@ -190,11 +190,20 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	pass
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
-		if drop:
-			drop = false
-			call_deferred("_stomp_attack", velocity.x)
 		if not defeated and not drop:
 			call_deferred("_stomp_attack", velocity.x)
+		if drop:
+			drop = false
+			call_deferred("_huge_stomp", velocity.x)
+func _huge_stomp(speed):
+	var attack_1: Node2D = preload("res://scenes/projectile/enemy9_stomp_strong.tscn").instantiate()
+	var attack_2:Node2D = preload("res://scenes/projectile/enemy9_stomp_strong.tscn").instantiate()
+	Autoloads.center.add_child(attack_1)
+	Autoloads.center.add_child(attack_2)
+	attack_1.global_position = global_position + Vector2(0, 6)
+	attack_2.global_position = global_position + Vector2(0, 6)
+	attack_1.call_deferred("_summon", -1, possess_health, speed)
+	attack_2.call_deferred("_summon", 1, possess_health, speed)
 func _stomp_attack(speed):
 	var attack_1: Node2D = preload("res://scenes/projectile/enemy9_stomp.tscn").instantiate()
 	var attack_2:Node2D = preload("res://scenes/projectile/enemy9_stomp.tscn").instantiate()
