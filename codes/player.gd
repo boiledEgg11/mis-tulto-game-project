@@ -66,6 +66,20 @@ extends CharacterBody2D
 @export var initial_y: int
 @export var map_changable = 120
 @export var fixed_camera = false
+func _gravity(multiplier: float, value: float):
+	velocity += get_gravity() * value * multiplier
+func _movement(value: float, facing: int, air: bool):
+	if air:
+		velocity.x = facing  * stats.air_speed * value
+	else:
+		velocity.x = facing * stats.speed * value
+func _jump(value: float):
+	velocity.y = stats.jump * value
+func _facing(facing: int):
+	if facing > 0:
+		$Sprite2D.flip_h = false
+	if facing < 0:
+		$Sprite2D.flip_h = true
 func _ready() -> void:
 	Autoloads.player = self
 	MAP = preload("res://scenes/tile_map/test_level_map.tscn").instantiate()
@@ -134,12 +148,12 @@ func _ability_use(ability):
 			_shoot()
 		"Bouncer":
 			if is_on_floor():
-				velocity.y = stats.jump * 2
+				_jump(2)
 			else:
 				if Input.is_action_pressed("down"):
-					velocity.y = stats.jump * -4
+					_jump(-4)
 				else:
-					velocity.y = stats.jump * 1.5
+					_jump(1.5)
 		"Pyrofighto":
 			ABILITY_LOCK = true
 			$ExtraAttack/CollisionShape2D.disabled = false
@@ -223,10 +237,7 @@ func _physics_process(delta: float) -> void:
 		match stats.species:
 			"BladeShooter":
 				direction = Input.get_axis("left", "right")
-				if direction > 0:
-					$Sprite2D.flip_h = false
-				if direction < 0:
-					$Sprite2D.flip_h = true
+				_facing(direction)
 				if not is_on_floor():
 					stats.slide = 0
 					stats.damage_multiplier = -1.2
@@ -235,17 +246,17 @@ func _physics_process(delta: float) -> void:
 					stats.damage_multiplier = -1
 				if not is_on_floor():
 					if Input.is_action_pressed("down"):
-						velocity += get_gravity() * delta * 2.5
+						_gravity(2.5, delta)
 					else:
-						velocity += get_gravity() * delta * 1.5
+						_gravity(1.5, delta)
 				if is_on_floor():
 					if Input.is_action_just_pressed("up"):
-						velocity.y = stats.jump
+						_jump(1)
 				if direction:
 					if not is_on_floor():
-						velocity.x = direction * stats.air_speed
+						_movement(1, direction, true)
 					if is_on_floor():
-						velocity.x = direction * stats.speed
+						_movement(1, direction, false)
 				if not direction:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
@@ -259,7 +270,7 @@ func _physics_process(delta: float) -> void:
 				else:
 					stats.slide = 45
 				if not is_on_floor():
-					velocity += get_gravity() * delta * 2.5
+					_gravity(2.5, delta)
 				if not Input.is_action_pressed("space"):
 					DASH_LOCK = true
 					if get_parent().call("_get_dash_recover_value") >= 60:
@@ -270,10 +281,7 @@ func _physics_process(delta: float) -> void:
 					DASH_LOCK = false
 			"Bouncer":
 				direction = Input.get_axis("left", "right")
-				if direction > 0:
-					$Sprite2D.flip_h = false
-				if direction < 0:
-					$Sprite2D.flip_h = true
+				_facing(direction)
 				if not is_on_floor():
 					stats.slide = 0
 					stats.damage_multiplier = -1.2
@@ -282,21 +290,21 @@ func _physics_process(delta: float) -> void:
 					stats.damage_multiplier = -1
 				if not is_on_floor():
 					if Input.is_action_pressed("down"):
-						velocity += get_gravity() * delta * 2.5
+						_gravity(2.5, delta)
 					else:
-						velocity += get_gravity() * delta * 1.5
+						_gravity(1.5, delta)
 				if is_on_floor():
 					if Input.is_action_just_pressed("up") and CHARGE > 7:
 						CHARGE = 0
-						velocity.y = stats.jump
+						_jump(1)
 					CHARGE += 1
 				if direction:
 					if not is_on_floor():
 						CHARGE = 0
-						velocity.x = direction * stats.air_speed
+						_movement(1, direction, true)
 					if is_on_floor():
 						if CHARGE > 15:
-							velocity.y = stats.jump
+							_jump(1)
 						velocity.x = 0
 				if not direction:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
@@ -310,9 +318,9 @@ func _physics_process(delta: float) -> void:
 					stats.damage_multiplier = -1
 				if not is_on_floor() and not Input.is_action_pressed("space"):
 					if Input.is_action_pressed("down"):
-						velocity += get_gravity() * delta * 1.5
+						_gravity(1.5, delta)
 					else:
-						velocity += get_gravity() * delta / 5
+						_gravity(0.2, delta)
 				if $groundchecker.is_colliding():
 					CHARGE = 0
 				if not Input.is_action_pressed("space"):
@@ -335,21 +343,18 @@ func _physics_process(delta: float) -> void:
 					DASH_LOCK = false
 				direction = Input.get_axis("left", "right")
 				if not MOVE_LOCK or not ABILITY_LOCK:
-					if direction > 0:
-						$Sprite2D.flip_h = false
-					if direction < 0:
-						$Sprite2D.flip_h = true
+					_facing(direction)
 					if Input.is_action_just_pressed("up") and not Input.is_action_pressed("space"):
 						if is_on_floor():
-							velocity.y = stats.jump / 2
+							_jump(0.5)
 						else:
 							if $groundchecker.is_colliding():
-								velocity.y = stats.jump / 4 
+								_jump(0.25)
 					if direction:
 						if is_on_floor():
-							velocity.x = direction * stats.speed * SPEED_MULTIPLIER
+							_movement(SPEED_MULTIPLIER, direction, false)
 						if not is_on_floor():
-							velocity.x = direction * stats.air_speed * SPEED_MULTIPLIER
+							_movement(SPEED_MULTIPLIER, direction, true)
 					else:
 						velocity.x = move_toward(velocity.x, 0, stats.slide)
 						direction = 0
@@ -383,26 +388,23 @@ func _physics_process(delta: float) -> void:
 					await get_tree().create_timer(0.6).timeout
 					HAS_TARGET = 0
 				if not MOVE_LOCK:
-					if direction > 0:
-						$Sprite2D.flip_h = false
-					if direction < 0:
-						$Sprite2D.flip_h = true
+					_facing(direction)
 					direction = Input.get_axis("left", "right")
 					if direction and HAS_TARGET == 0:
 						if is_on_floor():
-							velocity.x = direction * stats.speed * SPEED_MULTIPLIER
+							_movement(SPEED_MULTIPLIER, direction, false)
 						if not is_on_floor():
-							velocity.x = direction * stats.air_speed * SPEED_MULTIPLIER
+							_movement(SPEED_MULTIPLIER, direction, true)
 					else:
 						velocity.x = move_toward(velocity.x, 0, stats.slide)
 						direction = 0
 					if ($groundchecker.is_colliding() or is_on_floor()) and Input.is_action_pressed("up"):
-						velocity.y = stats.jump / 4
+						_jump(0.25)
 					if not is_on_floor():
 						if Input.is_action_pressed("down"):
-							velocity.y = stats.jump * -1
+							_jump(-1)
 						if not $groundchecker.is_colliding():
-							velocity += get_gravity() * delta
+							_gravity(1, delta)
 						else:
 							velocity.y = move_toward(velocity.y, 0, 30)
 			"Pyrofighto":
@@ -416,9 +418,9 @@ func _physics_process(delta: float) -> void:
 					stats.damage_multiplier = -1
 				if not is_on_floor():
 					if Input.is_action_pressed("down"):
-						velocity += get_gravity() * delta * 2.5
+						_gravity(2.5, delta)
 					else:
-						velocity += get_gravity() * delta * 1.5
+						_gravity(1.5, delta)
 				if Input.is_action_just_pressed("space"):
 					_charge_blink()
 				if not Input.is_action_pressed("space"):
@@ -433,19 +435,16 @@ func _physics_process(delta: float) -> void:
 					DASH_LOCK = false
 				direction = Input.get_axis("left", "right")
 				if not MOVE_LOCK or not ABILITY_LOCK:
-					if direction > 0:
-						$Sprite2D.flip_h = false
-					if direction < 0:
-						$Sprite2D.flip_h = true
+					_facing(direction)
 					if is_on_floor():
 						if Input.is_action_just_pressed("up"):
 							velocity.x = 0
-							velocity.y = stats.jump
+							_jump(1)
 					if direction:
 						if is_on_floor():
-							velocity.x = direction * stats.speed * SPEED_MULTIPLIER
+							_movement(SPEED_MULTIPLIER, direction, false)
 						if not is_on_floor():
-							velocity.x = direction * stats.air_speed * SPEED_MULTIPLIER
+							_movement(SPEED_MULTIPLIER, direction, true)
 					else:
 						velocity.x = move_toward(velocity.x, 0, stats.slide)
 						direction = 0
@@ -453,10 +452,7 @@ func _physics_process(delta: float) -> void:
 						velocity.x = move_toward(velocity.x, 0, stats.slide)
 			_:
 				direction = Input.get_axis("left", "right")
-				if direction > 0:
-					$Sprite2D.flip_h = false
-				if direction < 0:
-					$Sprite2D.flip_h = true
+				_facing(direction)
 				if not is_on_floor():
 					stats.slide = 2
 					stats.damage_multiplier = -1.2
@@ -465,18 +461,18 @@ func _physics_process(delta: float) -> void:
 					stats.damage_multiplier = -1
 				if not is_on_floor():
 					if Input.is_action_pressed("down"):
-						velocity += get_gravity() * delta * 2.5
+						_gravity(2.5, delta)
 					else:
-						velocity += get_gravity() * delta * 1.5
+						_gravity(1.5, delta)
 				if is_on_floor():
 					if Input.is_action_just_pressed("up"):
 						velocity.x = 0
-						velocity.y = stats.jump
+						_jump(1)
 				if direction and not Input.is_action_pressed("space"):
 					if is_on_floor():
-						velocity.x = direction * stats.speed * SPEED_MULTIPLIER
+						_movement(SPEED_MULTIPLIER, direction, false)
 					if not is_on_floor():
-						velocity.x = direction * stats.air_speed * SPEED_MULTIPLIER
+						_movement(SPEED_MULTIPLIER, direction, true)
 				else:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
@@ -503,10 +499,7 @@ func _physics_process(delta: float) -> void:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
 		if not DASH_MOVE:
 			direction = Input.get_axis("left", "right")
-			if direction > 0:
-				$Sprite2D.flip_h = false
-			if direction < 0:
-				$Sprite2D.flip_h = true
+			_facing(direction)
 			if not is_on_floor():
 				stats.slide = 2
 				stats.damage_multiplier = -1.2
@@ -519,9 +512,9 @@ func _physics_process(delta: float) -> void:
 					stats.damage_multiplier = -1
 			if not is_on_floor():
 				if Input.is_action_pressed("down"):
-					velocity += get_gravity() * delta * 2.5
+					_gravity(2.5, delta)
 				else:
-					velocity += get_gravity() * delta * 1.5
+					_gravity(1.5, delta)
 			if not TEXTURE_LOCK:
 				if direction and not CROUCH:
 					if not ANIMATION_MOVED:
@@ -560,13 +553,13 @@ func _physics_process(delta: float) -> void:
 					if not CROUCH_BLOCK:
 						CROUCH = false
 				if Input.is_action_just_pressed("up"):
-					velocity.y = stats.jump
+					_jump(1)
 			DASH_Y_CHANGE = Input.get_axis("up", "down")
 			if direction:
 				if is_on_floor():
-					velocity.x = direction * stats.speed * SPEED_MULTIPLIER
+					_movement(SPEED_MULTIPLIER, direction, false)
 				if not is_on_floor():
-					velocity.x = direction * stats.air_speed * SPEED_MULTIPLIER
+					_movement(SPEED_MULTIPLIER, direction, true)
 			if not direction:
 				velocity.x = move_toward(velocity.x, 0, stats.slide)
 				direction = 0
@@ -611,7 +604,7 @@ func _physics_process(delta: float) -> void:
 						await get_tree().create_timer(0.01).timeout
 						INVINCIBLE_HOLD = true
 						ATTACK_COLLISION = true
-						velocity.x = stats.speed * DASH_DIRECTION * 6
+						_movement(6, DASH_DIRECTION, false)
 						$PossessArea/PossessShape.disabled = true
 						await get_tree().create_timer(0.1).timeout
 					else:

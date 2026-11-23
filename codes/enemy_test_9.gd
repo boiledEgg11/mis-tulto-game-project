@@ -83,7 +83,7 @@ func _physics_process(delta: float) -> void:
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
-				velocity += get_gravity() * delta * 1.5
+			velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
 		INVINCIBLE = true
 		POSSESSED = true
@@ -126,6 +126,7 @@ func _possess_stop() -> void:
 	global_position = Autoloads.player.global_position
 	parent.global_position = global_position
 	if is_instance_valid(parent):
+		print("reparented!")
 		call_deferred("reparent", parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
