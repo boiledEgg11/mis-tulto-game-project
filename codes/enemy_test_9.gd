@@ -79,8 +79,6 @@ func _physics_process(delta: float) -> void:
 		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
-	if defeated:
-		velocity = Vector2(0, 0)
 	if possess_health == -1:
 		INVINCIBLE = true
 		POSSESSED = true
@@ -111,6 +109,9 @@ func _on_enemy_area_area_entered(area) -> void:
 				possess_health -= 1
 			else:
 				health -= 1
+	if health <= 0:
+		defeated = true
+		velocity = Vector2(0, 0)
 func _possess_stop() -> void:
 	defeated = true
 	global_position = Autoloads.player.global_position
@@ -118,7 +119,7 @@ func _possess_stop() -> void:
 	if is_instance_valid(parent):
 		call_deferred("reparent", parent)
 	else:
-		call_deferred("reaparent", Autoloads.center)
+		call_deferred("reparent", Autoloads.center)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
@@ -129,6 +130,7 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
+	print(get_parent().get_parent())
 	if defeated:
 		defeat_time += 0.1
 	if defeat_time > 24:
@@ -148,8 +150,6 @@ func _process(_delta: float) -> void:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:
 		_possess_stop()
-	if health <= 0:
-		defeated = true
 	if possess_health == 0:
 		_possess_start()
 func _possess_start():
