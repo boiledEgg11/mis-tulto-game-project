@@ -124,9 +124,7 @@ func _force_erase():
 				"enemy":
 					print(typeof(characters[i]))
 					if is_instance_valid(characters[i]):
-						if characters[i].get_child_count() > 0:
-							if characters[i].get_child(-1, false) != null:
-									characters[i].call_deferred("_erase")
+						characters[i].call_deferred("_erase")
 				"save":
 					if is_instance_valid(characters[i]):
 						characters[i].call_deferred("_erase")

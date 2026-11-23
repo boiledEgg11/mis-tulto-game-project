@@ -17,17 +17,15 @@ func _force_erase():
 func _reset(file):
 	$Player/Player_Shape.set_deferred("disabled", true)
 	if is_instance_valid(POSSESS_ENEMY):
-		POSSESS_ENEMY.call_deferred("_erase")
+		POSSESS_ENEMY.call_deferred("queue_free")
 	reset = true
 	_force_erase()
-	$Player.POSSESS_END = true
+	await get_tree().process_frame
 	_load(file)
 	Autoloads.POSSESS_AMOUNT = 0
 	Autoloads.PLAYER_POSSESSING = false
 	$ObjectPlacement.call_deferred("_read_data", false, null)
-	print(Autoloads.PLAYER_POSSESSING)
 	Autoloads.PLAYER_POSSESSING = false
-	$Player.POSSESS_END = false
 	_enemy_set()
 	$Player.POSSESS_START = true
 	$Player.velocity = Vector2(0, 0)

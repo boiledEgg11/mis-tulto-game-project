@@ -128,7 +128,7 @@ func _ability_use(ability):
 		get_parent().call("_dash_recover", 0, true)
 	match ability:
 		"BigSlimy":
-			Autoloads.POSSESS_ENEMY.call_deferred("_stomp_attack")
+			Autoloads.POSSESS_ENEMY.call_deferred("_stomp_attack", velocity.x)
 		"BladeShooter":
 			if Autoloads.POSSESS_ENEMY.projectile_amount < 3:
 				print(Autoloads.POSSESS_ENEMY.projectile_amount)
@@ -235,6 +235,36 @@ func _physics_process(delta: float) -> void:
 			if Input.is_action_just_pressed("space") and get_parent().call("_get_dash_recover_value") == 60:
 				_ability_use(stats.ability)
 		match stats.species:
+			"BigSlimy":
+				direction = Input.get_axis("left", "right")
+				_facing(direction)
+				if not is_on_floor():
+					stats.slide = 0
+					stats.damage_multiplier = -1.2
+				else:
+					stats.slide = 30
+					stats.damage_multiplier = -1
+				if not is_on_floor():
+					if Input.is_action_pressed("down"):
+						_gravity(2.5, delta)
+					else:
+						_gravity(1.5, delta)
+				if is_on_floor():
+					if Input.is_action_just_pressed("up") and CHARGE > 7:
+						CHARGE = 0
+						_jump(1)
+					CHARGE += 1
+				if direction:
+					if not is_on_floor():
+						CHARGE = 0
+						_movement(1, direction, true)
+					if is_on_floor():
+						if CHARGE > 15:
+							_jump(0.5)
+						velocity.x = 0
+				if not direction:
+					velocity.x = move_toward(velocity.x, 0, stats.slide)
+					direction = 0
 			"BladeShooter":
 				direction = Input.get_axis("left", "right")
 				_facing(direction)

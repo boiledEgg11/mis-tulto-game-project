@@ -85,6 +85,7 @@ func _physics_process(delta: float) -> void:
 		if not is_on_floor():
 			velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
+		global_position = Autoloads.player.global_position
 		INVINCIBLE = true
 		POSSESSED = true
 		$EnemyArea/CollisionShape2D.disabled = true
@@ -133,6 +134,7 @@ func _possess_stop() -> void:
 	velocity.y = -100
 	velocity.x = 0
 	health = 1
+	$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_stun.png")
 	$Sprite2D.visible = true
 	defeated = true
 	await get_tree().create_timer(1).timeout
@@ -164,7 +166,6 @@ func _possess_start():
 	Autoloads.player.stats = stats
 	possess_health = -1
 	Autoloads.PLAYER_POSSESSING = true
-	global_position = Autoloads.player.global_position
 	velocity = Vector2(0, 0)
 	defeated = false
 	defeat_time = 0
@@ -173,13 +174,13 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	pass
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
-		call_deferred("_stomp_attack")
-func _stomp_attack():
+		call_deferred("_stomp_attack", velocity.x)
+func _stomp_attack(speed):
 	var attack_1: Node2D = preload("res://scenes/projectile/enemy9_stomp.tscn").instantiate()
 	var attack_2:Node2D = preload("res://scenes/projectile/enemy9_stomp.tscn").instantiate()
 	Autoloads.center.add_child(attack_1)
 	Autoloads.center.add_child(attack_2)
 	attack_1.global_position = global_position + Vector2(0, 6)
 	attack_2.global_position = global_position + Vector2(0, 6)
-	attack_1.call_deferred("_summon", -1, possess_health)
-	attack_2.call_deferred("_summon", 1, possess_health)
+	attack_1.call_deferred("_summon", -1, possess_health, speed)
+	attack_2.call_deferred("_summon", 1, possess_health, speed)
