@@ -123,7 +123,11 @@ func _shoot():
 	owner.add_child(SHOOT_BULLET)
 	SHOOT_BULLET.position = position
 func _big_slimy_ability():
-	pass
+	DASH_LOCK = true
+	CHARGE = 0
+	TARGET_POS = get_local_mouse_position()
+	velocity.x = TARGET_POS.x * 2
+	velocity.y = -200
 func _ability_use(ability):
 	print(ability)
 	if stats.tag.has("no_recover_usage"):
@@ -236,35 +240,48 @@ func _physics_process(delta: float) -> void:
 				_ability_use(stats.ability)
 		match stats.species:
 			"BigSlimy":
-				direction = Input.get_axis("left", "right")
-				_facing(direction)
-				if not is_on_floor():
-					stats.slide = 0
-					stats.damage_multiplier = -1.2
-				else:
-					stats.slide = 30
-					stats.damage_multiplier = -1
-				if not is_on_floor():
-					if Input.is_action_pressed("down"):
-						_gravity(2.5, delta)
-					else:
-						_gravity(1.5, delta)
-				if is_on_floor():
-					if Input.is_action_just_pressed("up") and CHARGE > 7:
-						CHARGE = 0
-						_jump(1)
-					CHARGE += 1
-				if direction:
-					if not is_on_floor():
-						CHARGE = 0
-						_movement(1, direction, true)
+				if ABILITY_LOCK:
+					_gravity(3, delta)
 					if is_on_floor():
-						if CHARGE > 15:
-							_jump(0.5)
-						velocity.x = 0
-				if not direction:
-					velocity.x = move_toward(velocity.x, 0, stats.slide)
-					direction = 0
+						ABILITY_LOCK = false
+						DASH_LOCK = false
+				if DASH_LOCK:
+					CHARGE += 0.1
+					if CHARGE > 3:
+						velocity = Vector2(0, 0)
+					if CHARGE > 3.7:
+						CHARGE = 0
+						ABILITY_LOCK = true
+				if not DASH_LOCK:
+					direction = Input.get_axis("left", "right")
+					_facing(direction)
+					if not is_on_floor():
+						stats.slide = 0
+						stats.damage_multiplier = -1.2
+					else:
+						stats.slide = 30
+						stats.damage_multiplier = -1
+					if not is_on_floor():
+						if Input.is_action_pressed("down"):
+							_gravity(2.5, delta)
+						else:
+							_gravity(1.5, delta)
+					if is_on_floor():
+						if Input.is_action_just_pressed("up") and CHARGE > 7:
+							CHARGE = 0
+							_jump(1)
+						CHARGE += 1
+					if direction:
+						if not is_on_floor():
+							CHARGE = 0
+							_movement(1, direction, true)
+						if is_on_floor():
+							if CHARGE > 15:
+								_jump(0.5)
+							velocity.x = 0
+					if not direction:
+						velocity.x = move_toward(velocity.x, 0, stats.slide)
+						direction = 0
 			"BladeShooter":
 				direction = Input.get_axis("left", "right")
 				_facing(direction)
