@@ -2,6 +2,7 @@ extends Node2D
 @onready var possessed:bool = false
 func _erase():
 	if get_child_count() != 0:
+		get_child(0).queue_free()
 		if get_child(0).name == "Enemy8":
 			for i in 5:
 				if get_child(0).projectile[i].name == "Enemy8_projectile":
@@ -14,8 +15,6 @@ func _possess_start():
 	get_child(0).possess_health = 0
 	get_child(0).call_deferred("_possess_start")
 func _process(delta: float) -> void:
-	if Autoloads.RESET:
-		free()
 	if get_child_count() != 0:
 		if is_instance_valid(get_child(0)):
 			if get_child(0).possess_health == 0:

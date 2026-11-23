@@ -1,6 +1,6 @@
 extends CharacterBody2D
 @export var direction: int = -1
-@export var health: int = 10
+@export var health: int = 20
 @export var possess_health: int = 1
 @export var START: bool = false
 @export var INVINCIBLE: bool = false
@@ -13,6 +13,9 @@ extends CharacterBody2D
 @onready var defeated: bool = false
 @export var ground_exist: bool = true
 @export var defeat_time: float = 0
+@export var cooldown: float = 0
+@export var charge_attack: bool = false
+@export var target_position: Vector2
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -33,16 +36,20 @@ extends CharacterBody2D
 	"jump": -400,
 	"slide": 60,
 	"damage_multiplier": -0.6,
-	"hitbox": Vector2(15.5, 15.5),
+	"hitbox": Vector2(23.5, 23.5),
 	"air_speed": 60,
 	"damage": 1,
 	"extra_damage": 5,
-	"sprite": "res://assets/placeholders/placeholder_enemy.png",
-	"ability_display": "None",
+	"sprite": "res://assets/placeholders/placeholder_enemy_big.png",
+	"ability_display": "JumpDrop!",
 	"ability": "BigSlimy",
 	"species": "BigSlimy",
 	"tag": []
 }
+func _attack():
+	charge_attack = false
+	cooldown = 0
+	print("yayyyy")
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
@@ -60,7 +67,19 @@ func _physics_process(delta: float) -> void:
 				position = Vector2i(0, 0)
 		START = false
 	move_and_slide()
-	if possess_health > 0 and not defeated:
+	if possess_health > 0:
+		if cooldown <= 24:
+			cooldown += 0.1
+		else:
+			cooldown = 0
+			charge_attack = true
+			velocity.x = 0
+		if charge_attack:
+			print("charging...")
+			charge += 0.1
+			if charge >= 12:
+				target_position = Autoloads.player.global_position - Vector2(0, 50)
+				_attack()
 		if not ground_exist:
 			direction *= -1
 			ground_exist = true
@@ -70,11 +89,12 @@ func _physics_process(delta: float) -> void:
 				position.x += Autoloads.tile_move
 			if standing.is_in_group("moving_tile_y") and Autoloads.is_moving:
 				@warning_ignore("integer_division")
-				position.y -= Autoloads.tile_move / 2
+				position.y -= Autoloads.tile_move / 2 
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		velocity.x = direction * stats.speed
+		if not defeated and not charge_attack:
+				velocity.x = direction * stats.speed
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
@@ -94,7 +114,7 @@ func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 		else:
 			direction *= -1
 func _on_enemy_area_area_entered(area) -> void:
-	if not INVINCIBLE:
+	if not INVINCIBLE and not defeated:
 		if area.is_in_group("player_damaging"):
 			health -= 1
 		if area.name == "PlayerProjectile":
@@ -104,22 +124,24 @@ func _on_enemy_area_area_entered(area) -> void:
 			health -= 1
 		if area.name == "ExtraAttack":
 			health -= 5
+	if not INVINCIBLE:
 		if area.name == "PossessArea":
 			if defeated:
 				possess_health -= 1
 			else:
 				health -= 1
-	if health <= 0:
+	if health <= 0 and not defeated:
 		defeated = true
+		$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_stun.png")
 		velocity = Vector2(0, 0)
 func _possess_stop() -> void:
+	print("possess stop")
 	defeated = true
+	POSSESSED = false
 	global_position = Autoloads.player.global_position
 	parent.global_position = global_position
 	if is_instance_valid(parent):
 		call_deferred("reparent", parent)
-	else:
-		call_deferred("reparent", Autoloads.center)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
@@ -130,7 +152,6 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
-	print(get_parent().get_parent())
 	if defeated:
 		defeat_time += 0.1
 	if defeat_time > 24:
@@ -138,7 +159,7 @@ func _process(_delta: float) -> void:
 			parent.call_deferred("_erase")
 		else:
 			call_deferred("queue_free")
-	$LeftCollisionCheck.position.x = 8 * direction
+	$LeftCollisionCheck.position.x = 12 * direction
 	$GroundExistingChecker.position.x = 9 * direction
 	if direction == 1:
 		$Sprite2D.flip_h = false
@@ -167,8 +188,6 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	if stats.individual == 3:
 		if body.is_in_group("tile") and is_on_floor():
 				ground_exist = false
-
-
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if stats.individual == 3:
 		if body.is_in_group("tile") and is_on_floor():
