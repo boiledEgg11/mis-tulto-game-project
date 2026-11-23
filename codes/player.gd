@@ -113,6 +113,8 @@ func _ability_use(ability):
 	if stats.tag.has("no_recover_usage"):
 		get_parent().call("_dash_recover", 0, true)
 	match ability:
+		"BigSlimy":
+			Autoloads.POSSESS_ENEMY.call_deferred("_stomp_attack")
 		"BladeShooter":
 			if Autoloads.POSSESS_ENEMY.projectile_amount < 3:
 				print(Autoloads.POSSESS_ENEMY.projectile_amount)
@@ -792,10 +794,10 @@ func _raid_end():
 	fixed_camera = false
 	await get_tree().create_timer(0.2).timeout
 	get_parent().call_deferred("_raid_end")
-func _raid(map):
+func _raid(map, area):
 	match map:
 		"test_level_4":
 			fixed_camera = true
-			get_parent().call_deferred("_raid", "test_map_4")
+			get_parent().call_deferred("_raid", "test_map_4", area)
 		_:
 			pass

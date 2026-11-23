@@ -1,6 +1,6 @@
 extends CharacterBody2D
 @export var direction: int = -1
-@export var health: int = 20
+@export var health: int = 10
 @export var possess_health: int = 1
 @export var START: bool = false
 @export var INVINCIBLE: bool = false
@@ -180,5 +180,5 @@ func _stomp_attack():
 	Autoloads.center.add_child(attack_2)
 	attack_1.global_position = global_position + Vector2(0, 6)
 	attack_2.global_position = global_position + Vector2(0, 6)
-	attack_1.call_deferred("_summon", -1)
-	attack_2.call_deferred("_summon", 1)
+	attack_1.call_deferred("_summon", -1, possess_health)
+	attack_2.call_deferred("_summon", 1, possess_health)
