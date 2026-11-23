@@ -59,6 +59,7 @@ func _attack():
 	velocity.x = target_position.x * -2
 	velocity.y = -200
 	print(velocity.y)
+	cooldown = 0
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
@@ -67,22 +68,32 @@ func _physics_process(delta: float) -> void:
 	if START:
 		match stats.individual:
 			1:
-				print("yay")
 				position = Vector2(98, 0)
 			2:
 				position = Vector2(-20, 0)
 			3:
 				position = Vector2i(-208, 24)
 			_:
-				print("none")
 				position = Vector2i(0, 0)
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if not attacking or not charge_attack:
+			cooldown += 0.1
+			if cooldown > 24:
+				charge_attack = true
+				cooldown = 0
+		if charge_attack:
+			charge += 0.1
+			if charge > 3:
+				_attack()
+				charge_attack = false
+				charge = 0
 		if wait_time > 0:
 			wait_time -= 0.1
 			if wait_time <= 0:
 				waiting = false
+				cooldown = 0
 		if attacking:
 			attack_time += 0.1
 			if attack_time > 3 and not after_wait and not waiting:
@@ -97,7 +108,7 @@ func _physics_process(delta: float) -> void:
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		if not (defeated or attacking or drop or waiting):
+		if not (defeated or attacking or drop or waiting or charge_attack):
 			if not is_on_floor():
 				velocity.x = direction * stats.air_speed * 1.5
 			if is_on_floor():
@@ -134,7 +145,6 @@ func _on_enemy_area_area_entered(area) -> void:
 			health -= 1
 		if area.name == "PlayerProjectile":
 			health -= 1
-			print("hit!")
 		if area.name == "AttackCollision":
 			health -= 1
 		if area.name == "ExtraAttack":

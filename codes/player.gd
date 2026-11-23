@@ -122,19 +122,19 @@ func _shoot():
 	var SHOOT_BULLET = preload("res://scenes/projectile/player_projectile.tscn").instantiate()
 	owner.add_child(SHOOT_BULLET)
 	SHOOT_BULLET.position = position
+func _big_slimy_ability():
+	pass
 func _ability_use(ability):
 	print(ability)
 	if stats.tag.has("no_recover_usage"):
 		get_parent().call("_dash_recover", 0, true)
 	match ability:
 		"BigSlimy":
-			Autoloads.POSSESS_ENEMY.call_deferred("_stomp_attack", velocity.x)
+			call_deferred("_big_slimy_ability")
 		"BladeShooter":
 			if Autoloads.POSSESS_ENEMY.projectile_amount < 3:
-				print(Autoloads.POSSESS_ENEMY.projectile_amount)
 				Autoloads.POSSESS_ENEMY.call_deferred("_summon_projectile", 3, false)
 			else:
-				print("shoot!")
 				Autoloads.POSSESS_ENEMY.call_deferred("_call_fly",get_global_mouse_position())
 				get_parent().call("_dash_recover", 30, true)
 		"Crystaline":
