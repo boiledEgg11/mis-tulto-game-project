@@ -18,7 +18,10 @@ extends CharacterBody2D
 @export var target_position: Vector2
 @export var destination: Vector2
 @export var attack_time:float = 0.0
-@onready var drop = false
+@onready var drop: bool = false
+@onready var wait_time: float = 0
+@onready var waiting: bool = false
+@onready var after_wait: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -50,10 +53,12 @@ extends CharacterBody2D
 	"tag": []
 }
 func _attack():
+	after_wait = false
 	target_position = global_position - Autoloads.player.global_position
 	attacking = true
 	velocity.x = target_position.x * -2
-	velocity.y = -10000 / abs(target_position.x)
+	velocity.y = -200
+	print(velocity.y)
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
@@ -74,17 +79,25 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if wait_time > 0:
+			wait_time -= 0.1
+			if wait_time <= 0:
+				waiting = false
 		if attacking:
 			attack_time += 0.1
-			if attack_time > 3:
+			if attack_time > 3 and not after_wait and not waiting:
+				waiting = true
+				wait_time = 0.7
+				velocity = Vector2(0, 0)
+				after_wait = true
+			if attack_time > 3 and not waiting and wait_time <= 0:
 				attacking = false
 				attack_time = 0
 				drop = true
-				velocity = Vector2(0, 0)
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		if not defeated and not attacking and not drop:
+		if not (defeated or attacking or drop or waiting):
 			if not is_on_floor():
 				velocity.x = direction * stats.air_speed * 1.5
 			if is_on_floor():
@@ -95,7 +108,7 @@ func _physics_process(delta: float) -> void:
 					velocity.y = -150
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
-		if not is_on_floor() and not attacking:
+		if not (is_on_floor() or attacking or waiting):
 			if drop:
 				velocity += get_gravity() * delta * 2.5
 			else:
@@ -195,6 +208,8 @@ func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 		if drop:
 			drop = false
 			call_deferred("_huge_stomp", velocity.x)
+			waiting = true
+			wait_time = 5
 func _huge_stomp(speed):
 	var attack_1: Node2D = preload("res://scenes/projectile/enemy9_stomp_strong.tscn").instantiate()
 	var attack_2:Node2D = preload("res://scenes/projectile/enemy9_stomp_strong.tscn").instantiate()

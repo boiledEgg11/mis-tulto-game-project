@@ -137,7 +137,7 @@ func _on_right_collision_check_body_entered(_body: Node2D) -> void:
 			velocity.y = -300
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
-		if area.is_in_group("player_damaging") and charge == 0:
+		if area.is_in_group("player_damaging") and area != $Area2D:
 			health -= 1
 		if area.name == "PlayerProjectile":
 			health -= 1
@@ -150,6 +150,8 @@ func _on_enemy_area_area_entered(area) -> void:
 			player_colliding = area.get_parent()
 func _possess_stop() -> void:
 	call_deferred("reparent", parent)
+	if is_instance_valid(parent):
+		parent.call_deferred("_possess_end")
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
