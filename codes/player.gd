@@ -11,6 +11,7 @@ extends CharacterBody2D
 @export var ANIMATION_MOVED = false
 @export var CROUCH_BLOCK = false
 @export var INVINCIBLE = false
+@onready var KNOCKBACK_DURATION: float = 0
 @export var INVINCIBLE_HOLD = false
 @export var DEF_stats: Dictionary = {
 	"speed": 120,
@@ -69,10 +70,11 @@ extends CharacterBody2D
 func _gravity(multiplier: float, value: float):
 	velocity += get_gravity() * value * multiplier
 func _movement(value: float, facing: int, air: bool):
-	if air:
-		velocity.x = facing  * stats.air_speed * value
-	else:
-		velocity.x = facing * stats.speed * value
+	if KNOCKBACK_DURATION <= 0:
+		if air:
+			velocity.x = facing  * stats.air_speed * value
+		else:
+			velocity.x = facing * stats.speed * value
 func _jump(value: float):
 	velocity.y = stats.jump * value
 func _facing(facing: int):
@@ -100,20 +102,24 @@ func _dash_hold_stop():
 		INVINCIBLE = false
 		$AnimatedSprite2D.visible = true
 		$Sprite2D.visible = false
-func _health_process(DAMAGE) -> void:
+func _health_process(DAMAGE, knockback, way) -> void:
 	if not INVINCIBLE:
 		if not CROUCH:
 			TEXTURE_LOCK = true
 		if DAMAGE > 0:
 			if not Autoloads.PLAYER_POSSESSING and not CROUCH:
 				$AnimatedSprite2D.play("hurt")
+			if knockback:
+				velocity = Vector2(100 * way, -200)
+				KNOCKBACK_DURATION = 2
+				print("knockbacked!")
 			get_parent().call("_player_health", DAMAGE * stats.damage_multiplier, false)
 		if get_parent().call("_get_player_health") <= 0:
 			_death()
 		INVINCIBLE = true
 		await get_tree().create_timer(0.2).timeout
 		TEXTURE_LOCK = false
-		await get_tree().create_timer(1.8).timeout
+		await get_tree().create_timer(0.8).timeout
 		INVINCIBLE = false
 func _death():
 	get_parent().call("_player_health", 10, true)
@@ -185,6 +191,8 @@ func _physics_process(delta: float) -> void:
 			INVINCIBLE = true
 			DASH_LOCK = true
 			ATTACK_COLLISION = true
+	if KNOCKBACK_DURATION > 0:
+		KNOCKBACK_DURATION -= 0.1
 	if not TEXTURE_LOCK and not Autoloads.PLAYER_POSSESSING:
 		$Sprite2D.visible = false
 		$AnimatedSprite2D.visible = true
@@ -287,7 +295,8 @@ func _physics_process(delta: float) -> void:
 						if is_on_floor():
 							if CHARGE > 15:
 								_jump(0.5)
-							velocity.x = 0
+							if KNOCKBACK_DURATION <= 0:
+								velocity.x = 0
 					if not direction:
 						velocity.x = move_toward(velocity.x, 0, stats.slide)
 						direction = 0
@@ -494,7 +503,6 @@ func _physics_process(delta: float) -> void:
 					_facing(direction)
 					if is_on_floor():
 						if Input.is_action_just_pressed("up"):
-							velocity.x = 0
 							_jump(1)
 					if direction:
 						if is_on_floor():
@@ -522,7 +530,6 @@ func _physics_process(delta: float) -> void:
 						_gravity(1.5, delta)
 				if is_on_floor():
 					if Input.is_action_just_pressed("up"):
-						velocity.x = 0
 						_jump(1)
 				if direction and not Input.is_action_pressed("space"):
 					if is_on_floor():
@@ -723,14 +730,18 @@ func _on_crouch_test_area_body_entered(body) -> void:
 		CROUCH_BLOCK = true
 func _on_damage_collision_area_entered(area) -> void:
 	if area.is_in_group("damage"):
+		var knockback: int
 		ENEMY_COLLISION = true
 		if not INVINCIBLE:
-			velocity.y = -200
-		if area.is_in_group("damage_2"):
-			INVINCIBLE = false
-			_health_process(5)
-		else:
-			_health_process(1)
+			if area.global_position > global_position:
+				knockback = -1
+			else:
+				knockback = 1
+			if area.is_in_group("damage_2"):
+				INVINCIBLE = false
+				_health_process(5, true, knockback)
+			else:
+				_health_process(1, true, knockback)
 		print("damaged!")
 func _on_damage_collision_area_exited(area) -> void:
 	if area.is_in_group("damage"):
