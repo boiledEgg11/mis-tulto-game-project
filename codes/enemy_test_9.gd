@@ -16,6 +16,8 @@ extends CharacterBody2D
 @export var cooldown: float = 0
 @export var charge_attack: bool = false
 @export var target_position: Vector2
+@export var destination: Vector2
+@export var attack_time:float = 0.0
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -47,9 +49,10 @@ extends CharacterBody2D
 	"tag": []
 }
 func _attack():
+	attacking = true
 	charge_attack = false
 	cooldown = 0
-	print("yayyyy")
+	velocity = target_position.normalized() * -190
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _physics_process(delta: float) -> void:
@@ -78,8 +81,15 @@ func _physics_process(delta: float) -> void:
 			print("charging...")
 			charge += 0.1
 			if charge >= 12:
-				target_position = Autoloads.player.global_position - Vector2(0, 50)
+				target_position = global_position - Autoloads.player.global_position
+				if target_position.y > -24 and target_position.y < 24:
+					print(target_position)
+					target_position += Vector2(0, 50)
 				_attack()
+		if attacking:
+			attack_time += 0.1
+			if attack_time > 6:
+				attacking = false
 		if not ground_exist:
 			direction *= -1
 			ground_exist = true
@@ -93,11 +103,11 @@ func _physics_process(delta: float) -> void:
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		if not defeated and not charge_attack:
+		if not defeated and not charge_attack and not attacking:
 				velocity.x = direction * stats.speed
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
-		if not is_on_floor():
+		if not is_on_floor() and not attacking:
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
 		INVINCIBLE = true
