@@ -11,7 +11,8 @@ func _save(enemy, file, player):
 		"enemy": player.stats.species,
 		"enemy_id": player.stats.individual,
 		"play_time": Autoloads.play_time,
-		"treasure": Autoloads.FOUND_TREASURE
+		"treasure": Autoloads.FOUND_TREASURE,
+		"progression_stage": Progressions.progression
 	}
 	_save_game(file)
 func _placement(placement):

@@ -21,7 +21,12 @@ var SAVE_DEFAULT: Dictionary = {
 	"enemy": "Tulto",
 	"enemy_id": 0,
 	"play_time": 0,
-	"treasure": [false, false, false, false, false]
+	"treasure": [false, false, false, false, false],
+	"progression_stage": {
+		"Introduction": false,
+		"map_1_box": false,
+		"raid_1": false
+	}
 }
 func _ready() -> void:
 	if not FileAccess.file_exists("user://save_empty.save"):
@@ -110,15 +115,15 @@ func _ready() -> void:
 	$Control/SaveFiles/SaveFile3/Control/Label3.text = DATA_3.enemy
 @warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
-	if DATA_1.play_time == 0 and DATA_1.enemy == "none" and DATA_1.place == "none" and DATA_2.enemy_id == 0:
+	if DATA_1.play_time == 0 and DATA_1.enemy == "Tulto" and DATA_1.place == "none" and DATA_2.enemy_id == 0:
 		file_new.file_1 = true
 	else:
 		file_new.file_1 = false
-	if DATA_2.play_time == 0 and DATA_2.enemy == "none" and DATA_2.place == "none" and DATA_2.enemy_id == 0:
+	if DATA_2.play_time == 0 and DATA_2.enemy == "Tulto" and DATA_2.place == "none" and DATA_2.enemy_id == 0:
 		file_new.file_2 = true
 	else:
 		file_new.file_2 = false
-	if DATA_3.play_time == 0 and DATA_3.enemy == "none" and DATA_3.place == "none" and DATA_3.enemy_id == 0:
+	if DATA_3.play_time == 0 and DATA_3.enemy == "Tulto" and DATA_3.place == "none" and DATA_3.enemy_id == 0:
 		file_new.file_3 = true
 	else:
 		file_new.file_3 = false

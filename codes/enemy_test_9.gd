@@ -164,10 +164,16 @@ func _on_enemy_area_area_entered(area:Node2D) -> void:
 			knockback = -1
 		else:
 			knockback = 1
+		if defeated:
+			if area.name == "ExtraAttack":
+				defeat_time += 30
+			else:
+				defeat_time += 6
 		if health <= 0 and not defeated:
 			defeated = true
 			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_stun.png")
 			velocity = Vector2(300 * knockback, -500)
+			$EnemyArea.remove_from_group("damage")
 func _possess_stop() -> void:
 	print("possess stop")
 	defeated = true
@@ -175,7 +181,6 @@ func _possess_stop() -> void:
 	global_position = Autoloads.player.global_position
 	if is_instance_valid(parent):
 		parent.global_position = global_position
-		print("reparented!")
 		call_deferred("reparent", parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
@@ -185,6 +190,7 @@ func _possess_stop() -> void:
 	$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_stun.png")
 	$Sprite2D.visible = true
 	defeated = true
+	$EnemyArea.remove_from_group("damage")
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:

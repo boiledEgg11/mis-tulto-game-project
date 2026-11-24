@@ -240,6 +240,7 @@ func _physics_process(delta: float) -> void:
 			$Sprite2D.texture = load(stats.sprite)
 			POSSESS_START = false
 			$PlayerIndicator.visible = true
+			$GroundExistingChecker.position = Vector2(0, stats.hitbox.y / 2 + 0.5)
 		$PlayerIndicator.position = Vector2i(0, stats.hitbox.y / -2 - (stats.hitbox.y / 1.5))
 		$Player_Shape.shape.size = Vector2(stats.hitbox.x, stats.hitbox.y)
 		$PossessArea/PossessShape.disabled = true
