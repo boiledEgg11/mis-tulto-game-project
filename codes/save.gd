@@ -5,7 +5,6 @@ func _erase():
 	queue_free()
 	print(global_position)
 func _save(enemy, file, player):
-	print("saved!")
 	Autoloads.SAVE_STUFF = {
 		"place": location,
 		"enemy": player.stats.species,

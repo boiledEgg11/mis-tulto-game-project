@@ -278,7 +278,7 @@ func _raid(map, area):
 			print("attack!")
 			_camera_position(312, -28, true)
 			await get_tree().create_timer(0.5).timeout
-			$ObjectPlacement._set_enemy("raid_1")
+			$ObjectPlacement._set_enemy("raid_2")
 			$ObjectPlacement._raid_area(area)
 func _raid_end():
 	$Camera2D.position_smoothing_enabled = false

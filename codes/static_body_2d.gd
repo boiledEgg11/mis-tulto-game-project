@@ -122,6 +122,7 @@ func _set_enemy(level):
 					characters[i].global_position = Vector2(-1160, -56)
 				"raid_2":
 					characters[i].global_position = Vector2(416, 0)
+					print(characters[i])
 			raid_enemy.append(characters[i])
 			raid_enemies.resize(raid_enemy.size())
 			for m in raid_enemy:

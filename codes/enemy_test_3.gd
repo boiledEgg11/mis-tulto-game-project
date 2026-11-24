@@ -187,10 +187,10 @@ func _process(_delta: float) -> void:
 		_possess_start()
 
 func _on_player_detection_area_body_entered(body: Node2D) -> void:
-	if body.position.x > position.x:
-		direction = -1
-	if body.position.x < position.x:
+	if body.global_position.x > global_position.x:
 		direction = 1
+	if body.global_position.x < global_position.x:
+		direction = -1
 	attacking = true
 func _possess_start():
 	get_parent().call_deferred("_possessed")
