@@ -40,12 +40,12 @@ extends CharacterBody2D
 	"tag": ["no_recover_usage"]
 }
 @export var stats: Dictionary = {
-	"speed": 60,
+	"speed": 75,
 	"jump": -400,
 	"slide": 60,
 	"damage_multiplier": -0.6,
 	"hitbox": Vector2(23.5, 23.5),
-	"air_speed": 60,
+	"air_speed": 75,
 	"damage": 1,
 	"extra_damage": 5,
 	"sprite": "res://assets/placeholders/placeholder_enemy_big.png",

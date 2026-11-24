@@ -18,11 +18,10 @@ func _process(delta: float) -> void:
 			bar_move_state = 0
 			return
 		$TileMapLayer4.position.y -= 4
-	if Input.is_action_just_pressed("6"):
-		_raid_end()
 	if Progressions.progression.raid_1:
 		if not $EnemyRaidStart/CollisionShape2D.disabled:
 			$EnemyRaidStart/CollisionShape2D.disabled = true
+			$Area2D/Sprite2D.visible = false
 func _raid_start():
 	Autoloads.player.call_deferred("_raid", "test_level_4", self)
 	await get_tree().create_timer(0.5).timeout

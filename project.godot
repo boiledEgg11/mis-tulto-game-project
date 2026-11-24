@@ -19,6 +19,7 @@ config/icon="uid://dwbhkpngynbx1"
 [autoload]
 
 Autoloads="*uid://r5d8jl1g67yx"
+Progressions="*uid://cymowlipehihq"
 
 [display]
 
