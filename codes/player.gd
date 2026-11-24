@@ -6,6 +6,7 @@ extends CharacterBody2D
 @export var DASH_Y_CHANGE = 0
 @export var CROUCH = false
 @export var DASH_DIRECTION = 0
+@export var parent: Node2D
 @export var DASH_MOVE = false
 @export var POSSESS_END = false
 @export var ANIMATION_MOVED = false
@@ -88,7 +89,7 @@ func _ready() -> void:
 	owner.add_child.call_deferred(MAP)
 	$ExtraAttack/Sprite2D.visible = false
 	$CrouchTestArea/CollisionShape2D.shape.size = Vector2(15.5, 15.5)
-	get_parent().call("_player_health", 10, true)
+	parent.call("_player_health", 10, true)
 	$AttackCollision/CollisionShape2D.disabled = true
 	$PossessArea/PossessShape.disabled = true
 	$DamageCollision/PlayerDamageCollision.disabled = false
@@ -113,8 +114,8 @@ func _health_process(DAMAGE, knockback, way) -> void:
 				velocity = Vector2(100 * way, -200)
 				KNOCKBACK_DURATION = 2
 				print("knockbacked!")
-			get_parent().call("_player_health", DAMAGE * stats.damage_multiplier, false)
-		if get_parent().call("_get_player_health") <= 0:
+			parent.call("_player_health", DAMAGE * stats.damage_multiplier, false)
+		if parent.call("_get_player_health") <= 0:
 			_death()
 		INVINCIBLE = true
 		await get_tree().create_timer(0.2).timeout
@@ -122,8 +123,8 @@ func _health_process(DAMAGE, knockback, way) -> void:
 		await get_tree().create_timer(0.8).timeout
 		INVINCIBLE = false
 func _death():
-	get_parent().call("_player_health", 10, true)
-	get_parent().call("_reset", Autoloads.LAST_LOADED)
+	parent.call("_player_health", 10, true)
+	parent.call("_reset", Autoloads.LAST_LOADED)
 func _shoot():
 	var SHOOT_BULLET = preload("res://scenes/projectile/player_projectile.tscn").instantiate()
 	owner.add_child(SHOOT_BULLET)
@@ -138,7 +139,7 @@ func _big_slimy_ability():
 func _ability_use(ability):
 	print(ability)
 	if stats.tag.has("no_recover_usage"):
-		get_parent().call("_dash_recover", 0, true)
+		parent.call("_dash_recover", 0, true)
 	match ability:
 		"BigSlimy":
 			Autoloads.POSSESS_ENEMY.call_deferred("_stomp_stop")
@@ -148,7 +149,7 @@ func _ability_use(ability):
 				Autoloads.POSSESS_ENEMY.call_deferred("_summon_projectile", 3, false)
 			else:
 				Autoloads.POSSESS_ENEMY.call_deferred("_call_fly",get_global_mouse_position())
-				get_parent().call("_dash_recover", 30, true)
+				parent.call("_dash_recover", 30, true)
 		"Crystaline":
 			Autoloads.POSSESS_ENEMY.call("_attack")
 			Autoloads.PLAYER_ATTACK = true
@@ -180,10 +181,10 @@ func _ability_use(ability):
 			$ExtraAttack.position = Vector2(0, 0)
 			ABILITY_LOCK = false
 	if not stats.tag.has("no_recover_usage"):
-		get_parent().call_deferred("_dash_recover", 0, true)
+		parent.call_deferred("_dash_recover", 0, true)
 func _physics_process(delta: float) -> void:
 	if not fixed_camera:
-		get_parent().call("_camera_position", position.x, position.y, false)
+		parent.call("_camera_position", position.x, position.y, false)
 	if INVINCIBLE_HOLD:
 		if is_on_floor():
 			_dash_hold_stop()
@@ -220,20 +221,20 @@ func _physics_process(delta: float) -> void:
 			$PlayerIndicator.visible = false
 			$Sprite2D.visible = false
 			$AnimatedSprite2D.visible = false
-			get_parent().call("_sprite_change", "BoxContainer", "visible")
+			parent.call("_sprite_change", "BoxContainer", "visible")
 			Autoloads.SAVE_SCREEN = true
-			get_parent().get_parent().call("_pause")
-			get_parent().call("_player_health", 10, true)
+			parent.get_parent().call("_pause")
+			parent.call("_player_health", 10, true)
 		if treasure_gettable:
 			treasure.call_deferred("_found", self)
 	if position.y > 175:
-		get_parent().call("_reset", Autoloads.LAST_LOADED)
+		parent.call("_reset", Autoloads.LAST_LOADED)
 	move_and_slide()
 	if Autoloads.PLAYER_POSSESSING:
 		if stats.ability_display != "None":
-			get_parent().call("_ability_label", stats.ability_display)
+			parent.call("_ability_label", stats.ability_display)
 		else:
-			get_parent().call("_ability_label", "")
+			parent.call("_ability_label", "")
 		if POSSESS_START:
 			$AnimatedSprite2D.visible = false
 			$Sprite2D.visible = true
@@ -247,7 +248,7 @@ func _physics_process(delta: float) -> void:
 		if INVINCIBLE:
 			$DamageCollision/PlayerDamageCollision.shape.size = Vector2(0, 0)
 		if not DASH_MOVE:
-			if Input.is_action_just_pressed("space") and get_parent().call("_get_dash_recover_value") == 60:
+			if Input.is_action_just_pressed("space") and parent.call("_get_dash_recover_value") == 60:
 				_ability_use(stats.ability)
 		match stats.species:
 			"BigSlimy":
@@ -339,10 +340,10 @@ func _physics_process(delta: float) -> void:
 					_gravity(2.5, delta)
 				if not Input.is_action_pressed("space"):
 					DASH_LOCK = true
-					if get_parent().call("_get_dash_recover_value") >= 60:
+					if parent.call("_get_dash_recover_value") >= 60:
 						_ability_use(stats.ability)
 					else:
-						get_parent().call("_dash_recover", 0, true)
+						parent.call("_dash_recover", 0, true)
 				else:
 					DASH_LOCK = false
 			"Bouncer":
@@ -390,10 +391,10 @@ func _physics_process(delta: float) -> void:
 				if $groundchecker.is_colliding():
 					CHARGE = 0
 				if not Input.is_action_pressed("space"):
-					if get_parent().call("_get_dash_recover_value") == 60:
+					if parent.call("_get_dash_recover_value") == 60:
 						_ability_use(stats.ability)
 					else:
-						get_parent().call("_dash_recover", 0, true)
+						parent.call("_dash_recover", 0, true)
 					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
 				else:
@@ -431,9 +432,9 @@ func _physics_process(delta: float) -> void:
 				if Input.is_action_just_pressed("ability"):
 					Autoloads.move_amount = false
 				if not Input.is_action_pressed("space"):
-					get_parent().call("_camera_position", Autoloads.CAMERA_LOCATION.x, Autoloads.CAMERA_LOCATION.y, true)
+					parent.call("_camera_position", Autoloads.CAMERA_LOCATION.x, Autoloads.CAMERA_LOCATION.y, true)
 				else:
-					get_parent().call("_camera_position", position.x, position.y, false)
+					parent.call("_camera_position", position.x, position.y, false)
 				velocity.x = 0
 				velocity.y = 0
 				global_position = Autoloads.POSSESS_ENEMY.global_position
@@ -474,7 +475,7 @@ func _physics_process(delta: float) -> void:
 						else:
 							velocity.y = move_toward(velocity.y, 0, 30)
 			"Pyrofighto":
-				if get_parent().call("_get_dash_recover_value") == 0:
+				if parent.call("_get_dash_recover_value") == 0:
 					$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
 				if not is_on_floor():
 					stats.slide = 2
@@ -492,10 +493,10 @@ func _physics_process(delta: float) -> void:
 				if not Input.is_action_pressed("space"):
 					SPEED_MULTIPLIER = 1
 					DASH_LOCK = true
-					if get_parent().call("_get_dash_recover_value") >= 60:
+					if parent.call("_get_dash_recover_value") >= 60:
 						_ability_use(stats.ability)
 					else:
-						get_parent().call("_dash_recover", 0, true)
+						parent.call("_dash_recover", 0, true)
 				else:
 					SPEED_MULTIPLIER = 0.25
 					DASH_LOCK = false
@@ -556,7 +557,7 @@ func _physics_process(delta: float) -> void:
 			await get_tree().create_timer(0.2).timeout
 			INVINCIBLE = false
 	if not Autoloads.PLAYER_POSSESSING:
-		get_parent().call("_ability_label", stats.ability_display)
+		parent.call("_ability_label", stats.ability_display)
 		$PlayerIndicator.visible = false
 		DASH_LOCK = false
 		if INVINCIBLE:
@@ -627,7 +628,7 @@ func _physics_process(delta: float) -> void:
 			if not direction:
 				velocity.x = move_toward(velocity.x, 0, stats.slide)
 				direction = 0
-			if get_parent().call("_get_dash_recover_value") == 60 and abs(direction) + abs(DASH_Y_CHANGE) != 0:
+			if parent.call("_get_dash_recover_value") == 60 and abs(direction) + abs(DASH_Y_CHANGE) != 0:
 				if Input.is_action_just_pressed("space"): 
 					DASH_LOCK = true
 					$AnimatedSprite2D.visible = false
@@ -641,7 +642,7 @@ func _physics_process(delta: float) -> void:
 					DASH_MOVE = true
 					INVINCIBLE = true
 					$Sprite2D.texture = load("res://assets/placeholders/placeholder_dash.png")
-					get_parent().call("_dash_recover", 0, true)
+					parent.call("_dash_recover", 0, true)
 					if DASH_DIRECTION == 0:
 						velocity.x = 0
 						$Sprite2D.flip_h = false
@@ -692,22 +693,22 @@ func _physics_process(delta: float) -> void:
 func _process(_delta: float) -> void:
 	if map_changable > 0:
 		map_changable -= 1
-	if get_parent().call("_get_dash_recover_value") == 60:
-		get_parent().call("_sprite_change", "DashRecover", "max_dash")
+	if parent.call("_get_dash_recover_value") == 60:
+		parent.call("_sprite_change", "DashRecover", "max_dash")
 	else:
 		if stats.tag.has("charge"):
-			get_parent().call("_sprite_change", "DashRecover", "charge_dash")
+			parent.call("_sprite_change", "DashRecover", "charge_dash")
 		else:
-			get_parent().call("_sprite_change", "DashRecover", "normal")
+			parent.call("_sprite_change", "DashRecover", "normal")
 	if Input.is_action_just_pressed("Any") and not DASH_MOVE:
 		ANIMATION_MOVED = false
 	if DASH_MOVE:
 		$Sprite2D.visible = true
 		$AnimatedSprite2D.visible = false
-	if get_parent().call("_get_player_health") <= 3:
-		get_parent().call("_sprite_change", "PlayerHealth", "low_health")
+	if parent.call("_get_player_health") <= 3:
+		parent.call("_sprite_change", "PlayerHealth", "low_health")
 	else:
-		get_parent().call("_sprite_change", "PlayerHealth", "high_health")
+		parent.call("_sprite_change", "PlayerHealth", "high_health")
 	_dash_recover_process(1)
 	$AnimatedSprite2D.flip_h = $Sprite2D.flip_h
 	$AnimatedSprite2D.flip_v = $Sprite2D.flip_v
@@ -716,7 +717,7 @@ func _process(_delta: float) -> void:
 		$PossessArea/PossessShape.disabled = true
 func _dash_recover_process(delta:float) -> void:
 	if not DASH_LOCK:
-		get_parent().call("_dash_recover", delta, false)
+		parent.call("_dash_recover", delta, false)
 func _on_crouch_exit_test_area_body_exited(body) -> void:
 	if body.is_in_group("tile"):
 		CROUCH_BLOCK = false
@@ -758,7 +759,8 @@ func _on_crouch_exit_test_area_body_entered(body) -> void:
 		treasure = body
 
 func _goal():
-	get_parent().call("_open_text", 4, true)
+	parent.call("_open_text", 4, true)
+	Progressions.progression.map_1_box = true
 func _on_detect_shape_body_entered(body: Node2D) -> void:
 	if HAS_TARGET == 0:
 		INVINCIBLE = true
@@ -794,8 +796,8 @@ func _on_crouch_exit_test_area_area_entered(body) -> void:
 		_goal()
 		body.remove_from_group("goal")
 func _change_map(next_map, location):
-	get_parent().call("_set_data")
-	get_parent().call("_erase_enemies")
+	parent.call("_set_data")
+	parent.call("_erase_enemies")
 	match next_map:
 		"test_level_map_1":
 			MAP.call_deferred("_erase")
@@ -806,8 +808,8 @@ func _change_map(next_map, location):
 				1:
 					global_position = Vector2(912, -208)
 			owner.add_child.call_deferred(MAP)
-			get_parent().call("_erase_enemies")
-			get_parent().call("_add_enemies", 0)
+			parent.call("_erase_enemies")
+			parent.call("_add_enemies", 0)
 		"test_level_map_2":
 			MAP.call_deferred("_erase")
 			MAP = preload("res://scenes/tile_map/test_level_map_2.tscn").instantiate()
@@ -821,8 +823,8 @@ func _change_map(next_map, location):
 				_:
 					global_position = Vector2(0, 0)
 			owner.add_child.call_deferred(MAP)
-			get_parent().call("_erase_enemies")
-			get_parent().call("_add_enemies", 1)
+			parent.call("_erase_enemies")
+			parent.call("_add_enemies", 1)
 		"test_level_map_3":
 			MAP.call_deferred("_erase")
 			MAP = preload("res://scenes/tile_map/test_level_map_3.tscn").instantiate()
@@ -834,8 +836,8 @@ func _change_map(next_map, location):
 				_:
 					global_position = Vector2(0, 0)
 			owner.add_child.call_deferred(MAP)
-			get_parent().call("_erase_enemies")
-			get_parent().call("_add_enemies", 2)
+			parent.call("_erase_enemies")
+			parent.call("_add_enemies", 2)
 		"test_level_map_4":
 			MAP.call_deferred("_erase")
 			MAP = preload("res://scenes/tile_map/test_level_map_4.tscn").instantiate()
@@ -845,8 +847,8 @@ func _change_map(next_map, location):
 				1:
 					global_position = Vector2(0, -268)
 			owner.add_child.call_deferred(MAP)
-			get_parent().call("_erase_enemies")
-			get_parent().call("_add_enemies", 3)
+			parent.call("_erase_enemies")
+			parent.call("_add_enemies", 3)
 func _on_extra_attack_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("tile_breakable"):
 		var tiles = body.get_coords_for_body_rid(body_rid)
@@ -854,11 +856,11 @@ func _on_extra_attack_body_shape_entered(body_rid: RID, body: Node2D, body_shape
 func _raid_end():
 	fixed_camera = false
 	await get_tree().create_timer(0.2).timeout
-	get_parent().call_deferred("_raid_end")
+	parent.call_deferred("_raid_end")
 func _raid(map, area):
 	match map:
 		"test_level_4":
 			fixed_camera = true
-			get_parent().call_deferred("_raid", "test_map_4", area)
+			parent.call_deferred("_raid", "test_map_4", area)
 		_:
 			pass

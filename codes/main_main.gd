@@ -74,6 +74,8 @@ func _restart():
 	Autoloads.PAUSE = false
 	$Node2D2/Player.call("_possess_revisible")
 func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("9"):
+		print(Progressions.progression)
 	if Input.is_action_just_pressed("j"):
 		get_tree().paused = false
 		Autoloads.PAUSE = false

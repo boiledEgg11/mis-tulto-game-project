@@ -11,4 +11,6 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if Progressions.progression.map_1_box:
+		if $goal.is_in_group("goal"):
+			$goal.remove_from_group("goal")

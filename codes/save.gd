@@ -4,7 +4,6 @@ func _erase():
 	$Savepoint.call("_erase")
 	queue_free()
 func _save(enemy, file, player):
-
 	print("saved!")
 	Autoloads.SAVE_STUFF = {
 		"place": location,
@@ -14,6 +13,7 @@ func _save(enemy, file, player):
 		"treasure": Autoloads.FOUND_TREASURE,
 		"progression_stage": Progressions.progression
 	}
+	print(Autoloads.SAVE_STUFF)
 	_save_game(file)
 func _placement(placement):
 	match placement:
