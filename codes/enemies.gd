@@ -1,14 +1,14 @@
 extends Node2D
 @onready var possessed:bool = false
+@export var child: Node2D
 func _erase():
-	if get_child_count() != 0:
-		get_child(0).queue_free()
-		if get_child(0).name == "Enemy8":
+	if child:
+		child.queue_free()
+		if child.name == "Enemy8":
 			for i in 5:
 				if get_child(0).projectile[i].name == "Enemy8_projectile":
 					get_child(0).projectile[i].call_deferred("_screen_not_visible")
 	queue_free()
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 func _possess_start():

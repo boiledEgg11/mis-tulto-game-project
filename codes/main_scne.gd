@@ -8,18 +8,25 @@ var POSSESS_ENEMY: Node2D
 var SAVE_READY = true
 var dash_recover_value: int
 var health_value: int
+@export var player_shape: Node2D
 @onready var designated_position_player:Vector2
 var count_format = "x %s"
 func _ready():
 	_reset(Autoloads.LAST_LOADED)
 func _force_erase():
 	$ObjectPlacement.call_deferred("_force_erase")
+func _process(delta: float) -> void:
+	if Input.is_action_just_pressed("5"):
+		_force_erase()
 func _reset(file):
+	reset = true
 	Autoloads.RESET = true
 	await get_tree().process_frame
 	$ObjectPlacement.call_deferred("_read_data", false, null)
 	_force_erase()
-	$Player/Player_Shape.set_deferred("disabled", true)
+	player_shape.call_deferred("set_disabled", true)
+	await get_tree().process_frame
+	Autoloads.RESET = false
 	_load(file)
 	_enemy_set()
 func _variable_set():
@@ -74,7 +81,7 @@ func _load(file):
 			$Player.position = Vector2i(0, 0)
 			designated_position_player = Vector2(0, 0)
 	await get_tree().process_frame
-	$Player/Player_Shape.disabled = false
+	player_shape.call_deferred("set_disabled", false)
 	$Player._raid_end()
 	$ObjectPlacement.raid = false
 func _enemy_set():

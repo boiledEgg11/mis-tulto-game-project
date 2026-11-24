@@ -81,7 +81,7 @@ func _physics_process(delta: float) -> void:
 		var standing = $GroundExistingChecker.get_overlapping_bodies()
 		for body in standing:
 				if body.is_in_group("tile_move"):
-					position += body.tile_move_value2
+					position += body.tile_move_value
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
