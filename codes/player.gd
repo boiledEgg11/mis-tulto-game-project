@@ -136,6 +136,10 @@ func _big_slimy_ability():
 	TARGET_POS = get_local_mouse_position()
 	velocity.x = TARGET_POS.x * 2
 	velocity.y = -200
+func _whistledash():
+	INVINCIBLE = true
+	DASH_LOCK = true
+	TARGET_POS = get_local_mouse_position()
 func _ability_use(ability):
 	print(ability)
 	if stats.tag.has("no_recover_usage"):
@@ -208,7 +212,7 @@ func _physics_process(delta: float) -> void:
 					if not body.can_move:
 						position += body.tile_move_value
 				else:
-						position += body.tile_move_value
+					position += body.tile_move_value
 	bodies = $ExtraAttack.get_overlapping_bodies()
 	for body in bodies:
 		if not body.is_in_group("tile_breakable"):
@@ -441,7 +445,11 @@ func _physics_process(delta: float) -> void:
 					direction = Input.get_axis("left", "right") * 10
 				else:
 					direction = Input.get_axis("left", "right")
-				Autoloads.tile_move[stats.individual - 1] = direction
+				match stats.individual:
+					3:
+						Autoloads.tile_move[stats.individual - 1] = direction * 2
+					_:
+						Autoloads.tile_move[stats.individual - 1] = direction
 				if direction:
 					Autoloads.spin_moving = true
 					$Sprite2D.rotation_degrees += direction * 10
