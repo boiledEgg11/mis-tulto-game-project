@@ -8,6 +8,7 @@ var POSSESS_ENEMY: Node2D
 var SAVE_READY = true
 var dash_recover_value: int
 var health_value: int
+@export var Player: Node2D
 @export var player_shape: Node2D
 @onready var designated_position_player:Vector2
 var count_format = "x %s"
@@ -19,6 +20,7 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("5"):
 		_force_erase()
 func _reset(file):
+	Player.POSSESS_END = true
 	reset = true
 	Autoloads.RESET = true
 	await get_tree().process_frame
@@ -29,11 +31,13 @@ func _reset(file):
 	Autoloads.RESET = false
 	_load(file)
 	_enemy_set()
+	_variable_set()
 func _variable_set():
-	$Player.POSSESS_START = true
-	$Player.velocity = Vector2(0, 0)
-	$Player.DASH_LOCK = false
-	$Player.ABILITY_LOCK = false
+	Autoloads.POSSESS_AMOUNT = 0
+	Player.POSSESS_START = true
+	Player.velocity = Vector2(0, 0)
+	Player.DASH_LOCK = false
+	Player.ABILITY_LOCK = false
 	$Camera2D/BoxContainer/DashRecover.value = 30
 	$Camera2D/BoxContainer/PlayerHealth.value = 10
 func _erase_enemies():
@@ -45,44 +49,44 @@ func _load(file):
 	Autoloads._load_game(file)
 	match Autoloads.location:
 		"test_2":
-			$Player._change_map("test_level_map_1", -1)
-			$Player.position = Vector2i(360, -8)
+			Player._change_map("test_level_map_1", -1)
+			Player.position = Vector2i(360, -8)
 			designated_position_player = Vector2(360, -8)
 		"test_3":
-			$Player._change_map("test_level_map_1", -1)
-			$Player.position = Vector2i(1048, -56)
+			Player._change_map("test_level_map_1", -1)
+			Player.position = Vector2i(1048, -56)
 			designated_position_player = Vector2(1048, -56)
 		"test_4":
-			$Player._change_map("test_level_map_2", -1)
-			$Player.position = Vector2i(-24, 24)
+			Player._change_map("test_level_map_2", -1)
+			Player.position = Vector2i(-24, 24)
 			designated_position_player = Vector2(-24, 24)
 		"test_5":
-			$Player._change_map("test_level_map_2", -1)
-			$Player.position = Vector2i(-1050, 24)
+			Player._change_map("test_level_map_2", -1)
+			Player.position = Vector2i(-1050, 24)
 			designated_position_player = Vector2(-1050, 24)
 		"test_6":
-			$Player._change_map("test_level_map_3", -1)
-			$Player.position = Vector2(-8, 24)
+			Player._change_map("test_level_map_3", -1)
+			Player.position = Vector2(-8, 24)
 			designated_position_player = Vector2(-8, 24)
 		"test_7":
-			$Player._change_map("test_level_map_4", -1)
-			$Player.position = Vector2(0, -24)
+			Player._change_map("test_level_map_4", -1)
+			Player.position = Vector2(0, -24)
 			designated_position_player = Vector2(0, -24)
 		"test_8":
-			$Player._change_map("test_level_map_4", -1)
-			$Player.position = Vector2(-864, -40)
+			Player._change_map("test_level_map_4", -1)
+			Player.position = Vector2(-864, -40)
 			designated_position_player = Vector2(-864, -40)
 		"test_9":
-			$Player._change_map("test_level_map_5", -1)
-			$Player.position = Vector2(24, 8)
+			Player._change_map("test_level_map_5", -1)
+			Player.position = Vector2(24, 8)
 			designated_position_player = Vector2(24, 8)
 		_:
-			$Player._change_map("test_level_map_1", -1)
-			$Player.position = Vector2i(0, 0)
+			Player._change_map("test_level_map_1", -1)
+			Player.position = Vector2i(0, 0)
 			designated_position_player = Vector2(0, 0)
 	await get_tree().process_frame
 	player_shape.call_deferred("set_disabled", false)
-	$Player._raid_end()
+	Player._raid_end()
 	$ObjectPlacement.raid = false
 func _enemy_set():
 	if Autoloads.ENEMY_POSSESS.species and Autoloads.ENEMY_POSSESS.species != "Tulto":
@@ -121,9 +125,6 @@ func _on_texture_button_3_pressed() -> void:
 	else:
 		get_tree().paused = false
 		Autoloads.SAVE_SCREEN = false
-		if Autoloads.PLAYER_POSSESSING:
-			$Player/Sprite2D.visible = true
-			$Player/PlayerIndicator.visible = true
 func _on_texture_button_2_pressed() -> void:
 	$Camera2D/Control.FILE_OPEN = true
 	SAVE_READY =  false
@@ -207,7 +208,7 @@ func _save_update(file):
 func _save_files(file):
 	if SAVE_READY:
 		print("saved!")
-		$Player.OVERLAPPING_SAVE.call_deferred("_save", $Player.stats.species, file, $Player)
+		Player.OVERLAPPING_SAVE.call_deferred("_save", Player.stats.species, file, Player)
 		_save_update(file)
 	if not SAVE_READY:
 		_reset(file)

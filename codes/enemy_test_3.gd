@@ -161,7 +161,8 @@ func _possess_stop() -> void:
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
 	if not is_instance_valid(parent):
-		print("dead3...")
+		Autoloads.player.POSSESS_END = true
+		queue_free()
 	if INVINCIBLE:
 		attacking = false
 	if direction == 1:

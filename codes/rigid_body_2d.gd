@@ -114,6 +114,8 @@ func _possess_stop() -> void:
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
+	if not is_instance_valid(parent):
+		print("dead...")
 	$LeftCollisionCheck.position.x = 8 * direction
 	$GroundExistingChecker.position.x = 9 * direction
 	if direction == 1:

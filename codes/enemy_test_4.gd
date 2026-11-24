@@ -119,18 +119,21 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
-	call_deferred("reparent", parent)
-	parent.call_deferred("_possess_end")
-	global_position = Autoloads.player.global_position
-	Autoloads.PLAYER_POSSESS_STOP = false
-	possess_health = 1
-	velocity.y = -100
-	velocity.x = 0
-	initial_y = position.y
-	health = 1
-	$Sprite2D.visible = true
-	await get_tree().create_timer(1).timeout
-	INVINCIBLE = false
+	if is_instance_valid(parent):
+		call_deferred("reparent", parent)
+		parent.call_deferred("_possess_end")
+		global_position = Autoloads.player.global_position
+		Autoloads.PLAYER_POSSESS_STOP = false
+		possess_health = 1
+		velocity.y = -100
+		velocity.x = 0
+		initial_y = position.y
+		health = 1
+		$Sprite2D.visible = true
+		await get_tree().create_timer(1).timeout
+		INVINCIBLE = false
+	else:
+		queue_free()
 func _process(_delta: float) -> void:
 	if not is_instance_valid(parent):
 		queue_free()

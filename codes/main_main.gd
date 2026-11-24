@@ -86,9 +86,6 @@ func _on_home_return_pressed() -> void:
 		$Node2D2/Camera2D/Controlol.FILE_OPEN = false
 	else:
 		get_tree().paused = false
-		if Autoloads.PLAYER_POSSESSING:
-			$Node2D2/Player/Sprite2D.visible = true
-			$Node2D2/Player/PlayerIndicator.visible = true
 	Autoloads.CURRENT_STATE = "home"
 	queue_free()
 func _tutorial():

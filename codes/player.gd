@@ -137,6 +137,7 @@ func _big_slimy_ability():
 	velocity.x = TARGET_POS.x * 2
 	velocity.y = -200
 func _whistledash():
+	CHARGE = 0
 	INVINCIBLE = true
 	DASH_LOCK = true
 	TARGET_POS = get_local_mouse_position()
@@ -158,9 +159,7 @@ func _ability_use(ability):
 			Autoloads.POSSESS_ENEMY.call("_attack")
 			Autoloads.PLAYER_ATTACK = true
 		"WhistleDasher":
-			$DetectShape/CollisionShape2D.disabled = false
-			await get_tree().create_timer(1).timeout
-			$DetectShape/CollisionShape2D.disabled = true
+			_whistledash()
 		"Dropper":
 			_shoot()
 		"Bouncer":
@@ -220,9 +219,6 @@ func _physics_process(delta: float) -> void:
 		Autoloads.tile = body.local_to_map(body.position)
 	if Input.is_action_just_pressed("shift"):
 		if SAVABLE:
-			$PlayerIndicator.visible = false
-			$Sprite2D.visible = false
-			$AnimatedSprite2D.visible = false
 			parent.call("_sprite_change", "BoxContainer", "visible")
 			Autoloads.SAVE_SCREEN = true
 			parent.get_parent().call("_pause")
@@ -457,10 +453,22 @@ func _physics_process(delta: float) -> void:
 				else:
 					Autoloads.spin_moving = false
 			"WhistleDasher":
-				if HAS_TARGET == 2:
-					await get_tree().create_timer(0.6).timeout
-					HAS_TARGET = 0
-				if not MOVE_LOCK:
+				if DASH_LOCK:
+					CHARGE += 0.1
+					if CHARGE > 0.6:
+						CHARGE = 0
+						velocity = TARGET_POS.normalized()
+						MOVE_LOCK = true
+						DASH_LOCK = false
+				if MOVE_LOCK:
+					CHARGE += 0.1
+					if CHARGE > 2:
+						CHARGE = 0
+						velocity = Vector2(0, 0)
+						MOVE_LOCK = false
+						INVINCIBLE = false
+						print("finish!")
+				if not (DASH_LOCK or MOVE_LOCK):
 					_facing(direction)
 					direction = Input.get_axis("left", "right")
 					if direction and HAS_TARGET == 0:
