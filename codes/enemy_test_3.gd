@@ -147,19 +147,21 @@ func _on_enemy_area_area_entered(area) -> void:
 			player_colliding = area.get_parent()
 func _possess_stop() -> void:
 	call_deferred("reparent", parent)
+	global_position = Autoloads.player.global_position
 	if is_instance_valid(parent):
 		parent.call_deferred("_possess_end")
+		parent.global_position = global_position
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
 	velocity.x = 0
 	health = 1
 	$Sprite2D.visible = true
-	global_position = Autoloads.player.global_position
-	parent.global_position = global_position
 	await get_tree().create_timer(1).timeout
 	INVINCIBLE = false
 func _process(_delta: float) -> void:
+	if not is_instance_valid(parent):
+		print("dead3...")
 	if INVINCIBLE:
 		attacking = false
 	if direction == 1:

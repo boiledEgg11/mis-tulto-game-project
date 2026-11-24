@@ -13,19 +13,16 @@ var count_format = "x %s"
 func _ready():
 	_reset(Autoloads.LAST_LOADED)
 func _force_erase():
-	$ObjectPlacement._force_erase()
+	$ObjectPlacement.call_deferred("_force_erase")
 func _reset(file):
-	$Player/Player_Shape.set_deferred("disabled", true)
-	if is_instance_valid(POSSESS_ENEMY):
-		POSSESS_ENEMY.call_deferred("queue_free")
-	Autoloads.PLAYER_POSSESSING = false
-	reset = true
-	_force_erase()
+	Autoloads.RESET = true
 	await get_tree().process_frame
-	_load(file)
-	Autoloads.POSSESS_AMOUNT = 0
 	$ObjectPlacement.call_deferred("_read_data", false, null)
+	_force_erase()
+	$Player/Player_Shape.set_deferred("disabled", true)
+	_load(file)
 	_enemy_set()
+func _variable_set():
 	$Player.POSSESS_START = true
 	$Player.velocity = Vector2(0, 0)
 	$Player.DASH_LOCK = false

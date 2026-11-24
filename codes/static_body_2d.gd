@@ -49,7 +49,7 @@ func _read_data(start, level):
 	var enemy_specie = enemy_species.get_as_text()
 	enemy_ids.close()
 	enemy_file.close()
-	print("working...")
+	print("reading data")
 	enemy_species.close()
 	enemies_id = enemy_id.split("\n")
 	enemies = enemy_placement.split("\n")
@@ -129,6 +129,7 @@ func _set_enemy(level):
 				raid_target = raid_enemy
 func _force_erase():
 	if loaded:
+		print("force erased!")
 		for i in range(enemies.size()):
 			match enemies[i]:
 				"enemy":
