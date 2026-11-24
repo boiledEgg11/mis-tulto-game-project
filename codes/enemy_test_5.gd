@@ -11,19 +11,19 @@ extends CharacterBody2D
 @export var parent: Node2D
 @export var parent_parent: Node2D
 @export var default_stats: Dictionary = {
-	"speed": 80,
-	"jump": -350,
-	"slide": 60,
-	"damage_multiplier": -0.8,
-	"hitbox": Vector2(15.5, 15.5),
-	"air_speed": 80,
+	"speed": 0,
+	"jump": -0,
+	"slide": 200,
+	"damage_multiplier": -0.25,
+	"hitbox": Vector2(22, 22),
+	"air_speed": 0,
 	"damage": 1,
-	"extra_damage": 5,
-	"sprite": "res://assets/placeholders/placeholder_enemy_explosion.png",
-	"ability_display": "EXPLOSIVE",
-	"ability": "Pyrofighto",
-	"species": "Pyrofighto",
-	"tag": ["charge"]
+	"extra_damage": 1,
+	"sprite": "res://assets/placeholders/placeholder_gear.png",
+	"ability_display": "SPIN",
+	"ability": "Spinny",
+	"species": "Spinny",
+	"tag": ["no_recover_usage"]
 }
 @export var stats: Dictionary = {
 	"speed": 0,
@@ -60,8 +60,6 @@ func _physics_process(_delta: float) -> void:
 	if possess_health > 0:
 		if position.y > 175:
 			queue_free()
-		if not Autoloads.move_amount:
-			Autoloads.tile_move = 0.5
 		velocity = Vector2(0, 0)
 		POSSESSED = false
 		rotation += 0.1

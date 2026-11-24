@@ -54,12 +54,10 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
-		var standing = $groundchecker.get_collider()
-		if standing:
-			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
-				position.x += Autoloads.tile_move
-			if standing.is_in_group("moving_tile_y") and Autoloads.is_moving:
-				position.y -= Autoloads.tile_move / 2
+		var standing = $GroundExistingChecker.get_overlapping_bodies()
+		for body in standing:
+			if body.is_in_group("tile_move"):
+				position += body.tile_move_value
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false

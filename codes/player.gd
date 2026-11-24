@@ -205,12 +205,6 @@ func _physics_process(delta: float) -> void:
 	for body in standing:
 			if body.is_in_group("tile_move"):
 				position += body.tile_move_value
-			if body.is_in_group("moving_tile"):
-				if Autoloads.is_moving:
-					position.x += Autoloads.tile_move
-			if body.is_in_group("moving_tile_y") and Autoloads.is_moving:
-				@warning_ignore("integer_division")
-				position.y -= Autoloads.tile_move / 2
 	bodies = $ExtraAttack.get_overlapping_bodies()
 	for body in bodies:
 		if not body.is_in_group("tile_breakable"):
@@ -443,7 +437,7 @@ func _physics_process(delta: float) -> void:
 					direction = Input.get_axis("left", "right") * 10
 				else:
 					direction = Input.get_axis("left", "right")
-				Autoloads.tile_move = direction
+				Autoloads.tile_move[stats.individual] = direction
 				if direction:
 					Autoloads.spin_moving = true
 					$Sprite2D.rotation_degrees += direction * 10
@@ -546,7 +540,6 @@ func _physics_process(delta: float) -> void:
 			INVINCIBLE  = true
 			POSSESS_END = false
 			Autoloads.POSSESS_AMOUNT = 0
-			Autoloads.tile_move = 0
 			$Sprite2D.rotation = 0
 			$DamageCollision.rotation = 0
 			Autoloads.PLAYER_POSSESS_STOP = true

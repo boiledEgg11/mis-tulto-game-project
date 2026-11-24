@@ -1,19 +1,18 @@
 extends TileMapLayer
-@onready var tile_move_value = Vector2(0, 0)
-var initial_pos
+@onready var initial_pos: Vector2
+@onready var move_amount: Vector2 = Vector2(2, 0)
 func _ready() -> void:
 	initial_pos = position
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if Autoloads.spin_moving:
-		position.y += tile_move_value.y
-	if position.y > initial_pos.y - 62 and Autoloads.tile_move > 0:
-		tile_move_value.y = 2
-	if position.y < initial_pos.y + 62 and Autoloads.tile_move < 0:
-		tile_move_value.y = -2
-	if position.y < initial_pos.y - 62 or position.y > initial_pos.y + 62 or Autoloads.tile_move == 0:
-		tile_move_value.y = 0
-	if position.y < initial_pos.y - 62:
-		position.y += 0.1
-	if position.y > initial_pos.y + 62:
-		position.y -= 0.1
+	if position.y > initial_pos.y - 62:
+		if move_amount.y > 0:
+			position.y += move_amount.y
+	if position.y < initial_pos.y + 62:
+		if move_amount.y < 0:
+			position.y += move_amount.y
+	if initial_pos.y > position.y:
+			position.y = initial_pos.y - 62
+	if initial_pos.y < position.y + 62:
+			position.y = initial_pos.y
+	move_amount.y = Autoloads.tile_move[2]

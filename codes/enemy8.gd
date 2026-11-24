@@ -50,7 +50,6 @@ extends CharacterBody2D
 @export var projectile_amount = 0
 @export var projectile_exists: Array = [false, false, false, false, false]
 @export var projectile: Array = [preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate(), preload("res://scenes/misc/empty.tscn").instantiate()]
-@export var STATUS = {"speed": 100, "jump": -400, "slide": 60, "damage_multiplier": -0.8, "hitbox_y": 15.5, "hitbox_x": 15.5, "air_speed": 80, "damage": 1, "extra_damage": 1}
 func _ready() -> void:
 	parent_parent = parent.get_parent()
 	$EnemyArea/CollisionShape2D.disabled = false
@@ -121,13 +120,10 @@ func _physics_process(delta: float) -> void:
 			_forced_direction_fix()
 		if projectile_amount < 3:
 			_summon_projectile(3, true)
-		var standing = $groundchecker.get_collider()
-		if standing:
-			if standing.is_in_group("moving_tile") and Autoloads.is_moving:
-				position.x += Autoloads.tile_move
-			if standing.is_in_group("moving_tile_y") and Autoloads.is_moving:
-				@warning_ignore("integer_division")
-				position.y -= Autoloads.tile_move / 2
+		var standing = $GroundExistingChecker.get_overlapping_bodies()
+		for body in standing:
+				if body.is_in_group("tile_move"):
+					position += body.tile_move_value
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
@@ -144,13 +140,14 @@ func _physics_process(delta: float) -> void:
 					direction = -1
 		$EnemyArea/CollisionShape2D.disabled = false
 		if  $DetectionArea/CollisionShape2D.disabled:
-			velocity.x = direction * STATUS.speed / 1.25
+			velocity.x = direction * stats.speed / 1.25
 		if not $DetectionArea/CollisionShape2D.disabled:
-			velocity.x = direction * STATUS.speed
+			velocity.x = direction * stats.speed
 		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
+		global_position = Autoloads.player.global_position
 		INVINCIBLE = true
 		POSSESSED = true
 		$EnemyArea/CollisionShape2D.disabled = true
@@ -221,6 +218,7 @@ func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
 		ground_exist = true
 func _possess_start():
+	position = Vector2(0, 0)
 	_projectile_erase(3)
 	get_parent().call_deferred("_possessed")
 	Autoloads.POSSESS_AMOUNT += 1

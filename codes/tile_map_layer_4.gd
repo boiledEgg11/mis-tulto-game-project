@@ -1,22 +1,18 @@
 extends TileMapLayer
-var initial_pos
+@onready var initial_pos: Vector2
+@onready var move_amount: Vector2 = Vector2(2, 0)
 func _ready() -> void:
-	initial_pos = position.y
+	initial_pos = position
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	if position.y > initial_pos - 80 and position.y <= initial_pos:
-		print("movable")
-		position.y -= Autoloads.tile_move / 2
-		Autoloads.is_moving_2 = true
-	else:
-		Autoloads.is_moving_2 = false
-		if initial_pos > position.y:
-			if Autoloads.move_amount:
-				position.y = initial_pos - 79.9
-			else:
-				position.y = initial_pos - 80
-		if initial_pos < position.y:
-			if Autoloads.move_amount:
-				position.y = initial_pos 
-			else:
-				position.y = initial_pos + 0.1
+	if position.y > initial_pos.y - 80:
+		if move_amount.y > 0:
+			position.y += move_amount.y
+	if position.y < initial_pos.y:
+		if move_amount.y < 0:
+			position.y += move_amount.y
+	if initial_pos.y > position.y:
+			position.y = initial_pos.y - 80
+	if initial_pos.y < position.y:
+			position.y = initial_pos.y
+	move_amount.y = Autoloads.tile_move[1]
