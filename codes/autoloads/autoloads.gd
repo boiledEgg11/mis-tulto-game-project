@@ -43,7 +43,9 @@ var CURRENT_STATE = "home"
 	"progression_stage": {
 		"Introduction": false,
 		"map_1_box": false,
-		"raid_1": false
+		"raid_1": false,
+		"raid_2": false,
+		"raid_3": false
 	}
 }
 var START_TIME: int
@@ -62,19 +64,26 @@ func _load_game(file):
 		SAVE_FILE = FileAccess.open("user://save_3.save", FileAccess.READ)
 	var data = SAVE_FILE.get_var()
 	SAVE_FILE.close()
-	var SAVE_DATA = data
-	if SAVE_DATA.place:
-		SAVE_STUFF.place = SAVE_DATA.place
-	if SAVE_DATA.enemy:
-		SAVE_STUFF.enemy = SAVE_DATA.enemy
-	if SAVE_DATA.enemy_id:
-		SAVE_STUFF.enemy_id = SAVE_DATA.enemy_id
-	if SAVE_DATA.play_time:
-		SAVE_STUFF.play_time = SAVE_DATA.play_time
-	if SAVE_DATA.treasure:
-		SAVE_STUFF.treasure = SAVE_DATA.treasure
-	if SAVE_DATA.progression_stage:
-		SAVE_STUFF.progression_stage = SAVE_DATA.progression_stage
+	for i in SAVE_STUFF:
+		if not data.has(i):
+			data.get_or_add(i, false)
+			print(i)
+	for i in SAVE_STUFF.progression_stage:
+		if not data.progression_stage.has(i):
+			data.progression_stage.get_or_add(i, false)
+			print(data)
+	if data.place:
+		SAVE_STUFF.place = data.place
+	if data.enemy:
+		SAVE_STUFF.enemy = data.enemy
+	if data.enemy_id:
+		SAVE_STUFF.enemy_id = data.enemy_id
+	if data.play_time:
+		SAVE_STUFF.play_time = data.play_time
+	if data.treasure:
+		SAVE_STUFF.treasure = data.treasure
+	if data.progression_stage:
+		SAVE_STUFF.progression_stage = data.progression_stage
 	START_TIME = Time.get_ticks_msec()
 	location = Autoloads.SAVE_STUFF.place
 	ENEMY_POSSESS.species = Autoloads.SAVE_STUFF.enemy
