@@ -60,6 +60,11 @@ func _physics_process(_delta: float) -> void:
 	if possess_health > 0:
 		if position.y > 175:
 			queue_free()
+		match stats.individual:
+			2:
+				Autoloads.tile_move[stats.individual - 1] = -0.5
+			_:
+				Autoloads.tile_move[stats.individual - 1] = 0.5
 		velocity = Vector2(0, 0)
 		POSSESSED = false
 		rotation += 0.1

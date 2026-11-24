@@ -288,14 +288,14 @@ rendering_quadrant_size = 1
 physics_quadrant_size = 1
 script = ExtResource("2_w7cqt")
 
-[node name="TileMapLayer3" type="TileMapLayer" parent="." unique_id=1774684552 groups=["Player_collisoin", "moving_tile", "tile"]]
+[node name="TileMapLayer3" type="TileMapLayer" parent="." unique_id=1774684552 groups=["Player_collisoin", "moving_tile", "tile", "tile_move"]]
 light_mask = 261
 tile_map_data = PackedByteArray("AAAwAAQAAAADAAIAAAAxAAQAAAADAAIAAAAyAAQAAAADAAIAAAAzAAQAAAADAAIAAAA0AAQAAAADAAIAAAA=")
 tile_set = SubResource("TileSet_a0fvq")
 physics_quadrant_size = 1
 script = ExtResource("3_lueuc")
 
-[node name="TileMapLayer4" type="TileMapLayer" parent="." unique_id=1531295736 groups=["Player_collisoin", "moving_tile_y", "tile"]]
+[node name="TileMapLayer4" type="TileMapLayer" parent="." unique_id=1531295736 groups=["Player_collisoin", "moving_tile_y", "tile", "tile_move"]]
 light_mask = 261
 tile_map_data = PackedByteArray("AABKAAIAAAADAAIAAABLAAIAAAADAAIAAABMAAIAAAADAAIAAABNAAIAAAADAAIAAABOAAIAAAADAAIAAABPAAIAAAADAAIAAABQAAIAAAADAAIAAAA=")
 tile_set = SubResource("TileSet_j3skq")

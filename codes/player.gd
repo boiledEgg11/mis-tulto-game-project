@@ -204,7 +204,11 @@ func _physics_process(delta: float) -> void:
 	var standing = $GroundExistingChecker.get_overlapping_bodies()
 	for body in standing:
 			if body.is_in_group("tile_move"):
-				position += body.tile_move_value
+				if body.is_in_group("moving_tile"):
+					if not body.can_move:
+						position += body.tile_move_value
+				else:
+						position += body.tile_move_value
 	bodies = $ExtraAttack.get_overlapping_bodies()
 	for body in bodies:
 		if not body.is_in_group("tile_breakable"):
@@ -437,7 +441,7 @@ func _physics_process(delta: float) -> void:
 					direction = Input.get_axis("left", "right") * 10
 				else:
 					direction = Input.get_axis("left", "right")
-				Autoloads.tile_move[stats.individual] = direction
+				Autoloads.tile_move[stats.individual - 1] = direction
 				if direction:
 					Autoloads.spin_moving = true
 					$Sprite2D.rotation_degrees += direction * 10
