@@ -846,9 +846,22 @@ func _change_map(next_map, location):
 					global_position = Vector2(0, 0)
 				1:
 					global_position = Vector2(0, -268)
+				2:
+					global_position = Vector2(-1608, -64)
 			owner.add_child.call_deferred(MAP)
 			parent.call("_erase_enemies")
 			parent.call("_add_enemies", 3)
+		"test_level_map_5":
+			MAP.call_deferred("_erase")
+			MAP = preload("res://scenes/tile_map/test_level_map_5.tscn").instantiate()
+			match location:
+				0:
+					global_position = Vector2(0, 0)
+				1:
+					global_position = Vector2(-8, 0)
+			owner.add_child.call_deferred(MAP)
+			parent.call("_erase_enemies")
+			parent.call("_add_enemies", 4)
 func _on_extra_attack_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	if body.is_in_group("tile_breakable"):
 		var tiles = body.get_coords_for_body_rid(body_rid)
@@ -862,5 +875,8 @@ func _raid(map, area):
 		"test_level_4":
 			fixed_camera = true
 			parent.call_deferred("_raid", "test_map_4", area)
+		"test_level_5":
+			fixed_camera = true
+			parent.call_deferred("_raid", "test_map_5", area)
 		_:
 			pass

@@ -68,9 +68,14 @@ func _set_enemy(level):
 			file_start_point = 23
 		3:
 			file_start_point = 29
+		4:
+			file_start_point = 37
 		"raid_1":
 			raid = true
 			file_start_point = 34
+		"raid_2":
+			raid = true
+			file_start_point = 39
 	for i in range(file_start_point, enemy_types.size()):
 		if enemy_types[i] == "_stop" or enemy_types[i] == null:
 			break
@@ -112,7 +117,11 @@ func _set_enemy(level):
 			_:
 				print("missing type...")
 		if raid:
-			characters[i].global_position = Vector2(-1160, -56)
+			match level:
+				"raid_1":
+					characters[i].global_position = Vector2(-1160, -56)
+				"raid_2":
+					characters[i].global_position = Vector2(416, 0)
 			raid_enemy.append(characters[i])
 			raid_enemies.resize(raid_enemy.size())
 			for m in raid_enemy:

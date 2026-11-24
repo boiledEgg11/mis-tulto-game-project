@@ -3,6 +3,7 @@ var location
 func _erase():
 	$Savepoint.call("_erase")
 	queue_free()
+	print(global_position)
 func _save(enemy, file, player):
 	print("saved!")
 	Autoloads.SAVE_STUFF = {
@@ -33,6 +34,8 @@ func _placement(placement):
 			position = Vector2i(0, -24)
 		"test_8":
 			position = Vector2(-864, -40)
+		"test_9":
+			position = Vector2(24, 8)
 		_:
 			queue_free()
 	location = placement

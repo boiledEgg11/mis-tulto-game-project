@@ -69,6 +69,10 @@ func _load(file):
 			$Player._change_map("test_level_map_4", -1)
 			$Player.position = Vector2(-864, -40)
 			designated_position_player = Vector2(-864, -40)
+		"test_9":
+			$Player._change_map("test_level_map_5", -1)
+			$Player.position = Vector2(24, 8)
+			designated_position_player = Vector2(24, 8)
 		_:
 			$Player._change_map("test_level_map_1", -1)
 			$Player.position = Vector2i(0, 0)
@@ -267,6 +271,12 @@ func _raid(map, area):
 		"test_map_4":
 			print("attack!")
 			_camera_position(-1064, -87, true)
+			await get_tree().create_timer(0.5).timeout
+			$ObjectPlacement._set_enemy("raid_1")
+			$ObjectPlacement._raid_area(area)
+		"test_map_5":
+			print("attack!")
+			_camera_position(312, -28, true)
 			await get_tree().create_timer(0.5).timeout
 			$ObjectPlacement._set_enemy("raid_1")
 			$ObjectPlacement._raid_area(area)

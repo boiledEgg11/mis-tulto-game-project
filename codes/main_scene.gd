@@ -25,7 +25,8 @@ var SAVE_DEFAULT: Dictionary = {
 	"progression_stage": {
 		"Introduction": false,
 		"map_1_box": false,
-		"raid_1": false
+		"raid_1": false,
+		"raid_2": false
 	}
 }
 func _ready() -> void:
