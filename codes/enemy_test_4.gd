@@ -49,9 +49,6 @@ func _ready() -> void:
 	parent_parent = parent.get_parent()
 	$EnemyArea/CollisionShape2D.disabled = false
 func _charging():
-	await get_tree().create_timer(1).timeout
-	CHARGING = false
-	print(possess_health)
 	if possess_health > 0:
 		print("shot!")
 		var SHOOT_BULLET = preload("res://scenes/projectile/enemy_projectile.tscn").instantiate()
@@ -78,10 +75,14 @@ func _physics_process(delta: float) -> void:
 			queue_free()
 		$EnemyTestCollision.disabled = false
 		if $RayCast2D.is_colliding():
-			if not CHARGING:
-				_charging()
 			CHARGING = true
 		POSSESSED = false
+		if CHARGING:
+			charge += 0.1
+			if charge > 6:
+				_charging()
+				charge = 0
+				CHARGING = false
 		if is_on_floor():
 			velocity.y = stats.jump
 		if not is_on_floor():
@@ -100,8 +101,6 @@ func _physics_process(delta: float) -> void:
 		POSSESSED = true
 		$EnemyArea/CollisionShape2D.disabled = true
 		$Sprite2D.visible = false
-		if Autoloads.PLAYER_POSSESS_STOP:
-			_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	direction = 1
 	$Sprite2D.flip_h = false
@@ -123,41 +122,37 @@ func _on_enemy_area_area_entered(area) -> void:
 func _possess_stop() -> void:
 	if is_instance_valid(parent):
 		call_deferred("reparent", parent)
-		parent.call_deferred("_possess_end")
-		global_position = Autoloads.player.global_position
-		Autoloads.PLAYER_POSSESS_STOP = false
-		possess_health = 1
-		velocity.y = -100
-		velocity.x = 0
-		initial_y = position.y
-		health = 1
-		$Sprite2D.visible = true
-		INVINCIBLE = true
-		INVINCIBLE_COUNT = true
-		INVINCIBLE_COUNTER = 0
-	else:
-		queue_free()
+	parent.call_deferred("_possess_end")
+	global_position = Autoloads.player.global_position
+	parent.global_position = global_position
+	Autoloads.PLAYER_POSSESS_STOP = false
+	possess_health = 1
+	velocity.y = -100
+	velocity.x = 0
+	initial_y = position.y
+	health = 1
+	$Sprite2D.visible = true
+	INVINCIBLE = true
+	INVINCIBLE_COUNT = true
+	INVINCIBLE_COUNTER = 0
+	Autoloads.player.call_deferred("_end_possess")
 func _process(_delta: float) -> void:
+	print(get_parent().name)
 	if INVINCIBLE_COUNT:
 		INVINCIBLE_COUNTER += 0.1
 		if INVINCIBLE_COUNTER > 6:
 			INVINCIBLE_COUNT = false
 			INVINCIBLE = false
 			INVINCIBLE_COUNTER = 0
-	if not is_instance_valid(parent):
-		queue_free()
 	if direction == 1:
 		$Sprite2D.flip_h = false
 	if direction == -1:
 		$Sprite2D.flip_h = true
-	if not Autoloads.PLAYER_POSSESSING and POSSESSED and possess_health == -1:
+	if Autoloads.POSSESS_AMOUNT != 1 and POSSESSED:
 		_possess_stop()
-		print("1")
-	if Autoloads.POSSESS_AMOUNT > 1:
-		_possess_stop()
-		print("2")
 	if health <= 0:
 		parent.call_deferred("_erase")
+		print("erased!")
 	if possess_health == 0:
 		_possess_start()
 func _possess_start():

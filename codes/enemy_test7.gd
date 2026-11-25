@@ -164,11 +164,7 @@ func _process(_delta: float) -> void:
 		$Sprite2D.flip_h = false
 	if direction == -1:
 		$Sprite2D.flip_h = true
-	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
-		_possess_stop()
-	if Autoloads.POSSESS_AMOUNT > 1:
-		_possess_stop()
-	if Autoloads.POSSESS_AMOUNT > 1:
+	if Autoloads.POSSESS_AMOUNT > 1 and POSSESSED:
 		_possess_stop()
 	if health <= 0:
 		queue_free()

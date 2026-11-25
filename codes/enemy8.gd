@@ -154,8 +154,6 @@ func _physics_process(delta: float) -> void:
 		POSSESSED = true
 		$EnemyArea/CollisionShape2D.disabled = true
 		$Sprite2D.visible = false
-		if Autoloads.PLAYER_POSSESS_STOP:
-			_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	if $LeftCollisionCheck.area_entered:
 		direction *= -1
@@ -186,6 +184,7 @@ func _possess_stop() -> void:
 	INVINCIBLE = true
 	INVINCIBLE_COUNT = true
 	INVINCIBLE_COUNTER = 0
+	Autoloads.player.call_deferred("_end_possess")
 func _process(_delta: float) -> void:
 	if INVINCIBLE_COUNT:
 		INVINCIBLE_COUNTER += 0.1
@@ -199,11 +198,7 @@ func _process(_delta: float) -> void:
 		$Sprite2D.flip_h = false
 	if direction == -1:
 		$Sprite2D.flip_h = true
-	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
-		_possess_stop()
-	if Autoloads.POSSESS_AMOUNT > 1:
-		_possess_stop()
-	if Autoloads.POSSESS_AMOUNT > 1:
+	if Autoloads.POSSESS_AMOUNT != 1 and POSSESSED:
 		_possess_stop()
 	if health <= 0:
 		queue_free()
