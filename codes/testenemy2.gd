@@ -60,7 +60,7 @@ func _physics_process(delta: float) -> void:
 		for body in standing:
 			if body.is_in_group("tile_move"):
 				position += body.tile_move_value
-		if position.y > 175:
+		if position.y > 175 and not POSSESSED:
 			queue_free()
 		POSSESSED = false
 		if is_on_wall_only():
@@ -102,8 +102,9 @@ func _on_enemy_area_area_entered(area) -> void:
 			possess_health -= 1
 func _possess_stop() -> void:
 	global_position = Autoloads.player.global_position
-	parent.global_position = global_position
 	call_deferred("reparent", parent)
+	if is_instance_valid(parent):
+		parent.global_position = global_position
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100

@@ -135,6 +135,7 @@ func _possess_stop() -> void:
 	INVINCIBLE = true
 	INVINCIBLE_COUNT = true
 	INVINCIBLE_COUNTER = 0
+	
 	Autoloads.player.call_deferred("_end_possess")
 func _process(_delta: float) -> void:
 	if INVINCIBLE_COUNT:

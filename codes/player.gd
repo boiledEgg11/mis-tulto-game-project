@@ -127,7 +127,7 @@ func _death():
 	parent.call("_reset", Autoloads.LAST_LOADED)
 func _shoot():
 	var SHOOT_BULLET = preload("res://scenes/projectile/player_projectile.tscn").instantiate()
-	owner.add_child(SHOOT_BULLET)
+	owner.add_child.call_deferred(SHOOT_BULLET)
 	SHOOT_BULLET.position = position
 func _big_slimy_ability():
 	INVINCIBLE = true

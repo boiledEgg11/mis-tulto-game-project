@@ -146,10 +146,9 @@ func _on_enemy_area_area_entered(area) -> void:
 			possess_health -= 1
 			player_colliding = area.get_parent()
 func _possess_stop() -> void:
-	call_deferred("reparent", parent)
 	global_position = Autoloads.player.global_position
+	call_deferred("reparent", parent)
 	if is_instance_valid(parent):
-		parent.call_deferred("_possess_end")
 		parent.global_position = global_position
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1

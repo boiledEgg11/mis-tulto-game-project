@@ -11,6 +11,7 @@ var health_value: int
 @export var Player: Node2D
 @export var player_shape: Node2D
 @onready var designated_position_player:Vector2
+@onready var stage: int = 0
 var count_format = "x %s"
 func _ready():
 	_reset(Autoloads.LAST_LOADED)
@@ -19,20 +20,25 @@ func _force_erase():
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("5"):
 		_force_erase()
-func _reset(file):
+func _remove_previous_enemy(file):
+	if is_instance_valid(POSSESS_ENEMY):
+		POSSESS_ENEMY.queue_free()
+	call_deferred("_reset_previous", file)
+func _reset_previous(file):
 	_variable_set()
 	reset = true
 	Autoloads.RESET = true
-	if is_instance_valid(POSSESS_ENEMY):
-		POSSESS_ENEMY.queue_free()
-	await get_tree().process_frame
+	_enemy_set(file)
+func _load_data(file):
+	Autoloads.RESET = false
+	_load(file)
+func _enemy_read(file):
 	$ObjectPlacement.call_deferred("_read_data", false, null)
 	_force_erase()
 	player_shape.call_deferred("set_disabled", true)
-	await get_tree().process_frame
-	Autoloads.RESET = false
-	_load(file)
-	_enemy_set()
+	_load_data(file)
+func _reset(file):
+	call_deferred("_remove_previous_enemy", file)
 func _variable_set():
 	Autoloads.POSSESS_AMOUNT = 0
 	Player.POSSESS_START = true
@@ -89,7 +95,7 @@ func _load(file):
 	player_shape.call_deferred("set_disabled", false)
 	Player._raid_end()
 	$ObjectPlacement.raid = false
-func _enemy_set():
+func _enemy_set(file):
 	if Autoloads.ENEMY_POSSESS.species and Autoloads.ENEMY_POSSESS.species != "Tulto":
 		match Autoloads.ENEMY_POSSESS.species:
 			"Slimy":
@@ -115,6 +121,7 @@ func _enemy_set():
 			POSSESS_ENEMY.call("_individual_set", Autoloads.ENEMY_POSSESS.individual)
 			POSSESS_ENEMY.call("_possess_start")
 			$ObjectPlacement.call_deferred("_possess_enemy_set", POSSESS_ENEMY)
+		_enemy_read(file)
 func _set_data():
 	$ObjectPlacement._read_data(false, -1)
 func _on_texture_button_pressed() -> void:
