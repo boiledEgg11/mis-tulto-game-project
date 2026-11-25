@@ -143,9 +143,8 @@ func _force_erase():
 					if is_instance_valid(characters[i]):
 						characters[i].call_deferred("_erase")
 		if is_instance_valid(POSSESS_ENEMY):
-						if POSSESS_ENEMY.get_child_count() > 0:
-							if POSSESS_ENEMY.get_child(-1, false) != null:
-								POSSESS_ENEMY.call_deferred("_erase")
+			POSSESS_ENEMY.call_deferred("_erase")
+	get_parent().call_deferred("_erase_finish")
 func _erase_enemy():
 	if loaded:
 		for i in range(enemies.size()):

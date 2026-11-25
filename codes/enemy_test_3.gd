@@ -159,7 +159,8 @@ func _possess_stop() -> void:
 	INVINCIBLE = true
 	INVINCIBLE_COUNT = true
 	INVINCIBLE_COUNTER = 0
-	Autoloads.player.call_deferred("_end_possess")
+	if Autoloads.PLAYER_POSSESSING:
+		Autoloads.player.call_deferred("_end_possess")
 func _process(_delta: float) -> void:
 	if INVINCIBLE_COUNT:
 		INVINCIBLE_COUNTER += 0.1
@@ -185,7 +186,7 @@ func _process(_delta: float) -> void:
 		$RayCast2D.rotation_degrees = 0
 		$RayCast2D.position = Vector2i(10, 0)
 	if Autoloads.POSSESS_AMOUNT != 1 and POSSESSED:
-		_possess_stop()
+		call_deferred("_possess_stop")
 	if health <= 0:
 		get_parent().call_deferred("_erase")
 	if possess_health == 0:
@@ -202,6 +203,7 @@ func _possess_start():
 	Autoloads.POSSESS_AMOUNT += 1
 	Autoloads.player.stats = stats
 	possess_health = -1
+	Autoloads.POSSESS_ENEMY = self
 	Autoloads.PLAYER_POSSESSING = true
 	global_position = Autoloads.player.global_position
 	velocity = Vector2(0, 0)

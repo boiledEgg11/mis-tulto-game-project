@@ -140,6 +140,7 @@ func _possess_start():
 	get_parent().call_deferred("_possessed")
 	Autoloads.POSSESS_AMOUNT += 1
 	Autoloads.player.stats = stats
+	Autoloads.POSSESS_ENEMY = self
 	possess_health = -1
 	Autoloads.PLAYER_POSSESSING = true
 	global_position = Autoloads.player.global_position

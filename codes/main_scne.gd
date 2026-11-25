@@ -8,6 +8,7 @@ var POSSESS_ENEMY: Node2D
 var SAVE_READY = true
 var dash_recover_value: int
 var health_value: int
+@onready var load_file: int
 @export var Player: Node2D
 @export var player_shape: Node2D
 @onready var designated_position_player:Vector2
@@ -37,17 +38,19 @@ func _enemy_read(file):
 	_force_erase()
 	player_shape.call_deferred("set_disabled", true)
 	call_deferred("_load_data", file)
+func _erase_finish():
+	$ObjectPlacement.call_deferred("_read_data", false, null)
+	call_deferred("_variable_set")
+	call_deferred("_load", load_file)
+	call_deferred("_enemy_set")
 func _reset(file):
 	Player.INVINCIBLE = true
 	if Autoloads.POSSESS_ENEMY:
 		print("there is enemy")
 	print("Enemy Released1")
 	Player.POSSESS_END = false
+	load_file = file
 	_force_erase()
-	$ObjectPlacement.call_deferred("_read_data", false, null)
-	call_deferred("_variable_set")
-	call_deferred("_load", file)
-	call_deferred("_enemy_set")
 func _variable_set():
 	Autoloads.POSSESS_AMOUNT = 0
 	Player.POSSESS_START = true

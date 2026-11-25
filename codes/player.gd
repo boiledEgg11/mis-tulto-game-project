@@ -559,7 +559,7 @@ func _physics_process(delta: float) -> void:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1 or POSSESS_END:
-			_end_possess()
+			call_deferred("_end_possess")
 	if not Autoloads.PLAYER_POSSESSING:
 		parent.call("_ability_label", stats.ability_display)
 		$PlayerIndicator.visible = false
@@ -885,12 +885,15 @@ func _raid(map, area):
 		_:
 			pass
 func _end_possess():
+	print("ending possess...")
 	rotation = 0
 	INVINCIBLE  = true
 	POSSESS_END = false
+	print("ending...")
 	Autoloads.POSSESS_AMOUNT = 0
 	$Sprite2D.rotation = 0
 	$DamageCollision.rotation = 0
+	print("ending2...")
 	Autoloads.PLAYER_POSSESS_STOP = true
 	Autoloads.PLAYER_POSSESSING = false
 	POSSESS_START = true
