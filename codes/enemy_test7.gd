@@ -176,6 +176,7 @@ func _possess_start():
 	$Enemy7Laser.attacking = false
 	CHARGE = 0
 	get_parent().call_deferred("_possessed")
+	Autoloads.POSSESS_ENEMY = self
 	Autoloads.POSSESS_AMOUNT += 1
 	Autoloads.player.stats = stats
 	possess_health = -1

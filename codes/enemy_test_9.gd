@@ -223,6 +223,7 @@ func _possess_start():
 	Autoloads.POSSESS_AMOUNT += 1
 	Autoloads.player.stats = stats
 	possess_health = -1
+	Autoloads.POSSESS_ENEMY = self
 	Autoloads.PLAYER_POSSESSING = true
 	velocity = Vector2(0, 0)
 	defeated = false

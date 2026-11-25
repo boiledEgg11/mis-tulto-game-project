@@ -558,7 +558,7 @@ func _physics_process(delta: float) -> void:
 				else:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
-		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1 or POSSESS_END:
+		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1 or POSSESS_END or not is_instance_valid(Autoloads.POSSESS_ENEMY):
 			call_deferred("_end_possess")
 	if not Autoloads.PLAYER_POSSESSING:
 		parent.call("_ability_label", stats.ability_display)
