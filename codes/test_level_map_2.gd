@@ -15,4 +15,4 @@ func _process(delta: float) -> void:
 func _puzzle_solved():
 	for i in range(3, 6):
 		for l in range(-69, -67):
-			$TileMapLayer5.erase_cell(Vector2i(l, i))
+			$TileLayer5.erase_cell(Vector2i(l, i))

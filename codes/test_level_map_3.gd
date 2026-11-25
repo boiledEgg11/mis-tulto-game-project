@@ -21,7 +21,7 @@ func _puzzle_solved():
 	puzzle_amount += 1
 	if puzzle_amount == 2:
 		for i in range(-33, -30):
-			$TileMapLayer2.erase_cell(Vector2i(i, 5))
+			$TileLayer2.erase_cell(Vector2i(i, 5))
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if attacking and cooldown > 6:
