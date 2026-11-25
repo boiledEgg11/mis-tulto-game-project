@@ -24,6 +24,9 @@ extends CharacterBody2D
 @onready var after_wait: bool = false
 @onready var no_stomp: bool = false
 @onready var knockback: int = 0
+@onready var move_lock: bool = false
+@onready var return_position: Vector2
+@onready var returning: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -64,9 +67,20 @@ func _attack():
 	cooldown = 0
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
+func _background_attack():
+	return_position = global_position
+	move_lock = true
+	set_collision_mask_value(1, false)
+	velocity.y = 100
+func _end_background_attack():
+	returning = true
+	global_position = return_position + Vector2(0, -256)
+	velocity.y = 0
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("5"):
-		_attack()
+	if Input.is_action_just_pressed("7"):
+		_background_attack()
+	if Input.is_action_just_pressed("9"):
+		_end_background_attack()
 	if START:
 		match stats.individual:
 			1:
@@ -80,55 +94,66 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
-		if defeated:
-			velocity.x = move_toward(velocity.x, 0, 10)
-			velocity += get_gravity() * 1.5 * delta
-		if not attacking or not charge_attack:
-			cooldown += 0.1
-			if cooldown > 24:
-				charge_attack = true
-				cooldown = 0
-		if charge_attack and not defeated:
-			charge += 0.1
-			if charge > 3:
-				_attack()
-				charge_attack = false
-				charge = 0
-		if wait_time > 0:
-			wait_time -= 0.1
-			if wait_time <= 0:
-				waiting = false
-				cooldown = 0
-		if attacking:
-			attack_time += 0.1
-			if attack_time > 3 and not after_wait and not waiting:
-				waiting = true
-				wait_time = 0.7
-				velocity = Vector2(0, 0)
-				after_wait = true
-			if attack_time > 3 and not waiting and wait_time <= 0:
-				attacking = false
-				attack_time = 0
-				drop = true
-		if position.y > 175:
-			queue_free()
-		POSSESSED = false
-		if not (defeated or attacking or drop or waiting or charge_attack):
-			if not is_on_floor():
-				velocity.x = direction * stats.air_speed * 1.5
-			if is_on_floor():
-				charge += 1
-				velocity.x = 0
-				if charge > 30:
+		if returning:
+			direction = 1
+			print("returning...")
+			velocity.y = move_toward(velocity.y, 300, 12)
+			if global_position.y > 0:
+				returning = false
+				set_collision_mask_value(1, true)
+				move_lock = false
+		if move_lock:
+			velocity.y = move_toward(velocity.y, -300, 12)
+		if not move_lock or not returning:
+			if defeated:
+				velocity.x = move_toward(velocity.x, 0, 10)
+				velocity += get_gravity() * 1.5 * delta
+			if not attacking or not charge_attack:
+				cooldown += 0.1
+				if cooldown > 24:
+					charge_attack = true
+					cooldown = 0
+			if charge_attack and not defeated:
+				charge += 0.1
+				if charge > 3:
+					_attack()
+					charge_attack = false
 					charge = 0
-					velocity.y = -150
-		$EnemyArea/CollisionShape2D.disabled = false
-		$Sprite2D.visible = true
-		if not (is_on_floor() or attacking or waiting):
-			if drop:
-				velocity += get_gravity() * delta * 2.5
-			else:
-				velocity += get_gravity() * delta * 1.5
+			if wait_time > 0:
+				wait_time -= 0.1
+				if wait_time <= 0:
+					waiting = false
+					cooldown = 0
+			if attacking:
+				attack_time += 0.1
+				if attack_time > 3 and not after_wait and not waiting:
+					waiting = true
+					wait_time = 0.7
+					velocity = Vector2(0, 0)
+					after_wait = true
+				if attack_time > 3 and not waiting and wait_time <= 0:
+					attacking = false
+					attack_time = 0
+					drop = true
+			if position.y > 175:
+				queue_free()
+			POSSESSED = false
+			if not (defeated or attacking or drop or waiting or charge_attack):
+				if not is_on_floor():
+					velocity.x = direction * stats.air_speed * 1.5
+				if is_on_floor():
+					charge += 1
+					velocity.x = 0
+					if charge > 30:
+						charge = 0
+						velocity.y = -150
+			$EnemyArea/CollisionShape2D.disabled = false
+			$Sprite2D.visible = true
+			if not (is_on_floor() or attacking or waiting):
+				if drop:
+					velocity += get_gravity() * delta * 2.5
+				else:
+					velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
 		global_position = Autoloads.player.global_position
 		INVINCIBLE = true
@@ -138,11 +163,7 @@ func _physics_process(delta: float) -> void:
 		if Autoloads.PLAYER_POSSESS_STOP:
 			_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
-	if $LeftCollisionCheck.area_entered:
-		if stats.individual == 2 and is_on_floor():
-			velocity.y = -250
-			position.x -= 6 * direction
-		else:
+	if $LeftCollisionCheck.area_entered and not move_lock or returning:
 			direction *= -1
 func _on_enemy_area_area_entered(area:Node2D) -> void:
 	if not INVINCIBLE:

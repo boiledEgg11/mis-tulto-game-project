@@ -55,7 +55,7 @@ func _physics_process(_delta: float) -> void:
 			3:
 				position = Vector2i(-66 * 16, 80)
 			4:
-				position = Vector2(304, -64)
+				position = Vector2(312, -64)
 				set_collision_layer_value(1, false)
 				set_collision_layer_value(2, true)
 			_:
@@ -71,11 +71,13 @@ func _physics_process(_delta: float) -> void:
 				Autoloads.tile_move[stats.individual - 1] = -0.5
 			3:
 				Autoloads.tile_move[stats.individual - 1] = 0
+			4:
+				Autoloads.tile_move[stats.individual - 1] = 0.5
 			_:
 				Autoloads.tile_move[stats.individual - 1] = 0.5
 		velocity = Vector2(0, 0)
 		POSSESSED = false
-		rotation += 0.1
+		rotation += Autoloads.tile_move[stats.individual - 1] / 5
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 	if possess_health == -1:
@@ -116,7 +118,7 @@ func _possess_stop() -> void:
 func _process(_delta: float) -> void:
 	if INVINCIBLE_COUNT:
 		INVINCIBLE_COUNTER += 0.1
-		if INVINCIBLE_COUNTER > 60:
+		if INVINCIBLE_COUNTER > 6:
 			INVINCIBLE_COUNT = false
 			INVINCIBLE = false
 			INVINCIBLE_COUNTER = 0
