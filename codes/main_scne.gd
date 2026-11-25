@@ -20,12 +20,12 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("5"):
 		_force_erase()
 func _reset(file):
+	_variable_set()
 	reset = true
 	Autoloads.RESET = true
 	if is_instance_valid(POSSESS_ENEMY):
 		POSSESS_ENEMY.queue_free()
 	await get_tree().process_frame
-	_variable_set()
 	$ObjectPlacement.call_deferred("_read_data", false, null)
 	_force_erase()
 	player_shape.call_deferred("set_disabled", true)

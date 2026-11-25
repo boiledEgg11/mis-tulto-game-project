@@ -120,11 +120,11 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
-	if is_instance_valid(parent):
-		call_deferred("reparent", parent)
-	parent.call_deferred("_possess_end")
+	call_deferred("reparent", parent)
 	global_position = Autoloads.player.global_position
-	parent.global_position = global_position
+	if is_instance_valid(parent):
+		parent.call_deferred("_possess_end")
+		parent.global_position = global_position
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
@@ -137,7 +137,6 @@ func _possess_stop() -> void:
 	INVINCIBLE_COUNTER = 0
 	Autoloads.player.call_deferred("_end_possess")
 func _process(_delta: float) -> void:
-	print(get_parent().name)
 	if INVINCIBLE_COUNT:
 		INVINCIBLE_COUNTER += 0.1
 		if INVINCIBLE_COUNTER > 6:
@@ -152,7 +151,6 @@ func _process(_delta: float) -> void:
 		_possess_stop()
 	if health <= 0:
 		parent.call_deferred("_erase")
-		print("erased!")
 	if possess_health == 0:
 		_possess_start()
 func _possess_start():
