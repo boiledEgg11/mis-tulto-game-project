@@ -28,7 +28,7 @@ func _reset_previous(file):
 	_variable_set()
 	reset = true
 	Autoloads.RESET = true
-	_enemy_set(file)
+	_enemy_set()
 func _load_data(file):
 	Autoloads.RESET = false
 	_load(file)
@@ -36,9 +36,18 @@ func _enemy_read(file):
 	$ObjectPlacement.call_deferred("_read_data", false, null)
 	_force_erase()
 	player_shape.call_deferred("set_disabled", true)
-	_load_data(file)
+	call_deferred("_load_data", file)
 func _reset(file):
-	call_deferred("_remove_previous_enemy", file)
+	Player.INVINCIBLE = true
+	if Autoloads.POSSESS_ENEMY:
+		print("there is enemy")
+	print("Enemy Released1")
+	Player.POSSESS_END = false
+	_force_erase()
+	$ObjectPlacement.call_deferred("_read_data", false, null)
+	call_deferred("_variable_set")
+	call_deferred("_load", file)
+	call_deferred("_enemy_set")
 func _variable_set():
 	Autoloads.POSSESS_AMOUNT = 0
 	Player.POSSESS_START = true
@@ -91,11 +100,10 @@ func _load(file):
 			Player._change_map("test_level_map_1", -1)
 			Player.position = Vector2i(0, 0)
 			designated_position_player = Vector2(0, 0)
-	await get_tree().process_frame
 	player_shape.call_deferred("set_disabled", false)
 	Player._raid_end()
 	$ObjectPlacement.raid = false
-func _enemy_set(file):
+func _enemy_set():
 	if Autoloads.ENEMY_POSSESS.species and Autoloads.ENEMY_POSSESS.species != "Tulto":
 		match Autoloads.ENEMY_POSSESS.species:
 			"Slimy":
@@ -121,7 +129,6 @@ func _enemy_set(file):
 			POSSESS_ENEMY.call("_individual_set", Autoloads.ENEMY_POSSESS.individual)
 			POSSESS_ENEMY.call("_possess_start")
 			$ObjectPlacement.call_deferred("_possess_enemy_set", POSSESS_ENEMY)
-		_enemy_read(file)
 func _set_data():
 	$ObjectPlacement._read_data(false, -1)
 func _on_texture_button_pressed() -> void:
