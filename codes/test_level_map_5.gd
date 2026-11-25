@@ -9,15 +9,15 @@ func _ready() -> void:
 			Autoloads.tiles.append(i)
 func _process(delta: float) -> void:
 	if bar_move_state == 1:
-		if $TileMapLayer4.position.y >= 16:
+		if $TileLayer2.position.y >= 16:
 			bar_move_state = 0
 			return
-		$TileMapLayer4.position.y += 4
+		$TileLayer2.position.y += 4
 	if bar_move_state == 2:
-		if $TileMapLayer4.position.y <=-80:
+		if $TileLayer2.position.y <=-80:
 			bar_move_state = 0
 			return
-		$TileMapLayer4.position.y -= 4
+		$TileLayer2.position.y -= 4
 	if Progressions.progression.raid_2:
 		if not $EnemyRaidStart/CollisionShape2D.disabled:
 			$EnemyRaidStart/CollisionShape2D.disabled = true
