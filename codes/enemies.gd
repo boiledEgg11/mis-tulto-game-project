@@ -8,9 +8,12 @@ func _erase():
 			for i in 5:
 				if get_child(0).projectile[i].name == "Enemy8_projectile":
 					get_child(0).projectile[i].call_deferred("_screen_not_visible")
+	if is_instance_valid(child):
+		child.queue_free()
 	queue_free()
 func _ready() -> void:
-	pass # Replace with function body.
+	if is_instance_valid(get_child(0)):
+		child = get_child(0)
 func _possess_start():
 	get_child(0).possess_health = 0
 	get_child(0).call_deferred("_possess_start")
