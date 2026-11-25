@@ -432,10 +432,11 @@ func _physics_process(delta: float) -> void:
 				Autoloads.move_amount = true
 				if Input.is_action_just_pressed("ability"):
 					Autoloads.move_amount = false
-				if not Input.is_action_pressed("space"):
-					parent.call("_camera_position", Autoloads.CAMERA_LOCATION.x, Autoloads.CAMERA_LOCATION.y, true)
-				else:
-					parent.call("_camera_position", position.x, position.y, false)
+				if not fixed_camera:
+					if not Input.is_action_pressed("space"):
+						parent.call("_camera_position", Autoloads.CAMERA_LOCATION.x, Autoloads.CAMERA_LOCATION.y, true)
+					else:
+						parent.call("_camera_position", position.x, position.y, false)
 				velocity.x = 0
 				velocity.y = 0
 				global_position = Autoloads.POSSESS_ENEMY.global_position
