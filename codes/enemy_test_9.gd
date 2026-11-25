@@ -10,6 +10,8 @@ extends CharacterBody2D
 @export var player_colliding: Node2D
 @export var parent: Node2D
 @export var parent_parent: Node2D
+@onready var INVINCIBLE_COUNT: bool = false
+@onready var INVINCIBLE_COUNTER: float = 0
 @onready var defeated: bool = false
 @export var ground_exist: bool = true
 @export var defeat_time: float = 0
@@ -191,9 +193,16 @@ func _possess_stop() -> void:
 	$Sprite2D.visible = true
 	defeated = true
 	$EnemyArea.remove_from_group("damage")
-	await get_tree().create_timer(1).timeout
-	INVINCIBLE = false
+	INVINCIBLE = true
+	INVINCIBLE_COUNT = true
+	INVINCIBLE_COUNTER = 0
 func _process(_delta: float) -> void:
+	if INVINCIBLE_COUNT:
+		INVINCIBLE_COUNTER += 0.1
+		if INVINCIBLE_COUNTER > 6:
+			INVINCIBLE_COUNT = false
+			INVINCIBLE = false
+			INVINCIBLE_COUNTER = 0
 	if defeated:
 		defeat_time += 0.1
 	if defeat_time > 24:

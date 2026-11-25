@@ -5,6 +5,8 @@ extends CharacterBody2D
 @export var START: bool = false
 @export var INVINCIBLE: bool = false
 @export var POSSESSED: bool = false
+@onready var INVINCIBLE_COUNT: bool = false
+@onready var INVINCIBLE_COUNTER: float = 0
 @export var attacking: bool = false
 @export var charge: float = 0.0
 @export var player_colliding: Node2D
@@ -106,9 +108,16 @@ func _possess_stop() -> void:
 	velocity.y = -100
 	velocity.x = 0
 	health = 1
-	await get_tree().create_timer(1).timeout
-	INVINCIBLE = false
+	INVINCIBLE = true
+	INVINCIBLE_COUNT = true
+	INVINCIBLE_COUNTER = 0
 func _process(_delta: float) -> void:
+	if INVINCIBLE_COUNT:
+		INVINCIBLE_COUNTER += 0.1
+		if INVINCIBLE_COUNTER > 60:
+			INVINCIBLE_COUNT = false
+			INVINCIBLE = false
+			INVINCIBLE_COUNTER = 0
 	if not Autoloads.PLAYER_POSSESSING and POSSESSED:
 		_possess_stop()
 	if Autoloads.POSSESS_AMOUNT > 1:

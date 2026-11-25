@@ -10,6 +10,8 @@ extends CharacterBody2D
 @export var player_colliding: Node2D
 @export var parent: Node2D
 @export var parent_parent: Node2D
+@onready var INVINCIBLE_COUNT: bool = false
+@onready var INVINCIBLE_COUNTER: float = 0
 @export var default_stats: Dictionary = {
 	"speed": 80,
 	"jump": -350,
@@ -157,9 +159,16 @@ func _possess_stop() -> void:
 	velocity.x = 0
 	health = 1
 	$Sprite2D.visible = true
-	await get_tree().create_timer(1).timeout
-	INVINCIBLE = false
+	INVINCIBLE = true
+	INVINCIBLE_COUNT = true
+	INVINCIBLE_COUNTER = 0
 func _process(_delta: float) -> void:
+	if INVINCIBLE_COUNT:
+		INVINCIBLE_COUNTER += 0.1
+		if INVINCIBLE_COUNTER > 6:
+			INVINCIBLE_COUNT = false
+			INVINCIBLE = false
+			INVINCIBLE_COUNTER = 0
 	if not is_instance_valid(parent):
 		Autoloads.player.POSSESS_END = true
 		queue_free()

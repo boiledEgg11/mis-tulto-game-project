@@ -186,6 +186,9 @@ func _ability_use(ability):
 	if not stats.tag.has("no_recover_usage"):
 		parent.call_deferred("_dash_recover", 0, true)
 func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed("7"):
+		print(Autoloads.POSSESS_AMOUNT)
+		print(POSSESS_END)
 	if not fixed_camera:
 		parent.call("_camera_position", position.x, position.y, false)
 	if INVINCIBLE_HOLD:
@@ -556,19 +559,7 @@ func _physics_process(delta: float) -> void:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1 or POSSESS_END:
-			rotation = 0
-			INVINCIBLE  = true
-			POSSESS_END = false
-			Autoloads.POSSESS_AMOUNT = 0
-			$Sprite2D.rotation = 0
-			$DamageCollision.rotation = 0
-			Autoloads.PLAYER_POSSESS_STOP = true
-			Autoloads.PLAYER_POSSESSING = false
-			POSSESS_START = true
-			DASH_LOCK = false
-			stats = DEF_stats
-			await get_tree().create_timer(0.2).timeout
-			INVINCIBLE = false
+			_end_possess()
 	if not Autoloads.PLAYER_POSSESSING:
 		parent.call("_ability_label", stats.ability_display)
 		$PlayerIndicator.visible = false
@@ -893,3 +884,17 @@ func _raid(map, area):
 			parent.call_deferred("_raid", "test_map_5", area)
 		_:
 			pass
+func _end_possess():
+	rotation = 0
+	INVINCIBLE  = true
+	POSSESS_END = false
+	Autoloads.POSSESS_AMOUNT = 0
+	$Sprite2D.rotation = 0
+	$DamageCollision.rotation = 0
+	Autoloads.PLAYER_POSSESS_STOP = true
+	Autoloads.PLAYER_POSSESSING = false
+	POSSESS_START = true
+	DASH_LOCK = false
+	stats = DEF_stats
+	await get_tree().create_timer(0.2).timeout
+	INVINCIBLE = false

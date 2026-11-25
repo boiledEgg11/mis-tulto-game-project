@@ -11,6 +11,8 @@ extends CharacterBody2D
 @export var parent: Node2D
 @export var parent_parent: Node2D
 @export var ground_exist: bool = true
+@onready var INVINCIBLE_COUNT: bool = false
+@onready var INVINCIBLE_COUNTER: float = 0
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -111,9 +113,17 @@ func _possess_stop() -> void:
 	velocity.x = 0
 	health = 1
 	$Sprite2D.visible = true
-	await get_tree().create_timer(1).timeout
-	INVINCIBLE = false
+	INVINCIBLE = true
+	INVINCIBLE_COUNT = true
+	INVINCIBLE_COUNTER = 0
+	Autoloads.player.call_deferred("_end_possess")
 func _process(_delta: float) -> void:
+	if INVINCIBLE_COUNT:
+		INVINCIBLE_COUNTER += 0.1
+		if INVINCIBLE_COUNTER > 6:
+			INVINCIBLE = false
+			INVINCIBLE_COUNT = false
+			INVINCIBLE_COUNTER = 0
 	if not is_instance_valid(parent):
 		print("dead...")
 	$LeftCollisionCheck.position.x = 8 * direction
@@ -145,8 +155,6 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	if stats.individual == 3:
 		if body.is_in_group("tile") and is_on_floor():
 				ground_exist = false
-
-
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if stats.individual == 3:
 		if body.is_in_group("tile") and is_on_floor():

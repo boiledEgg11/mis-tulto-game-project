@@ -8,6 +8,8 @@ extends CharacterBody2D
 @export var attacking: bool = false
 @export var charge: float = 0.0
 @export var parent: Node2D
+@onready var INVINCIBLE_COUNT:bool = false
+@onready var INVINCIBLE_COUNTER: float = 0
 @export var parent_parent: Node2D
 @export var default_stats: Dictionary = {
 	"speed": 100,
@@ -181,9 +183,16 @@ func _possess_stop() -> void:
 	health = 1
 	$EnemyTestCollision.disabled = false
 	$Sprite2D.visible = true
-	await get_tree().create_timer(1).timeout
-	INVINCIBLE = false
+	INVINCIBLE = true
+	INVINCIBLE_COUNT = true
+	INVINCIBLE_COUNTER = 0
 func _process(_delta: float) -> void:
+	if INVINCIBLE_COUNT:
+		INVINCIBLE_COUNTER += 0.1
+		if INVINCIBLE_COUNTER > 6:
+			INVINCIBLE_COUNT = false
+			INVINCIBLE = false
+			INVINCIBLE_COUNTER = 0
 	$LeftCollisionCheck.position.x = 8 * direction
 	$GroundExistingChecker.position.x = 9 * direction
 	if direction == 1:
