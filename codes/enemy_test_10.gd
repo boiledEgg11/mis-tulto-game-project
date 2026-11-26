@@ -124,10 +124,10 @@ func _physics_process(delta: float) -> void:
 		if attack_charging:
 			projectile_cooldown += 0.1
 			charge += 0.1
-			if projectile_cooldown >= 0.4:
+			if projectile_cooldown >= 0.4 and charge < 12:
 				projectile_cooldown = 0
 				_projectile_summon()
-			if charge > 12:
+			if charge > 24:
 				_attack_end()
 				charge = 0
 				attack_charging = false

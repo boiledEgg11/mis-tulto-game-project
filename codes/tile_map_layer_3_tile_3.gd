@@ -18,6 +18,13 @@ func _process(_delta: float) -> void:
 			can_move = true
 		else:
 			can_move = false
+	if tile_move_value.x != 0:
+		if position.x >= -128:
+			if not is_in_group("background_guard"):
+				add_to_group("background_guard")
+		else:
+			if is_in_group("background_guard"):
+				remove_from_group("background_guard")
 	if initial_pos.x - 136 > position.x:
 			position.x = initial_pos.x - 136
 	if initial_pos.x < position.x:
