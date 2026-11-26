@@ -28,6 +28,7 @@ extends CharacterBody2D
 @onready var return_position: Vector2
 @onready var returning: bool = false
 @onready var in_background: bool = false
+@onready var background_return: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -64,7 +65,6 @@ func _attack():
 	attacking = true
 	velocity.x = target_position.x * -2
 	velocity.y = -200
-	print(velocity.y)
 	cooldown = 0
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
@@ -77,23 +77,41 @@ func _background_attack():
 	set_collision_layer_value(6, false)
 	velocity.y = 100
 func _background_reside():
+	scale = Vector2(0.5, 0.5)
+	$EnemyArea/CollisionShape2D.disabled = true
+	Autoloads.tile_move[3] = 0
+	move_lock = false
 	velocity = Vector2(0, 300)
 	global_position = Vector2(312, -256)
 	z_index = -2
 	in_background =  true
+	charge = 0
+func _end_background_reside():
+	in_background = false
+	velocity = Vector2(0, 100)
+	background_return = true
 func _end_background_attack():
+	scale = Vector2(1, 1)
+	$EnemyArea/CollisionShape2D.disabled = false
+	z_index = 0
+	in_background =  false
 	returning = true
 	move_lock = false
 	velocity = Vector2(0, 0)
 	global_position = return_position + Vector2(0, -256)
 	velocity.y = 10
+func _charge_attack():
+	print("attack!")
+	_attack_end()
+func _attack_end():
+	_end_background_reside()
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("4"):
 		_background_reside()
 	if Input.is_action_just_pressed("8"):
 		_background_attack()
 	if Input.is_action_just_pressed("9"):
-		_end_background_attack()
+		_end_background_reside()
 	if START:
 		match stats.individual:
 			1:
@@ -107,11 +125,23 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if background_return:
+			velocity.y = move_toward(velocity.y, -300, 12)
+			if global_position.y < -300:
+				print("return end")
+				background_return = false
+				_end_background_attack()
+		if move_lock:
+			Autoloads.tile_move[3] = -1.75
+		if returning:
+			Autoloads.tile_move[3] = 2.5
 		if in_background:
 			if global_position.y > -58:
 				velocity.y = move_toward(velocity.y, 0, 30)
+			charge += 0.1
+			if charge > 12:
+				_charge_attack()
 		if returning:
-			print(global_position)
 			velocity.y = move_toward(velocity.y, 300, 12)
 			if global_position.y > 0:
 				move_lock = false
@@ -119,13 +149,13 @@ func _physics_process(delta: float) -> void:
 				set_collision_mask_value(1, true)
 				set_collision_mask_value(2, true)
 				set_collision_layer_value(6, true)
+				Autoloads.tile_move[3] = 0
 		if move_lock:
 			velocity.y = move_toward(velocity.y, -300, 12)
 			if global_position.y < -300:
 				move_lock = false
 				_background_reside()
-		if not (returning or move_lock or in_background):
-			print("moving")
+		if not (returning or move_lock or in_background or background_return):
 			if defeated:
 				velocity.x = move_toward(velocity.x, 0, 10)
 				velocity += get_gravity() * 1.5 * delta
@@ -185,7 +215,7 @@ func _physics_process(delta: float) -> void:
 			_possess_stop()
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
 	if $LeftCollisionCheck.area_entered:
-		if not (move_lock or returning or in_background):
+		if not (move_lock or returning or in_background or background_return):
 			direction *= -1
 func _on_enemy_area_area_entered(area:Node2D) -> void:
 	if not INVINCIBLE:
