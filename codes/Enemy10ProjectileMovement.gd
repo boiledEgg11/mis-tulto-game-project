@@ -5,6 +5,7 @@ extends CharacterBody2D
 @onready var projectile_owner: Node2D
 @onready var last_velocity: Vector2
 @onready var timer: float = 0 
+@onready var projectile_erase: bool = true
 func _summoned(initial_size: Vector2, size_growth: Vector2, size_growth_speed: float, target_position: Vector2, parent):
 	timer = 0
 	global_position = parent.global_position
@@ -44,6 +45,8 @@ func _physics_process(delta: float) -> void:
 		z_index = -2
 	else:
 		z_index = 2
+	if scale.x >= 0.4:
+		projectile_erase = true
 	if scale.x > 1:
 		if scale.x < 3:
 			erasable = true
@@ -56,5 +59,9 @@ func _physics_process(delta: float) -> void:
 	else:
 		$Area2D/CollisionShape2D.disabled = true
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body.is_in_group("background_guard"):
+	pass
+
+
+func _on_erase_detection_body_entered(body: Node2D) -> void:
+	if body.is_in_group("background_guard") and projectile_erase:
 		get_parent().queue_free()

@@ -44,6 +44,7 @@ func _erase_finish():
 	call_deferred("_load", load_file)
 	call_deferred("_enemy_set")
 func _reset(file):
+	player_shape.call_deferred("set_disabled", true)
 	Player.INVINCIBLE = true
 	if Autoloads.POSSESS_ENEMY:
 		print("there is enemy")
@@ -52,7 +53,6 @@ func _reset(file):
 	load_file = file
 	_force_erase()
 func _variable_set():
-	Autoloads.POSSESS_AMOUNT = 0
 	Player.POSSESS_START = true
 	Player.velocity = Vector2(0, 0)
 	Player.DASH_LOCK = false
@@ -103,9 +103,12 @@ func _load(file):
 			Player._change_map("test_level_map_1", -1)
 			Player.position = Vector2i(0, 0)
 			designated_position_player = Vector2(0, 0)
-	player_shape.call_deferred("set_disabled", false)
 	Player._raid_end()
 	$ObjectPlacement.raid = false
+	while Player.global_position != designated_position_player:
+		pass
+	await get_tree().process_frame
+	player_shape.call_deferred("set_disabled", false)
 func _enemy_set():
 	if Autoloads.ENEMY_POSSESS.species and Autoloads.ENEMY_POSSESS.species != "Tulto":
 		match Autoloads.ENEMY_POSSESS.species:

@@ -27,6 +27,7 @@ func _raid_start():
 	await get_tree().create_timer(0.5).timeout
 	$Area2D/Sprite2D.visible = false
 func _on_enemy_raid_start_body_entered(body: Node2D) -> void:
+	print("raid start!")
 	_raid_start()
 	bar_move_state = 1
 func _raid_end():
