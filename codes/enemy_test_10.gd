@@ -30,6 +30,7 @@ extends CharacterBody2D
 @onready var in_background: bool = false
 @onready var background_return: bool = false
 @onready var attack_charging: bool = false
+@onready var random_value = RandomNumberGenerator.new()
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -107,6 +108,8 @@ func _charge_attack():
 func _attack_end():
 	_end_background_reside()
 func _physics_process(delta: float) -> void:
+	if Input.is_action_just_pressed("2"):
+		_projectile_summon()
 	if START:
 		match stats.individual:
 			1:
@@ -305,3 +308,9 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
 		pass
+func _summoned(initial_size: Vector2, size_growth: Vector2, size_growth_speed: float, direction: float):
+	pass
+func _projectile_summon():
+	var projectile = preload("res://scenes/projectile/enemy10_projectile.tscn").instantiate()
+	owner.add_child.call_deferred(projectile)
+	projectile.call_deferred("_summoned", Vector2(0.1, 0.1), Vector2(random_value.randf_range(0.2, 0.5), random_value.randf_range(0.2, 0.5)), random_value.randf_range(0.2, 0.5), random_value.randf_range(0.1, 360), self)
