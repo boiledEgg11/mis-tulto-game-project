@@ -4,8 +4,9 @@ extends TileMapLayer
 @onready var can_move: bool = false
 func _ready() -> void:
 	initial_pos.x = position.x
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
+	if Autoloads.RESET:
+		_reset()
 	if position.x >= initial_pos.x - 136:
 		if tile_move_value.x > 0:
 			position.x += tile_move_value.x
@@ -30,3 +31,5 @@ func _process(_delta: float) -> void:
 	if initial_pos.x < position.x:
 			position.x = initial_pos.x
 	tile_move_value.x = Autoloads.tile_move[3]
+func _reset():
+	position = Vector2(8, 0)
