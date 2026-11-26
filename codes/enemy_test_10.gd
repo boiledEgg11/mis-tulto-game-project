@@ -13,6 +13,7 @@ extends CharacterBody2D
 @onready var defeated: bool = false
 @export var ground_exist: bool = true
 @export var defeat_time: float = 0
+@onready var initial_position: Vector2
 @export var cooldown: float = 0
 @export var charge_attack: bool = false
 @export var target_position: Vector2
@@ -63,8 +64,8 @@ extends CharacterBody2D
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _background_attack():
-	return_position = global_position
 	velocity = Vector2(0, 0)
+	return_position = global_position
 	move_lock = true
 	set_collision_mask_value(1, false)
 	set_collision_mask_value(2, false)
@@ -102,8 +103,11 @@ func _movement_logic(delta):
 			velocity.y = move_toward(velocity.y, 0, 15)
 			velocity.x = move_toward(velocity.x, 0, 15)
 		"move":
-			velocity.x = -100
-			velocity.y = move_toward(velocity.y, 0, 40)
+			velocity.x = 100 * direction
+			if initial_position.y - 20 < position.y:
+				velocity.y -= 50
+			if not is_on_floor():
+				velocity += get_gravity() * delta * 1.5
 		"idle":
 			if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
@@ -111,10 +115,9 @@ func _movement_logic(delta):
 				_stay_attack()
 func _stay_attack():
 	_shooot_attack()
-	velocity.y = -300
-	stage = "move"
+	initial_position = position
 func _shooot_attack():
-	pass
+	stage = "move"
 func _attack_end():
 	_end_background_reside()
 func _physics_process(delta: float) -> void:
@@ -182,7 +185,7 @@ func _physics_process(delta: float) -> void:
 			if position.y > 175:
 				queue_free()
 			POSSESSED = false
-			if not (defeated or attacking or waiting or charge_attack):
+			if not (move_lock or defeated):
 				_movement_logic(delta)
 			$EnemyArea/CollisionShape2D.disabled = false
 			$Sprite2D.visible = true

@@ -57,7 +57,6 @@ func _physics_process(_delta: float) -> void:
 			4:
 				position = Vector2(312, -64)
 				set_collision_layer_value(1, false)
-				set_collision_layer_value(2, true)
 			_:
 				position = Vector2i(0, 0)
 		Initial = position
