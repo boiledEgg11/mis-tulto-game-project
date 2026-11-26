@@ -71,9 +71,7 @@ func _physics_process(_delta: float) -> void:
 				Autoloads.tile_move[stats.individual - 1] = -0.5
 			3:
 				Autoloads.tile_move[stats.individual - 1] = 0
-			4:
-				Autoloads.tile_move[stats.individual - 1] = 0.5
-			_:
+			1:
 				Autoloads.tile_move[stats.individual - 1] = 0.5
 		velocity = Vector2(0, 0)
 		POSSESSED = false

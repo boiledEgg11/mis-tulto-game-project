@@ -29,6 +29,7 @@ extends CharacterBody2D
 @onready var returning: bool = false
 @onready var in_background: bool = false
 @onready var background_return: bool = false
+@onready var attack_charging: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -101,17 +102,11 @@ func _end_background_attack():
 	global_position = return_position + Vector2(0, -256)
 	velocity.y = 10
 func _charge_attack():
-	print("attack!")
-	_attack_end()
+	$AllScreenDamage/CollisionShape2D.disabled = false
+	attack_charging = true
 func _attack_end():
 	_end_background_reside()
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("4"):
-		_background_reside()
-	if Input.is_action_just_pressed("8"):
-		_background_attack()
-	if Input.is_action_just_pressed("9"):
-		_end_background_reside()
 	if START:
 		match stats.individual:
 			1:
@@ -125,10 +120,17 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if attack_charging:
+			charge += 0.1
+			if charge > 0.4 and charge < 0.7:
+				$AllScreenDamage/CollisionShape2D.disabled = true
+			if charge > 6:
+				_attack_end()
+				charge = 0
+				attack_charging = false
 		if background_return:
 			velocity.y = move_toward(velocity.y, -300, 12)
 			if global_position.y < -300:
-				print("return end")
 				background_return = false
 				_end_background_attack()
 		if move_lock:
@@ -140,6 +142,7 @@ func _physics_process(delta: float) -> void:
 				velocity.y = move_toward(velocity.y, 0, 30)
 			charge += 0.1
 			if charge > 12:
+				charge = 0
 				_charge_attack()
 		if returning:
 			velocity.y = move_toward(velocity.y, 300, 12)
@@ -161,7 +164,7 @@ func _physics_process(delta: float) -> void:
 				velocity += get_gravity() * 1.5 * delta
 			if not attacking or not charge_attack:
 				cooldown += 0.1
-				if cooldown > 24:
+				if cooldown > 48:
 					charge_attack = true
 					cooldown = 0
 			if charge_attack and not defeated:

@@ -1,4 +1,4 @@
-extends CharacterBody2D
+sextends CharacterBody2D
 @export var DASHING = false
 @export var direction = 1
 @export var health = 10
@@ -750,6 +750,10 @@ func _on_damage_collision_area_entered(area) -> void:
 			else:
 				_health_process(1, true, knockback)
 		print("damaged!")
+	if area.is_in_group("background_attack"):
+		_background_calculations()
+func _background_calculations():
+	pass
 func _on_damage_collision_area_exited(area) -> void:
 	if area.is_in_group("damage"):
 		ENEMY_COLLISION = false
