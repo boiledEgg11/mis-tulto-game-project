@@ -31,6 +31,7 @@ extends CharacterBody2D
 @onready var background_return: bool = false
 @onready var attack_charging: bool = false
 @onready var random_value = RandomNumberGenerator.new()
+@onready var projectile_cooldown: float = 0
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -124,10 +125,14 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if possess_health > 0:
 		if attack_charging:
+			projectile_cooldown += 0.1
 			charge += 0.1
+			if projectile_cooldown > 0.3:
+				_projectile_summon()
+				projectile_cooldown = 0
 			if charge > 0.4 and charge < 0.7:
 				$AllScreenDamage/CollisionShape2D.disabled = true
-			if charge > 6:
+			if charge > 12:
 				_attack_end()
 				charge = 0
 				attack_charging = false
