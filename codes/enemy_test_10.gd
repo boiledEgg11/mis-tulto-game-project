@@ -308,9 +308,9 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
 		pass
-func _summoned(initial_size: Vector2, size_growth: Vector2, size_growth_speed: float, direction: float):
+func _summoned(initial_size: Vector2, size_growth: Vector2, size_growth_speed: float, target_position: Vector2, parent):
 	pass
 func _projectile_summon():
 	var projectile = preload("res://scenes/projectile/enemy10_projectile.tscn").instantiate()
 	owner.add_child.call_deferred(projectile)
-	projectile.call_deferred("_summoned", Vector2(0.1, 0.1), Vector2(random_value.randf_range(0.2, 0.5), random_value.randf_range(0.2, 0.5)), random_value.randf_range(0.2, 0.5), random_value.randf_range(0.1, 360), self)
+	projectile.call_deferred("_summoned", Vector2(0.1, 0.1), Vector2(random_value.randf_range(0.2, 0.5), random_value.randf_range(0.2, 0.5)), random_value.randf_range(0.2, 0.5), Vector2(random_value.randf_range(-144, 144), random_value.randf_range(-81, 81)), self)

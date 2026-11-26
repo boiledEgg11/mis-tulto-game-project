@@ -6,7 +6,8 @@ extends CharacterBody2D
 func _summoned(initial_size: Vector2, size_growth: Vector2, size_growth_speed: float, target_position: Vector2, parent):
 	global_position = parent.global_position
 	scale = initial_size
-	look_at(target_position)
+	look_at(to_global(target_position))
+	velocity = target_position.normalized() * -190
 	size_grow = size_growth
 	size_speed = size_growth_speed
 func _physics_process(delta: float) -> void:
