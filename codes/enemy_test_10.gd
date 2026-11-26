@@ -99,25 +99,39 @@ func _charge_attack():
 	attack_charging = true
 func _movement_logic(delta):
 	match stage:
-		"stay":
-			velocity.y = move_toward(velocity.y, 0, 15)
+		"landing":
 			velocity.x = move_toward(velocity.x, 0, 15)
+			velocity.y = move_toward(velocity.y, -200, 15)
+			charge += 0.1
+			if charge > 3:
+				print("landing!")
+				charge = 0
+				stage = "idle"
 		"move":
 			velocity.x = 100 * direction
-			if initial_position.y - 20 < position.y:
-				velocity.y -= 50
-			if not is_on_floor():
-				velocity += get_gravity() * delta * 1.5
+			charge += 0.1
+			if charge > 12:
+				velocity.y = 100
+				charge = 0
+				stage = "landing"
+			velocity.y = move_toward(velocity.y, 0, 25)
 		"idle":
 			if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 			if is_on_floor():
 				_stay_attack()
+		"land_wait":
+			if not is_on_floor():
+				velocity += get_gravity() * delta * 1.5
+func _landing():
+	velocity.y = -200
 func _stay_attack():
+	velocity = Vector2(0, 0)
 	_shooot_attack()
 	initial_position = position
 func _shooot_attack():
 	stage = "move"
+	velocity.y = -300
 func _attack_end():
 	_end_background_reside()
 func _physics_process(delta: float) -> void:
