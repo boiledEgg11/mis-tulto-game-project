@@ -106,7 +106,7 @@ func _movement_logic(delta):
 			if charge > 3:
 				print("landing!")
 				charge = 0
-				stage = "idle"
+				stage = "land_wait"
 		"move":
 			velocity.x = 100 * direction
 			charge += 0.1
@@ -130,6 +130,9 @@ func _stay_attack():
 	_shooot_attack()
 	initial_position = position
 func _shooot_attack():
+	var easy_projectile = preload("res://scenes/projectile/enemy10_easy_projectile.tscn").instantiate()
+	owner.add_child.call_deferred(easy_projectile)
+	easy_projectile.global_position = global_position
 	stage = "move"
 	velocity.y = -300
 func _attack_end():
