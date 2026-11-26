@@ -15,21 +15,22 @@ func _summoned(initial_size: Vector2, size_growth: Vector2, size_growth_speed: f
 	size_grow = size_growth
 	size_speed = size_growth_speed
 func _z_close_normal():
-	scale.x += 0.02
-	scale.y += 0.04
+	scale.x += 0.02 * size_speed
+	scale.y += 0.04 * size_speed
 func _z_close_reversing():
-	scale.y -= 0.1
-	scale.x += 0.02
+	scale.y -= 0.1 * size_speed
+	scale.x += 0.02 * size_speed
 	velocity.x = move_toward(velocity.x, 0, 15)
 	velocity.y = move_toward(velocity.y, 0, 15)
 func _z_close_reverse():
-	scale.y -= 0.04
-	scale.x += 0.02
+	scale.y -= 0.04 * size_speed
+	scale.x += 0.02 * size_speed
 	velocity.x = move_toward(velocity.x, last_velocity.x, 15)
 	velocity.y = move_toward(velocity.y, last_velocity.y, 15)
 func _physics_process(delta: float) -> void:
 	timer += 0.1
-	if timer > 12:
+	if timer > 80:
+		timer = 0
 		get_parent().queue_free()
 	if scale.x > 0.5 and scale.y > 0:
 		_z_close_reversing()

@@ -104,13 +104,10 @@ func _end_background_attack():
 	global_position = return_position + Vector2(0, -256)
 	velocity.y = 10
 func _charge_attack():
-	$AllScreenDamage/CollisionShape2D.disabled = false
 	attack_charging = true
 func _attack_end():
 	_end_background_reside()
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("2"):
-		_projectile_summon()
 	if START:
 		match stats.individual:
 			1:
@@ -127,11 +124,9 @@ func _physics_process(delta: float) -> void:
 		if attack_charging:
 			projectile_cooldown += 0.1
 			charge += 0.1
-			if projectile_cooldown > 0.3:
-				_projectile_summon()
+			if projectile_cooldown >= 0.4:
 				projectile_cooldown = 0
-			if charge > 0.4 and charge < 0.7:
-				$AllScreenDamage/CollisionShape2D.disabled = true
+				_projectile_summon()
 			if charge > 12:
 				_attack_end()
 				charge = 0
@@ -142,7 +137,7 @@ func _physics_process(delta: float) -> void:
 				background_return = false
 				_end_background_attack()
 		if move_lock:
-			Autoloads.tile_move[3] = -1.75
+			Autoloads.tile_move[3] = -3.5
 		if returning:
 			Autoloads.tile_move[3] = 2.5
 		if in_background:
@@ -318,4 +313,4 @@ func _summoned(initial_size: Vector2, size_growth: Vector2, size_growth_speed: f
 func _projectile_summon():
 	var projectile = preload("res://scenes/projectile/enemy10_projectile.tscn").instantiate()
 	owner.add_child.call_deferred(projectile)
-	projectile.call_deferred("_summoned", Vector2(0.1, 0.1), Vector2(random_value.randf_range(0.2, 0.5), random_value.randf_range(0.2, 0.5)), random_value.randf_range(0.2, 0.5), Vector2(random_value.randf_range(-144, 144), random_value.randf_range(-81, 81)), self)
+	projectile.call_deferred("_summoned", Vector2(0.1, 0.1), Vector2(random_value.randf_range(0.2, 0.5), random_value.randf_range(0.2, 0.5)), random_value.randf_range(0.75, 1.5), Vector2(random_value.randf_range(-144, 144), random_value.randf_range(-81, 81)), self)
