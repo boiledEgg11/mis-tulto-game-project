@@ -99,6 +99,8 @@ func _set_enemy(level):
 				characters[i] = preload("res://scenes/enemy/enemy8.tscn").instantiate()
 			"enemy_9":
 				characters[i] = preload("res://scenes/enemy/enemy9.tscn").instantiate()
+			"enemy_10":
+				characters[i] = preload("res://scenes/enemy/enemy_10.tscn").instantiate()
 			"save":
 				characters[i] = preload("res://scenes/misc/save.tscn").instantiate()
 			"treasure":
@@ -154,8 +156,8 @@ func _erase_enemy():
 					if is_instance_valid(characters[i]):
 						print("erased!")
 						if characters[i].get_child_count() > 0:
-							if characters[i].get_child(-1, false) != null:
-								if characters[i].get_child(-1, false).possess_health > 0:
+							if characters[i].get_child(0, false) != null:
+								if characters[i].get_child(0, false).possess_health > 0:
 									characters[i].call_deferred("_erase")
 				"save":
 					if is_instance_valid(characters[i]):
@@ -166,8 +168,8 @@ func _erase_enemy():
 		if is_instance_valid(POSSESS_ENEMY):
 			print("erased!")
 			if POSSESS_ENEMY.get_child_count() > 0:
-					if POSSESS_ENEMY.get_child(-1, false) != null:
-						if POSSESS_ENEMY.get_child(-1, false).possess_health > 0:
+					if POSSESS_ENEMY.get_child(0, false) != null:
+						if POSSESS_ENEMY.get_child(0, false).possess_health > 0:
 								POSSESS_ENEMY.call_deferred("_erase")
 func _possess_enemy_set(enemy):
 	POSSESS_ENEMY = enemy

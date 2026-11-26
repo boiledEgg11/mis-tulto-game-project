@@ -13,6 +13,10 @@ func _summoned(initial_size: Vector2, size_growth: Vector2, size_growth_speed: f
 func _physics_process(delta: float) -> void:
 	move_and_slide()
 	scale += size_grow * Vector2(size_speed, size_speed)
+	if scale.x < 1 and scale.y < 1:
+		z_index = -2
+	else:
+		z_index = 0
 	if scale.x > 1 and scale.y > 1:
 		if not scale.x > 1.5 or not scale.y > 1.5:
 			erasable = true
