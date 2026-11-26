@@ -17,11 +17,8 @@ extends CharacterBody2D
 @export var charge_attack: bool = false
 @export var target_position: Vector2
 @export var destination: Vector2
-@export var attack_time:float = 0.0
-@onready var drop: bool = false
 @onready var wait_time: float = 0
 @onready var waiting: bool = false
-@onready var after_wait: bool = false
 @onready var no_stomp: bool = false
 @onready var knockback: int = 0
 @onready var move_lock: bool = false
@@ -32,6 +29,7 @@ extends CharacterBody2D
 @onready var attack_charging: bool = false
 @onready var random_value = RandomNumberGenerator.new()
 @onready var projectile_cooldown: float = 0
+@onready var stage: String = "idle"
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -62,13 +60,6 @@ extends CharacterBody2D
 	"species": "BigSlimy",
 	"tag": []
 }
-func _attack():
-	after_wait = false
-	target_position = global_position - Autoloads.player.global_position
-	attacking = true
-	velocity.x = target_position.x * -2
-	velocity.y = -200
-	cooldown = 0
 func _ready() -> void:
 	$EnemyArea/CollisionShape2D.disabled = false
 func _background_attack():
@@ -105,6 +96,25 @@ func _end_background_attack():
 	velocity.y = 10
 func _charge_attack():
 	attack_charging = true
+func _movement_logic(delta):
+	match stage:
+		"stay":
+			velocity.y = move_toward(velocity.y, 0, 15)
+			velocity.x = move_toward(velocity.x, 0, 15)
+		"move":
+			velocity.x = -100
+			velocity.y = move_toward(velocity.y, 0, 40)
+		"idle":
+			if not is_on_floor():
+				velocity += get_gravity() * delta * 1.5
+			if is_on_floor():
+				_stay_attack()
+func _stay_attack():
+	_shooot_attack()
+	velocity.y = -300
+	stage = "move"
+func _shooot_attack():
+	pass
 func _attack_end():
 	_end_background_reside()
 func _physics_process(delta: float) -> void:
@@ -123,13 +133,13 @@ func _physics_process(delta: float) -> void:
 	if possess_health > 0:
 		if attack_charging:
 			projectile_cooldown += 0.1
-			charge += 0.1
-			if projectile_cooldown >= 0.4 and charge < 12:
+			cooldown += 0.1
+			if projectile_cooldown >= 0.4 and cooldown < 12:
 				projectile_cooldown = 0
 				_projectile_summon()
-			if charge > 24:
+			if cooldown > 18:
 				_attack_end()
-				charge = 0
+				cooldown = 0
 				attack_charging = false
 		if background_return:
 			velocity.y = move_toward(velocity.y, -300, 12)
@@ -165,52 +175,17 @@ func _physics_process(delta: float) -> void:
 			if defeated:
 				velocity.x = move_toward(velocity.x, 0, 10)
 				velocity += get_gravity() * 1.5 * delta
-			if not attacking or not charge_attack:
-				cooldown += 0.1
-				if cooldown > 48:
-					charge_attack = true
-					cooldown = 0
-			if charge_attack and not defeated:
-				charge += 0.1
-				if charge > 3:
-					_background_attack()
-					charge_attack = false
-					charge = 0
-			if wait_time > 0:
-				wait_time -= 0.1
-				if wait_time <= 0:
-					waiting = false
-					cooldown = 0
-			if attacking:
-				attack_time += 0.1
-				if attack_time > 3 and not after_wait and not waiting:
-					waiting = true
-					wait_time = 0.7
-					velocity = Vector2(0, 0)
-					after_wait = true
-				if attack_time > 3 and not waiting and wait_time <= 0:
-					attacking = false
-					attack_time = 0
-					drop = true
+			cooldown += 0.1
+			if cooldown > 24:
+				cooldown = 0
+				_background_attack()
 			if position.y > 175:
 				queue_free()
 			POSSESSED = false
-			if not (defeated or attacking or drop or waiting or charge_attack):
-				if not is_on_floor():
-					velocity.x = direction * stats.air_speed * 1.5
-				if is_on_floor():
-					charge += 1
-					velocity.x = 0
-					if charge > 30:
-						charge = 0
-						velocity.y = -150
+			if not (defeated or attacking or waiting or charge_attack):
+				_movement_logic(delta)
 			$EnemyArea/CollisionShape2D.disabled = false
 			$Sprite2D.visible = true
-			if not (is_on_floor() or attacking or waiting):
-				if drop:
-					velocity += get_gravity() * delta * 2.5
-				else:
-					velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
 		global_position = Autoloads.player.global_position
 		INVINCIBLE = true
