@@ -437,6 +437,7 @@ func _physics_process(delta: float) -> void:
 				Autoloads.move_amount = true
 				if Input.is_action_just_pressed("ability"):
 					Autoloads.move_amount = false
+					Autoloads.tile_move[stats.individual - 1] = 0
 				if not fixed_camera:
 					if not Input.is_action_pressed("space"):
 						parent.call("_camera_position", Autoloads.CAMERA_LOCATION.x, Autoloads.CAMERA_LOCATION.y, true)

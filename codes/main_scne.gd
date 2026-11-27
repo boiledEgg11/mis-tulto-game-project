@@ -53,6 +53,8 @@ func _reset(file):
 	load_file = file
 	_force_erase()
 func _variable_set():
+	for i in Autoloads.tile_move.size():
+		Autoloads.tile_move[i] = 0
 	Player.POSSESS_START = true
 	Player.velocity = Vector2(0, 0)
 	Player.DASH_LOCK = false

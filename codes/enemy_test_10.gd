@@ -122,9 +122,9 @@ func _movement_logic(delta):
 				charge = 0
 				stage = "idle"
 		"move":
-			velocity.x = 100 * direction
+			velocity.x = 195 * direction
 			charge += 0.1
-			if charge > 12:
+			if charge > 6:
 				velocity.y = 100
 				charge = 0
 				stage = "landing"
@@ -147,7 +147,7 @@ func _movement_logic(delta):
 				charge = 0
 				if low_health:
 					attack_count += 1
-					if attack_count >= 2:
+					if attack_count >= 3:
 						print("attacking!")
 						_background_attack()
 						attack_count = 0
@@ -211,7 +211,7 @@ func _physics_process(delta: float) -> void:
 			if global_position.y > -58:
 				velocity.y = move_toward(velocity.y, 0, 30)
 			charge += 0.1
-			if charge > 12:
+			if charge > 24:
 				charge = 0
 				_charge_attack()
 		if returning:
