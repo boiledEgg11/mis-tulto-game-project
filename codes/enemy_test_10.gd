@@ -75,6 +75,7 @@ func _background_attack():
 	set_collision_layer_value(6, false)
 	velocity.y = 100
 func _background_reside():
+	$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot_targetting.png")
 	scale = Vector2(0.5, 0.5)
 	$EnemyArea/CollisionShape2D.disabled = true
 	Autoloads.tile_move[3] = 0
@@ -89,6 +90,7 @@ func _end_background_reside():
 	velocity = Vector2(0, 100)
 	background_return = true
 func _end_background_attack():
+	$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot.png")
 	scale = Vector2(1, 1)
 	$EnemyArea/CollisionShape2D.disabled = false
 	z_index = 0
@@ -144,6 +146,7 @@ func _movement_logic(delta):
 				projectile_cooldown = 0
 			if charge > 9:
 				charge = 0
+				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot.png")
 				if low_health:
 					attack_count += 1
 					if attack_count >= 3:
@@ -170,6 +173,7 @@ func _shooot_attack():
 		direction = 1
 	if to_local(Autoloads.player.global_position) < position:
 		direction = -1
+	$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot_easy.png")
 	stage = "shooting"
 func _attack_end():
 	_end_background_reside()
