@@ -96,10 +96,13 @@ func _end_background_attack():
 	velocity = Vector2(0, 0)
 	global_position = return_position + Vector2(0, -256)
 	velocity.y = 10
+	stage = "attack_end"
 func _charge_attack():
 	attack_charging = true
 func _movement_logic(delta):
 	match stage:
+		"attack_end":
+			pass
 		"landing":
 			velocity.x = move_toward(velocity.x, 0, 15)
 			velocity.y = move_toward(velocity.y, -200, 15)
@@ -129,15 +132,15 @@ func _movement_logic(delta):
 		"shooting":
 			charge += 0.1
 			projectile_cooldown += 0.1
-			if projectile_cooldown > 1.5:
+			if projectile_cooldown > 1.5 and charge <= 7.5:
 				var easy_projectile = preload("res://scenes/projectile/enemy10_easy_projectile.tscn").instantiate()
 				owner.add_child.call_deferred(easy_projectile)
 				easy_projectile.call_deferred("_start", global_position, Autoloads.player.position + Vector2(random_value.randf_range(-5, 5), random_value.randf_range(-5, 5)))
 				projectile_cooldown = 0
-			if charge > 7.5:
+			if charge > 9:
 				charge = 0
-				velocity.y = -300
-				stage = "move"
+				_background_attack()
+				stage = "attacking"
 			if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 func _landing():
@@ -208,10 +211,7 @@ func _physics_process(delta: float) -> void:
 			if defeated:
 				velocity.x = move_toward(velocity.x, 0, 10)
 				velocity += get_gravity() * 1.5 * delta
-			cooldown += 0.1
-			if cooldown > 24:
-				cooldown = 0
-				_background_attack()
+
 			if position.y > 175:
 				queue_free()
 			POSSESSED = false
