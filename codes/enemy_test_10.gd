@@ -33,6 +33,7 @@ extends CharacterBody2D
 @onready var stage: String = "idle"
 @onready var shooting: bool = false
 @onready var low_health: bool = false
+@onready var attack_count: int = 0
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -145,8 +146,14 @@ func _movement_logic(delta):
 			if charge > 9:
 				charge = 0
 				if low_health:
-					_background_attack()
-					stage = "attacking"
+					attack_count += 1
+					if attack_count >= 2:
+						print("attacking!")
+						_background_attack()
+						attack_count = 0
+						stage = "attacking"
+					else:
+						stage = "attack_end"
 				else:
 					stage = "attack_end"
 			if not is_on_floor():
