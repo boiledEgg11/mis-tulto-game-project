@@ -1,4 +1,4 @@
-sextends CharacterBody2D
+extends CharacterBody2D
 @export var DASHING = false
 @export var direction = 1
 @export var health = 10
@@ -134,6 +134,11 @@ func _big_slimy_ability():
 	DASH_LOCK = true
 	CHARGE = 0
 	TARGET_POS = get_local_mouse_position()
+	if abs(TARGET_POS.x) > 150:
+		if TARGET_POS.x > 0:
+			TARGET_POS.x = 150
+		else:
+			TARGET_POS.x = -150
 	velocity.x = TARGET_POS.x * 2
 	velocity.y = -200
 func _whistledash():

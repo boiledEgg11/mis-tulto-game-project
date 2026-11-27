@@ -13,6 +13,5 @@ func _physics_process(delta: float) -> void:
 		get_parent().queue_free()
 	move_and_slide()
 func _start(target_position: Vector2):
-	print(target_position)
-	velocity = target_position.normalized() * -190
+	velocity = target_position.normalized() * 190
 	look_at(to_global(target_position))

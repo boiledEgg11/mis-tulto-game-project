@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://bmh3jbbjjhnou"]
+
+[ext_resource type="Script" uid="uid://b5athvlcu3idy" path="res://codes/easy_enemy10_projectile.gd" id="1_6cpk8"]
+[ext_resource type="Script" uid="uid://cew0g8gkln6x6" path="res://codes/enemy10_easy_projectile.gd" id="2_6cpk8"]
+[ext_resource type="Texture2D" uid="uid://dvoip6xx1om4c" path="res://assets/sprites/enemy10_projectile.png" id="3_qcoc6"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_vrqk7"]
+radius = 6.0
+height = 25.0
+
+[node name="Enemy10Projectile" type="Node2D" unique_id=1587201924]
+rotation = 4.712389
+script = ExtResource("1_6cpk8")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=989910786]
+script = ExtResource("2_6cpk8")
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D" unique_id=1381736514 groups=["damage"]]
+collision_layer = 186
+collision_mask = 186
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D" unique_id=2017369951]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_vrqk7")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D/Area2D" unique_id=772829745]
+texture = ExtResource("3_qcoc6")
+
+[node name="EraseDetection" type="Area2D" parent="CharacterBody2D" unique_id=922806807]
+collision_layer = 128
+collision_mask = 186
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/EraseDetection" unique_id=1591006694]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_vrqk7")
+
+[connection signal="body_entered" from="CharacterBody2D/EraseDetection" to="CharacterBody2D" method="_on_erase_detection_body_entered"]

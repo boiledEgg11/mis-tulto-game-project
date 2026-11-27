@@ -1,6 +1,6 @@
 extends CharacterBody2D
 @export var direction: int = -1
-@export var health: int = 10
+@export var health: int = 20
 @export var possess_health: int = 1
 @export var START: bool = false
 @export var INVINCIBLE: bool = false
@@ -32,6 +32,7 @@ extends CharacterBody2D
 @onready var projectile_cooldown: float = 0
 @onready var stage: String = "idle"
 @onready var shooting: bool = false
+@onready var low_health: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -96,13 +97,21 @@ func _end_background_attack():
 	velocity = Vector2(0, 0)
 	global_position = return_position + Vector2(0, -256)
 	velocity.y = 10
+	charge = 0
 	stage = "attack_end"
 func _charge_attack():
 	attack_charging = true
 func _movement_logic(delta):
 	match stage:
 		"attack_end":
-			pass
+			if is_on_floor():
+				waiting = true
+			if waiting:
+				charge += 0.1
+				if charge > 6:
+					velocity.y = -300
+					charge = 0
+					stage = "move"
 		"landing":
 			velocity.x = move_toward(velocity.x, 0, 15)
 			velocity.y = move_toward(velocity.y, -200, 15)
@@ -110,7 +119,7 @@ func _movement_logic(delta):
 			if charge > 3:
 				print("landing!")
 				charge = 0
-				stage = "land_wait"
+				stage = "idle"
 		"move":
 			velocity.x = 100 * direction
 			charge += 0.1
@@ -124,23 +133,22 @@ func _movement_logic(delta):
 				velocity += get_gravity() * delta * 1.5
 			if is_on_floor():
 				_stay_attack()
-		"land_wait":
-			if not is_on_floor():
-				velocity += get_gravity() * delta * 1.5
-			if is_on_floor():
-				_shooot_attack()
+
 		"shooting":
 			charge += 0.1
 			projectile_cooldown += 0.1
 			if projectile_cooldown > 1.5 and charge <= 7.5:
 				var easy_projectile = preload("res://scenes/projectile/enemy10_easy_projectile.tscn").instantiate()
 				owner.add_child.call_deferred(easy_projectile)
-				easy_projectile.call_deferred("_start", global_position, Autoloads.player.position + Vector2(random_value.randf_range(-5, 5), random_value.randf_range(-5, 5)))
+				easy_projectile.call_deferred("_start", global_position, to_local(Autoloads.player.global_position) + Vector2(random_value.randf_range(-5, 5), random_value.randf_range(-5, 5)))
 				projectile_cooldown = 0
 			if charge > 9:
 				charge = 0
-				_background_attack()
-				stage = "attacking"
+				if low_health:
+					_background_attack()
+					stage = "attacking"
+				else:
+					stage = "attack_end"
 			if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 func _landing():
@@ -150,6 +158,12 @@ func _stay_attack():
 	_shooot_attack()
 	initial_position = position
 func _shooot_attack():
+	charge = 0
+	projectile_cooldown = 0
+	if to_local(Autoloads.player.global_position) > position:
+		direction = 1
+	if to_local(Autoloads.player.global_position) < position:
+		direction = -1
 	stage = "shooting"
 func _attack_end():
 	_end_background_reside()
@@ -247,6 +261,10 @@ func _on_enemy_area_area_entered(area:Node2D) -> void:
 				possess_health -= 1
 			else:
 				health -= 1
+		if health <= 10:
+			if not low_health:
+				_background_attack()
+			low_health = true
 		if area.global_position > global_position:
 			knockback = -1
 		else:
