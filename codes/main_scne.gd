@@ -46,9 +46,6 @@ func _erase_finish():
 func _reset(file):
 	player_shape.call_deferred("set_disabled", true)
 	Player.INVINCIBLE = true
-	if Autoloads.POSSESS_ENEMY:
-		print("there is enemy")
-	print("Enemy Released1")
 	Player.POSSESS_END = false
 	load_file = file
 	_force_erase()
@@ -134,6 +131,7 @@ func _enemy_set():
 				POSSESS_ENEMY = preload("res://scenes/enemy/enemy9.tscn").instantiate()
 		add_child.call_deferred(POSSESS_ENEMY)
 		if Autoloads.ENEMY_POSSESS.species != null and not Autoloads.ENEMY_POSSESS.species == "none":
+			Autoloads.player.call_deferred("_possess_reset")
 			POSSESS_ENEMY.call("_individual_set", Autoloads.ENEMY_POSSESS.individual)
 			POSSESS_ENEMY.call("_possess_start")
 			$ObjectPlacement.call_deferred("_possess_enemy_set", POSSESS_ENEMY)

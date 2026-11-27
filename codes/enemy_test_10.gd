@@ -134,7 +134,6 @@ func _movement_logic(delta):
 				velocity += get_gravity() * delta * 1.5
 			if is_on_floor():
 				_stay_attack()
-
 		"shooting":
 			charge += 0.1
 			projectile_cooldown += 0.1

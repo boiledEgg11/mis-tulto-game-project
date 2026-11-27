@@ -67,7 +67,9 @@ extends CharacterBody2D
 @export var treasure_gettable = false
 @export var initial_y: int
 @export var map_changable = 120
-@export var fixed_camera = false
+@export var fixed_camera: bool = false
+@onready var attack_time: bool = false
+@onready var attacking: float = 0
 func _gravity(multiplier: float, value: float):
 	velocity += get_gravity() * value * multiplier
 func _movement(value: float, facing: int, air: bool):
@@ -168,6 +170,8 @@ func _ability_use(ability):
 		"Dropper":
 			_shoot()
 		"Bouncer":
+			INVINCIBLE = true
+			ATTACK_COLLISION = true
 			if is_on_floor():
 				_jump(2)
 			else:
@@ -175,6 +179,7 @@ func _ability_use(ability):
 					_jump(-4)
 				else:
 					_jump(1.5)
+			attacking = true
 		"Pyrofighto":
 			ABILITY_LOCK = true
 			$ExtraAttack/CollisionShape2D.disabled = false
@@ -353,6 +358,11 @@ func _physics_process(delta: float) -> void:
 				else:
 					DASH_LOCK = false
 			"Bouncer":
+				if attacking:
+					if velocity.y > 0:
+						attacking = false
+						ATTACK_COLLISION = false
+						INVINCIBLE = false
 				direction = Input.get_axis("left", "right")
 				_facing(direction)
 				if not is_on_floor():
@@ -567,6 +577,7 @@ func _physics_process(delta: float) -> void:
 					direction = 0
 		if Input.is_action_just_pressed("ability") or Autoloads.POSSESS_AMOUNT > 1 or POSSESS_END or not is_instance_valid(Autoloads.POSSESS_ENEMY):
 			call_deferred("_end_possess")
+			print("possess stopped!")
 	if not Autoloads.PLAYER_POSSESSING:
 		parent.call("_ability_label", stats.ability_display)
 		$PlayerIndicator.visible = false
@@ -641,6 +652,8 @@ func _physics_process(delta: float) -> void:
 				direction = 0
 			if parent.call("_get_dash_recover_value") == 60 and abs(direction) + abs(DASH_Y_CHANGE) != 0:
 				if Input.is_action_just_pressed("space"): 
+					_tulto_dash()
+func _tulto_dash():
 					DASH_LOCK = true
 					$AnimatedSprite2D.visible = false
 					$Sprite2D.visible = true
@@ -700,7 +713,6 @@ func _physics_process(delta: float) -> void:
 						velocity.x = 0
 					DASH_MOVE = false
 					$PossessArea/PossessShape.disabled = true
-
 func _process(_delta: float) -> void:
 	if map_changable > 0:
 		map_changable -= 1
@@ -912,3 +924,6 @@ func _end_possess():
 	stats = DEF_stats
 	await get_tree().create_timer(0.2).timeout
 	INVINCIBLE = false
+func _possess_reset():
+	Autoloads.PLAYER_POSSESSING = false
+	
