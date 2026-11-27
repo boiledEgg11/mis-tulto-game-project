@@ -123,6 +123,8 @@ func _movement_logic(delta):
 		"land_wait":
 			if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
+			if is_on_floor():
+				_shooot_attack()
 func _landing():
 	velocity.y = -200
 func _stay_attack():
@@ -132,7 +134,7 @@ func _stay_attack():
 func _shooot_attack():
 	var easy_projectile = preload("res://scenes/projectile/enemy10_easy_projectile.tscn").instantiate()
 	owner.add_child.call_deferred(easy_projectile)
-	easy_projectile.global_position = global_position
+	easy_projectile.call_deferred("_start", global_position)
 	stage = "move"
 	velocity.y = -300
 func _attack_end():
