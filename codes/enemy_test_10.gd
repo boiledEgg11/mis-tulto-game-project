@@ -145,12 +145,16 @@ func _movement_logic(delta):
 		"shooting":
 			charge += 0.1
 			projectile_cooldown += 0.1
-			if projectile_cooldown > 1.5 and charge <= 7.5:
+			if projectile_cooldown > 2 and charge <= 10.5 and charge >= 4.5:
 				var easy_projectile = preload("res://scenes/projectile/enemy10_easy_projectile.tscn").instantiate()
 				owner.add_child.call_deferred(easy_projectile)
-				easy_projectile.call_deferred("_start", global_position, to_local(Autoloads.player.global_position) + Vector2(random_value.randf_range(-5, 5), random_value.randf_range(-5, 5)))
+				var target_position = to_local(Vector2(Autoloads.player.global_position + Vector2(random_value.randf_range(-7, 7), random_value.randf_range(-7, 7))))
+				if direction > 0:
+						easy_projectile.call_deferred("_start", global_position, Vector2(abs(target_position.x), target_position.y))
+				if direction < 0:
+						easy_projectile.call_deferred("_start", global_position, Vector2(-abs(target_position.x), target_position.y))
 				projectile_cooldown = 0
-			if charge > 9:
+			if charge > 15:
 				charge = 0
 				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot.png")
 				if low_health:
@@ -238,7 +242,7 @@ func _physics_process(delta: float) -> void:
 							stage = "attacking"
 					sprite_timer = 0
 			charge += 0.1
-			if charge > 48:
+			if charge > 49:
 				charge = 0
 				cooldown = 0
 				sprite_change_counter = 0
@@ -261,7 +265,6 @@ func _physics_process(delta: float) -> void:
 			if defeated:
 				velocity.x = move_toward(velocity.x, 0, 10)
 				velocity += get_gravity() * 1.5 * delta
-
 			if position.y > 175:
 				queue_free()
 			POSSESSED = false
