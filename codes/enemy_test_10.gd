@@ -34,6 +34,8 @@ extends CharacterBody2D
 @onready var shooting: bool = false
 @onready var low_health: bool = false
 @onready var attack_count: int = 0
+@onready var sprite_timer: float = 0
+@onready var sprite_change_counter: float = 0
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -75,6 +77,8 @@ func _background_attack():
 	set_collision_layer_value(6, false)
 	velocity.y = 100
 func _background_reside():
+	sprite_change_counter = 6
+	print("changing sprite")
 	$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot_targetting.png")
 	scale = Vector2(0.5, 0.5)
 	$EnemyArea/CollisionShape2D.disabled = true
@@ -103,6 +107,7 @@ func _end_background_attack():
 	charge = 0
 	stage = "attack_end"
 func _charge_attack():
+	$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot_targetting_charge.png")
 	attack_charging = true
 func _movement_logic(delta):
 	match stage:
@@ -111,6 +116,7 @@ func _movement_logic(delta):
 				waiting = true
 			if waiting:
 				charge += 0.1
+
 				if charge > 6:
 					velocity.y = -300
 					charge = 0
@@ -198,6 +204,7 @@ func _physics_process(delta: float) -> void:
 				projectile_cooldown = 0
 				_projectile_summon()
 			if cooldown > 18:
+				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot_targetting.png")
 				_attack_end()
 				cooldown = 0
 				attack_charging = false
@@ -213,9 +220,28 @@ func _physics_process(delta: float) -> void:
 		if in_background:
 			if global_position.y > -58:
 				velocity.y = move_toward(velocity.y, 0, 30)
+			sprite_timer += 0.1
+			if sprite_timer > sprite_change_counter and charge > 6:
+				if not attack_charging:
+					sprite_change_counter -= 0.4
+					print(stage)
+					if stage == "attacking":
+						print("currently attacking")
+						$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot_targetting_charge.png")
+						stage = "attacking_2"
+					else:
+						if stage == "attacking_2":
+							$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_big_shoot_targetting.png")
+							stage = "attacking"
+						else:
+							print(stage)
+							stage = "attacking"
+					sprite_timer = 0
 			charge += 0.1
-			if charge > 24:
+			if charge > 48:
 				charge = 0
+				cooldown = 0
+				sprite_change_counter = 0
 				_charge_attack()
 		if returning:
 			velocity.y = move_toward(velocity.y, 300, 12)
@@ -274,6 +300,7 @@ func _on_enemy_area_area_entered(area:Node2D) -> void:
 		if health <= 10:
 			if not low_health:
 				_background_attack()
+				stage = "attacking"
 			low_health = true
 		if area.global_position > global_position:
 			knockback = -1
