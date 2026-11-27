@@ -12,8 +12,7 @@ func _physics_process(delta: float) -> void:
 		timer = 0
 		get_parent().queue_free()
 	move_and_slide()
-
-
-func _on_erase_detection_body_entered(body: Node2D) -> void:
-	if body.is_in_group("background_guard") and projectile_erase:
-		get_parent().queue_free()
+func _start(target_position: Vector2):
+	print(target_position)
+	velocity = target_position.normalized() * -190
+	look_at(to_global(target_position))

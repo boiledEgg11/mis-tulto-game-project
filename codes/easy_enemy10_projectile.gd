@@ -9,5 +9,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-func _start(start_position: Vector2):
+func _start(start_position: Vector2, target_position: Vector2):
 	global_position = start_position
+	$CharacterBody2D.call_deferred("_start", target_position)

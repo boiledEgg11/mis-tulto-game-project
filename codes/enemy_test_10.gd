@@ -31,6 +31,7 @@ extends CharacterBody2D
 @onready var random_value = RandomNumberGenerator.new()
 @onready var projectile_cooldown: float = 0
 @onready var stage: String = "idle"
+@onready var shooting: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -125,6 +126,20 @@ func _movement_logic(delta):
 				velocity += get_gravity() * delta * 1.5
 			if is_on_floor():
 				_shooot_attack()
+		"shooting":
+			charge += 0.1
+			projectile_cooldown += 0.1
+			if projectile_cooldown > 1.5:
+				var easy_projectile = preload("res://scenes/projectile/enemy10_easy_projectile.tscn").instantiate()
+				owner.add_child.call_deferred(easy_projectile)
+				easy_projectile.call_deferred("_start", global_position, Autoloads.player.position + Vector2(random_value.randf_range(-5, 5), random_value.randf_range(-5, 5)))
+				projectile_cooldown = 0
+			if charge > 7.5:
+				charge = 0
+				velocity.y = -300
+				stage = "move"
+			if not is_on_floor():
+				velocity += get_gravity() * delta * 1.5
 func _landing():
 	velocity.y = -200
 func _stay_attack():
@@ -132,11 +147,7 @@ func _stay_attack():
 	_shooot_attack()
 	initial_position = position
 func _shooot_attack():
-	var easy_projectile = preload("res://scenes/projectile/enemy10_easy_projectile.tscn").instantiate()
-	owner.add_child.call_deferred(easy_projectile)
-	easy_projectile.call_deferred("_start", global_position)
-	stage = "move"
-	velocity.y = -300
+	stage = "shooting"
 func _attack_end():
 	_end_background_reside()
 func _physics_process(delta: float) -> void:
