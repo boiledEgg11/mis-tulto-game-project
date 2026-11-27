@@ -14,6 +14,8 @@ extends CharacterBody2D
 @export var INVINCIBLE = false
 @onready var KNOCKBACK_DURATION: float = 0
 @export var INVINCIBLE_HOLD = false
+@onready var invincible_timer: float = 0
+@onready var invincible_count: bool = false
 @export var DEF_stats: Dictionary = {
 	"speed": 120,
 	"jump": -400,
@@ -120,10 +122,10 @@ func _health_process(DAMAGE, knockback, way) -> void:
 		if parent.call("_get_player_health") <= 0:
 			_death()
 		INVINCIBLE = true
+		invincible_timer = 7.5
+		invincible_count = true
 		await get_tree().create_timer(0.2).timeout
 		TEXTURE_LOCK = false
-		await get_tree().create_timer(0.8).timeout
-		INVINCIBLE = false
 func _death():
 	parent.call("_player_health", 10, true)
 	parent.call("_reset", Autoloads.LAST_LOADED)
@@ -196,6 +198,12 @@ func _ability_use(ability):
 	if not stats.tag.has("no_recover_usage"):
 		parent.call_deferred("_dash_recover", 0, true)
 func _physics_process(delta: float) -> void:
+	if invincible_count:
+		invincible_timer -= 0.1
+		if invincible_timer < 0:
+			INVINCIBLE = false
+			invincible_count = false
+			invincible_timer = 0
 	if Input.is_action_just_pressed("7"):
 		print(Autoloads.POSSESS_AMOUNT)
 		print(POSSESS_END)
@@ -714,6 +722,8 @@ func _tulto_dash():
 					DASH_MOVE = false
 					$PossessArea/PossessShape.disabled = true
 func _process(_delta: float) -> void:
+	if INVINCIBLE:
+		print("is invincible")
 	if map_changable > 0:
 		map_changable -= 1
 	if parent.call("_get_dash_recover_value") == 60:
@@ -767,7 +777,7 @@ func _on_damage_collision_area_entered(area) -> void:
 				_health_process(5, true, knockback)
 			else:
 				_health_process(1, true, knockback)
-		print("damaged!")
+			print("damaged!")
 	if area.is_in_group("background_attack"):
 		_background_calculations()
 func _background_calculations():

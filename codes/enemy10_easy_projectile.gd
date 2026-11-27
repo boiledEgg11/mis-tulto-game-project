@@ -8,7 +8,7 @@ extends CharacterBody2D
 @onready var projectile_erase: bool = true
 func _physics_process(delta: float) -> void:
 	timer += 0.1
-	if timer > 80:
+	if timer > 30:
 		timer = 0
 		get_parent().queue_free()
 	move_and_slide()

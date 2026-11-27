@@ -374,8 +374,6 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
 	if body.is_in_group("tile"):
 		pass
-func _summoned(initial_size: Vector2, size_growth: Vector2, size_growth_speed: float, target_position: Vector2, parent):
-	pass
 func _projectile_summon():
 	var projectile = preload("res://scenes/projectile/enemy10_projectile.tscn").instantiate()
 	owner.add_child.call_deferred(projectile)
