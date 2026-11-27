@@ -11,7 +11,10 @@ func _erase():
 	if is_instance_valid(child):
 		child.queue_free()
 	queue_free()
-
+func _load_possess_start():
+	Autoloads.POSSESS_AMOUNT =  1
+	child.possess_health = 0
+	child.call_deferred("_load_possess")
 func _possess_start():
 	child.possess_health = 0
 	child.call_deferred("_possess_start")

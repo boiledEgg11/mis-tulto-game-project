@@ -12,6 +12,8 @@ extends CharacterBody2D
 @export var parent_parent: Node2D
 @onready var INVINCIBLE_COUNT: bool = false
 @onready var INVINCIBLE_COUNTER: float = 0
+@onready var possess_maintain: bool = false
+@onready var possess_maintain_timer: float = 0
 @export var default_stats: Dictionary = {
 	"speed": 80,
 	"jump": -350,
@@ -127,13 +129,32 @@ func _process(_delta: float) -> void:
 		$Sprite2D.flip_h = false
 	if direction == -1:
 		$Sprite2D.flip_h = true
-	if Autoloads.POSSESS_AMOUNT != 1 and POSSESSED:
+	if Autoloads.POSSESS_AMOUNT != 1 and POSSESSED and not possess_maintain:
+		print(Autoloads.POSSESS_AMOUNT)
+		print(POSSESSED)
+		print(possess_maintain)
 		_possess_stop()
 	if health <= 0:
 		queue_free()
 	if possess_health == 0:
 		_possess_start()
+	if possess_maintain:
+		possess_maintain_timer -= 0.1
+		if possess_maintain_timer < 0:
+			possess_maintain = false
 func _possess_start():
+	get_parent().call_deferred("_possessed")
+	Autoloads.POSSESS_AMOUNT += 1
+	Autoloads.player.stats = stats
+	possess_health = -1
+	Autoloads.POSSESS_ENEMY = self
+	Autoloads.PLAYER_POSSESSING = true
+	global_position = Autoloads.player.global_position
+	velocity = Vector2(0, 0)
+	call_deferred("reparent", Autoloads.player)
+func _load_possess():
+	possess_maintain = true
+	possess_maintain_timer = 1
 	get_parent().call_deferred("_possessed")
 	Autoloads.POSSESS_AMOUNT += 1
 	Autoloads.player.stats = stats
