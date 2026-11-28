@@ -108,6 +108,7 @@ func _physics_process(delta: float) -> void:
 			charge = 0
 			velocity.x = move_toward(velocity.x, 0, 30)
 			if stun_time < 0:
+				velocity.y = -200
 				$EnemyArea.add_to_group("damage")
 				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
 				stunned = false

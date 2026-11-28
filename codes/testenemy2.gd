@@ -14,6 +14,8 @@ extends CharacterBody2D
 @onready var INVINCIBLE_COUNTER: float = 0
 @onready var possess_maintain: bool = false
 @onready var possess_maintain_timer: float = 0
+@onready var stunned: bool = false
+@onready var stun_time: float = 0
 @export var default_stats: Dictionary = {
 	"speed": 80,
 	"jump": -350,
@@ -58,6 +60,18 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if stunned:
+			$EnemyArea.remove_from_group("damage")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_bouncy_stun.png")
+			stun_time -= 0.1
+			charge = 0
+			velocity.x = move_toward(velocity.x, 0, 30)
+			if stun_time < 0:
+				velocity.y = -200
+				$EnemyArea.add_to_group("damage")
+				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_bouncy.png")
+				stunned = false
+				stun_time = 0
 		var standing = $GroundExistingChecker.get_overlapping_bodies()
 		for body in standing:
 			if body.is_in_group("tile_move"):
@@ -65,23 +79,24 @@ func _physics_process(delta: float) -> void:
 		if position.y > 175 and not POSSESSED:
 			queue_free()
 		POSSESSED = false
-		if is_on_wall_only():
-			direction *= -1
-		if not is_on_floor():
-			velocity.x = direction * stats.air_speed
-		if is_on_floor():
-			charge += 1
-			velocity.x = 0
-			if charge > 30:
-				charge = 0
-				velocity.y = stats.jump
+		if not stunned:
+			if is_on_wall_only():
+				direction *= -1
+			if not is_on_floor():
+				velocity.x = direction * stats.air_speed
+			if is_on_floor():
+				charge += 1
+				velocity.x = 0
+				if charge > 30:
+					charge = 0
+					velocity.y = stats.jump
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
-		if velocity.x > 0:
+		if direction > 0:
 			$Sprite2D.flip_h = false
-		if velocity.x < 0:
+		if direction < 0:
 			$Sprite2D.flip_h = true
 	if possess_health == -1:
 		INVINCIBLE = true
@@ -89,7 +104,8 @@ func _physics_process(delta: float) -> void:
 		$EnemyArea/CollisionShape2D.disabled = true
 		$Sprite2D.visible = false
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
-	direction *= -1
+	if not stunned:
+		direction *= -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
 		if area.is_in_group("player_damaging"):
@@ -103,6 +119,8 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
+	stunned = true
+	stun_time = 24
 	global_position = Autoloads.player.global_position
 	call_deferred("reparent", parent)
 	if is_instance_valid(parent):
