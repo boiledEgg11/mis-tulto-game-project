@@ -25,6 +25,7 @@ func _physics_process(delta: float) -> void:
 			target_position.y = move_toward(target_position.y, max_length.y, speed * delta)
 			laser_end_position = target_position
 		if is_colliding():
+			print("is colliding")
 			target_position = laser_end_position
 			laser_end_position = to_local(get_collision_point())
 	if not attacking:

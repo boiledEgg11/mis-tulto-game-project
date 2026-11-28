@@ -13,6 +13,9 @@ extends CharacterBody2D
 @onready var INVINCIBLE_COUNTER: float = 0
 @export var parent_parent: Node2D
 @export var ground_exist: bool = true
+@export var charge_type: String = "Normal"
+@onready var stunned: bool = false
+@onready var stun_time: float = 0
 @export var default_stats: Dictionary = {
 	"speed": 60,
 	"jump": -250,
@@ -62,6 +65,8 @@ func _attack():
 	$Enemy7Laser.attacking = true
 	CHARGE_LOW = true
 func _physics_process(delta: float) -> void:
+	if CHARGE_LOCK and stats.individual == 3:
+		print("is shooting")
 	if START:
 		match stats.individual:
 			1:
@@ -72,16 +77,20 @@ func _physics_process(delta: float) -> void:
 				rotation_degrees = 180
 				position = Vector2i(-248, -72)
 				$Enemy7Laser._placement(0, 0, 0, -200)
+				charge_type = "always"
 			3:
 				position = Vector2(-800, -24)
 				$Enemy7Laser._placement(0, 0, 0, -100)
+				charge_type = "always"
 			4:
 				position = Vector2(-816, -24)
 				$Enemy7Laser._placement(0, 0, 0, -100)
+				charge_type = "always"
 			5:
 				rotation_degrees = 90
 				position = Vector2(487, -104)
 				$Enemy7Laser._placement(0, 0, 0, -400)
+				charge_type = "always"
 			_:
 				print("none")
 				position = Vector2i(0, 0)
@@ -95,12 +104,27 @@ func _physics_process(delta: float) -> void:
 		if stats.individual != 5:
 			velocity += get_gravity() * delta * 1.5
 	if possess_health > 0:
-		$Enemy7Laser/Line2D._attack_change(true)
-		if not CHARGE_LOCK:
-			CHARGE += 1
-		CHARGE = 181
-		if CHARGE > 180:
-			_attack()
+		if stunned:
+			$EnemyArea.remove_from_group("damage")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_crystal_stun.png")
+			stun_time -= 0.1
+			charge = 0
+			velocity.x = move_toward(velocity.x, 0, 30)
+			if stun_time < 0:
+				$EnemyArea.add_to_group("damage")
+				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_crystal.png")
+				stunned = false
+				stun_time = 0
+		if not stunned:
+			$Enemy7Laser/Line2D._attack_change(true)
+			if not CHARGE_LOCK:
+				CHARGE += 1
+			if charge_type == "always":
+				CHARGE = 181
+			if CHARGE > 180:
+				if charge_type != "always":
+					CHARGE = 0
+				_attack()
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
@@ -127,9 +151,9 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
+	stunned = true
+	stun_time = 24
 	$EnemyArea.add_to_group("damage")
-	global_position = Autoloads.player.global_position
-	parent.global_position = global_position
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
