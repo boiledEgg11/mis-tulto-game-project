@@ -12,6 +12,9 @@ extends CharacterBody2D
 @onready var INVINCIBLE_COUNT: bool = false
 @onready var INVINCIBLE_COUNTER: float = 0
 @export var parent_parent: Node2D
+@onready var stunned: bool = false
+@onready var stun_time: float = 0
+@onready var stun_jumping: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 30,
 	"jump": -300,
@@ -67,34 +70,60 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if stunned:
+			$EnemyArea.remove_from_group("damage")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_shoot_stun.png")
+			stun_time -= 0.1
+			CHARGING = false
+			charge = 0
+			velocity.x = move_toward(velocity.x, 0, 30)
+			if not is_on_floor():
+				velocity += get_gravity() * delta / 3
+			if stun_time < 0:
+				stun_jumping = true
+				velocity.y = -200
+				$EnemyArea.add_to_group("damage")
+				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_shoot.png")
+				stunned = false
+				stun_time = 0
 		var standing = $GroundExistingChecker.get_overlapping_bodies()
 		for body in standing:
 				if body.is_in_group("tile_move"):
 					position += body.tile_move_value
 		if position.y > 175:
 			queue_free()
-		$EnemyTestCollision.disabled = false
-		if $RayCast2D.is_colliding():
-			CHARGING = true
-		POSSESSED = false
-		if CHARGING:
-			charge += 0.1
-			if charge > 6:
-				_charging()
+		if stun_jumping:
+			velocity += get_gravity() * delta / 3
+			if is_on_floor():
+				charge += 0.1
+			if not is_on_floor():
 				charge = 0
-				CHARGING = false
-		if is_on_floor():
-			velocity.y = stats.jump
-		if not is_on_floor():
-			if position.y > initial_y:
-				velocity.y = stats.jump / 4
-			if CHARGING:
-				velocity.x = direction * stats.air_speed / 4
-			else:
-				velocity.x = direction * stats.air_speed
+			if charge > 0.3:
+				charge = 0
+				stun_jumping = false
 		$EnemyArea/CollisionShape2D.disabled = false
 		$Sprite2D.visible = true
-		if not is_on_floor():
+		$EnemyTestCollision.disabled = false
+		POSSESSED = false
+		if not stunned and not stun_jumping:
+			if $RayCast2D.is_colliding():
+				CHARGING = true
+			if CHARGING:
+				charge += 0.1
+				if charge > 6:
+					_charging()
+					charge = 0
+					CHARGING = false
+			if is_on_floor():
+				velocity.y = stats.jump
+			if not is_on_floor():
+				if position.y > initial_y:
+					velocity.y = stats.jump / 4
+				if CHARGING:
+					velocity.x = direction * stats.air_speed / 4
+				else:
+					velocity.x = direction * stats.air_speed
+			if not is_on_floor():
 				velocity += get_gravity() * delta / 12
 	if possess_health == -1:
 		INVINCIBLE = true
@@ -102,11 +131,9 @@ func _physics_process(delta: float) -> void:
 		$EnemyArea/CollisionShape2D.disabled = true
 		$Sprite2D.visible = false
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
-	direction = 1
-	$Sprite2D.flip_h = false
-func _on_right_collision_check_body_entered(_body: Node2D) -> void:
-	direction = -1
-	$Sprite2D.flip_h = true
+	if not stunned and not stun_jumping:
+		direction *= -1
+		$Sprite2D.flip_h = false
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
 		if area.is_in_group("player_damaging"):
@@ -120,6 +147,8 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
+	stunned = true
+	stun_time = 24
 	call_deferred("reparent", parent)
 	global_position = Autoloads.player.global_position
 	if is_instance_valid(parent):
@@ -135,18 +164,18 @@ func _possess_stop() -> void:
 	INVINCIBLE = true
 	INVINCIBLE_COUNT = true
 	INVINCIBLE_COUNTER = 0
-	
 	Autoloads.player.call_deferred("_end_possess")
 func _process(_delta: float) -> void:
+	$LeftCollisionCheck.position.x = direction * 8
 	if INVINCIBLE_COUNT:
 		INVINCIBLE_COUNTER += 0.1
 		if INVINCIBLE_COUNTER > 6:
 			INVINCIBLE_COUNT = false
 			INVINCIBLE = false
 			INVINCIBLE_COUNTER = 0
-	if direction == 1:
+	if direction > 0:
 		$Sprite2D.flip_h = false
-	if direction == -1:
+	if direction < 0:
 		$Sprite2D.flip_h = true
 	if Autoloads.POSSESS_AMOUNT != 1 and POSSESSED:
 		_possess_stop()

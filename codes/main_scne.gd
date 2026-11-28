@@ -107,7 +107,8 @@ func _load(file):
 	while Player.global_position != designated_position_player:
 		pass
 	await get_tree().process_frame
-	player_shape.call_deferred("set_disabled", false)
+	if is_instance_valid(player_shape):
+		player_shape.call_deferred("set_disabled", false)
 func _enemy_set():
 	if Autoloads.ENEMY_POSSESS.species and Autoloads.ENEMY_POSSESS.species != "Tulto":
 		match Autoloads.ENEMY_POSSESS.species:

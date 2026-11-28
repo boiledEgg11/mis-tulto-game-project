@@ -11,6 +11,9 @@ extends CharacterBody2D
 @onready var INVINCIBLE_COUNT:bool = false
 @onready var INVINCIBLE_COUNTER: float = 0
 @export var parent_parent: Node2D
+@onready var stunned: bool = false
+@onready var stun_time: float = 0
+@onready var stun_jumping: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 100,
 	"jump": -400,
@@ -100,6 +103,19 @@ func _physics_process(delta: float) -> void:
 			_:
 				position = Vector2(0, 0)
 		START = false
+	if stunned:
+			$EnemyArea.remove_from_group("damage")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_sword_stun.png")
+			stun_time -= 0.1
+			charge = 0
+			velocity.x = move_toward(velocity.x, 0, 30)
+			if stun_time < 0:
+				stun_jumping = true
+				velocity.y = -200
+				$EnemyArea.add_to_group("damage")
+				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_sword.png")
+				stunned = false
+				stun_time = 0
 	if projectile_amount < 0:
 		projectile_amount = 0
 	for i in range(3):
@@ -111,17 +127,40 @@ func _physics_process(delta: float) -> void:
 	if Autoloads.player:
 		if $DetectionArea.overlaps_body(Autoloads.player):
 			_call_fly(null)
-
 	$SpinManager.rotation_degrees += 3
 	move_and_slide()
 	if possess_health > 0:
-		if not ground_exist:
-			forced_direction = true
-			direction *= -1
-			ground_exist = true
-			_forced_direction_fix()
-		if projectile_amount < 3:
-			_summon_projectile(3, true)
+		if stun_jumping:
+			if is_on_floor():
+				charge += 0.1
+			if not is_on_floor():
+				charge = 0
+			if charge > 0.3:
+				charge = 0
+				stun_jumping = false
+		if not stunned or not stun_jumping:
+			if not ground_exist:
+				forced_direction = true
+				direction *= -1
+				ground_exist = true
+				_forced_direction_fix()
+			if projectile_amount < 3:
+					_summon_projectile(3, true)
+			if not forced_direction:
+				if Autoloads.player and $DetectionArea/CollisionShape2D:
+					if Autoloads.player.position.x > position.x:
+						direction = -1
+					if Autoloads.player.position.x < position.x:
+						direction = 1
+				if not $DetectionArea/CollisionShape2D.disabled and Autoloads.player:
+					if Autoloads.player.position.x > position.x:
+						direction = 1
+					if Autoloads.player.position.x < position.x:
+						direction = -1
+			if  $DetectionArea/CollisionShape2D.disabled:
+				velocity.x = direction * stats.speed / 1.25
+			if not $DetectionArea/CollisionShape2D.disabled:
+				velocity.x = direction * stats.speed
 		var standing = $GroundExistingChecker.get_overlapping_bodies()
 		for body in standing:
 				if body.is_in_group("tile_move"):
@@ -129,22 +168,7 @@ func _physics_process(delta: float) -> void:
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		if not forced_direction:
-			if Autoloads.player and $DetectionArea/CollisionShape2D:
-				if Autoloads.player.position.x > position.x:
-					direction = -1
-				if Autoloads.player.position.x < position.x:
-					direction = 1
-			if not $DetectionArea/CollisionShape2D.disabled and Autoloads.player:
-				if Autoloads.player.position.x > position.x:
-					direction = 1
-				if Autoloads.player.position.x < position.x:
-					direction = -1
 		$EnemyArea/CollisionShape2D.disabled = false
-		if  $DetectionArea/CollisionShape2D.disabled:
-			velocity.x = direction * stats.speed / 1.25
-		if not $DetectionArea/CollisionShape2D.disabled:
-			velocity.x = direction * stats.speed
 		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
@@ -171,6 +195,9 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
+	velocity = Vector2(0, 0)
+	stunned = true
+	stun_time = 24
 	global_position = Autoloads.player.global_position
 	parent.global_position = global_position
 	parent.call_deferred("reparent", parent_parent)
@@ -213,9 +240,10 @@ func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 		ground_exist = false
 
 func _on_detection_area_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
-	if body.is_in_group("Autoloads.player"):
-		_call_fly(null)
-		Autoloads.player = body
+	if not stunned or not stun_jumping:
+		if body.is_in_group("Autoloads.player"):
+			_call_fly(null)
+			Autoloads.player = body
 func _enable_detect_collision():
 	$DetectionArea/CollisionShape2D.disabled = false
 func _on_ground_existing_checker_body_entered(body: Node2D) -> void:
