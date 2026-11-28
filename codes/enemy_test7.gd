@@ -54,6 +54,7 @@ func _solved(place):
 		0:
 			print("solved!")
 func _ready() -> void:
+	parent_parent = parent.get_parent()
 	$EnemyArea/CollisionShape2D.disabled = false
 func _attack():
 	LAZER_DURATION = 120
@@ -89,7 +90,7 @@ func _physics_process(delta: float) -> void:
 	standing = $GroundExistingChecker.get_overlapping_bodies()
 	for body in standing:
 		if not body.is_in_group("enemy7_cancel"):
-			get_parent().reparent(body)
+			parent.reparent(body)
 	if not standing:
 		if stats.individual != 5:
 			velocity += get_gravity() * delta * 1.5
@@ -97,10 +98,8 @@ func _physics_process(delta: float) -> void:
 		$Enemy7Laser/Line2D._attack_change(true)
 		if not CHARGE_LOCK:
 			CHARGE += 1
-		if stats.individual == 2 or stats.individual == 3 or stats.individual == 4 or stats.individual == 5:
-			CHARGE = 181
+		CHARGE = 181
 		if CHARGE > 180:
-			CHARGE = 0
 			_attack()
 		if position.y > 175:
 			queue_free()
@@ -113,8 +112,6 @@ func _physics_process(delta: float) -> void:
 		$Enemy7Laser/Line2D._attack_change(false)
 		INVINCIBLE = true
 		POSSESSED = true
-		$EnemyArea/CollisionShape2D.disabled = true
-		$Sprite2D.visible = false
 		if Autoloads.PLAYER_POSSESS_STOP:
 			_possess_stop()
 func _on_enemy_area_area_entered(area) -> void:
@@ -123,7 +120,6 @@ func _on_enemy_area_area_entered(area) -> void:
 			health -= 1
 		if area.name == "PlayerProjectile":
 			health -= 1
-			print("hit!")
 		if area.name == "AttackCollision":
 			health -= 1
 		if area.name == "ExtraAttack":
@@ -131,9 +127,9 @@ func _on_enemy_area_area_entered(area) -> void:
 		if area.name == "PossessArea":
 			possess_health -= 1
 func _possess_stop() -> void:
+	$EnemyArea.add_to_group("damage")
 	global_position = Autoloads.player.global_position
 	parent.global_position = global_position
-	call_deferred("reparent", parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
 	velocity.y = -100
@@ -155,7 +151,6 @@ func _process(_delta: float) -> void:
 			INVINCIBLE_COUNT = false
 			INVINCIBLE = false
 			INVINCIBLE_COUNTER = 0
-
 	if CHARGE_LOW and stats.individual != 2:
 		LAZER_DURATION -= 1
 		if LAZER_DURATION < 0:
@@ -171,19 +166,18 @@ func _process(_delta: float) -> void:
 	if possess_health == 0:
 		_possess_start()
 func _possess_start():
+	$EnemyArea.remove_from_group("damage")
 	CHARGE_LOW = false
 	CHARGE_LOCK = false
 	$Enemy7Laser.attacking = false
 	CHARGE = 0
-	get_parent().call_deferred("_possessed")
+	parent.call_deferred("_possessed")
 	Autoloads.POSSESS_ENEMY = self
 	Autoloads.POSSESS_AMOUNT += 1
 	Autoloads.player.stats = stats
 	possess_health = -1
 	Autoloads.PLAYER_POSSESSING = true
-	global_position = Autoloads.player.global_position
 	velocity = Vector2(0, 0)
-	call_deferred("reparent", Autoloads.player)
 func _on_ground_existing_checker_body_exited(body: Node2D) -> void:
 	if body.is_in_group("tile"):
 		direction *= -1

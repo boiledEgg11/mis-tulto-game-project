@@ -347,8 +347,10 @@ func _physics_process(delta: float) -> void:
 					velocity.x = move_toward(velocity.x, 0, stats.slide)
 					direction = 0
 			"Crystaline":
-				global_position = Autoloads.POSSESS_ENEMY.global_position
-				global_rotation = Autoloads.POSSESS_ENEMY.global_rotation
+				$Sprite2D.visible = false
+				if is_instance_valid(Autoloads.POSSESS_ENEMY):
+					global_position = Autoloads.POSSESS_ENEMY.global_position
+					global_rotation = Autoloads.POSSESS_ENEMY.global_rotation
 				velocity.x = 0
 				velocity.y = 0
 				if is_on_floor():
