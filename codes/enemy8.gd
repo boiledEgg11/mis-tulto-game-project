@@ -80,7 +80,6 @@ func _summon_projectile(summon_amount, attack_player: bool):
 	if possess_health > 0:
 		_enable_detect_collision()
 func _projectile_erase(projectile_number):
-	print("erased!")
 	projectile[projectile_number]  = preload("res://scenes/misc/empty.tscn").instantiate()
 	print(projectile_amount)
 func _disable_collision_shape():
@@ -104,18 +103,18 @@ func _physics_process(delta: float) -> void:
 				position = Vector2(0, 0)
 		START = false
 	if stunned:
-			$EnemyArea.remove_from_group("damage")
-			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_sword_stun.png")
-			stun_time -= 0.1
-			charge = 0
-			velocity.x = move_toward(velocity.x, 0, 30)
-			if stun_time < 0:
-				stun_jumping = true
-				velocity.y = -200
-				$EnemyArea.add_to_group("damage")
-				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_sword.png")
-				stunned = false
-				stun_time = 0
+		$EnemyArea.remove_from_group("damage")
+		$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_sword_stun.png")
+		stun_time -= 0.1
+		charge = 0
+		velocity.x = move_toward(velocity.x, 0, 30)
+		if stun_time < 0:
+			stun_jumping = true
+			velocity.y = -200
+			$EnemyArea.add_to_group("damage")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_sword.png")
+			stunned = false
+			stun_time = 0
 	if projectile_amount < 0:
 		projectile_amount = 0
 	for i in range(3):
@@ -124,9 +123,10 @@ func _physics_process(delta: float) -> void:
 				projectile[i].get_child(0).scale += Vector2(0.05, 0.05)
 			if projectile[i].get_child(0).position.y > -50:
 				projectile[i].get_child(0).position.y -= 2
-	if Autoloads.player:
-		if $DetectionArea.overlaps_body(Autoloads.player):
-			_call_fly(null)
+	if not stunned:
+		if Autoloads.player:
+			if $DetectionArea.overlaps_body(Autoloads.player):
+				_call_fly(null)
 	$SpinManager.rotation_degrees += 3
 	move_and_slide()
 	if possess_health > 0:
@@ -135,10 +135,14 @@ func _physics_process(delta: float) -> void:
 				charge += 0.1
 			if not is_on_floor():
 				charge = 0
-			if charge > 0.3:
+			if charge > 0.5:
 				charge = 0
 				stun_jumping = false
-		if not stunned or not stun_jumping:
+		if not (stunned or stun_jumping):
+			if  $DetectionArea/CollisionShape2D.disabled:
+				velocity.x = direction * stats.speed / 1.25
+			if not $DetectionArea/CollisionShape2D.disabled:
+				velocity.x = direction * stats.speed
 			if not ground_exist:
 				forced_direction = true
 				direction *= -1
@@ -157,14 +161,10 @@ func _physics_process(delta: float) -> void:
 						direction = 1
 					if Autoloads.player.position.x < position.x:
 						direction = -1
-			if  $DetectionArea/CollisionShape2D.disabled:
-				velocity.x = direction * stats.speed / 1.25
-			if not $DetectionArea/CollisionShape2D.disabled:
-				velocity.x = direction * stats.speed
 		var standing = $GroundExistingChecker.get_overlapping_bodies()
 		for body in standing:
-				if body.is_in_group("tile_move"):
-					position += body.tile_move_value
+			if body.is_in_group("tile_move"):
+				position += body.tile_move_value
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
@@ -179,8 +179,9 @@ func _physics_process(delta: float) -> void:
 		$EnemyArea/CollisionShape2D.disabled = true
 		$Sprite2D.visible = false
 func _on_left_collision_check_body_entered(_body: Node2D) -> void:
-	if $LeftCollisionCheck.area_entered:
-		direction *= -1
+	if not (stunned or stun_jumping):
+		if $LeftCollisionCheck.area_entered:
+			direction *= -1
 func _on_enemy_area_area_entered(area) -> void:
 	if not INVINCIBLE:
 		if area.is_in_group("Autoloads.player_damaging"):
@@ -198,8 +199,6 @@ func _possess_stop() -> void:
 	velocity = Vector2(0, 0)
 	stunned = true
 	stun_time = 24
-	global_position = Autoloads.player.global_position
-	parent.global_position = global_position
 	parent.call_deferred("reparent", parent_parent)
 	Autoloads.PLAYER_POSSESS_STOP = false
 	possess_health = 1
