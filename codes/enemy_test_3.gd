@@ -12,6 +12,12 @@ extends CharacterBody2D
 @export var parent_parent: Node2D
 @onready var INVINCIBLE_COUNT: bool = false
 @onready var INVINCIBLE_COUNTER: float = 0
+@onready var stunned: bool = false
+@onready var stun_time: float = 0
+@onready var sprite_change: float = 0
+@onready var current_sprite: String = "normal"
+@onready var attack_sprite_duration: float = 0
+@onready var attack_sprite_appear: bool = false
 @export var default_stats: Dictionary = {
 	"speed": 80,
 	"jump": -350,
@@ -54,22 +60,6 @@ func _charging():
 		await get_tree().create_timer(0.3).timeout
 		if attacking:
 			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
-func _attack_charge():
-	charge = 1
-	_charging()
-	await get_tree().create_timer(2).timeout
-	if possess_health > 0 and not INVINCIBLE:
-		$Area2D.position = Vector2i(10 * direction, 0)
-		velocity.x = 0
-		$Area2D/CollisionShape2D.disabled = false
-		$Area2D/Sprite2D.visible = true
-		attacking = false
-		$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
-		await get_tree().create_timer(0.1).timeout
-		$Area2D/CollisionShape2D.disabled = true
-		$Area2D/Sprite2D.visible = false
-	charge = 0
-	direction *= -1
 func _physics_process(delta: float) -> void:
 	if START:
 		match stats.individual:
@@ -80,37 +70,78 @@ func _physics_process(delta: float) -> void:
 		START = false
 	move_and_slide()
 	if possess_health > 0:
+		if attacking:
+			sprite_change += 0.1
+			charge += 0.1
+			if sprite_change > 2:
+				if current_sprite == "normal":
+					$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosive_charge.png")
+					current_sprite = "charge"
+				else:
+					if current_sprite == "charge":
+						$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
+						current_sprite = "normal"
+				sprite_change = 0
+			if charge > 12:
+				attack_sprite_appear = true
+				attack_sprite_duration = 1
+				$Area2D.position = Vector2i(10 * direction, 0)
+				velocity.x = 0
+				charge = 0
+				$Area2D/CollisionShape2D.disabled = false
+				$Area2D/Sprite2D.visible = true
+				attacking = false
+				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
+				direction *= -1
+		if attack_sprite_appear:
+			attack_sprite_duration -= 0.1
+			if attack_sprite_duration <= 0:
+				attack_sprite_appear = false
+				attack_sprite_duration = 0
+				$Area2D/CollisionShape2D.disabled = true
+				$Area2D/Sprite2D.visible = false
+		if stunned:
+			$EnemyArea.remove_from_group("damage")
+			$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion_stun.png")
+			stun_time -= 0.1
+			attacking = false
+			charge = 0
+			velocity.x = move_toward(velocity.x, 0, 30)
+			if stun_time < 0:
+				$EnemyArea.add_to_group("damage")
+				$Sprite2D.texture = load("res://assets/placeholders/placeholder_enemy_explosion.png")
+				stunned = false
+				stun_time = 0
+		if not stunned:
+			if $player_detection.is_colliding():
+				attacking = true
+			if $RayCast2D.is_colliding():
+				direction *= -1
+			if direction == 1:
+				$player_detection.rotation_degrees = 0 
+				$player_detection.position = Vector2i(10, 0)
+				$Sprite2D.flip_h = false
+				$RayCast2D.rotation_degrees = 180
+				$RayCast2D.position = Vector2i(-10, 0)
+			if direction == -1:
+				$player_detection.rotation_degrees = 180 
+				$player_detection.position = Vector2i(-10, 0)
+				$Sprite2D.flip_h = true
+				$RayCast2D.rotation_degrees = 0
+				$RayCast2D.position = Vector2i(10, 0)
+			if not attacking:
+				velocity.x = direction * stats.speed
+			if attacking:
+				velocity.x = direction * stats.speed / 2.5
+		$EnemyArea/CollisionShape2D.disabled = false
+		$Sprite2D.visible = true
 		var standing = $GroundExistingChecker.get_overlapping_bodies()
 		for body in standing:
-				if body.is_in_group("tile_move"):
-					position += body.tile_move_value
+			if body.is_in_group("tile_move"):
+				position += body.tile_move_value
 		if position.y > 175:
 			queue_free()
 		POSSESSED = false
-		if $player_detection.is_colliding():
-			attacking = true
-		if $RayCast2D.is_colliding():
-			direction *= -1
-		if direction == 1:
-			$player_detection.rotation_degrees = 0 
-			$player_detection.position = Vector2i(10, 0)
-			$Sprite2D.flip_h = false
-			$RayCast2D.rotation_degrees = 180
-			$RayCast2D.position = Vector2i(-10, 0)
-		if direction == -1:
-			$player_detection.rotation_degrees = 180 
-			$player_detection.position = Vector2i(-10, 0)
-			$Sprite2D.flip_h = true
-			$RayCast2D.rotation_degrees = 0
-			$RayCast2D.position = Vector2i(10, 0)
-		if not attacking and charge == 0:
-			velocity.x = direction * stats.speed
-		if attacking:
-			velocity.x = direction * stats.speed / 2.5
-			if charge == 0:
-				_attack_charge()
-		$EnemyArea/CollisionShape2D.disabled = false
-		$Sprite2D.visible = true
 		if not is_on_floor():
 				velocity += get_gravity() * delta * 1.5
 	if possess_health == -1:
@@ -146,6 +177,8 @@ func _on_enemy_area_area_entered(area) -> void:
 			possess_health -= 1
 			player_colliding = area.get_parent()
 func _possess_stop() -> void:
+	stunned = true
+	stun_time = 24
 	global_position = Autoloads.player.global_position
 	call_deferred("reparent", parent)
 	if is_instance_valid(parent):
@@ -193,11 +226,12 @@ func _process(_delta: float) -> void:
 		_possess_start()
 
 func _on_player_detection_area_body_entered(body: Node2D) -> void:
-	if body.global_position.x > global_position.x:
-		direction = 1
-	if body.global_position.x < global_position.x:
-		direction = -1
-	attacking = true
+	if not stunned:
+		if body.global_position.x > global_position.x:
+			direction = 1
+		if body.global_position.x < global_position.x:
+			direction = -1
+		attacking = true
 func _possess_start():
 	get_parent().call_deferred("_possessed")
 	Autoloads.POSSESS_AMOUNT += 1
